@@ -54,6 +54,11 @@ const AccountForm = () => {
         return t;
     } 
 
+    const validatePhoneNumber = (phone) => {
+        const phoneRegex = /^[0-9]{10}$/; // 10-digit phone number validation
+        return phoneRegex.test(phone);
+    };
+
     const checkEmail = (email) => {
         // eslint-disable-next-line
         const res = (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email));
@@ -69,6 +74,12 @@ const AccountForm = () => {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
+        
+        if (!validatePhoneNumber(phone)) {
+            alert("Invalid phone number! Please enter a valid 10-digit number.");
+            return; // Prevent form submission if phone number is invalid
+        }
+
         if ( isInvEmail || isInvPass ) {
             return;
         }
