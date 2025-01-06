@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import useDocTitle from "../hooks/useDocTitle";
 import Accordion from '@mui/material/Accordion';
@@ -23,8 +23,9 @@ import profiles from "../data/teamData";
 
 
 const LandingPage = () => {
-
     const { isLoading, toggleLoading } = useContext(commonContext);
+    const [openFaqIndex, setOpenFaqIndex] = useState(null);
+    const faqRef = useRef(null);
 
     useEffect(() => {
         toggleLoading(true);
@@ -32,10 +33,29 @@ const LandingPage = () => {
     }, []);
 
     useScrollDisable(isLoading);
-
     useDocTitle();
-
     const navigate = useNavigate();
+
+    const handleFaqClick = (index) => {
+        setOpenFaqIndex(prevIndex => (prevIndex === index ? null : index));
+    };
+
+    const handleOutsideClick = (event) => {
+        if (faqRef.current && !faqRef.current.contains(event.target)) {
+            setOpenFaqIndex(null);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("click", handleOutsideClick);
+        return () => {
+            document.removeEventListener("click", handleOutsideClick);
+        };
+    }, []);
+
+    if (isLoading) {
+        return <Preloader />;
+    }
 
     const handleOnCLick = () => {
          navigate('/doctors');
@@ -205,8 +225,8 @@ const LandingPage = () => {
 
 
 
-                <section className="faq-section">
-                    <div className="faq-div">
+<section className="faq-section">
+                    <div className="faq-div" ref={faqRef}>
                         <div className="img-div">
                             <img src="faq-img.png" alt="faq" />
                         </div>
@@ -214,7 +234,12 @@ const LandingPage = () => {
                             <h2 className="head">Any Queries ?</h2>
                             <div className="faqs">
                                 {faqs.map((item, index) => (
-                                    <Accordion key={index} className="faq-item">
+                                    <Accordion
+                                        key={index}
+                                        className="faq-item"
+                                        expanded={openFaqIndex === index}
+                                        onChange={() => handleFaqClick(index)}
+                                    >
                                         <AccordionSummary
                                             expandIcon={<MdExpandMore className="icon" />}
                                             className="expand-icon"
