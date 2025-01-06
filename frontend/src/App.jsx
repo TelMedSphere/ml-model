@@ -7,6 +7,8 @@ import RouterRoutes from "./routes/RouterRoutes";
 import Footer from "./components/common/Footer";
 import BackTop from "./components/common/BackTop";
 import httpClient from "./httpClient";///
+import LandingPage from './pages/LandingPage';  // Import LandingPage
+import AboutUs from './pages/AboutUs'; 
 
 const App = () => {
 

@@ -1,8 +1,11 @@
+// src/routes/RouterRoutes.jsx
 import React from "react";
 import { Routes, Route } from "react-router";
 import useScrollRestore from "../hooks/useScrollRestore";
+// Import all the necessary components
 import LandingPage from "../pages/LandingPage";
 import Home from "../pages/Home";
+import AboutUs from "../pages/AboutUs";
 import Doctors from "../pages/Doctors";
 import BuyMedicines from "../pages/Medicines";
 import MedicineDetails from "../pages/MedicineDetails";
@@ -19,13 +22,11 @@ import Chatbot from "../components/common/Chatbot";
 import MyOrders from "../pages/MyOrders";
 import MyWallet from "../pages/MyWallet";
 import RecentTransactions from "../pages/RecentTransactions";
- 
-
 const RouterRoutes = () => {
   useScrollRestore();
 
   return (
-    <> 
+    <>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<Home />} />
@@ -48,6 +49,10 @@ const RouterRoutes = () => {
         <Route path="/my-wallet" element={<MyWallet />} />
         <Route path="/recent-transactions" element={<RecentTransactions />} />
 
+        {/* Add About Us route */}
+        <Route path="/about" element={<AboutUs />} />
+
+        {/* Catch all errors or undefined routes */}
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </>
