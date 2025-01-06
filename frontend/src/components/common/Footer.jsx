@@ -4,7 +4,7 @@ import { footMenu, footSocial } from '../../data/footerData';
 import { TfiAngleRight } from "react-icons/tfi";
 import logo from "../../assets/header.png";
 
-const Footer = () => { 
+const Footer = () => {
     return (
         <footer id="footer" className="fadeInFooter">
             <div className="container">
@@ -54,9 +54,10 @@ const Footer = () => {
                     <div className="sub_footer_wrapper">
                         <div className="foot_copyright">
                             <p>
-                                2024 @ <a href="/">TelMedSphere</a> | All Rights Reserved.
+                                {new Date().getFullYear()} @ <a href="/">TelMedSphere</a> | All Rights Reserved.
                             </p>
                         </div>
+
                         <div className="foot_social">
                             {footSocial.map((item) => {
                                 const { id, icon, cls, path } = item;
