@@ -27,17 +27,17 @@ export const footMenu = [
             {
                 id: 1,
                 link: "About Us",
-                path: "/"
+                path: "/about"  // Change path to "/about"
             },
             {
                 id: 2,
                 link: "Contact Us",
-                path: "/contact"
+                path: "/contact"  // Change path to "/contact"
             },
             {
                 id: 3,
                 link: "FAQ",
-                path: "/"
+                path: "/faq"  // Change path to "/faq"
             }
         ]
     }
