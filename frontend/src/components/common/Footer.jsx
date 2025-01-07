@@ -1,100 +1,82 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { footMenu, footSocial } from "../../data/footerData";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { footMenu, footSocial } from '../../data/footerData';
 import { TfiAngleRight } from "react-icons/tfi";
 import logo from "../../assets/header.png";
 
 const Footer = () => {
   return (
-    <footer
-      id="footer"
-      className="bg-gradient-to-br from-blue-1 to-blue-2 text-blue-8 py-12 mt-12"
-    >
-      <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-[1.4fr_repeat(2,1fr)] gap-12 justify-items-center">
-          <div >
-            <Link to="/">
-            <img
-                src={logo}
-                alt="footer-logo"
-                style={{ height: "50px" }} 
-                />
-            </Link>
+    <footer id="footer">
+      <div className="container">
+        <div className="wrapper footer_wrapper">
+          <div className="foot_about">
+            <div className="foot_logo_div">
+              <Link to="/">
+                <img src={logo} alt="footer-logo" width="230px" height="230px" />
+              </Link>
+            </div>
           </div>
 
-          {footMenu.map((item) => {
+          {/* Rendering Footer Menu */}
+          {footMenu.map(item => {
             const { id, title, menu } = item;
             return (
-              <div key={id} className="text-center md:text-left">
-                <h4 className="font-bold text-lg mb-4">{title}</h4>
-                <ul className="mt-6 grid gap-4 min-w-[200px]">
-                  {menu.map((menuItem) => {
+              <div className="foot_menu" key={id}>
+                <h4>{title}</h4>
+                <ul>
+                  {/* Dynamically render menu items */}
+                  {menu.map(menuItem => {
                     const { id, link, path } = menuItem;
                     return (
-                      <li
-                        key={id}
-                        className="transition-all duration-300 ease-out"
-                      >
-                        <div className="flex items-center gap-2 hover:ml-2">
-                          <TfiAngleRight className="text-sm text-opacity-80 " />
-                          <Link
-                            to={path}
-                            className="text-sm opacity-80 hover:opacity-100 hover:underline hover:text-blue-500 transition-transform transform hover:translate-x-1"
-                          >
-                            {link}
-                          </Link>
-                        </div>
+                      <li key={id}>
+                        <TfiAngleRight className="arrow-icon" />{" "}
+                        <Link to={path}> {/* Use dynamic path for each link */}
+                          {link}
+                        </Link>
                       </li>
                     );
                   })}
-                  {localStorage.getItem("usertype") === "patient" &&
-                    title === "Shop & More" && (
-                      <li className="transition-all duration-300 ease-in-out">
-                        <div className="flex items-center gap-2 hover:ml-2">
-                          <TfiAngleRight className="text-sm text-opacity-80" />
-                          <Link
-                            to="/doctors"
-                            className="text-sm opacity-80 hover:opacity-100 hover:underline hover:text-blue-500 transition-transform transform hover:translate-x-1"
-                          >
-                            Book an Appointment
-                          </Link>
-                        </div>
-                      </li>
-                    )}
+
+                  {/* Conditional link for "Book an Appointment" for patient users */}
+                  {localStorage.getItem("usertype") === "patient" && title === "Shop & More" && (
+                    <li>
+                      <TfiAngleRight className="arrow-icon" />{" "}
+                      <Link to="/doctors">Book an Appointment</Link>
+                    </li>
+                  )}
                 </ul>
               </div>
             );
           })}
         </div>
+      </div>
 
+      <div className="separator"></div>
 
-        <div className="border-t border-opacity-70 mt-10"></div>
-
-
-        <div className="flex flex-col-reverse md:flex-row items-center justify-between mt-8 gap-8">
-          <p className="text-sm">
-            2024 @{" "}
-            <Link
-              to="/"
-              className="opacity-80 hover:opacity-100 transition-all"
-            >
-              TelMedSphere
-            </Link>{" "}
-            | All Rights Reserved.
-          </p>
-          <div className="flex gap-8 text-lg">
-            {footSocial.map((item) => {
-              const { id, icon, cls, path } = item;
-              return (
-                <Link
-                  key={id}
-                  to={path}
-                  className={`hover:text-blue-9 transition-transform transform hover:scale-110 ${cls}`}
-                >
-                  {icon}
-                </Link>
-              );
-            })}
+      <div className="sub_footer">
+        <div className="container">
+          <div className="sub_footer_wrapper">
+            <div className="foot_copyright">
+              <p>
+                2024 @ <a href="/">TelMedSphere</a> | All Rights Reserved.
+              </p>
+            </div>
+            <div className="foot_social">
+              {footSocial.map((item) => {
+                const { id, icon, cls, path } = item;
+                return (
+                  <Link
+                    to={path}
+                    key={id}
+                    className={`icon ${cls}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {icon}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
