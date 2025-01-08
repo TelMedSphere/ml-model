@@ -92,6 +92,15 @@ const Header = () => {
                             <Link to="/"><img src={logo} alt="" /></Link>
                         </h2>
 
+                        <div className="auth-buttons">
+                            <button type="button" onClick={() => toggleForm(true)} className='get_started_btn'>
+                                Login
+                            </button>
+                            <button type="button" onClick={() => toggleForm(true)} className='get_started_btn'>
+                                Register
+                            </button>
+                        </div>
+
                         {
                             (localStorage.getItem("username")!==null && localStorage.getItem("username")!==undefined)? 
                                 windowWidth >= 800 ? (
@@ -249,13 +258,7 @@ const Header = () => {
                                         </div>
                                     </div>
                                 )
-                         : (
-                                <div>
-                                    <button type="button" onClick={toggleForm} className='get_started_btn'>
-                                        Login
-                                    </button>
-                                </div>
-                            )
+                         : null
                         }
  
                     </div>

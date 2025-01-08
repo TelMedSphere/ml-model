@@ -162,13 +162,6 @@ const AccountForm = () => {
                                 {/*===== Form-Header =====*/}
                                 <div className="form_head">
                                     <h2>{isSignupVisible ? 'Signup' : 'Login'}</h2>
-                                    <p>
-                                        {isSignupVisible ? 'Already have an account ?' : 'New to TelMedSphere ?'}
-                                        &nbsp;&nbsp;
-                                        <button type="button" onClick={handleIsSignupVisible}>
-                                            {isSignupVisible ? 'Login' : 'Create an account'}
-                                        </button>
-                                    </p>
                                 </div>
 
                                 {/*===== Form-Body =====*/}
@@ -358,7 +351,15 @@ const AccountForm = () => {
                                             isSignupVisible ? 'Signup' : 'Login'
                                         )}
                                     </button>
-
+                                    <div className="form_head">
+                                    <p>
+                                        {isSignupVisible ? 'Already have an account ?' : 'New to TelMedSphere ?'}
+                                        &nbsp;&nbsp;
+                                        <button type="button" onClick={handleIsSignupVisible}>
+                                            {isSignupVisible ? 'Login' : 'Create an account'}
+                                        </button>
+                                    </p>
+                                </div>
                                 </div>
 
                                 {/*===== Form-Close-Btn =====*/}
