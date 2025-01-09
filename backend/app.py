@@ -112,7 +112,7 @@ def create_payment():
 def register():
     if request.is_json:
         data = request.get_json()
-        if data['registerer'] == 'patient':
+        if data['usertype'] == 'patient':
             if doctor.find_one({'email': data['email']}):
                 return jsonify({'message': 'User already exists'}), 400
             user = patients.find_one({'email': data['email']})
@@ -135,7 +135,7 @@ def register():
                 whatsapp_message(payload)
 
                 return jsonify({'message': 'User created successfully'}), 200
-        elif data['registerer'] == 'doctor':
+        elif data['usertype'] == 'doctor':
             if patients.find_one({'email': data['email']}):
                 return jsonify({'message': 'User already exists'}), 400
             user = doctor.find_one({'email': data['email']})

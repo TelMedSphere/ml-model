@@ -21,6 +21,7 @@ import Chatbot from "../components/common/Chatbot";
 import MyOrders from "../pages/MyOrders";
 import MyWallet from "../pages/MyWallet";
 import RecentTransactions from "../pages/RecentTransactions";
+import AuthForm from "../pages/AuthForm";
  
 
 const RouterRoutes = () => {
@@ -51,6 +52,7 @@ const RouterRoutes = () => {
         <Route path="/recent-transactions" element={<RecentTransactions />} />
         <Route path="/contact" element={<ContactUs />} />
         {/* Add About Us route */}
+        <Route path="/auth-form" element={<AuthForm />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>

@@ -29,6 +29,8 @@ const Header = () => {
     const windowWidth = window.innerWidth;
     const [isSideBarOpen, setSideBarOpen] = useState(false);
 
+    const isAuthPage = location.pathname === '/auth-form';
+
     // handle the sticky-header
     useEffect(() => {
         const handleIsSticky = () => window.scrollY >= 50 ? setIsSticky(true) : setIsSticky(false);
@@ -249,9 +251,10 @@ const Header = () => {
                                         </div>
                                     </div>
                                 )
-                         : (
+                         : !isAuthPage && (
                                 <div>
-                                    <button type="button" onClick={toggleForm} className='get_started_btn'>
+                                    {/* modified onClick{toggleForm} */}
+                                    <button type="button" onClick={() => navigate('/auth-form')} className='get_started_btn'>
                                         Login
                                     </button>
                                 </div>
