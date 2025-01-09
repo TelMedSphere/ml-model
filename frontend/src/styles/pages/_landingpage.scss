@@ -432,6 +432,8 @@
                     border: 1px solid #eaeaea;
                     margin: 1rem;
                     padding: 1rem 0;
+                    padding-top: 0;
+                    // overflow: hidden;
 
                     &:hover {
                         box-shadow: 0 0 10px 10px var(--white-color);
@@ -439,13 +441,14 @@
                         .contact-div {
                             @include toggleVisibility(visible, 1);
                             font-size: 30px;
+                            
                         }
                     }
 
 
                     .img-div {
-
                         .img {
+                            border-radius: 12px;
                             width: 250px;
                             height: 250px;
                             border-bottom: 1px solid #eaeaea;
@@ -470,12 +473,12 @@
 
                     .contact-div {
                         position: absolute;
-                        bottom: 85px;
+                        bottom: 92px;
                         font-size: 0px;
                         @include toggleVisibility(hidden, 0);
                         @include flexbox(center, center);
                         transition: all 0.5s linear;
-                        background-color: rgba(74, 76, 178, 0.8);
+                        background-color: rgba(74,76,172,0.90);
                         width: 250px;
                         height: 70px;
                         border-radius: 100% 100% 0 0;

@@ -58,7 +58,7 @@ const LandingPage = () => {
     }
 
     const handleOnCLick = () => {
-         navigate('/doctors');
+        navigate('/doctors');
     }
 
     const faqs = [
@@ -197,27 +197,27 @@ const LandingPage = () => {
                         <div className="team-div">
                             <div className="head"><h2>Meet Our Team</h2></div>
                             <div className="team">
-                            {profiles.map(profile => (
-                                <div className="item" key={profile.id}>
-                                    <div className="img-div">
-                                        <img src={profile.imgSrc} alt={profile.name} className="img" />
-                                        <div className="contact-div">
-                                            {profile.contact.map((contact, index) => {
-                                                const IconComponent = contact.icon === "IoMdMail" ? IoMdMail :
-                                                    contact.icon === "FaPhoneAlt" ? FaPhoneAlt :
-                                                        FaHospital; 
-                                                return (
-                                                    <div className="contact-icon" key={index} onClick={handleOnCLick}>
-                                                        <IconComponent />
-                                                    </div>
-                                                );
-                                            })}
+                                {profiles.map(profile => (
+                                    <div className="item" key={profile.id}>
+                                        <div className="img-div">
+                                            <img src={profile.imgSrc} alt={profile.name} className="img" />
+                                            <div className="contact-div">
+                                                {profile.contact.map((contact, index) => {
+                                                    const IconComponent = contact.icon === "IoMdMail" ? IoMdMail :
+                                                        contact.icon === "FaPhoneAlt" ? FaPhoneAlt :
+                                                            FaHospital;
+                                                    return (
+                                                        <div className="contact-icon" key={index} onClick={handleOnCLick}>
+                                                            <IconComponent />
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
+                                        <h3>{profile.name}</h3>
+                                        <p>{profile.specialty}</p>
                                     </div>
-                                    <h3>{profile.name}</h3>
-                                    <p>{profile.specialty}</p>
-                                </div>
-                            ))}
+                                ))}
                             </div>
                         </div>
                     </section>
@@ -225,7 +225,7 @@ const LandingPage = () => {
 
 
 
-<section className="faq-section">
+                <section className="faq-section">
                     <div className="faq-div" ref={faqRef}>
                         <div className="img-div">
                             <img src="faq-img.png" alt="faq" />
