@@ -149,6 +149,35 @@ const AccountForm = () => {
 
     } 
  
+    const handleForgotPassword = () => {
+        if (!checkEmail(email)) {
+            setIsAlert("error");
+            setAlertCont("Please enter a valid email address");
+            setTimeout(() => {
+                setIsAlert("");
+            }, 1500);
+            return;
+        }
+    
+        httpClient.post("/forgot_password", { email })
+            .then(() => {
+                setIsAlert("success");
+                setAlertCont(`Password reset link sent to ${email}`);
+                setTimeout(() => {
+                    setIsAlert("");
+                }, 1500);
+                return;
+            })
+            .catch(err => {
+                console.error("Error sending password reset link:", err.response?.data || err.message);
+                setIsAlert("error");
+                setAlertCont(`Failed to send password reset link: ${err.response?.data?.message || err.message}`);
+                setTimeout(() => {
+                    setIsAlert("");
+                }, 1500);
+                return;
+            });
+    }
 
     return (
         <>
@@ -359,6 +388,15 @@ const AccountForm = () => {
                                         )}
                                     </button>
 
+                                    {!isSignupVisible && (
+                                        <button
+                                            type="button"
+                                            className="btn forgot_password_btn"
+                                            onClick={handleForgotPassword}
+                                        >
+                                            Forgot Password?
+                                        </button>
+                                    )}
                                 </div>
 
                                 {/*===== Form-Close-Btn =====*/}
