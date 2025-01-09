@@ -225,9 +225,9 @@ const LandingPage = () => {
 
 
 
-                <section className="faq-section">
+              <section className="faq-section">
                     <div className="faq-div" ref={faqRef}>
-                        <div className="img-div">
+                       <div className="img-div">
                             <img src="faq-img.png" alt="faq" />
                         </div>
                         <div className="content">
@@ -236,7 +236,7 @@ const LandingPage = () => {
                                 {faqs.map((item, index) => (
                                     <Accordion
                                         key={index}
-                                        className="faq-item"
+                                        className="faq-item object-cover shadow-md hover:shadow-[0px_0px_10px_2px_rgba(59,130,246,0.6)]"
                                         expanded={openFaqIndex === index}
                                         onChange={() => handleFaqClick(index)}
                                     >

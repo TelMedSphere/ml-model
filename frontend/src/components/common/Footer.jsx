@@ -73,7 +73,7 @@ const Footer = () => {
 
         <div className="flex flex-col-reverse md:flex-row items-center justify-between mt-8 gap-8">
           <p className="text-sm">
-            2024 @{" "}
+             {new Date().getFullYear()} @{" "}
             <Link
               to="/"
               className="opacity-80 hover:opacity-100 transition-all"

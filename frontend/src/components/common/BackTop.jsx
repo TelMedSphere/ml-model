@@ -196,7 +196,9 @@ const handleSend = async (msg) => {
     <>
       {!open && (
         <div
-          className={`back_top ${isVisible ? "popped" : ""}`}
+        className={`fixed bottom-[13vh] right-[1.7vw] z-30 bg-blue-9 text-white-1 text-[1.4rem] p-2 cursor-pointer rounded-[3px] transform scale-0 items-center opacity-0 transition-all duration-300 hover:bg-blue-8 max-lg:bottom-[11vh] max-lg:right-[2vw] ${
+          isVisible ? "scale-100 opacity-100 visible" : "invisible"
+        }`}
           title="Back to top"
           onClick={handleBackTop}
         >
@@ -205,13 +207,13 @@ const handleSend = async (msg) => {
       )}
       <div
         onClick={() => setOpen(!open)} 
-        className="back_top popped chat_icon"
+        className="fixed bottom-[5vh] right-[1.3vw] z-30 bg-blue-9 text-white-1 text-[2rem] p-2 cursor-pointer rounded-[50%] transform items-center transition-all duration-300 hover:bg-blue-8 scale-100 opacity-100 visible"
         title="Wanna Chat?"
       >
         {open? <MdClear /> : <AiFillWechat />}
       </div>
-      <div className={`chatbot ${open && "opened"}`}>
-        <div className="chat">
+      <div className={`fixed right-[1.5vw] bg-white-1 z-40 border-[2px] border-blue-2 rounded-[10px] pt-4 transition-all duration-300 ease-in-out opacity-0 w-0 bottom-[10vh] h-0 ${open && "bottom-[13vh] w-[300px] visible opacity-100 h-[450px]"}`}>
+        <div className="w-full h-full bg-white overflow-auto rounded-[10px]">
           <MainContainer
           style={{border: 0, borderRadius: 10}}
           >

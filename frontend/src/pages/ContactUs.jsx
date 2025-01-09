@@ -3,6 +3,7 @@ import httpClient from '../httpClient';
 import { Alert } from '@mui/material';
 import useDocTitle from '../hooks/useDocTitle';
 import '../styles/ContactUs.css';
+import img from '../assets/contactus.jpg'
 
 const ContactUs = () => {
   useDocTitle('Contact Us - TelMedSphere');
@@ -43,7 +44,7 @@ const ContactUs = () => {
                 <p>+91 12345 67890</p>
               </div>
               <div>
-                <img src="../public/contactus.jpg" alt="Contact Us" />
+                <img src={img} alt="Contact Us" />
               </div>
             </div>
           </div>

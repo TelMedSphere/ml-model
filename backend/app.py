@@ -23,6 +23,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = secret_key
 SECRET_KEY = os.getenv('SECRET')
 
+
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = os.getenv('PORT')
 app.config['MAIL_USERNAME'] = os.getenv('HOST_EMAIL')
@@ -105,8 +106,8 @@ def create_payment():
         print(e)
         return jsonify(error=str(e)), 403
 
-# # ----------- Authentication routes -----------------
-
+# # ----------- Authentication routes ----------------
+# 
 @app.route('/register', methods=['POST'])
 def register():
     if request.is_json:
@@ -121,7 +122,8 @@ def register():
                 hashed_password = bcrypt.generate_password_hash(data['passwd']).decode('utf-8')
                 data['passwd'] = hashed_password
                 data['upcomingAppointments'] = []
-                del data['specialization']
+                if 'specialization' in data:
+                    del data['specialization']
                 patients.insert_one(data)
                 payload = {
                       "messaging_product": "whatsapp",
@@ -147,7 +149,8 @@ def register():
                 data['stars'] = 0
                 data["status"] = "offline"
                 data['upcomingAppointments'] = []
-                del data["age"]
+                if 'age' in data:
+                    del data["age"]
                 doctor.insert_one(data)
                 return jsonify({'message': 'User created successfully'}), 200
         else:
@@ -204,6 +207,53 @@ def verify():
     
     return jsonify({'message': 'verification details', "verified": verified}), 200
 
+    @app.route('/forgot_password', methods=['POST'])
+    def forgot_password():
+        data = request.get_json()
+        email = data['email']
+        print(data)
+        
+        user = patients.find_one({'email': email}) or doctor.find_one({'email': email})
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+
+        # Generate a password reset token
+        token = secrets.token_urlsafe(16)
+
+        # Store the token in the user's document with an expiration time
+        expiration_time = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        patients.update_one({'email': email}, {'$set': {'reset_token': token, 'reset_token_expiration': expiration_time}})
+        doctor.update_one({'email': email}, {'$set': {'reset_token': token, 'reset_token_expiration': expiration_time}})
+
+        # Send the token to the user's email
+        reset_url = url_for('reset_password', token=token, _external=True)
+        msg = Message("Password Reset Request",
+                      sender=os.getenv('HOST_EMAIL'),
+                      recipients=[email])
+        msg.body = f"To reset your password, visit the following link: {reset_url}"
+        mail.send(msg)
+
+        return jsonify({'message': 'Password reset link sent'}), 200
+
+
+@app.route('/reset_password/<token>', methods=['POST'])
+def reset_password(token):
+    data = request.get_json()
+    new_password = data['password']
+    hashed_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
+
+    # Find the user with the token and check if it's still valid
+    user = patients.find_one({'reset_token': token, 'reset_token_expiration': {'$gt': datetime.datetime.utcnow()}}) or \
+           doctor.find_one({'reset_token': token, 'reset_token_expiration': {'$gt': datetime.datetime.utcnow()}})
+    
+    if not user:
+        return jsonify({'message': 'The reset link is invalid or has expired'}), 400
+
+    # Update the user's password and remove the reset token
+    patients.update_one({'reset_token': token}, {'$set': {'passwd': hashed_password}, '$unset': {'reset_token': "", 'reset_token_expiration': ""}})
+    doctor.update_one({'reset_token': token}, {'$set': {'passwd': hashed_password}, '$unset': {'reset_token': "", 'reset_token_expiration': ""}})
+
+    return jsonify({'message': 'Password has been reset'}), 200
 
         
 @app.route('/doc_status', methods=['PUT'])
@@ -669,3 +719,4 @@ def contact():
         return jsonify({"message": "Message sent successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
