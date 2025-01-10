@@ -15,6 +15,7 @@ const AccountForm = () => {
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [passwd, setPasswd] = useState("");
+    const [isInvPhone, setIsInvPhone] = useState(false);
     const [specialization, setSpecialization] = useState("");
     const [isInvEmail, setIsInvEmail] = useState(false);
     const [isInvPass, setIsInvPass] = useState(false);
@@ -67,9 +68,16 @@ const AccountForm = () => {
         return res;
     }
 
+     const validatePhoneNumber = (phoneNumber) => {
+        const pattern = /^\+?1?\d{10,10}$/;
+        const res = pattern.test(phoneNumber);
+        setIsInvPhone(!res);
+        return res;
+    };
+
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        if ( isInvEmail || isInvPass ) {
+        if ( isInvEmail || isInvPass || isInvPhone) {
             return;
         }
 
@@ -286,11 +294,15 @@ const AccountForm = () => {
                                                     name="phone"
                                                     className="input_field"
                                                     value={phone}
-                                                    onChange={(e) => setPhone(e.target.value)}
+                                                    onChange={(e) => {
+                                                        validatePhoneNumber(e.target.value);
+                                                        setPhone(e.target.value);
+                                                    }}
                                                     required
                                                 />
                                                 <label className="input_label">Phone</label>
                                             </div>
+                                              { phone!=="" && isInvPhone && <Alert severity="error" className='input_alert'>Invalid Phone Number</Alert>}
                                             </>
                                         )
                                     }
