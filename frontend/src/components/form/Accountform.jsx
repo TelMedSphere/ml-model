@@ -77,6 +77,34 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
         return res;
     };
 
+    const handleForgotPassword = () => {
+        if (!checkEmail(email)) {
+            setIsAlert("error");
+            setAlertCont("Please enter a valid email address");
+            setTimeout(() => {
+                setIsAlert("");
+            }, 1500);
+            return;
+        }
+    
+        httpClient.post("/forgot_password", { email })
+            .then(() => {
+                setIsAlert("success");
+                setAlertCont(`Password reset link sent to ${email}`);
+                setTimeout(() => {
+                    setIsAlert("");
+                }, 1500);
+            })
+            .catch(err => {
+                console.error("Error sending password reset link:", err.response?.data || err.message);
+                setIsAlert("error");
+                setAlertCont(`Failed to send password reset link: ${err.response?.data?.message || err.message}`);
+                setTimeout(() => {
+                    setIsAlert("");
+                }, 1500);
+            });
+    };
+
     const handleFormSubmit = (e) => {
         e.preventDefault();
         if (isInvEmail || isInvPass || isInvPhone) {
@@ -141,9 +169,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                         }, 1500);
                     });
             }
-
         }, 1500);
-
     };
 
     const handleFormSwitch = () => {
@@ -347,6 +373,17 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                                         isSignup ? 'Signup' : 'Login'
                                     )}
                                 </button>
+
+                                {!isSignup && (
+                                    <button
+                                        type="button"
+                                        className="btn forgot_password_btn"
+                                        onClick={handleForgotPassword}
+                                    >
+                                        Forgot Password?
+                                    </button>
+                                )}
+
                                 <div className="form_head">
                                     <p>
                                         {isSignup ? 'Already have an account ?' : 'New to TelMedSphere ?'}
@@ -368,7 +405,6 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                             >
                                 &times;
                             </div>
-
                         </form>
                     </div>
                 </div>

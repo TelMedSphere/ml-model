@@ -72,6 +72,29 @@ module.exports = {
         xs: "480px",
         xxs: "400px",
       },
+      animation: {
+        spark: "spark 1.5s linear infinite",
+        "pulse-custom": "pulse 2s infinite",
+      },
+      keyframes: {
+        spark: {
+          "0%": {
+            maxWidth: "0%",
+          },
+          "100%": {
+            maxWidth: "100%",
+          },
+        },
+        pulse: {
+          "0%, 100%": {
+            transform: "scale(1)",
+          },
+          "50%": {
+            transform: "scale(1.1)",
+            opacity: "1",
+          },
+        },
+      },
     },
   },
   plugins: [],
