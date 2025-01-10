@@ -94,15 +94,23 @@ This document provides a step-by-step guide to setting up the required `.env` fi
      4. Create a new application if you don't have one.
      5. Copy the App ID provided.
      6. Set the VITE_JAAS_APP_ID variable in your env file with the copied App ID.
-     
-     `VITE_JAAS_APP_ID=your_jaas_app_id`
 
-3. **`VITE_API_KEY`**  
+      `VITE_JAAS_APP_ID=your_jaas_app_id`
+
+   3. **`VITE_API_KEY`**  
    - **Description:** The API key for chatbot integration.  
    - **How to Obtain:** 
-     1. Contact your chatbot service provider to request an API key.
-     2. Alternatively, request the API key from your team lead or project manager.
-     3. Once you have the key, set the VITE_API_KEY variable in your env file with the provided key.
+      1. Identify the chatbot service provider you are using (e.g., Dialogflow, IBM Watson, etc.).
+      2. Visit the official website of the chatbot service provider.
+      3. Sign up for an account or log in if you already have one.
+      4. Navigate to the API section or the developer console of the service provider.
+      5. Look for an option to generate or view your API keys.
+      6. Follow the instructions provided by the service to generate a new API key.
+      7. Copy the generated API key.
+      8. Open your `.env` file in a text editor.
+      9. Add the following line to your `.env` file, replacing `your_chatbot_api_key` with the key you copied:
+
+      `VITE_API_KEY=your_chatbot_api_key`
      
      `VITE_API_KEY=your_chatbot_api_key`
 
