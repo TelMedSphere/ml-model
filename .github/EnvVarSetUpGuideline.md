@@ -111,8 +111,7 @@ This document provides a step-by-step guide to setting up the required `.env` fi
       9. Add the following line to your `.env` file, replacing `your_chatbot_api_key` with the key you copied:
 
       `VITE_API_KEY=your_chatbot_api_key`
-     
-     `VITE_API_KEY=your_chatbot_api_key`
+      
 
 ---
 
