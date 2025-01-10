@@ -429,23 +429,3 @@
         }
     }
 }
-
-.auth-buttons {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    margin-left: auto;
-
-    .get_started_btn {
-        padding: 0.7rem 1.5rem;
-        border-radius: 4px;
-        color: var(--white-color);
-        background-color: var(--blue-color-4);
-        transition: all 0.3s ease;
-        cursor: pointer;
-
-        &:hover {
-            background-color: var(--blue-color-6);
-        }
-    }
-}
