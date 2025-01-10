@@ -77,33 +77,33 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
         return res;
     };
 
-    const handleForgotPassword = () => {
-        if (!checkEmail(email)) {
-            setIsAlert("error");
-            setAlertCont("Please enter a valid email address");
-            setTimeout(() => {
-                setIsAlert("");
-            }, 1500);
-            return;
-        }
+    // const handleForgotPassword = () => {
+    //     if (!checkEmail(email)) {
+    //         setIsAlert("error");
+    //         setAlertCont("Please enter a valid email address");
+    //         setTimeout(() => {
+    //             setIsAlert("");
+    //         }, 1500);
+    //         return;
+    //     }
     
-        httpClient.post("/forgot_password", { email })
-            .then(() => {
-                setIsAlert("success");
-                setAlertCont(`Password reset link sent to ${email}`);
-                setTimeout(() => {
-                    setIsAlert("");
-                }, 1500);
-            })
-            .catch(err => {
-                console.error("Error sending password reset link:", err.response?.data || err.message);
-                setIsAlert("error");
-                setAlertCont(`Failed to send password reset link: ${err.response?.data?.message || err.message}`);
-                setTimeout(() => {
-                    setIsAlert("");
-                }, 1500);
-            });
-    };
+    //     httpClient.post("/forgot_password", { email })
+    //         .then(() => {
+    //             setIsAlert("success");
+    //             setAlertCont(`Password reset link sent to ${email}`);
+    //             setTimeout(() => {
+    //                 setIsAlert("");
+    //             }, 1500);
+    //         })
+    //         .catch(err => {
+    //             console.error("Error sending password reset link:", err.response?.data || err.message);
+    //             setIsAlert("error");
+    //             setAlertCont(`Failed to send password reset link: ${err.response?.data?.message || err.message}`);
+    //             setTimeout(() => {
+    //                 setIsAlert("");
+    //             }, 1500);
+    //         });
+    // };
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
@@ -374,7 +374,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                                     )}
                                 </button>
 
-                                {!isSignup && (
+                                {/* {!isSignup && (
                                     <button
                                         type="button"
                                         className="btn forgot_password_btn"
@@ -382,7 +382,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                                     >
                                         Forgot Password?
                                     </button>
-                                )}
+                                )} */}
 
                                 <div className="form_head">
                                     <p>
