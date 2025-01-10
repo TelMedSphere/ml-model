@@ -5,7 +5,7 @@ import useScrollDisable from '../../hooks/useScrollDisable';
 import { Alert, CircularProgress } from "@mui/material";
 import httpClient from '../../httpClient';
 
-const AccountForm = ({ isSignup }) => {
+const AccountForm = ({ isSignup, setIsSignup }) => {
     const { isFormOpen, toggleForm } = useContext(commonContext);
     const [username, setUsername] = useState("");
     const [usertype, setUsertype] = useState("patient");
@@ -144,6 +144,11 @@ const AccountForm = ({ isSignup }) => {
 
         }, 1500);
 
+    };
+
+    const handleFormSwitch = () => {
+        setIsSignup(!isSignup);
+        resetForm();
     };
 
     return (
@@ -346,7 +351,7 @@ const AccountForm = ({ isSignup }) => {
                                     <p>
                                         {isSignup ? 'Already have an account ?' : 'New to TelMedSphere ?'}
                                         &nbsp;&nbsp;
-                                        <button type="button" onClick={() => toggleForm(false)}>
+                                        <button type="button" onClick={handleFormSwitch}>
                                             {isSignup ? 'Login' : 'Create an account'}
                                         </button>
                                     </p>

@@ -19,8 +19,7 @@ const Header = () => {
     const { toggleForm, setFormUserInfo, userLogout, toggleProfile } = useContext(commonContext);
     const { cartItems, setCartItems } = useContext(cartContext);
     const [isSticky, setIsSticky] = useState(false);
-    const [isLoginFormOpen, setIsLoginFormOpen] = useState(false);
-    const [isRegisterFormOpen, setIsRegisterFormOpen] = useState(false);
+    const [isSignup, setIsSignup] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const curPath = location.pathname;
@@ -66,14 +65,12 @@ const Header = () => {
     useOutsideClose(sidebarRef, () => setSideBarOpen(false));
 
     const handleLoginClick = () => {
-        setIsLoginFormOpen(true);
-        setIsRegisterFormOpen(false);
+        setIsSignup(false);
         toggleForm(true);
     };
 
     const handleRegisterClick = () => {
-        setIsLoginFormOpen(false);
-        setIsRegisterFormOpen(true);
+        setIsSignup(true);
         toggleForm(true);
     };
 
@@ -275,8 +272,7 @@ const Header = () => {
                 </div>
             </header>
 
-            {isLoginFormOpen && <AccountForm isSignup={false} />}
-            {isRegisterFormOpen && <AccountForm isSignup={true} />}
+            <AccountForm isSignup={isSignup} setIsSignup={setIsSignup} />
             <Profile />
         </>
     );
