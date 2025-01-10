@@ -14,13 +14,13 @@ import { CiMenuFries } from "react-icons/ci";
 import { MdClose } from "react-icons/md";
 import { IoWalletOutline } from "react-icons/io5";
 import logo from "../../assets/header.png";
- 
 
 const Header = () => {
-
-    const { toggleForm, userLogout, toggleProfile } = useContext(commonContext);
+    const { toggleForm, setFormUserInfo, userLogout, toggleProfile } = useContext(commonContext);
     const { cartItems, setCartItems } = useContext(cartContext);
     const [isSticky, setIsSticky] = useState(false);
+    const [isLoginFormOpen, setIsLoginFormOpen] = useState(false);
+    const [isRegisterFormOpen, setIsRegisterFormOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const curPath = location.pathname;
@@ -29,7 +29,6 @@ const Header = () => {
     const windowWidth = window.innerWidth;
     const [isSideBarOpen, setSideBarOpen] = useState(false);
 
-    // handle the sticky-header
     useEffect(() => {
         const handleIsSticky = () => window.scrollY >= 50 ? setIsSticky(true) : setIsSticky(false);
         const handleIsScrolled = () => window.scrollY >= 1 ? setIsScrolled(true) : setIsScrolled(false);
@@ -41,23 +40,23 @@ const Header = () => {
             window.removeEventListener('scroll', handleIsSticky);
             window.removeEventListener('scroll', handleIsScrolled);
         };
-        
     }, [isSticky, isScrolled]);
 
     const updatestatus = () => {
-        httpClient.put('/doc_status', { "email": localStorage.getItem("email")});
+        httpClient.put('/doc_status', { "email": localStorage.getItem("email") });
         userLogout();
     }
 
     useEffect(() => {
-        {(localStorage.getItem("email") && localStorage.getItem("email")!=="undefined") &&
-        httpClient.post('/get_cart', { "email": localStorage.getItem("email")})
-        .then((res) => {
-            setCartItems(res.data.cart);
-        })
-        .catch((err) => {
-            console.log(err);
-        });}
+        {(localStorage.getItem("email") && localStorage.getItem("email") !== "undefined") &&
+            httpClient.post('/get_cart', { "email": localStorage.getItem("email") })
+                .then((res) => {
+                    setCartItems(res.data.cart);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
     }, [localStorage.getItem("email")]);
 
     const dropdownRef = useRef();
@@ -66,24 +65,36 @@ const Header = () => {
     useOutsideClose(dropdownRef, () => setShowDropdown(false));
     useOutsideClose(sidebarRef, () => setSideBarOpen(false));
 
+    const handleLoginClick = () => {
+        setIsLoginFormOpen(true);
+        setIsRegisterFormOpen(false);
+        toggleForm(true);
+    };
+
+    const handleRegisterClick = () => {
+        setIsLoginFormOpen(false);
+        setIsRegisterFormOpen(true);
+        toggleForm(true);
+    };
+
     return (
         <>
-            {(localStorage.getItem("username") && localStorage.getItem("username")!=="undefined") && localStorage.getItem("usertype")==="patient" && 
-             <div id='contact-header' className={`${isScrolled? "scrolled" : ""}`}>
-                <div className='details'>
-                    <Link to="/" className='contact-detail'>
-                        <FiMail className='icon'/>
-                        <p className='detail'>telmedsphere489@gmail.com</p>
-                    </Link>
-                    <Link to="/" className='contact-detail'>
-                        <FiPhoneCall className='icon'/>
-                        <p className='detail'>+91 12345 67890</p>
-                    </Link>
-                </div>
-                <div>
-                    <Link to="/doctors" className='appt-link'>Appointment</Link>
-                </div>
-            </div>}
+            {(localStorage.getItem("username") && localStorage.getItem("username") !== "undefined") && localStorage.getItem("usertype") === "patient" &&
+                <div id='contact-header' className={`${isScrolled ? "scrolled" : ""}`}>
+                    <div className='details'>
+                        <Link to="/" className='contact-detail'>
+                            <FiMail className='icon' />
+                            <p className='detail'>telmedsphere489@gmail.com</p>
+                        </Link>
+                        <Link to="/" className='contact-detail'>
+                            <FiPhoneCall className='icon' />
+                            <p className='detail'>+91 12345 67890</p>
+                        </Link>
+                    </div>
+                    <div>
+                        <Link to="/doctors" className='appt-link'>Appointment</Link>
+                    </div>
+                </div>}
 
             <header id="header" className={isSticky ? 'sticky' : ''}>
                 <div className="container">
@@ -93,19 +104,18 @@ const Header = () => {
                         </h2>
 
                         <div className="auth-buttons">
-                            <button type="button" onClick={() => toggleForm(true)} className='get_started_btn'>
+                            <button type="button" onClick={handleLoginClick} className='get_started_btn'>
                                 Login
                             </button>
-                            <button type="button" onClick={() => toggleForm(true)} className='get_started_btn'>
+                            <button type="button" onClick={handleRegisterClick} className='get_started_btn'>
                                 Register
                             </button>
                         </div>
 
                         {
-                            (localStorage.getItem("username")!==null && localStorage.getItem("username")!==undefined)? 
+                            (localStorage.getItem("username") !== null && localStorage.getItem("username") !== undefined) ?
                                 windowWidth >= 800 ? (
                                     <nav className="nav_actions">
-
                                         <div className={`dash_action ${curPath==="/home"? "active" : ""}`}>
                                             <span onClick={() => navigate("/home")}>
                                                 HOME
@@ -265,7 +275,8 @@ const Header = () => {
                 </div>
             </header>
 
-            <AccountForm />
+            {isLoginFormOpen && <AccountForm isSignup={false} />}
+            {isRegisterFormOpen && <AccountForm isSignup={true} />}
             <Profile />
         </>
     );
