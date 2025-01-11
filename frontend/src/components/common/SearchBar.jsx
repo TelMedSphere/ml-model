@@ -40,7 +40,7 @@ const SearchBar = () => {
             <div id="" className='grid grid-cols-8 mb-4'>
                 <div className='col-span-2 max-sm:col-span-0'></div>
                 <div className="col-span-4 max-sm:col-span-full w-full" ref={searchRef}>
-                    <div className="flex ">
+                    <div className="flex max-sm:mx-2">
                         
                         <input
                             type="search"
