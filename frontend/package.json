@@ -22,6 +22,7 @@
     "jitsi": "^1.1.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.28",
+    "lucide-react": "^0.471.0",
     "react": "^18.2.0",
     "react-beforeunload": "^2.5.3",
     "react-dom": "^18.2.0",

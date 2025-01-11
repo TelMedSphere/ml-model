@@ -207,33 +207,34 @@ def verify():
     
     return jsonify({'message': 'verification details', "verified": verified}), 200
 
-    @app.route('/forgot_password', methods=['POST'])
-    def forgot_password():
-        data = request.get_json()
-        email = data['email']
-        print(data)
-        
-        user = patients.find_one({'email': email}) or doctor.find_one({'email': email})
-        if not user:
-            return jsonify({'message': 'User not found'}), 404
+@app.route('/forgot_password', methods=['POST'])
+def forgot_password():
+    data = request.get_json()
+    print(data)
+    email = data['email']
+    print(email)
+    
+    user = patients.find_one({'email': email}) or doctor.find_one({'email': email})
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
 
-        # Generate a password reset token
-        token = secrets.token_urlsafe(16)
+    # Generate a password reset token
+    token = secrets.token_urlsafe(16)
 
-        # Store the token in the user's document with an expiration time
-        expiration_time = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-        patients.update_one({'email': email}, {'$set': {'reset_token': token, 'reset_token_expiration': expiration_time}})
-        doctor.update_one({'email': email}, {'$set': {'reset_token': token, 'reset_token_expiration': expiration_time}})
+    # Store the token in the user's document with an expiration time
+    expiration_time = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    patients.update_one({'email': email}, {'$set': {'reset_token': token, 'reset_token_expiration': expiration_time}})
+    doctor.update_one({'email': email}, {'$set': {'reset_token': token, 'reset_token_expiration': expiration_time}})
 
-        # Send the token to the user's email
-        reset_url = url_for('reset_password', token=token, _external=True)
-        msg = Message("Password Reset Request",
-                      sender=os.getenv('HOST_EMAIL'),
-                      recipients=[email])
-        msg.body = f"To reset your password, visit the following link: {reset_url}"
-        mail.send(msg)
+    # Send the token to the user's email
+    reset_url = url_for('reset_password', token=token, _external=True)
+    msg = Message("Password Reset Request",
+                    sender=os.getenv('HOST_EMAIL'),
+                    recipients=[email])
+    msg.body = f"To reset your password, visit the following link: {reset_url}"
+    mail.send(msg)
 
-        return jsonify({'message': 'Password reset link sent'}), 200
+    return jsonify({'message': 'Password reset link sent'}), 200
 
 
 @app.route('/reset_password/<token>', methods=['POST'])
