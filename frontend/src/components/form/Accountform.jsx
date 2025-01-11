@@ -154,18 +154,19 @@ const AccountForm = () => {
         <>
             {
                 isFormOpen && (
-                    <div className="backdrop">
-                        <div className="modal_centered">
-                            <form id="account_form" ref={formRef} onSubmit={handleFormSubmit}>
+                    <div className="bg-black-1/50 fixed top-0 left-0 w-full h-full overflow-x-hidden overflow-y-auto z-[9999]">
+                        <div className="grid place-items-center min-h-[97vh] m-6 max-xs:min-h-[99vh] max-xs:m-2 relative">
+                            <form id="account_form" ref={formRef} onSubmit={handleFormSubmit} className='absolute bg-blue-3 text-blue-8 max-w-[480px] w-full p-12 rounded-[3px] z-[99] max-xs:px-4 max-xs:py-8'>
                                 { isAlert!=="" && <Alert severity={isAlert} className='form_sucess_alert'>{alertCont}</Alert> }
 
                                 {/*===== Form-Header =====*/}
-                                <div className="form_head">
-                                    <h2>{isSignupVisible ? 'Signup' : 'Login'}</h2>
+                                <div className="text-white-1">
+                                    <h2 className='mb-[0.6rem]'>{isSignupVisible ? 'Signup' : 'Login'}</h2>
                                     <p>
                                         {isSignupVisible ? 'Already have an account ?' : 'New to TelMedSphere ?'}
                                         &nbsp;&nbsp;
-                                        <button type="button" onClick={handleIsSignupVisible}>
+                                        <button type="button" onClick={handleIsSignupVisible}
+                                        className='text-blue-1 opacity-80 hover:opacity-100'>
                                             {isSignupVisible ? 'Login' : 'Create an account'}
                                         </button>
                                     </p>
@@ -363,7 +364,7 @@ const AccountForm = () => {
 
                                 {/*===== Form-Close-Btn =====*/}
                                 <div
-                                    className="close_btn"
+                                    className="bg-black-2/50 text-white-1 absolute top-0 right-0 w-[30px] h-[30px] text-xl text-center overflow-hidden opacity-80 transition-colors duration-200 ease hover:opacity-100 cursor-pointer"
                                     title="Close"
                                     onClick={() => toggleForm(false)}
                                 >

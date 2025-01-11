@@ -170,6 +170,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     z-index: 9999;
+    // bg-black-1/50 fixed top-0 left-0 w-full h-full overflow-x-hidden overflow-y-auto z-[9999]
 }
 
 .modal_centered {
@@ -181,6 +182,7 @@
         min-height: calc(100% - 1rem);
         margin: 0.5rem;
     }
+    // grid place-items-center min-h-[97vh] m-6 max-xs:min-h-[99vh] max-xs:m-2
 }
 
 .swiper {

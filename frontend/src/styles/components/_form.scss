@@ -13,6 +13,8 @@
         @include padding-y(2rem, 2rem);
     }
 
+    // absolute bg-blue-3 text-blue-8 max-w-[480px] w-full p-12 rounded-[3px] z-[99] max-xs:px-4 max-xs:py-8
+
     .close_btn {
         background-color: rgba($color: var(--black-color-2), $alpha: 0.5);
         color: var(--white-color);
@@ -31,6 +33,7 @@
         &:hover {
             opacity: 1;
         }
+        // bg-black-2/50 text-white-1 absolute top-0 right-0 w-[30px] h-[30px] text-xl text-center overflow-hidden opacity-80 transition-colors duration-200 ease hover:opacity-100 cursor-pointer
     }
 }
 
@@ -55,7 +58,7 @@
     display: grid;
     gap: 1.5rem;
     @include margin-y(2rem, 0rem);
-
+    // grid gap-6 mt-2
     .check_box {
         @include flexbox(flex-start, center);
 
