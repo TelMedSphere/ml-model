@@ -75,6 +75,8 @@ module.exports = {
       animation: {
         spark: "spark 1.5s linear infinite",
         "pulse-custom": "pulse 2s infinite",
+        fadeIn: 'fadeIn 1.5s ease-in-out',
+        fadeInLeft: 'fadeInLeft 1.5s ease-in-out forwards'
       },
       keyframes: {
         spark: {
@@ -93,6 +95,14 @@ module.exports = {
             transform: "scale(1.1)",
             opacity: "1",
           },
+        },
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' }
+        },
+        fadeInLeft: {
+          '0%': { opacity: '0', transform: 'translateX(-20px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' }
         },
       },
     },
