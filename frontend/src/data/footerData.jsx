@@ -38,7 +38,12 @@ export const footMenu = [
                 id: 3,
                 link: "FAQ",
                 path: "/faq"  // Change path to "/faq"
-            }
+            },
+            {
+                id: 4,
+                link: "Feedback",
+                path: "/feedback"
+            },
         ]
     }
 ];
