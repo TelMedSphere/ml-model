@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import useDocTitle from "../hooks/useDocTitle";
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import { MdExpandMore } from 'react-icons/md';
+// import Accordion from '@mui/material/Accordion';
+// import AccordionSummary from '@mui/material/AccordionSummary';
+// import AccordionDetails from '@mui/material/AccordionDetails';
+// import { MdExpandMore } from 'react-icons/md';
 import { AiFillLinkedin, AiFillGithub } from 'react-icons/ai';
 import { TbStethoscope, TbHeartPlus } from "react-icons/tb";
 import { BsRobot } from "react-icons/bs";
@@ -20,11 +20,12 @@ import useScrollDisable from "../hooks/useScrollDisable";
 import bg from "../assets/landing-bg.png";
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
+import Faq from "./Faq";
 
 
 const LandingPage = () => {
     const { isLoading, toggleLoading } = useContext(commonContext);
-    const [openFaqIndex, setOpenFaqIndex] = useState(null);
+    // const [openFaqIndex, setOpenFaqIndex] = useState(null);
     const faqRef = useRef(null);
 
     useEffect(() => {
@@ -36,9 +37,9 @@ const LandingPage = () => {
     useDocTitle();
     const navigate = useNavigate();
 
-    const handleFaqClick = (index) => {
-        setOpenFaqIndex(prevIndex => (prevIndex === index ? null : index));
-    };
+    // const handleFaqClick = (index) => {
+    //     setOpenFaqIndex(prevIndex => (prevIndex === index ? null : index));
+    // };
 
     const handleOutsideClick = (event) => {
         if (faqRef.current && !faqRef.current.contains(event.target)) {
@@ -61,28 +62,28 @@ const LandingPage = () => {
          navigate('/doctors');
     }
 
-    const faqs = [
-        {
-            question: "What is TelMedSphere?",
-            answer: "It is the web application that connects patients to the right doctor or allow them to choose a doctor as per their need. It provides information about users, doctors, news, appointments, and prescriptions. It also allows users to create instant meetings with doctors, and buy medicines. It allows users to check their health status by using his/her symptoms."
-        },
-        {
-            question: "Can we get a free account in TelMedSphere and use all its features for free?",
-            answer: "Yes, Ofcourse. You can use all the features provided by TelMedSphere for free."
-        },
-        {
-            question: "Can we book an appointment at any time?",
-            answer: "Yes. You can book an appointment of a doctor if he/she is free at that time."
-        },
-        {
-            question: "Is there a way to test our health?",
-            answer: "Yes. You can test your health by a Model that predicts the disease probability in the future."
-        },
-        {
-            question: "Can we purchase the medicines from here?",
-            answer: "Yes. You can purchase the medicines from TelMedSphere store."
-        },
-    ];
+    // const faqs = [
+    //     {
+    //         question: "What is TelMedSphere?",
+    //         answer: "It is the web application that connects patients to the right doctor or allow them to choose a doctor as per their need. It provides information about users, doctors, news, appointments, and prescriptions. It also allows users to create instant meetings with doctors, and buy medicines. It allows users to check their health status by using his/her symptoms."
+    //     },
+    //     {
+    //         question: "Can we get a free account in TelMedSphere and use all its features for free?",
+    //         answer: "Yes, Ofcourse. You can use all the features provided by TelMedSphere for free."
+    //     },
+    //     {
+    //         question: "Can we book an appointment at any time?",
+    //         answer: "Yes. You can book an appointment of a doctor if he/she is free at that time."
+    //     },
+    //     {
+    //         question: "Is there a way to test our health?",
+    //         answer: "Yes. You can test your health by a Model that predicts the disease probability in the future."
+    //     },
+    //     {
+    //         question: "Can we purchase the medicines from here?",
+    //         answer: "Yes. You can purchase the medicines from TelMedSphere store."
+    //     },
+    // ];
 
     if (isLoading) {
         return <Preloader />;
@@ -225,7 +226,7 @@ const LandingPage = () => {
 
 
 
-              <section className="faq-section">
+              {/* <section className="faq-section">
                     <div className="faq-div" ref={faqRef}>
                        <div className="img-div">
                             <img src="faq-img.png" alt="faq" />
@@ -254,7 +255,9 @@ const LandingPage = () => {
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> */}
+
+                <Faq />
             </div>
         </>
     )

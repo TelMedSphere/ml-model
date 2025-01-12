@@ -21,6 +21,7 @@ import Chatbot from "../components/common/Chatbot";
 import MyOrders from "../pages/MyOrders";
 import MyWallet from "../pages/MyWallet";
 import RecentTransactions from "../pages/RecentTransactions";
+import Faq from "../pages/Faq";
  
 
 const RouterRoutes = () => {
@@ -52,6 +53,7 @@ const RouterRoutes = () => {
         <Route path="/contact" element={<ContactUs />} />
         {/* Add About Us route */}
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/faq" element={<Faq />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </>
