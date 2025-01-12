@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import useDocTitle from '../hooks/useDocTitle';
-import Rating from 'react-rating-stars-component';
 
 const Feedback = () => {
   useDocTitle('Feedback - TelMedSphere');
