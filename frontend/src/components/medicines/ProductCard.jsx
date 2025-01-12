@@ -28,7 +28,7 @@ const ProductCard = (props) => {
 
     return (
         <>
-            <div className="card products_card">
+            <div className="card products_card w-[24%] max-xs:w-[98%] max-md:w-[46%] max-xl:w-[31%] mx-[0.3rem]">
                 <figure className="products_img">
                     <Link to={`/all-medicines/medicine-details/${id}`}>
                         <img src={images[0]} alt="product-img" />
