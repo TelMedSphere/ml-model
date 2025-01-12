@@ -50,7 +50,7 @@ const AllMedicines = () => {
         id=""
         className=" overflow-hidden py-20 pt-8 grid grid-cols-12 text-blue-6 max-lg:grid-cols-none"
       >
-        <div className="col-span-2 bg-black-1">
+        <div className="col-span-2">
           <FilterBar  />
         </div>
         {/* container */}
