@@ -1,0 +1,151 @@
+.feedback-section {
+    padding: 80px 0;
+    background: linear-gradient(to right, #f8fbff, #ffffff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .feedback-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .feedback-image {
+    flex: 1;
+    max-width: 50%;
+    padding: 20px;
+  }
+  
+  .feedback-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  .feedback-form-container {
+    flex: 1;
+    max-width: 50%;
+    padding: 20px;
+  }
+  
+  .feedback-form {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .feedback-form h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 3rem;
+    color: #53779c;
+  }
+  
+  .feedback-form .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .feedback-form .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .feedback-form .form-group input,
+  .feedback-form .form-group select,
+  .feedback-form .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .feedback-form .form-group input:focus,
+  .feedback-form .form-group select:focus,
+  .feedback-form .form-group textarea:focus {
+    border-color: #679fdc;
+    box-shadow: 0 0 0 2px rgba(103, 159, 220, 0.2);
+    outline: none;
+  }
+  
+  .feedback-form .form-group textarea {
+    resize: vertical;
+  }
+  
+  .feedback-form button[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    background: #3e6b9c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .feedback-form button[type="submit"]:hover {
+    background: #2c4d7a;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+  
+  .modal-content h2 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+  }
+  
+  .modal-content p {
+    margin-bottom: 1.5rem;
+  }
+  
+  .close-button {
+    padding: 10px 20px;
+    background: #3e6b9c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .close-button:hover {
+    background: #2c4d7a;
+  }
+  .feedback-image h1 {
+    font-size: 2.5rem;
+    color:#4e71a1 ;
+    margin-bottom: 2rem;
+    font-weight: 4rem;
+  }
+  .feedback-image h2 {
+      font-size: 1.3rem;
+      color:#7698c6 ;
+      margin-bottom: 1rem;
+      font-weight: 4rem;
+    }
