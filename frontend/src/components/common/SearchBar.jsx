@@ -44,7 +44,7 @@ const SearchBar = () => {
                         
                         <input
                             type="search"
-                            className="w-full h-[45px] mr-[10px] px-4 align-middle focus:shadow-[0_0_6px_3px_#d4ddf1] bg-transparent focus:bg-white-1 ring-blue-2 ring-1 rounded-[2px] focus:ring-blue-2 focus:ring-2 text-black-2/90"
+                            className="border-none outline-none w-full h-[45px] mr-[10px] px-4 align-middle focus:shadow-[0_0_6px_3px_#d4ddf1] bg-transparent focus:bg-white-1 ring-blue-2 ring-1 rounded-[2px] focus:ring-blue-2 focus:ring-2 text-black-2/90"
                             placeholder="Search for product..."
                             onChange={handleSearching}
                             value={curSearch}
