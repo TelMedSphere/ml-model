@@ -43,21 +43,26 @@ const FeaturedSlider = () => {
                     spaceBetween: 250
                 },
             }}
-            className="featured_swiper"
+            // featured_swiper
+            className="!pt-12 !pb-20"
         >
             {
                 medicinesData.slice(0,5).map((item) => {
                     const { id, images, title, price } = item;
 
                     return (
-                        <SwiperSlide key={id} className="featured_slides">
-                            <div className="featured_title">{title}</div>
-                            <figure className="featured_img">
+                        // featured_slides
+                        <SwiperSlide key={id} className="text-center overflow-hidden shadow-[0_0_20px_1px_#B3B8D0] p-4 text-blue-7 max-md:w-[16rem] rounded-[12px]">
+                            {/* featured_title */}
+                            <div className="">{title}</div>
+                            {/* featured_img */}
+                            <figure className="my-8 overflow-hidden">
                                 <Link to={`/all-medicines/medicine-details/${id}`}>
-                                    <img src={images[0]} alt="" />
+                                    <img src={images[0]} alt="" className="w-full h-full object-cover rounded-[12px]"/>
                                 </Link>
                             </figure>
-                            <h2 className="products_price">
+                            {/* products_price */}
+                            <h2 className="">
                                 ₹ {price} /- &nbsp;
                             </h2>
                         </SwiperSlide>
