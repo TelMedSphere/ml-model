@@ -36,8 +36,8 @@ module.exports = {
       animation: {
         spark: "spark 1.5s linear infinite",
         "pulse-custom": "pulse 2s infinite",
-        fadeIn: "fadeIn 1.5s ease-in-out",
-        fadeInLeft: "fadeInLeft 1.5s ease-in-out forwards"
+        fadeIn: 'fadeIn 1.5s ease-in-out',
+        fadeInLeft: 'fadeInLeft 1.5s ease-in-out forwards'
       },
       keyframes: {
         spark: {
@@ -58,22 +58,22 @@ module.exports = {
           },
         },
         fadeIn: {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" }
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' }
         },
         fadeInLeft: {
-          "0%": { opacity: "0", transform: "translateX(-20px)" },
-          "100%": { opacity: "1", transform: "translateX(0)" }
+          '0%': { opacity: '0', transform: 'translateX(-20px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' }
         },
       },
       zIndex: {
-        "-1": "-1",
-        50: "50",
-        1000: "1000",
-        1050: "1050",
-        9999: "9999", // Ensure the modal is on top
+        '-1': '-1',
+        50: '50',
+        1000: '1000',
+        1050: '1050',
+        9999: '9999', // Ensure the modal is on top
       },
     },
   },
-  plugins: [require("tailwind-scrollbar")],
+  plugins: [],
 };
