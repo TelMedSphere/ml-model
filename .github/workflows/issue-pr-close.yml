@@ -1,13 +1,11 @@
-name: Automate Issue and PR Responses
+name: Automate Issue and PR Close Responses
 
 on:
   issues:
     types:
-      - opened
       - closed
   pull_request_target:
     types:
-      - opened
       - closed
 
 permissions:
@@ -23,17 +21,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Respond to new issues
-      - name: Respond to new issues
-        if: ${{ github.event.action == 'opened' && github.event_name == 'issues' }}
-        uses: peter-evans/create-or-update-comment@v3
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            Hey @${{ github.actor }}, Welcome to 💖TelMedSphere !!! 🎊
-            Thanks for opening an issue! 🙌 Please wait for the issue to get reviewed. If it is relevant, it will get assigned to you.
-            Happy Coding !!! ✨
-
       # Respond to closed issues
       - name: Respond to closed issues
         if: ${{ github.event.action == 'closed' && github.event_name == 'issues' }}
@@ -43,18 +30,6 @@ jobs:
           body: |
             Hello @${{ github.event.issue.user.login }}! Your issue #${{ github.event.issue.number }} has been closed.
             Thank you for your interest in 💖TelMedSphere !!! 🙌
-
-      # Respond to new PRs
-      - name: Respond to new PRs
-        if: ${{ github.event.action == 'opened' && github.event_name == 'pull_request' }}
-        uses: peter-evans/create-or-update-comment@v3
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            Hey @${{ github.actor }}, Welcome to 💖TelMedSphere !!! 🎊
-            Thanks for raising a PR! Your effort makes this project better. 🙌
-            Please wait for the PR to be reviewed.
-            Happy Coding!! ✨
 
       # Respond to merged PRs
       - name: Respond to merged PRs
@@ -75,5 +50,5 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             Hello @${{ github.event.pull_request.user.login }}, your PR #${{ github.event.pull_request.number }} has been closed without merging. 😞
-            Don't be discouraged! Please feel free to address any review comments or reopen the PR if necessary.
+            Don't be discouraged! Please feel free to look into another issue of your interest or create one.
             Thank you for your effort and interest in 💖TelMedSphere !!! 🙌
