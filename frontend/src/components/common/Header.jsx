@@ -48,9 +48,10 @@ const Header = () => {
     }, []);
 
     const NavLink = ({ path, label, badge }) => (
-        <div className={`relative cursor-pointer ${curPath === path ? "text-blue-900" : ""}`}>
+        <div className={`relative group`}>
             <span 
-                className="text-xs font-bold hover:text-blue-900 transition-colors duration-300" 
+                className={`text-xs font-bold cursor-pointer transition-colors duration-300
+                    ${curPath === path ? "text-blue-900" : "text-blue-800 hover:text-blue-900"}`}
                 onClick={() => {
                     navigate(path);
                     setMobileMenuOpen(false);
@@ -71,10 +72,10 @@ const Header = () => {
 
     return (
         <>
+            {/* Top Contact Bar */}
             {localStorage.getItem("username") && localStorage.getItem("usertype") === "patient" && (
-                <div className={`hidden md:flex justify-between items-center px-4 lg:px-40 py-4 border-b border-blue-800 transition-all duration-300 ${
-                    isScrolled ? 'h-0 opacity-0 invisible p-0' : 'h-full opacity-100 visible'
-                }`}>
+                <div className={`hidden md:flex justify-between items-center px-4 lg:px-40 py-4 border-b border-blue-800
+                    transition-all duration-300 ${isScrolled ? 'h-0 opacity-0 invisible p-0' : 'h-full opacity-100 visible'}`}>
                     <div className="flex items-center gap-5 text-gray-600">
                         <Link to="/" className="flex items-center hover:text-gray-800 transition-colors duration-300">
                             <FiMail className="mr-1" />
@@ -91,7 +92,9 @@ const Header = () => {
                 </div>
             )}
 
-            <header className={`relative w-full text-blue-800 py-6 ${isSticky ? 'sticky top-0 left-0 z-50 bg-blue-100' : ''}`}>
+            {/* Main Header */}
+            <header className={`relative w-full bg-blue-50 py-6 transition-colors duration-200
+                ${isSticky ? 'sticky top-0 left-0 z-50 shadow-md' : ''}`}>
                 <div className="container mx-auto px-4">
                     <div className="flex justify-between items-center">
                         <Link to="/" className="flex items-center">
@@ -107,23 +110,25 @@ const Header = () => {
                                             <NavLink key={item.path} {...item} />
                                         )
                                     ))}
+                                    
+                                    {/* Account Dropdown */}
                                     <div className="relative" ref={dropdownRef}>
                                         <span 
-                                            className="text-xs font-bold hover:text-blue-900 transition-colors duration-300 cursor-pointer"
+                                            className="text-xs font-bold text-blue-800 hover:text-blue-900 transition-colors duration-300 cursor-pointer"
                                             onClick={() => setShowDropdown(!showDropdown)}
                                         >
                                             ACCOUNT
                                         </span>
                                         {showDropdown && (
-                                            <div className="absolute top-12 right-0 w-64 bg-blue-600 p-6 rounded shadow-lg">
-                                                {/* Account Dropdown Content */}
+                                            <div className="absolute top-12 right-0 w-64 bg-blue-600 p-6 rounded-lg shadow-lg z-50
+                                                animate-fadeIn">
                                                 <div className="text-white space-y-4">
                                                     <h4 className="font-semibold">
                                                         Hello! {localStorage.getItem("username")}
                                                     </h4>
                                                     <div className="flex gap-2">
                                                         <button 
-                                                            className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-400"
+                                                            className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-400 transition-colors duration-300"
                                                             onClick={() => {
                                                                 setShowDropdown(false);
                                                                 toggleProfile(true);
@@ -132,7 +137,7 @@ const Header = () => {
                                                             Profile
                                                         </button>
                                                         <button 
-                                                            className="px-4 py-2 border rounded hover:bg-blue-500"
+                                                            className="px-4 py-2 border rounded hover:bg-blue-500 transition-colors duration-300"
                                                             onClick={() => {
                                                                 userLogout();
                                                                 navigate("/");
@@ -142,18 +147,18 @@ const Header = () => {
                                                         </button>
                                                     </div>
                                                     <div className="space-y-3 pt-4 border-t border-blue-400">
-                                                        <Link to="/my-wallet" className="flex items-center gap-2 hover:text-blue-200">
+                                                        <Link to="/my-wallet" className="flex items-center gap-2 hover:text-blue-200 transition-colors duration-300">
                                                             <IoWalletOutline />
                                                             My Wallet
                                                         </Link>
-                                                        <Link to="/my-cart" className="flex items-center gap-2 hover:text-blue-200">
+                                                        <Link to="/my-cart" className="flex items-center gap-2 hover:text-blue-200 transition-colors duration-300">
                                                             <AiOutlineShoppingCart />
                                                             My Cart
                                                             <span className="px-2 py-1 bg-blue-500 rounded-full text-xs">
                                                                 {cartItems.length}
                                                             </span>
                                                         </Link>
-                                                        <Link to="/my-orders" className="flex items-center gap-2 hover:text-blue-200">
+                                                        <Link to="/my-orders" className="flex items-center gap-2 hover:text-blue-200 transition-colors duration-300">
                                                             <RiFileList3Line />
                                                             My Orders
                                                         </Link>
@@ -164,48 +169,48 @@ const Header = () => {
                                     </div>
                                 </nav>
 
-                                {/* Mobile Menu Button */}
+                                {/* Mobile Menu */}
                                 <div className="md:hidden" ref={mobileMenuRef}>
                                     <button 
                                         onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-                                        className="text-2xl"
+                                        className="text-2xl text-blue-800 hover:text-blue-900 transition-colors duration-300"
                                     >
                                         {isMobileMenuOpen ? <MdClose /> : <CiMenuFries />}
                                     </button>
 
-                                    {/* Mobile Menu */}
                                     {isMobileMenuOpen && (
-                                        <div className="absolute top-full right-0 w-64 bg-white shadow-lg rounded-lg mt-2 p-4 z-50">
+                                        <div className="absolute top-full right-0 w-64 bg-white shadow-lg rounded-lg mt-2 p-4 z-50
+                                            animate-fadeInLeft">
                                             <div className="space-y-4">
                                                 {navItems.map((item) => (
                                                     (!item.showFor || localStorage.getItem("usertype") === item.showFor) && (
-                                                        <div key={item.path} className="px-4 py-2 hover:bg-blue-50 rounded">
+                                                        <div key={item.path} className="px-4 py-2 hover:bg-blue-50 rounded transition-colors duration-300">
                                                             <NavLink {...item} />
                                                         </div>
                                                     )
                                                 ))}
-                                                <hr className="my-2" />
+                                                <hr className="my-2 border-blue-100" />
                                                 <div className="space-y-3 px-4">
-                                                    <Link to="/my-wallet" className="flex items-center gap-2 hover:text-blue-600">
+                                                    <Link to="/my-wallet" className="flex items-center gap-2 text-blue-800 hover:text-blue-600 transition-colors duration-300">
                                                         <IoWalletOutline />
                                                         My Wallet
                                                     </Link>
-                                                    <Link to="/my-cart" className="flex items-center gap-2 hover:text-blue-600">
+                                                    <Link to="/my-cart" className="flex items-center gap-2 text-blue-800 hover:text-blue-600 transition-colors duration-300">
                                                         <AiOutlineShoppingCart />
                                                         My Cart
                                                         <span className="px-2 py-1 bg-blue-100 rounded-full text-xs">
                                                             {cartItems.length}
                                                         </span>
                                                     </Link>
-                                                    <Link to="/my-orders" className="flex items-center gap-2 hover:text-blue-600">
+                                                    <Link to="/my-orders" className="flex items-center gap-2 text-blue-800 hover:text-blue-600 transition-colors duration-300">
                                                         <RiFileList3Line />
                                                         My Orders
                                                     </Link>
                                                 </div>
-                                                <hr className="my-2" />
+                                                <hr className="my-2 border-blue-100" />
                                                 <div className="px-4 space-y-2">
                                                     <button 
-                                                        className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                                        className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-300"
                                                         onClick={() => {
                                                             setMobileMenuOpen(false);
                                                             toggleProfile(true);
@@ -214,7 +219,7 @@ const Header = () => {
                                                         Profile
                                                     </button>
                                                     <button 
-                                                        className="w-full px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50"
+                                                        className="w-full px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 transition-colors duration-300"
                                                         onClick={() => {
                                                             userLogout();
                                                             navigate("/");
