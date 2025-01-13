@@ -12,7 +12,7 @@ const FilterBar = () => {
       {/*===== Filterbar-default =====*/}
       <aside
         id="filterbar"
-        className="bg-white p-6 max-h-[82vh] overflow-y-auto hidden lg:block"
+        className="p-6 max-h-[82vh] overflow-y-auto max-lg:hidden"
       >
         <div className="grid gap-10 text-sm">
           <FilterBarOptions />
@@ -22,7 +22,7 @@ const FilterBar = () => {
       {/*===== Filterbar-mobile =====*/}
       <div
         id="filterbar_mob"
-        className="fixed bottom-0 left-0 z-[999] w-full p-4 bg-white shadow-[0_-8px_15px_rgba(0,0,0,0.5)] lg:hidden"
+        className="fixed bottom-0 left-0 w-full p-4 bg-white-1 shadow-[0_-8px_15px_rgba(0,0,0,0.5)] lg:hidden max-h-[30vh] overflow-y-scroll"
       >
         <div className="flex justify-around items-center text-sm">
           <h3
