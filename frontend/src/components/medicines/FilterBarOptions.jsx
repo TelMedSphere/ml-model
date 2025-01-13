@@ -12,7 +12,7 @@ const FilterBarOptions = () => {
     handleMobFilterVisibility,
     handleClearFilters,
   } = useContext(filtersContext);
-
+  
   const sortMenu = [
     {
       id: 1,
@@ -31,7 +31,7 @@ const FilterBarOptions = () => {
   return (
     <>
       {/*===== Clear-Filters btn =====*/}
-      {sortedValue && (
+      {(sortedValue || price !== maxPrice) && (
         // clear_filter_btn
         <div className="">
           <button

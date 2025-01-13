@@ -54,7 +54,7 @@ const AllMedicines = () => {
           <FilterBar  />
         </div>
         {/* container */}
-        <div className="col-span-10 max-w-[1440px] mx-auto px-3 max-xl:max-w-[1280px] max-lg:max-w-[1024px] max-md:max-w-[768px] max-sm:max-w-[640px] max-xs:max-w-full">
+        <div className="col-span-10 max-w-[1440px] mx-auto px-3 max-xl:max-w-[1280px] max-lg:max-w-[1024px] max-md:max-w-[768px] max-sm:max-w-[640px] max-xs:max-w-full lg:min-w-[80vw]">
           {allProducts.length > 0 ? (
             // wrapper products_wrapper
             <div className="flex flex-wrap w-full gap-2 ">
