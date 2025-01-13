@@ -29,7 +29,7 @@ const ProductCard = (props) => {
     return (
         <>
         {/* products_card */}
-            <div className="card w-[24%] max-xs:w-[98%] max-md:w-[46%] max-xl:w-[31%] mx-[0.3rem] border-[1px] border-white-1/40 overflow-auto max-h-[520px] shadow-[0px_0px_5px_2px_#ccc] rounded-[8px] text-blue-6 text-center transition-all duration-300 ease-in-out hover:shadow-[0px_0px_10px_2px_#7584AE] hover:text-blue-8 scrollbar-none mb-3" >
+            <div className="card w-[24%] max-xs:w-[98%] max-md:w-[46%] max-lg:w-[31%] mx-[0.3rem] border-[1px] border-white-1/40 overflow-auto max-h-[520px] shadow-[0px_0px_5px_2px_#ccc] rounded-[8px] text-blue-6 text-center transition-all duration-300 ease-in-out hover:shadow-[0px_0px_10px_2px_#7584AE] hover:text-blue-8 scrollbar-none mb-3" >
             {/* products_img */}
                 <figure className="p-4 overflow-hidden min-h-[50%]">
                     <Link to={`/all-medicines/medicine-details/${id}`} className='flex justify-center w-full'>

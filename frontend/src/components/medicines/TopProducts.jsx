@@ -8,8 +8,10 @@ import medicinesData from '../../data/medicinesData';
 const TopProducts = () => {
 
     return (
-        <div id="latest-products">
-            <div className="wrapper products_wrapper">
+        // latest-products
+        <div id="" className='p-[10px] mt-12 w-full'>
+            {/* wrapper products_wrapper */}
+            <div className="flex flex-wrap  ">
                 {
                     medicinesData.slice(0, 7).map(item => (
                         <ProductCard
@@ -18,7 +20,8 @@ const TopProducts = () => {
                         />
                     ))
                 }
-                <div className="card products_card browse_card">
+                {/* products_card browse_card */}
+                <div className="card w-[24%] max-xs:w-[98%] max-md:w-[46%] max-xl:w-[31%] mx-[0.3rem] border-[1px] border-white-1/40 max-h-[440px] shadow-[0_0_5px_2px_#ccc] rounded-[8px] text-blue-6 text-center transition-all duration-300 ease-in-out scrollbar-[5px] hover:shadow-[0_0_10px_2px_#7584AE] hover:text-blue-8 text-[1.5rem] flex items-center justify-start px-10 overflow-y-hidden">
                     <Link to="/all-medicines">
                         Browse All <br /> Medicines <BsArrowRight />
                     </Link>
