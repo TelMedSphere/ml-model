@@ -626,12 +626,12 @@ def wallet():
     email = data['email']
     var = patients.find_one({'email': email})
     if var:
-        wallet = var.get('wallet', 0)+int(data['walletAmount'])
+        wallet = var.get('wallet', 0)+round(float(data['walletAmount']))
         patients.update_one({'email': email}, {'$set': {'wallet': wallet}})
         return jsonify({'message': 'Wallet updated successfully'}), 200
     else:
         var = doctor.find_one({'email': email})
-        wallet = var.get('wallet', 0)+int(data['walletAmount'])
+        wallet = var.get('wallet', 0)+round(float(data['walletAmount']))
         doctor.update_one({'email': email}, {'$set': {'wallet': wallet}})
         return jsonify({'message': 'Wallet updated successfully'}), 200
 
@@ -654,17 +654,17 @@ def debit_wallet():
     if data.get('demail', False):
         demail = data['demail']
         doc = doctor.find_one({'email': demail})
-        wallet = var.get('wallet', 0)-int(doc.get('fee', 0))
+        wallet = var.get('wallet', 0)-round(float(doc.get('fee', 0)))
         patients.update_one({'email': email}, {'$set': {'wallet': wallet}})
         return jsonify({'message': 'Wallet updated successfully'}), 200
     else:
         if var:
-            wallet = var.get('wallet', 0)-int(data['walletAmount'])
+            wallet = var.get('wallet', 0)-round(float(data['walletAmount']))
             patients.update_one({'email': email}, {'$set': {'wallet': wallet}})
             return jsonify({'message': 'Wallet updated successfully'}), 200
         else:
             var = doctor.find_one({'email': email})
-            wallet = var.get('wallet', 0)-int(data['walletAmount'])
+            wallet = var.get('wallet', 0)-round(float(data['walletAmount']))
             doctor.update_one({'email': email}, {'$set': {'wallet': wallet}})
             return jsonify({'message': 'Wallet updated successfully'}), 200
     
