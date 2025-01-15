@@ -9,9 +9,9 @@ import { IoWalletOutline } from 'react-icons/io5';
 import commonContext from '../../contexts/common/commonContext';
 import cartContext from '../../contexts/cart/cartContext';
 import useOutsideClose from '../../hooks/useOutsideClose';
-import AccountForm from '../form/AccountForm';
 import Profile from './Profile';
 import logo from "../../assets/header.png";
+import AccountForm from '../form/Accountform';
 
 const Header = () => {
     const { toggleForm, userLogout, toggleProfile } = useContext(commonContext);
