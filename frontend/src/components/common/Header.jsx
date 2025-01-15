@@ -59,7 +59,7 @@ const Header = () => {
             >
                 {label}
                 {badge && (
-                    <span className="absolute -right-10 top-0 flex items-center justify-center w-12 h-5 bg-blue-800 rounded-full text-xs text-white">
+                    <span className="absolute -right-0 md:-right-10 top-0 flex items-center justify-center w-12 h-5 bg-blue-20 rounded-full text-xs text-white-6">
                         {badge}
                     </span>
                 )}
@@ -93,8 +93,8 @@ const Header = () => {
             )}
 
             {/* Main Header */}
-            <header className={`relative w-full bg-blue-50 py-6 transition-colors duration-200
-                ${isSticky ? 'sticky top-0 left-0 z-50 shadow-md' : ''}`}>
+            <header className={`relative w-full py-6 transition-colors duration-200 
+                ${isSticky ? 'sticky top-0 left-0 z-1000 shadow-md bg-gradient-to-br from-blue-1 to-blue-2' : ''}`}>
                 <div className="container mx-auto px-4">
                     <div className="flex justify-between items-center">
                         <Link to="/" className="flex items-center">
@@ -120,7 +120,7 @@ const Header = () => {
                                             ACCOUNT
                                         </span>
                                         {showDropdown && (
-                                            <div className="absolute top-12 right-0 w-64 bg-blue-600 p-6 rounded-lg shadow-lg z-50
+                                            <div className="absolute top-12 right-0 w-64bg-gradient-to-br from-blue-1 to-blue-2 p-6 rounded-lg shadow-lg z-50
                                                 animate-fadeIn">
                                                 <div className="text-white space-y-4">
                                                     <h4 className="font-semibold">
@@ -128,7 +128,7 @@ const Header = () => {
                                                     </h4>
                                                     <div className="flex gap-2">
                                                         <button 
-                                                            className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-400 transition-colors duration-300"
+                                                            className="px-4 py-2 bg-blue-9 rounded hover:bg-slate-800 transition-colors duration-300"
                                                             onClick={() => {
                                                                 setShowDropdown(false);
                                                                 toggleProfile(true);
@@ -179,7 +179,7 @@ const Header = () => {
                                     </button>
 
                                     {isMobileMenuOpen && (
-                                        <div className="absolute top-full right-0 w-64 bg-white shadow-lg rounded-lg mt-2 p-4 z-50
+                                        <div className="absolute top-full right-0 w-64 bg-gradient-to-br from-blue-1 to-blue-2 shadow-lg rounded-lg mt-2 p-4 z-50
                                             animate-fadeInLeft">
                                             <div className="space-y-4">
                                                 {navItems.map((item) => (
@@ -210,7 +210,7 @@ const Header = () => {
                                                 <hr className="my-2 border-blue-100" />
                                                 <div className="px-4 space-y-2">
                                                     <button 
-                                                        className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-300"
+                                                        className="w-full px-4 py-2 bg-blue-9 text-white rounded hover:bg-slate-800 transition-colors duration-300"
                                                         onClick={() => {
                                                             setMobileMenuOpen(false);
                                                             toggleProfile(true);
