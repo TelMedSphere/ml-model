@@ -249,6 +249,3 @@ Read our [Contributing Guidelines](https://github.com/PratikMane0112/TelMedSpher
 
 TelMedSphere and everyone participating in it is governed by the [Code of Conduct](https://github.com/PratikMane0112/TelMedSphere/blob/master/.github/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
-
-<h3>🎊 Contributions are always welcome 👨‍💻 Give it a 🌟 if you 🧡 TelMedSphere. Happy Coding !!!!! 🎊</h3>
-<h3 align="right"><a href="#top">⬆️</a></h3>
