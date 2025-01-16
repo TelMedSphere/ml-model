@@ -8,7 +8,7 @@ const useActive = (initState) => {
     };
 
     const activeClass = (i) => {
-        return active === i ? 'active' : '';
+        return active === i ? 'border-[2px] border-blue-2' : '';
     };
 
     return { active, handleActive, activeClass };
