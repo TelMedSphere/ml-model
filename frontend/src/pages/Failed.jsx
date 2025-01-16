@@ -18,18 +18,18 @@ const Failed = () => {
   };
 
   return (
-    <div id="success">
-      <div className={`tick-icon ${active? "active" : ""} failed`}>
+    <div className="my-[100px] mx-0 mt-[150px] text-center">
+      <div className={`text-[#f00] text-[0] transition-all duration-300 ease-out h-[200px] flex justify-center items-end ${active? "text-[200px]" : ""}`}>
         <BiErrorCircle className="icon"/>
       </div>
-      <div className="content">
+      <div className="p-[50px] pt-[20px] max-w-[1200px] w-full my-0 mx-auto text-blue-8">
         <h1>Payment Failed!!!</h1>
         <br></br>
         <h3>Please Try Again!</h3>
       </div>
-      <div className="redirecting-div" onClick={() => setActive(prev => !prev)}>
+      <div className="flex justify-center items-center text-blue-9" onClick={() => setActive(prev => !prev)}>
         <CircularProgress size={24} />
-        <p style={{marginLeft: "10px"}}>redirecting to medicines page...</p>
+        <p className="ml-[10px]">redirecting to medicines page...</p>
       </div>
     </div>
   );
