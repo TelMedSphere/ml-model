@@ -71,7 +71,7 @@ const Footer = () => {
         <div className="border-t border-opacity-70 mt-10"></div>
 
 
-        <div className="flex flex-col-reverse md:flex-row items-center justify-between mt-8 gap-8">
+        <div className="flex flex-col-reverse  items-center justify-between mt-8 gap-8">
           <p className="text-sm">
              {new Date().getFullYear()} @{" "}
             <Link
