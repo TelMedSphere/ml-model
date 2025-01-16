@@ -1,4 +1,4 @@
-# <p align="center">💖 TelMedSphere 💖</p>
+# <p align="center">💖TelMedSphere</p>
 <!-------------------------------------------------------------------------------------------------------------------------------------->
  <div align="center">
  <p>
@@ -31,10 +31,10 @@
  [⭐ Overview](#overview).<br>
  [💥 Getting Started](#getting-started).<br>
  [🐳 Docker Setup](#docker-setup).<br>
+ [⚡ Project Admin & Mentors](#project-admin-and-mentors).<br>
+ [💬 Join Chatting Server](#contributing-with-fun).<br>
  [📑 Contributing Guidelines](#contributing-guidelines).<br>
  [📑 Code Of Conduct](#code-of-conduct).<br>
- [⚡ Project Admin & Mentors](#project-admin-and-mentors).<br>
- [🧡 Contributing with fun](#contributing-with-fun).<br>
 <br>
 
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
@@ -140,6 +140,14 @@ TelMedSphere is designed to make healthcare simple and accessible for both docto
  # deactivate the virtual environment, when you are done
  deactivate
  ```
+
+<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+## How to Get `.env` File Variables
+
+Refer to the [EnvVarSetUpGuideline.md](.github/EnvVarSetUpGuideline.md) for detailed steps on setting up the `.env` files for both the frontend and backend.
+
+
 <h3 align="right"><a href="#top">⬆️</a></h3>
 
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
@@ -179,24 +187,6 @@ docker-compose kill
 ```
 
 <h3 align="right"><a href="#top">⬆️</a></h3>
-
-<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-
-## How to Get `.env` File Variables
-
-Refer to the [EnvVarSetUpGuideline.md](.github/EnvVarSetUpGuideline.md) for detailed steps on setting up the `.env` files for both the frontend and backend.
-
-
-<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-<h2>📑Contributing Guidelines</h2>
-
-Read our [Contributing Guidelines](https://github.com/PratikMane0112/TelMedSphere/blob/master/.github/CONTRIBUTING_GUIDELINES.md) to learn about our development process, how to propose bugfixes and improvements, and contributions.
-
-<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-
-<h2>📑Code Of Conduct</h2>
-
-TelMedSphere and everyone participating in it is governed by the [Code of Conduct](https://github.com/PratikMane0112/TelMedSphere/blob/master/.github/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
@@ -247,5 +237,18 @@ TelMedSphere and everyone participating in it is governed by the [Code of Conduc
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
 <h2><a href="https://discord.gg/qsdDRKak28">Join Discord Server↗️</a></h2>
+
+<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+<h2>📑Contributing Guidelines</h2>
+
+Read our [Contributing Guidelines](https://github.com/PratikMane0112/TelMedSphere/blob/master/.github/CONTRIBUTING_GUIDELINES.md) to learn about our development process, how to propose bugfixes and improvements, and contributions.
+
+<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+<h2>📑Code Of Conduct</h2>
+
+TelMedSphere and everyone participating in it is governed by the [Code of Conduct](https://github.com/PratikMane0112/TelMedSphere/blob/master/.github/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+
+
 <h3>🎊 Contributions are always welcome 👨‍💻 Give it a 🌟 if you 🧡 TelMedSphere. Happy Coding !!!!! 🎊</h3>
 <h3 align="right"><a href="#top">⬆️</a></h3>
