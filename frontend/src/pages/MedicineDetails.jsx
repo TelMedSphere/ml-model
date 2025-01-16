@@ -123,15 +123,17 @@ const MedicineDetails = () => {
                   // tabs_item
                   <div
                     key={i}
-                    className={`w-24 h-24 rounded-[3px] py-2 max-sm:w-[5.5rem] max-sm:h-[5.5rem] max-xs:w-20 max-xs:h-20 ${activeClass(
-                      i
+                    className={`w-24 h-24 rounded-[3px] py-2 px-2 max-sm:w-[5.5rem] max-sm:h-[5.5rem] max-xs:w-20 max-xs:h-20 ${activeClass(
+                      i,
+                      "border-[2px] border-blue-2",
+                      ""
                     )}`}
-                    onClick={() => handlePreviewImg(i)}
+                    onClick={() => handleActive(i)} // Update the active index on click
                   >
                     <img
                       src={img}
                       alt="product-img"
-                      className="w-full h-full object-cover "
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 ))}
@@ -151,14 +153,18 @@ const MedicineDetails = () => {
             <div className="col-span-5 lg:pl-20 text-blue-8 max-lg:w-[92vw] mt-6">
               {/* prod_details_title */}
               <h1 className="">{title}</h1>
-              <h4 className="mt-[0.6rem] mb-[1.2rem] font-semibold text-blue-9">Pharmaceuticals</h4>
+              <h4 className="mt-[0.6rem] mb-[1.2rem] font-semibold text-blue-9">
+                Pharmaceuticals
+              </h4>
 
               <div className="mt-[2.2rem] mb-[2.2rem] border-t-[1px] border-t-grey-2"></div>
 
               <div className="flex justify-between items-center">
                 <div>
                   <h2 className="text-[2rem]">₹ {price} /- &nbsp;</h2>
-                  <span className="text-[0.9rem] text-blue-9">(Inclusive of all taxes)</span>
+                  <span className="text-[0.9rem] text-blue-9">
+                    (Inclusive of all taxes)
+                  </span>
                 </div>
 
                 <div className="bg-green-700 w-auto py-1 px-2 text-xs font-semibold text-white-1 rounded-[3px]">
@@ -189,8 +195,11 @@ const MedicineDetails = () => {
                   type="checkbox"
                   checked={addBalance}
                   onChange={() => {}}
-                 className="inline-block"/>
-                <p className="inline-block">Use Wallet Money {`(₹ ${balance})`}</p>
+                  className="inline-block"
+                />
+                <p className="inline-block">
+                  Use Wallet Money {`(₹ ${balance})`}
+                </p>
               </div>
 
               <div className="use-balance-div">
@@ -198,7 +207,7 @@ const MedicineDetails = () => {
                   Amount to pay: <b>₹ {totalBalance}</b>
                 </p>
               </div>
-                {/* prod_details_buy_btn */}
+              {/* prod_details_buy_btn */}
               <div className="flex justify-start items-center flex-wrap">
                 <button
                   type="button"
@@ -229,7 +238,9 @@ const MedicineDetails = () => {
                 </button>
                 <button
                   type="button"
-                  className={`inline-block px-6 py-[0.8rem] rounded-[3px] transition-colors duration-200 ease-out w-[200px] bg-yellow-4 text-white-1 mt-2 mr-2 hover:bg-yellow-6 active:bg-blue-7 ${btnActive && "active"}`}
+                  className={`inline-block px-6 py-[0.8rem] rounded-[3px] transition-colors duration-200 ease-out w-[200px] bg-yellow-4 text-white-1 mt-2 mr-2 hover:bg-yellow-6 active:bg-blue-7 ${
+                    btnActive && "active"
+                  }`}
                   onClick={handleAddItem}
                 >
                   {btnActive ? "Added" : "Add to cart"}
