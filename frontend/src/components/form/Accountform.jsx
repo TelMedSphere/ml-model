@@ -171,7 +171,7 @@ const AccountForm = () => {
 
                     <div className="w-full max-w-lg bg-gray-50 ">
                         <form ref={formRef} onSubmit={isForgotPassword ? handleForgotPassword : handleFormSubmit} 
-                             className="bg-gray rounded-lg p-8 relative w-full max-h-[90vh] overflow-y-auto shadow-lg z-[1050]">
+                             className="bg-blue-1 rounded-lg p-8 relative w-full max-h-[90vh] overflow-y-auto shadow-lg z-[1050]">
                             {isAlert !== "" && (
                                 <div className="mb-4">
                                     <Alert severity={isAlert}>{alertCont}</Alert>
@@ -362,9 +362,9 @@ const AccountForm = () => {
                                     </button>
                                 )}
 
-<button
+                                <button
                                     type="submit"
-                                    className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium mt-4 hover:bg-blue-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                                    className="w-full bg-blue-4 hover:bg-slate-600 text-white-6 py-3 rounded-lg font-medium mt-4 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
                                     disabled={isSuccessLoading}
                                 >
                                     {isSuccessLoading ? (

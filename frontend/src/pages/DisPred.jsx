@@ -180,10 +180,10 @@ const handleSend = async (message) => {
   }
 
   return (
-    <div className="App">
-      <div style={{ position: "relative", height: "550px", width: "500px" }}>
+    <div className="flex justify-center items-center mb-[20px] mt-10">
+      <div className="relative h-[550px] max-w-[500px] mx-6">
         <MainContainer>
-          <ChatContainer>
+          <ChatContainer className="pt-2 -ml-[0.5rem]">
             <MessageList
               scrollBehavior="smooth"
               typingIndicator={

@@ -75,18 +75,18 @@ const Success = () => {
   // }, []);
   
   return (
-    <div id="success">
-      <div className={`tick-icon ${active? "active" : ""}`}>
-        <IoCheckmarkDoneCircleOutline className="icon"/>
+    <div id="" className="my-[100px] mx-0 mt-[150px] text-center">
+      <div className={`text-social-whatsapp text-[0] transition-all duration-300 ease-out h-[200px] flex justify-center items-end ${active? "text-[200px]" : ""}`}>
+        <IoCheckmarkDoneCircleOutline/>
       </div>
-      <div className="content">
+      <div className="p-[50px] pt-[20px] max-w-[1200px] w-full my-0 mx-auto text-blue-8">
         <h1>Payment Successful!!!</h1>
         <br></br>
         <h3>Thank you for choosing TELMEDSPHERE!</h3>
       </div>
-      <div className="redirecting-div" onClick={() => setActive(prev => !prev)}>
+      <div className="flex justify-center items-center text-blue-9" onClick={() => setActive(prev => !prev)}>
         <CircularProgress size={24} />
-        <p style={{marginLeft: "10px"}}>redirecting to orders page...</p>
+        <p className="ml-[10px]">redirecting to orders page...</p>
       </div>
     </div>
   );

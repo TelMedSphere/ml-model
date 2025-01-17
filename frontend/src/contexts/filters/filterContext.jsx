@@ -113,22 +113,41 @@ const FiltersProvider = ({ children }) => {
     };
 
     const handleMobSortVisibility = (toggle) => {
+        if (!toggle) {
+            dispatch({
+                type: 'SET_SORTED_VALUE',
+                payload: { sortValue: null },
+            });
+        }
+    
         return dispatch({
             type: 'MOB_SORT_VISIBILITY',
-            payload: { toggle }
+            payload: { toggle },
         });
     };
 
     const handleMobFilterVisibility = (toggle) => {
+        if (!toggle) {
+            dispatch({
+                type: 'HANDLE_PRICE',
+                payload: { value: state.selectedPrice.maxPrice }, // Reset price to max
+            });
+        }
+    
         return dispatch({
             type: 'MOB_FILTER_VISIBILITY',
-            payload: { toggle }
+            payload: { toggle },
         });
     };
 
     const handleClearFilters = () => {
-        return dispatch({
-            type: 'CLEAR_FILTERS'
+        dispatch({
+            type: 'CLEAR_FILTERS',
+        });
+    
+        dispatch({
+            type: 'HANDLE_PRICE',
+            payload: { value: state.selectedPrice.maxPrice },
         });
     };
 

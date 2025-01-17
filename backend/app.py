@@ -44,6 +44,7 @@ client = pymongo.MongoClient(URI, server_api=ServerApi('1'))
 
 doctor = client.get_database("telmedsphere").doctors
 patients = client.get_database("telmedsphere").patients
+feedback = client.get_database("telmedsphere").feedback
 
 YOUR_DOMAIN = os.getenv('DOMAIN') 
 
@@ -627,12 +628,12 @@ def wallet():
     email = data['email']
     var = patients.find_one({'email': email})
     if var:
-        wallet = var.get('wallet', 0)+int(data['walletAmount'])
+        wallet = var.get('wallet', 0)+round(float(data['walletAmount']))
         patients.update_one({'email': email}, {'$set': {'wallet': wallet}})
         return jsonify({'message': 'Wallet updated successfully'}), 200
     else:
         var = doctor.find_one({'email': email})
-        wallet = var.get('wallet', 0)+int(data['walletAmount'])
+        wallet = var.get('wallet', 0)+round(float(data['walletAmount']))
         doctor.update_one({'email': email}, {'$set': {'wallet': wallet}})
         return jsonify({'message': 'Wallet updated successfully'}), 200
 
@@ -655,17 +656,17 @@ def debit_wallet():
     if data.get('demail', False):
         demail = data['demail']
         doc = doctor.find_one({'email': demail})
-        wallet = var.get('wallet', 0)-int(doc.get('fee', 0))
+        wallet = var.get('wallet', 0)-round(float(doc.get('fee', 0)))
         patients.update_one({'email': email}, {'$set': {'wallet': wallet}})
         return jsonify({'message': 'Wallet updated successfully'}), 200
     else:
         if var:
-            wallet = var.get('wallet', 0)-int(data['walletAmount'])
+            wallet = var.get('wallet', 0)-round(float(data['walletAmount']))
             patients.update_one({'email': email}, {'$set': {'wallet': wallet}})
             return jsonify({'message': 'Wallet updated successfully'}), 200
         else:
             var = doctor.find_one({'email': email})
-            wallet = var.get('wallet', 0)-int(data['walletAmount'])
+            wallet = var.get('wallet', 0)-round(float(data['walletAmount']))
             doctor.update_one({'email': email}, {'$set': {'wallet': wallet}})
             return jsonify({'message': 'Wallet updated successfully'}), 200
     
@@ -697,7 +698,35 @@ def get_wallet_history():
         var = doctor.find_one({'email': email})
         return jsonify({'message': 'Wallet history', 'wallet_history': var.get('wallet_history', [])}), 200
 
+#------------ feedback route ------------------------------
+@app.route('/feedback', methods=['POST'])
+def save_feedback():
+    data = request.get_json()
+    try:
+        # Saving feedback information
+        feedback.insert_one(data);
+        return jsonify({"message": "Feedback Saved Successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500     
+        
+@app.route('/feedback',methods=['GET'])
+def get_all_feedback():
+    try:
+        feedbacks = list(feedback_collection.find({}, {"_id": 0}))
+        return jsonify(feedbacks),200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500    
 
+@app.route('/feedback/<id>',methods=['GET'])
+def get_feedback(id):
+    try:
+        result = feedback.find_one({'feedbackid':id})         
+        if(result):
+            return jsonify({"message":"Feedback found","data":result}), 200
+        else: return jsonify({"message": "Feedback Not Found"}),400    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  
+                       
 # ----------- email for contact us routes -----------------
 @app.route('/contact', methods=['POST'])
 def contact():
