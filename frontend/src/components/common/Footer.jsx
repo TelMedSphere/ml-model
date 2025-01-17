@@ -72,15 +72,14 @@ const Footer = () => {
 
 
         <div className="flex flex-col-reverse  items-center justify-between mt-8 gap-8">
-          <p className="text-sm">
-             {new Date().getFullYear()} @{" "}
+          <p className="text-sm flex flex-col items-center justify-between md:flex-row">
             <Link
               to="/"
               className="opacity-80 hover:opacity-100 transition-all"
             >
-              TelMedSphere
+              {new Date().getFullYear()} @{" "}TelMedSphere |{" "}
             </Link>{" "}
-            | All Rights Reserved.
+            {" "}| All Rights Reserved
           </p>
           <div className="flex gap-8 text-lg">
             {footSocial.map((item) => {
