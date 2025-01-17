@@ -5,8 +5,8 @@ import { FiltersProvider } from "./contexts/filters/filterContext";
 import Header from "./components/common/Header";
 import RouterRoutes from "./routes/RouterRoutes";
 import Footer from "./components/common/Footer";
-import BackTop from "./components/common/BackTop";
 import httpClient from "./httpClient";
+import ChatBot from "./components/common/ChatBot";
 
 const App = () => {
 
@@ -40,7 +40,7 @@ const App = () => {
             <Header />
             <RouterRoutes />  
             <Footer />
-            <BackTop />
+            <ChatBot />
           </CartProvider>
         </FiltersProvider>
       </CommonProvider>
