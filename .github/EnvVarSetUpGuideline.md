@@ -98,19 +98,17 @@ This document provides a step-by-step guide to setting up the required `.env` fi
       `VITE_JAAS_APP_ID=your_jaas_app_id`
 
    3. **`VITE_API_KEY`**  
-   - **Description:** The API key for chatbot integration.  
+   - **Description:** The API key for OpenAI Model use to predict patient's disease
    - **How to Obtain:** 
-      1. Identify the chatbot service provider you are using (e.g., Dialogflow, IBM Watson, etc.).
-      2. Visit the official website of the chatbot service provider.
-      3. Sign up for an account or log in if you already have one.
-      4. Navigate to the API section or the developer console of the service provider.
-      5. Look for an option to generate or view your API keys.
-      6. Follow the instructions provided by the service to generate a new API key.
-      7. Copy the generated API key.
-      8. Open your `.env` file in a text editor.
-      9. Add the following line to your `.env` file, replacing `your_chatbot_api_key` with the key you copied:
-
-      `VITE_API_KEY=your_chatbot_api_key`
+      1. Log in to the [OpenAI Platform](https://platform.openai.com/).
+      2. After logging in go to top right & click on option [Dashboard](https://platform.openai.com/chat-completions)
+      3. From there go left side cloumn click on option [API keys](https://platform.openai.com/api-keys)
+      4. Click on option `Create new secret key` to generate your OpenAI API key
+      5. Follow the instructions provided by the platform to generate a new API key.
+      6. Copy the generated API key.
+      7. Open your `.env` file in a text editor.
+      8. Add the following line to your `.env` file, replacing `your_api_key` with the key you copied:
+      `VITE_API_KEY = your_api_key`
       
 
 ---
