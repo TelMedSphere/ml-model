@@ -17,7 +17,6 @@ import DiseasePrediction from "../pages/DiseasePrediction";
 import ErrorPage from "../pages/ErrorPage";
 import Checkout from "../pages/Checkout";
 import DisPred from "../pages/DisPred";
-import Chatbot from "../components/common/Chatbot";
 import MyOrders from "../pages/MyOrders";
 import MyWallet from "../pages/MyWallet";
 import RecentTransactions from "../pages/RecentTransactions";
@@ -46,7 +45,6 @@ const RouterRoutes = () => {
         <Route path="/failed" element={<Failed />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/disease-prediction" element={<DiseasePrediction />} />
-        <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/my-orders" element={<MyOrders />} />
         <Route path="/my-wallet" element={<MyWallet />} />
         <Route path="/recent-transactions" element={<RecentTransactions />} />
