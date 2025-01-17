@@ -98,17 +98,17 @@ This document provides a step-by-step guide to setting up the required `.env` fi
       `VITE_JAAS_APP_ID=your_jaas_app_id`
 
    3. **`VITE_API_KEY`**  
-   - **Description:** The API key for OpenAI Model use to predict patient's disease
+   - **Description:** The API key for Chat-Bot
    - **How to Obtain:** 
-      1. Log in to the [OpenAI Platform](https://platform.openai.com/).
-      2. After logging in go to top right & click on option [Dashboard](https://platform.openai.com/chat-completions)
-      3. From there go left side cloumn click on option [API keys](https://platform.openai.com/api-keys)
-      4. Click on option `Create new secret key` to generate your OpenAI API key
-      5. Follow the instructions provided by the platform to generate a new API key.
-      6. Copy the generated API key.
-      7. Open your `.env` file in a text editor.
-      8. Add the following line to your `.env` file, replacing `your_api_key` with the key you copied:
-      `VITE_API_KEY = your_api_key`
+      1. Go to the [Google AI Studio](https://aistudio.google.com/app/apikey).
+      2. Sign in with your Google account.
+      3. Once logged in, you should see an interface for managing projects and API keys (If prompted, create a new project or select an existing one).
+      4. Now In the API Key section, look for an option to Generate API Key & click on it to create a new API key 
+      5. Once the key is generated, it will be displayed on the screen.
+      6. Copy the API key.
+      7. Open your `.env` file in frontend folder.
+      8. Replacing `your_api_key` with the key you copied:
+      `VITE_API_KEY = your_API_key`
       
 
 ---

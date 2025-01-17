@@ -12,7 +12,7 @@ import {
   TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
 
-const BackTop = () => {
+const ChatBot = () => {
   const API_KEY = import.meta.env.VITE_API_KEY;
 
   if (!API_KEY) {
@@ -85,22 +85,12 @@ const BackTop = () => {
   };
 
   const processMessageToGemini = async (chatMessages) => {
-    const apiMessages = chatMessages.map((messageObject) => ({
-      role: messageObject.sender === "gemini-pro" ? "assistant" : "user",
-      content: messageObject.message,
-    }));
   
     const apiRequestBody = {
       contents: [{
-        parts: apiMessages.map(message => ({ text: message.content }))
+        parts: chatMessages.map(message => ({ text: message.message }))
       }]
     };
-  
-    const API_KEY = import.meta.env.VITE_API_KEY;
-    if (!API_KEY) {
-      console.error("API_KEY is missing in environment variables");
-      return;
-    }
   
     try {
       const response = await fetch(
@@ -118,12 +108,12 @@ const BackTop = () => {
       const responseData = await response.json();
       console.log('Full API Response:', responseData);
   
-      if (!response.ok || !responseData || !responseData.choices || !responseData.choices[0]?.message?.content) {
+      if (!response.ok || !responseData || !responseData.candidates || !responseData.candidates[0]?.content?.parts) {
         console.error("API Error:", response.status, response.statusText);
         setMessages((prevMessages) => [
           ...prevMessages,
           {
-            message: "I'm sorry, I couldn't fetch a response. Please try again.",
+            message: "Oopps !!! It's overload for today, Please try again later.",
             sender: "gemini-pro",
           },
         ]);
@@ -131,7 +121,7 @@ const BackTop = () => {
         return;
       }
   
-      const botResponse = responseData.choices[0].message.content;
+      const botResponse = responseData.candidates[0].content.parts[0].text;
   
       if (botResponse) {
         setMessages((prevMessages) => [
@@ -170,7 +160,7 @@ const BackTop = () => {
     <>
       {!open && (
         <div
-          className={`fixed bottom-[13vh] right-[1.7vw] z-30 bg-blue-9 text-white-1 text-[1.4rem] p-2 cursor-pointer rounded-[3px] transform ${
+          className={`fixed bottom-[13vh] mb-3 md:mb-0 right-[1.7vw] z-30 bg-blue-9 text-white-1 text-[1.4rem] p-2 cursor-pointer rounded-[3px] transform ${
             isVisible ? "scale-100 opacity-100 visible" : "scale-0 opacity-0 invisible"
           } transition-all duration-300 hover:bg-blue-8 max-lg:bottom-[11vh] max-lg:right-[2vw]`}
           title="Back to top"
@@ -220,4 +210,4 @@ const BackTop = () => {
   );
 };
 
-export default BackTop;
+export default ChatBot;
