@@ -101,10 +101,10 @@ This document provides a step-by-step guide to setting up the required `.env` fi
    - **Description:** The API key for OpenAI Model use to predict patient's disease
    - **How to Obtain:** 
       1. Log in to the [OpenAI Platform](https://platform.openai.com/).
-      2. After login go to top right & click on option [Dashboard](https://platform.openai.com/chat-completions)
+      2. After logging in go to top right & click on option [Dashboard](https://platform.openai.com/chat-completions)
       3. From there go left side cloumn click on option [API keys](https://platform.openai.com/api-keys)
-      4. Now click on option `Create new secret key` to generate your openapi-key
-      5. Follow the instructions provided by the service to generate a new API key.
+      4. Click on option `Create new secret key` to generate your OpenAI API key
+      5. Follow the instructions provided by the platform to generate a new API key.
       6. Copy the generated API key.
       7. Open your `.env` file in a text editor.
       8. Add the following line to your `.env` file, replacing `your_api_key` with the key you copied:
