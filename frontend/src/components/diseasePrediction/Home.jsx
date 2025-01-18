@@ -3,7 +3,7 @@ import React from "react";
 const Home = (props) => {
   return (
     <>
-      <div id="" className="max-w-[400px] pt-8 leading-9 tablet:grid-col padding-x-2">
+      <div id="" className="max-w-[400px] leading-9 tablet:grid-col padding-x-2">
         <p className="text-blue-6 ">
           Before using this symptom checker, please read carefully and accept
           our Terms and Services:

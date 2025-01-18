@@ -9,7 +9,6 @@ import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 import { useNavigate } from "react-router-dom";
 
-
 class DP extends Component {
   constructor(props) {
     super(props);
@@ -19,9 +18,11 @@ class DP extends Component {
       tab_progress: 25,
       button_is_disabled: true, // Next button disabled if not agreed to terms
       home_button_checked: false, //Check if terms are agreed
-      age: localStorage.getItem("age")? localStorage.getItem("age") : "18", //Patient Default Age
+      age: localStorage.getItem("age") ? localStorage.getItem("age") : "18", //Patient Default Age
       button_name: "Next", //Button name retry or next
-      gender: localStorage.getItem("gender")? localStorage.getItem("gender").toUpperCase() : "Male", //Default gender
+      gender: localStorage.getItem("gender")
+        ? localStorage.getItem("gender").toUpperCase()
+        : "Male", //Default gender
       // male: true, // patient checkbox
       // female: false, // patient checkbox
       home_nav_icon: <p>1</p>,
@@ -148,9 +149,19 @@ class DP extends Component {
 
   home_button_check_event = (e) => {
     if (e.target.checked === true) {
-      return this.setState({ button_is_disabled: false, home_button_checked: true, home_nav_value: true, patient_nav_value: true });
+      return this.setState({
+        button_is_disabled: false,
+        home_button_checked: true,
+        home_nav_value: true,
+        patient_nav_value: true,
+      });
     } else if (e.target.checked === false) {
-      return this.setState({ button_is_disabled: true, home_button_checked: false, home_nav_value: false, patient_nav_value: false });
+      return this.setState({
+        button_is_disabled: true,
+        home_button_checked: false,
+        home_nav_value: false,
+        patient_nav_value: false,
+      });
     }
   };
 
@@ -180,8 +191,8 @@ class DP extends Component {
         });
       case "Patient-2":
         // return this.setState({ current_page: "Patient", patient_2_next_button_disabled: false });
-        return this.setState({ 
-          current_page: "Home", 
+        return this.setState({
+          current_page: "Home",
           // patient_2_next_button_disabled: false,
           // current_page: "Home",
           home_nav_icon: <p>1</p>,
@@ -209,7 +220,12 @@ class DP extends Component {
     // eslint-disable-next-line default-case
     switch (current_page) {
       case "Home":
-        return <Home isChecked={home_button_checked} checked={this.home_button_check_event} />;
+        return (
+          <Home
+            isChecked={home_button_checked}
+            checked={this.home_button_check_event}
+          />
+        );
       // case "Patient":
       //   return <Patient male={male} female={female} gender={this.get_gender} age={age} ageChange={this.get_age_event} />;
       case "Patient-2":
@@ -225,55 +241,154 @@ class DP extends Component {
           />
         );
       case "Disease":
-        return <Disease patientInfo={this.state.patient_question} disease_with_possibility={this.state.disease_possibility} gender={gender} age={age} />;
+        return (
+          <Disease
+            patientInfo={this.state.patient_question}
+            disease_with_possibility={this.state.disease_possibility}
+            gender={gender}
+            age={age}
+          />
+        );
     }
   };
 
   renderResetButton = () => {
     return (
-      <button className="usa-button usa-button--secondary" onClick={this.symptomPage.current}>
+      <button
+        className="usa-button usa-button--secondary"
+        onClick={this.symptomPage.current}
+      >
         Reset
       </button>
     );
   };
 
   render() {
-    const { tab_progress, button_is_disabled, patient_2_next_button_disabled, user_symptom_length, current_page } = this.state;
+    const {
+      tab_progress,
+      button_is_disabled,
+      patient_2_next_button_disabled,
+      user_symptom_length,
+      current_page,
+    } = this.state;
 
     return (
-      <div id="disease-prediction">
-        <main id="main-content">
-            <div className="first-grid">
-              <div>
-                <ul className="side-menu-list padding-left-2">
-				  <li id="progressbar"><div className={`${tab_progress === 25 && "progressbardiv25"} ${tab_progress === 50 && "progressbardiv50"} ${tab_progress === 75 && "progressbardiv75"} ${tab_progress === 100 && "progressbardiv100"}`}></div></li>
-                  <li className={`${current_page === "Home" ? "active" : "done"}`}>Welcome</li>
-                  <li className={`${tab_progress === 50 && "active"} ${tab_progress < 50 && "list"} ${tab_progress > 50 && "done"}`}>Patient</li>
-                  <li className={`${tab_progress === 75 && "active"} ${tab_progress < 75 && "list"} ${tab_progress > 75 && "done"}`}>Symptom</li>
-                  <li className={`${tab_progress === 100 && "active"} ${tab_progress < 100 && "list"} ${tab_progress > 100 && "done"}`}>Disease</li>
-                </ul>
-              </div>
-              <div id="ContentDiv">
-                <div className="shoPageSection">{this.showPage()}</div>
+      <div id="disease-prediction" className="pt-28 flex justify-center items-center">
+        {/* main-content */}
+        <main className="px-8 pt-12 max-w-[1000px] w-[95vw] border-[1px] border-grey-3 rounded-[1rem] max-sm:p-6 max-sm:pb-0">
+          {/* first-grid  */}
+          <div className="grid grid-cols-12 max-md:grid-cols-none">
+            <div className="col-span-3 relative max-md:col-span-full">
+              {/* side-menu-list */}
+              <ul className="list-none leading-6 md:pl-2 absolute w-full">
+                <li
+                  id=""
+                  className="py-[3px] px-[3px] text-[1rem] rounded-[13px] w-[25%]  bg-blue-1 absolute right-0 md:hidden"
+                >
+                  <div
+                    className={`${
+                      tab_progress === 25 &&
+                      "bg-blue-7 w-[25%] h-[2px] rounded-[10px]"
+                    } ${
+                      tab_progress === 50 &&
+                      "bg-blue-7 w-[50%] h-[2px] rounded-[10px]"
+                    } ${
+                      tab_progress === 75 &&
+                      "bg-blue-7 w-[75%] h-[3px] rounded-[10px]"
+                    } ${
+                      tab_progress === 100 &&
+                      "bg-blue-7 w-[100%] h-[2px] rounded-[10px]"
+                    }`}
+                  ></div>
+                </li>
+                <li
+                  className={`mt-2 py-[10px] px-[20px] max-md:px-2 ${
+                    current_page === "Home" &&
+                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block"
+                  } ${
+                    tab_progress > 25 &&
+                    " max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8"
+                  }`}
+                >
+                  Welcome
+                </li>
+                <li
+                  className={`py-[10px] px-[20px] max-md:px-2 ${
+                    tab_progress === 50 &&
+                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block"
+                  } ${tab_progress < 50 && "max-md:hidden"} ${
+                    tab_progress > 50 &&
+                    "max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8"
+                  }`}
+                >
+                  Patient
+                </li>
+                <li
+                  className={`py-[10px] px-[20px] max-md:px-2${
+                    tab_progress === 75 &&
+                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block"
+                  } ${tab_progress < 75 && "max-md:hidden"} ${
+                    tab_progress > 75 &&
+                    "max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8"
+                  }`}
+                >
+                  Symptom
+                </li>
+                <li
+                  className={`py-[10px] px-[20px] max-md:px-2 ${
+                    tab_progress === 100 &&
+                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block"
+                  } ${tab_progress < 100 && "max-md:hidden"} ${
+                    tab_progress > 100 &&
+                    "max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8"
+                  }`}
+                >
+                  Disease
+                </li>
+              </ul>
+            </div>
+            <div
+              id=""
+              className="col-span-9 rounded-[0.5rem] pb-12 max-md:col-span-full mt-4 max-md:mt-20"
+            >
+              <div className="h-[50vh] overflow-y-auto pb-16">
+                {this.showPage()}
               </div>
             </div>
+          </div>
 
-            <div className="second-grid">
-                <div id="buttonsSection">
-                  <button disabled={this.state.current_page === "Home"} onClick={this.get_previous_page} className="usa-button usa-button--outline back">
-                    Back
-                  </button>
-                  {/* {current_page === "Symptom" ? this.renderResetButton() : ""} */}
-                  <button
-                    className={`usa-button ${button_is_disabled || patient_2_next_button_disabled || user_symptom_length === 0 ? "" : "next"}`}
-                    disabled={button_is_disabled || patient_2_next_button_disabled || user_symptom_length === 0}
-                    type="submit"
-                    onClick={this.get_next_page}
-                  >
-                    {this.state.button_name}
-                  </button>
-                </div>
+          <div className="m-4 border-[1px] border-t-grey-3"></div>
+
+          <div className="second-grid">
+            <div id="buttonsSection" className="py-4 px-8 flex justify-between items-center">
+              <button
+                disabled={this.state.current_page === "Home"}
+                onClick={this.get_previous_page}
+                className="bg-blue-3 border-[1px] border-blue-5 text-white-1 py-[10px] px-[12px] rounded-[5px] mb-[8px] mx-[20px] font-sans transition-all duration-300 ease-in-out hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed usa-button--outline back"
+              >
+                Back
+              </button>
+              {/* {current_page === "Symptom" ? this.renderResetButton() : ""} */}
+              <button
+                className={`bg-blue-3 border-[1px] border-blue-5 text-white-1 py-[10px] px-[12px] rounded-[5px] mb-[8px] mx-[20px] font-sans transition-all duration-300 ease-in-out hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed ${
+                  button_is_disabled ||
+                  patient_2_next_button_disabled ||
+                  user_symptom_length === 0
+                    ? ""
+                    : "next"
+                }`}
+                disabled={
+                  button_is_disabled ||
+                  patient_2_next_button_disabled ||
+                  user_symptom_length === 0
+                }
+                type="submit"
+                onClick={this.get_next_page}
+              >
+                {this.state.button_name}
+              </button>
             </div>
+          </div>
         </main>
       </div>
     );
@@ -281,30 +396,30 @@ class DP extends Component {
 }
 
 const DiseasePrediction = () => {
-
   const { isLoading, toggleLoading } = useContext(commonContext);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
-  const userNotExists = !localStorage.getItem("username") || localStorage.getItem("username")==="undefined";
+  const userNotExists =
+    !localStorage.getItem("username") ||
+    localStorage.getItem("username") === "undefined";
 
   useEffect(() => {
-    if(userNotExists) {
-        navigate("/");
+    if (userNotExists) {
+      navigate("/");
     } else {
-        toggleLoading(true);
-        setTimeout(() => toggleLoading(false), 2000);
+      toggleLoading(true);
+      setTimeout(() => toggleLoading(false), 2000);
     }
     //eslint-disable-next-line
   }, []);
 
   useScrollDisable(isLoading);
 
-  if(isLoading) {
+  if (isLoading) {
     return <Preloader />;
-  };
+  }
 
-  
   return <DP />;
 };
 
