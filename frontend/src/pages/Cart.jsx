@@ -157,9 +157,10 @@ const Cart = () => {
                     className="flex justify-start items-center cursor-pointer mb-6"
                   >
                     <input
-                      type="checkbox mr-4"
+                      type="checkbox"
                       checked={addBalance}
                       onChange={() => {}}
+                      className="mr-2"
                     />
                     <p>Use Wallet Money {`(₹ ${balance})`}</p>
                   </div>

@@ -190,7 +190,7 @@ const MyWallet = () => {
                     <p className="text-[0.9em] whitespace-nowrap text-ellipsis overflow-hidden max-w-[15px]">{trans.date}</p>
                     <div className="absolute opacity-0 invisible hover:opacity-100 hover:visible active:opacity-100 active:visible top-[35px] w-full bg-blue-7">{trans.desc}</div>
                   </div>
-                  <div className={`text-[1.2em] font-bold text-[#f00] ${trans.add ? "text-[#0f0]" : ""}`}>
+                  <div className={`text-[1.2em] font-bold  ${trans.add ? "text-[#0f0]" : "text-[#f00]"}`}>
                     {trans.add ? "+" : "-"} ₹ {trans.amount}
                   </div>
                 </div>
