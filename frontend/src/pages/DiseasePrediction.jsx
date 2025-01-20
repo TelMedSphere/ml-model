@@ -272,122 +272,100 @@ class DP extends Component {
       patient_2_next_button_disabled,
       user_symptom_length,
       current_page,
+      button_name
     } = this.state;
 
     return (
-      <div id="disease-prediction" className="pt-28 flex justify-center items-center">
-        {/* main-content */}
-        <main className="px-8 pt-12 max-w-[1000px] w-[95vw] border-[1px] border-grey-3 rounded-[1rem] max-sm:p-6 max-sm:pb-0">
-          {/* first-grid  */}
-          <div className="grid grid-cols-12 max-md:grid-cols-none">
-            <div className="col-span-3 relative max-md:col-span-full">
-              {/* side-menu-list */}
-              <ul className="list-none leading-6 md:pl-2 absolute w-full">
-                <li
-                  id=""
-                  className="py-[3px] px-[3px] text-[1rem] rounded-[13px] w-[25%]  bg-blue-1 absolute right-0 md:hidden"
-                >
-                  <div
-                    className={`${
-                      tab_progress === 25 &&
-                      "bg-blue-7 w-[25%] h-[2px] rounded-[10px]"
-                    } ${
-                      tab_progress === 50 &&
-                      "bg-blue-7 w-[50%] h-[2px] rounded-[10px]"
-                    } ${
-                      tab_progress === 75 &&
-                      "bg-blue-7 w-[75%] h-[3px] rounded-[10px]"
-                    } ${
-                      tab_progress === 100 &&
-                      "bg-blue-7 w-[100%] h-[2px] rounded-[10px]"
-                    }`}
-                  ></div>
-                </li>
-                <li
-                  className={`mt-2 py-[10px] px-[20px] max-md:px-2 ${
-                    current_page === "Home" &&
-                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block"
-                  } ${
-                    tab_progress > 25 &&
-                    " max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8"
-                  }`}
-                >
-                  Welcome
-                </li>
-                <li
-                  className={`py-[10px] px-[20px] max-md:px-2 ${
-                    tab_progress === 50 &&
-                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block"
-                  } ${tab_progress < 50 && "max-md:hidden"} ${
-                    tab_progress > 50 &&
-                    "max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8"
-                  }`}
-                >
-                  Patient
-                </li>
-                <li
-                  className={`py-[10px] px-[20px] max-md:px-2${
-                    tab_progress === 75 &&
-                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block"
-                  } ${tab_progress < 75 && "max-md:hidden"} ${
-                    tab_progress > 75 &&
-                    "max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8"
-                  }`}
-                >
-                  Symptom
-                </li>
-                <li
-                  className={`py-[10px] px-[20px] max-md:px-2 ${
-                    tab_progress === 100 &&
-                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block"
-                  } ${tab_progress < 100 && "max-md:hidden"} ${
-                    tab_progress > 100 &&
-                    "max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8"
-                  }`}
-                >
-                  Disease
-                </li>
-              </ul>
-            </div>
-            <div
-              id=""
-              className="col-span-9 rounded-[0.5rem] pb-12 max-md:col-span-full mt-4 max-md:mt-20"
-            >
-              <div className="h-[50vh] overflow-y-auto pb-16">
-                {this.showPage()}
+      <div className="pt-28 flex justify-center items-center min-h-screen bg-white">
+        <main className="w-[95vw] max-w-[1000px] border border-gray-300 rounded-lg">
+          <div className="px-8 pt-12 max-sm:p-6">
+            {/* Top Section with Progress */}
+            <div className="grid grid-cols-12 border-b border-gray-300 pb-6 max-md:grid-cols-1 gap-4">
+              {/* Sidebar Navigation */}
+              <div className="col-span-3 relative max-md:col-span-full">
+                <ul className="list-none leading-7 space-y-2">
+                  {/* Progress Bar (Mobile) */}
+                  <li className="py-1 px-1 text-base rounded-xl w-1/4 bg-blue-100 absolute right-0 md:hidden">
+                    <div className={`h-1 rounded-lg bg-blue-600 transition-all duration-300
+                      ${tab_progress === 25 ? 'w-1/4' : ''}
+                      ${tab_progress === 50 ? 'w-1/2' : ''}
+                      ${tab_progress === 75 ? 'w-3/4' : ''}
+                      ${tab_progress === 100 ? 'w-full' : ''}`} 
+                    />
+                  </li>
+
+                  {/* Navigation Items */}
+                  <li className={`py-2.5 px-5 transition-colors duration-200
+                    ${current_page === "Home" ? 
+                      "font-bold text-blue-900 border-l-2 border-blue-900 max-md:border-b-2 max-md:border-l-0" : 
+                      "text-gray-600"}
+                    ${tab_progress > 25 ? "max-md:hidden border-l-2 border-blue-900 text-blue-800" : ""}`}>
+                    Welcome
+                  </li>
+                  
+                  <li className={`py-2.5 px-5 transition-colors duration-200
+                    ${current_page === "Patient-2" ? 
+                      "font-bold text-blue-900 border-l-2 border-blue-900 max-md:border-b-2 max-md:border-l-0" : 
+                      "text-gray-600"}
+                    ${tab_progress < 50 ? "max-md:hidden" : ""}
+                    ${tab_progress > 50 ? "max-md:hidden border-l-2 border-blue-900 text-blue-800" : ""}`}>
+                    Patient
+                  </li>
+                  
+                  <li className={`py-2.5 px-5 transition-colors duration-200
+                    ${current_page === "Symptom" ? 
+                      "font-bold text-blue-900 border-l-2 border-blue-900 max-md:border-b-2 max-md:border-l-0" : 
+                      "text-gray-600"}
+                    ${tab_progress < 75 ? "max-md:hidden" : ""}
+                    ${tab_progress > 75 ? "max-md:hidden border-l-2 border-blue-900 text-blue-800" : ""}`}>
+                    Symptom
+                  </li>
+                  
+                  <li className={`py-2.5 px-5 transition-colors duration-200
+                    ${current_page === "Disease" ? 
+                      "font-bold text-blue-900 border-l-2 border-blue-900 max-md:border-b-2 max-md:border-l-0" : 
+                      "text-gray-600"}
+                    ${tab_progress < 100 ? "max-md:hidden" : ""}
+                    ${tab_progress > 100 ? "max-md:hidden border-l-2 border-blue-900 text-blue-800" : ""}`}>
+                    Disease
+                  </li>
+                </ul>
+              </div>
+
+              {/* Main Content Area */}
+              <div className="col-span-9 rounded-lg pb-12 max-md:col-span-full mt-4 max-md:mt-16">
+                <div className="h-[50vh] overflow-y-auto pb-16 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
+                  {this.showPage()}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="m-4 border-[1px] border-t-grey-3"></div>
-
-          <div className="second-grid">
-            <div id="buttonsSection" className="py-4 px-8 flex justify-between items-center">
+            {/* Bottom Navigation Buttons */}
+            <div className="py-4 px-8 flex justify-between items-center border-t border-gray-300 mt-4">
               <button
-                disabled={this.state.current_page === "Home"}
+                disabled={current_page === "Home"}
                 onClick={this.get_previous_page}
-                className="bg-blue-3 border-[1px] border-blue-5 text-white-1 py-[10px] px-[12px] rounded-[5px] mb-[8px] mx-[20px] font-sans transition-all duration-300 ease-in-out hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed usa-button--outline back"
+                className="bg-blue-500 text-white py-2.5 px-6 rounded-md
+                  transition-all duration-300 ease-in-out
+                  hover:bg-blue-600 active:bg-blue-700
+                  disabled:bg-blue-300 disabled:cursor-not-allowed
+                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               >
                 Back
               </button>
-              {/* {current_page === "Symptom" ? this.renderResetButton() : ""} */}
+
               <button
-                className={`bg-blue-3 border-[1px] border-blue-5 text-white-1 py-[10px] px-[12px] rounded-[5px] mb-[8px] mx-[20px] font-sans transition-all duration-300 ease-in-out hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed ${
-                  button_is_disabled ||
-                  patient_2_next_button_disabled ||
-                  user_symptom_length === 0
-                    ? ""
-                    : "next"
-                }`}
-                disabled={
-                  button_is_disabled ||
-                  patient_2_next_button_disabled ||
-                  user_symptom_length === 0
-                }
+                className={`bg-blue-500 text-white py-2.5 px-6 rounded-md
+                  transition-all duration-300 ease-in-out
+                  hover:bg-blue-600 active:bg-blue-700
+                  disabled:bg-blue-300 disabled:cursor-not-allowed
+                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+                  ${button_is_disabled || patient_2_next_button_disabled || user_symptom_length === 0 ? "" : "next"}`}
+                disabled={button_is_disabled || patient_2_next_button_disabled || user_symptom_length === 0}
                 type="submit"
                 onClick={this.get_next_page}
               >
-                {this.state.button_name}
+                {button_name}
               </button>
             </div>
           </div>
@@ -399,11 +377,9 @@ class DP extends Component {
 
 const DiseasePrediction = () => {
   const { isLoading, toggleLoading } = useContext(commonContext);
-
   const navigate = useNavigate();
 
-  const userNotExists =
-    !localStorage.getItem("username") ||
+  const userNotExists = !localStorage.getItem("username") || 
     localStorage.getItem("username") === "undefined";
 
   useEffect(() => {
@@ -413,7 +389,7 @@ const DiseasePrediction = () => {
       toggleLoading(true);
       setTimeout(() => toggleLoading(false), 2000);
     }
-    //eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   useScrollDisable(isLoading);
