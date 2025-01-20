@@ -1,7 +1,7 @@
 import React, { Component, useContext, useEffect } from "react";
 import Home from "../components/diseasePrediction/Home";
 // import Patient from "../components/diseasePrediction/Patient1";
-import Patient2 from "../components/diseasePrediction/Patient2";
+// import Patient2 from "../components/diseasePrediction/Patient2";
 import Symptom from "../components/diseasePrediction/Symptom";
 import Disease from "../components/diseasePrediction/Disease";
 import Preloader from "../components/common/Preloader";
@@ -47,7 +47,8 @@ class DP extends Component {
       case "Home":
         return this.setState({
           // current_page: "Patient",
-          current_page: "Patient-2",
+          // current_page: "Patient-2",
+          current_page: "Symptom",
           tab_progress: 50,
           home_nav_value: true,
           button_is_disabled: false,
@@ -212,8 +213,8 @@ class DP extends Component {
         return <Home isChecked={home_button_checked} checked={this.home_button_check_event} />;
       // case "Patient":
       //   return <Patient male={male} female={female} gender={this.get_gender} age={age} ageChange={this.get_age_event} />;
-      case "Patient-2":
-        return <Patient2 callback={this.patient_2_callback} />;
+      // case "Patient-2":
+      //   return <Patient2 callback={this.patient_2_callback} />;
       case "Symptom":
         return (
           <Symptom

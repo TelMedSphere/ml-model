@@ -42,12 +42,20 @@ TOKEN = os.getenv("WHATSAPP")
 
 client = pymongo.MongoClient(URI, server_api=ServerApi('1'))
 
+
 doctor = client.get_database("telmedsphere").doctors
 patients = client.get_database("telmedsphere").patients
 feedback = client.get_database("telmedsphere").feedback
 
 YOUR_DOMAIN = os.getenv('DOMAIN') 
 
+
+# Test MongoDB connection
+try:
+    client.admin.command('ping')
+    print("MongoDB connection successful!")
+except Exception as e:
+    print(f"Error connecting to MongoDB: {e}")
 @app.get("/")
 def getInfo():
     return "API WORKING"
