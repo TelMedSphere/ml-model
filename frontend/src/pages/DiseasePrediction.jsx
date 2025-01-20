@@ -1,7 +1,7 @@
 import React, { Component, useContext, useEffect } from "react";
 import Home from "../components/diseasePrediction/Home";
 // import Patient from "../components/diseasePrediction/Patient1";
-import Patient2 from "../components/diseasePrediction/Patient2";
+// import Patient2 from "../components/diseasePrediction/Patient2";
 import Symptom from "../components/diseasePrediction/Symptom";
 import Disease from "../components/diseasePrediction/Disease";
 import Preloader from "../components/common/Preloader";
@@ -48,13 +48,14 @@ class DP extends Component {
       case "Home":
         return this.setState({
           // current_page: "Patient",
-          current_page: "Patient-2",
+          // current_page: "Patient-2",
+          current_page: "Symptom",
           tab_progress: 50,
           home_nav_value: true,
           button_is_disabled: false,
           home_button_checked: false,
-          button_name: "Next",
-          patient_2_next_button_disabled: true,
+          button_name: "Submit",
+          patient_2_next_button_disabled: false,
         });
       // case "Patient":
       //   return this.setState({
@@ -62,14 +63,14 @@ class DP extends Component {
       //     button_name: "Next",
       //     patient_2_next_button_disabled: true,
       //   });
-      case "Patient-2":
-        return this.setState({
-          current_page: "Symptom",
-          tab_progress: 75,
-          button_name: "Finish",
-          patient_nav_value: true,
-          user_symptom_length: 0,
-        });
+      // case "Patient-2":
+      //   return this.setState({
+      //     current_page: "Symptom",
+      //     tab_progress: 75,
+      //     button_name: "Finish",
+      //     patient_nav_value: true,
+      //     user_symptom_length: 0,
+      //   });
       case "Symptom":
         return this.setState({
           current_page: "Disease",
@@ -180,7 +181,8 @@ class DP extends Component {
         });
       case "Symptom":
         return this.setState({
-          current_page: "Patient-2",
+          // current_page: "Patient-2",
+          current_page:"Home",
           symptom_page_button: "",
           tab_progress: 50,
           button_name: "Next",
@@ -228,8 +230,8 @@ class DP extends Component {
         );
       // case "Patient":
       //   return <Patient male={male} female={female} gender={this.get_gender} age={age} ageChange={this.get_age_event} />;
-      case "Patient-2":
-        return <Patient2 callback={this.patient_2_callback} />;
+      // case "Patient-2":
+      //   return <Patient2 callback={this.patient_2_callback} />;
       case "Symptom":
         return (
           <Symptom
