@@ -42,8 +42,8 @@ const MyOrders = () => {
 
     return (
         <>
-            <section id="orders" className="section">
-                <div className="container">
+            <section id="orders" className="py-32 text-blue-8 w-full">
+                <div className="w-full flex justify-center">
                     {orderedQuantity === 0 ? (
                         <EmptyView
                             msg="Your Cart is Empty"
@@ -51,9 +51,10 @@ const MyOrders = () => {
                             btnText="Start Shopping"
                         />
                     ) : (
-                        <div className="orders_wrapper">
-                            <h2 className="orders_head">Recent Orders</h2>
-                            <div className="ordered_items">
+                        // orders_wrapper
+                        <div className=" w-[95%] max-w-[600px] my-0 mx-auto">
+                            <h2 className="mb-4">Recent Orders</h2>
+                            <div className="bg-white-1 rounded-[12px]">
                                 {
                                     viewAll? 
                                     orderedItems.map((item) => (
@@ -64,13 +65,13 @@ const MyOrders = () => {
                                     ))
                                 }
                             </div>
-                            <h3 className="view_all" onClick={() => setViewAll((prev) => !prev)}>
+                            <h3 className="transition-all duration-300 ease-in-out cursor-pointer text-right mt-4 hover:underline" onClick={() => setViewAll((prev) => !prev)}>
                                 {viewAll? "show less" : "show more"}</h3>
                         </div>
                     )}
                 </div>
-                <div className="back_to_home_btn">
-                    <button onClick={() => navigate("/")}>Back to Home</button>
+                <div className=" text-center mt-12">
+                    <button onClick={() => navigate("/")} className="bg-blue-9 text-white-1 py-4 px-[1.5rem] m-4 rounded-[4px] cursor-pointer transition-all duration-300 ease-in-out hover:bg-blue-7 active:bg-blue-7">Back to Home</button>
                 </div>
             </section>
         </>
