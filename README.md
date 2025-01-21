@@ -213,11 +213,15 @@ docker-compose kill
 <table>
 <tr>
 <td align="center">
-<a href="https://kwoc.kossiitkgp.org/"><img src="https://kwoc.kossiitkgp.org/assets/kwoc_logo-DlraoW8b.png" height="100px" width="100px" alt="KWOC2024"></a><br><sub><b>KWOC 2k24</b></sub>
+<a href="https://kwoc.kossiitkgp.org/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/KWoC.png" height="100px" width="100px" alt="KWOC2024"></a><br><sub><b>KWOC 2k24</b></sub>
+</td>
+<td></td>
+ <td align="center">
+<a href="https://kwoc.kossiitkgp.org/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/SWoC.png" height="100px" width="100px" alt="SWOC2025"></a><br><sub><b>SWOC 2k25</b></sub>
 </td>
  <td></td>
  <td align="center">
-<a href="https://kwoc.kossiitkgp.org/"><img src="https://www.socialwinterofcode.com/img/logos/SWOC_W_Black.png" height="100px" width="100px" alt="SWOC2025"></a><br><sub><b>SWOC 2k25</b></sub>
+<a href="https://dwoc.io/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/DWoC.jpg" height="100px" width="100px" alt="SWOC2025"></a><br><sub><b>DWOC 2k25</b></sub>
 </td>
 </tr>
 </table>
