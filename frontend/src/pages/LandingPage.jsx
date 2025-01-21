@@ -19,6 +19,27 @@ import profiles from "../data/teamData";
 import { IoMdMail } from 'react-icons/io';
 import { FaPhoneAlt, FaHospital } from 'react-icons/fa';
 
+const services = [
+  {
+    icon: <TbStethoscope className="text-[#19958f] text-3xl" />,
+    title: "Experienced Doctors",
+    description: "Connect with doctors through live video calls and receive prescriptions.",
+    iconClass: "bg-[rgba(25,150,143,0.1)] border-[#19958f]"
+  },
+  {
+    icon: <BsRobot className="text-[#f59c23] text-3xl" />,
+    title: "Health Prediction",
+    description: "Assess your health status with our advanced disease detection model.",
+    iconClass: "bg-[rgba(245,158,50,0.1)] border-[#f59c23]"
+  },
+  {
+    icon: <GiMedicines className="text-[#f05032] text-3xl" />,
+    title: "Pharmacy store",
+    description: "Buy medications securely through our integrated pharmacy service.",
+    iconClass: "bg-[rgba(240,80,50,0.1)] border-[#f05032]"
+  }
+];
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
@@ -121,46 +142,31 @@ const LandingPage = () => {
           />
         </motion.div>
       </section>
-
-      {/* Services Section */}
-      <section className="py-16 bg-white">
-        <motion.div
-          className="text-center mb-12"
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-        >
-          <h2 className="text-3xl font-semibold text-blue-800">Our Services</h2>
-          <p className="text-gray-600 mt-4">
-            Explore our comprehensive services designed for your health and
-            convenience.
-          </p>
-        </motion.div>
-        <motion.div
-          className="flex flex-wrap justify-center gap-8"
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-        >
-          {[
-            { icon: <TbStethoscope className="text-4xl text-blue-600" />, title: "Experienced Doctors", description: "Connect with doctors via video calls and receive prescriptions instantly." },
-            { icon: <BsRobot className="text-4xl text-yellow-500" />, title: "Health Prediction", description: "Predict your health status with our advanced AI disease detection." },
-            { icon: <GiMedicines className="text-4xl text-red-500" />, title: "Pharmacy Store", description: "Buy medicines securely from our integrated online pharmacy." },
-          ].map((service, index) => (
-            <motion.div
-              key={index}
-              className="w-[300px] p-6 bg-gray-100 rounded-lg shadow hover:shadow-lg transition"
-              variants={fadeInUp}
-            >
-              <div className="flex justify-center mb-4">{service.icon}</div>
-              <h3 className="text-xl font-medium text-blue-800 mb-2">
-                {service.title}
-              </h3>
-              <p className="text-gray-600">{service.description}</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
+      <section className="py-16 text-center bg-white">
+      <div className="header">
+        <h2 className="text-gray-800 text-3xl font-semibold mb-8">Services we provide</h2>
+      </div>
+      <div className="flex flex-wrap justify-around max-w-6xl mx-auto mt-8">
+        {services.map((service, index) => (
+          <div
+            key={index}
+            className="flex flex-col items-center flex-[0_1_30%] min-w-[280px] max-w-[280px] text-center p-6 rounded-lg transition-all duration-300 border border-gray-200 bg-gray-50 m-4 hover:transform hover:scale-105 hover:shadow-lg"
+          >
+            <div className="flex items-center justify-center min-h-[80px]">
+              <div className={`w-[50px] h-[50px] rounded-full flex items-center justify-center border-2 ${service.iconClass}`}>
+                {service.icon}
+              </div>
+            </div>
+            <h3 className="text-gray-800 mb-3 text-xl font-medium">
+              {service.title}
+            </h3>
+            <p className="text-gray-600 text-sm">
+              {service.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
 
       {/* Why Section */}
       <section className="py-16 bg-blue-50">
