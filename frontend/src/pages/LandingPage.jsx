@@ -1,24 +1,32 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { motion } from "framer-motion";
 import useDocTitle from "../hooks/useDocTitle";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import { MdExpandMore } from "react-icons/md";
-import { TbStethoscope } from "react-icons/tb";
+import { MdExpandMore, MdOutlineHealthAndSafety } from "react-icons/md";
+import { TbStethoscope, TbHeartPlus } from "react-icons/tb";
 import { BsRobot } from "react-icons/bs";
 import { GiMedicines } from "react-icons/gi";
+import { IoAccessibility } from "react-icons/io5";
 import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 import bgImage from "../assets/landing-bg.png";
 import needImage from "../assets/need.png";
+import profiles from "../data/teamData";
+import { IoMdMail } from 'react-icons/io';
+import { FaPhoneAlt, FaHospital } from 'react-icons/fa';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
 };
+
+const handleOnCLick = () => {
+  navigate('/doctors');
+}
 
 const staggerContainer = {
   hidden: { opacity: 1 },
@@ -56,12 +64,27 @@ const LandingPage = () => {
   }, []);
 
   const faqs = [
-    { question: "What is TelMedSphere?", answer: "It is a web application connecting patients to doctors. It provides features like appointments, prescriptions, instant meetings, and a pharmacy store." },
-    { question: "Is TelMedSphere free?", answer: "Yes, you can use all the features for free, including health predictions, doctor consultations, and medicine purchases." },
-    { question: "Can I book an appointment anytime?", answer: "Yes, appointments can be booked based on the doctor's availability." },
-    { question: "Does TelMedSphere offer health tests?", answer: "Yes, our AI model predicts disease probabilities based on symptoms and provides valuable insights." },
-    { question: "Can I purchase medicines through TelMedSphere?", answer: "Yes, you can securely purchase medicines from our online pharmacy." },
-  ];
+    {
+        question: "What is TelMedSphere?",
+        answer: "It is the web application that connects patients to the right doctor or allow them to choose a doctor as per their need. It provides information about users, doctors, news, appointments, and prescriptions. It also allows users to create instant meetings with doctors, and buy medicines. It allows users to check their health status by using his/her symptoms."
+    },
+    {
+        question: "Can we get a free account in TelMedSphere and use all its features for free?",
+        answer: "Yes, Ofcourse. You can use all the features provided by TelMedSphere for free."
+    },
+    {
+        question: "Can we book an appointment at any time?",
+        answer: "Yes. You can book an appointment of a doctor if he/she is free at that time."
+    },
+    {
+        question: "Is there a way to test our health?",
+        answer: "Yes. You can test your health by a Model that predicts the disease probability in the future."
+    },
+    {
+        question: "Can we purchase the medicines from here?",
+        answer: "Yes. You can purchase the medicines from TelMedSphere store."
+    },
+];
 
   if (isLoading) {
     return <Preloader />;
@@ -179,6 +202,136 @@ const LandingPage = () => {
           </motion.div>
         </div>
       </section>
+
+
+      {/* Benefits Section */}
+      <section className="py-16 bg-white">
+        <motion.div 
+          className="text-center"
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+        >
+          <h2 className="text-3xl font-semibold text-blue-800 mb-8">Our Benefits</h2>
+          <motion.div 
+            className="flex flex-wrap justify-center max-w-5xl mx-auto"
+            variants={staggerContainer}
+          >
+          
+
+
+          <motion.div 
+              className="flex items-center justify-between w-52 h-20 p-4 mx-4 my-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 bg-orange-50"
+              variants={fadeInUp}
+            >
+              <div className="text-2xl text-orange-400">
+                <MdOutlineHealthAndSafety />
+              </div>
+              <p className="flex-1 text-center ml-2 text-gray-700">TeleHealth services</p>
+            </motion.div>
+
+            <motion.div 
+              className="flex items-center justify-between w-52 h-20 p-4 mx-4 my-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 bg-teal-50"
+              variants={fadeInUp}
+            >
+              <div className="text-2xl text-teal-500">
+                <IoAccessibility />
+              </div>
+              <p className="flex-1 text-center ml-2 text-gray-700">Convenience and accessibility</p>
+            </motion.div>
+
+            <motion.div 
+              className="flex items-center justify-between w-52 h-20 p-4 mx-4 my-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 bg-red-50"
+              variants={fadeInUp}
+            >
+              <div className="text-2xl text-red-500">
+                <TbStethoscope />
+              </div>
+              <p className="flex-1 text-center ml-2 text-gray-700">Online Appointment Booking</p>
+            </motion.div>
+
+            <motion.div 
+              className="flex items-center justify-between w-52 h-20 p-4 mx-4 my-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 bg-blue-50"
+              variants={fadeInUp}
+            >
+              <div className="text-2xl text-blue-500">
+                <TbHeartPlus />
+              </div>
+              <p className="flex-1 text-center ml-2 text-gray-700">Competitive advantage</p>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Team Section */}
+      {(localStorage.getItem("username") && 
+    localStorage.getItem("username") !== "undefined" && 
+    localStorage.getItem("usertype") === "patient") && (
+    <section className="py-20 text-center bg-white">
+      <div>
+      <div>
+        <h2 className="text-blue-900 mb-8">Meet Our Team</h2>
+      </div>
+     
+
+      <div className="flex flex-wrap mx-auto max-w-[1200px] justify-center mt-8">
+        {profiles.map(profile => (
+          <div 
+            key={profile.id}
+            className="flex flex-col items-center justify-center flex-[0_0_25%] relative min-w-[250px] max-w-[250px] text-center rounded-xl transition-all duration-300 bg-white border border-[#eaeaea] m-4 py-4 hover:shadow-[0_0_10px_10px_#ffffff]"
+          >
+
+
+          
+            <div className="relative">
+              <img 
+                src={profile.imgSrc} 
+                alt={profile.name} 
+                className="w-[250px] h-[250px] border-b border-[#eaeaea]"
+              />
+
+
+              <div className="absolute bottom-[85px] text-[0px] invisible opacity-0 flex justify-center items-center transition-all duration-500 bg-[rgba(74,76,178,0.8)] w-[250px] h-[70px] rounded-t-full group-hover:visible group-hover:opacity-100 group-hover:text-[30px]">
+                {profile.contact.map((contact, index) => {
+                    const IconComponent = contact.icon === "IoMdMail" ? IoMdMail :
+                  contact.icon === "FaPhoneAlt" ? FaPhoneAlt :
+                    FaHospital; 
+                    return (
+                                                    <div className="contact-icon" key={index} onClick={handleOnCLick}>
+                                                        <IconComponent />
+                                                    </div>
+                  );
+                })}
+              </div>
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+            <h3 className="text-blue-600 mt-4 mb-3 cursor-pointer hover:text-blue-900">
+              {profile.name}
+            </h3>
+            <p className="text-gray-500">
+              {profile.specialty}
+            </p>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+)}
 
       {/* FAQ Section */}
       <section className="py-16 bg-white">

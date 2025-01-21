@@ -124,7 +124,7 @@ TelMedSphere is designed to make healthcare simple and accessible for both docto
 - Navigate to the project directory for backend Setup.
   
  ```bash
- # Navigate to backeend directory
+ # Navigate to backend directory
  cd backend
  # Set .env file
  copy .env.example .env
