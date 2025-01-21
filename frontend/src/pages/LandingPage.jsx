@@ -332,35 +332,49 @@ const LandingPage = () => {
     </div>
   </section>
 )}
+    {/* FAQ Section */}
+    <section className="py-16 bg-white">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col md:flex-row items-start gap-8">
+          {/* Image Column */}
+          <div className="w-full md:w-2/5">  {/* Changed from w-1/2 to w-2/5 */}
+            <img 
+              src="faq-img.png" 
+              alt="faq" 
+              className="w-full h-auto rounded-lg max-w-md mx-auto" /* Added max-width and center alignment */
+            />
+          </div>
 
-      {/* FAQ Section */}
-      <section className="py-16 bg-white">
-        <motion.div
-          className="max-w-4xl mx-auto"
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-        >
-          <h2 className="text-3xl font-bold text-blue-800 text-center mb-8">
-            Frequently Asked Questions
-          </h2>
-          {faqs.map((faq, index) => (
-            <Accordion
-              key={index}
-              expanded={openFaqIndex === index}
-              onChange={() => handleFaqClick(index)}
-              className="mb-4 border rounded-lg"
-            >
-              <AccordionSummary expandIcon={<MdExpandMore />}>
-                <h3 className="text-lg font-medium text-blue-800">{faq.question}</h3>
-              </AccordionSummary>
-              <AccordionDetails>
-                <p className="text-gray-700">{faq.answer}</p>
-              </AccordionDetails>
-            </Accordion>
-          ))}
-        </motion.div>
-      </section>
+          {/* FAQs Column */}
+          <motion.div
+            className="w-full md:w-3/5"  
+            initial="hidden"
+            animate="visible"
+            variants={fadeInUp}
+          >
+            <h2 className="text-3xl font-bold text-blue-800 mb-8">
+              Frequently Asked Questions
+            </h2>
+            {faqs.map((faq, index) => (
+              <Accordion
+                key={index}
+                expanded={openFaqIndex === index}
+                onChange={() => handleFaqClick(index)}
+                className="mb-4 border rounded-lg"
+              >
+                <AccordionSummary expandIcon={<MdExpandMore />}>
+                  <h3 className="text-lg font-medium text-blue-800">{faq.question}</h3>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <p className="text-gray-700">{faq.answer}</p>
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+    </section>
+
     </div>
   );
 };
