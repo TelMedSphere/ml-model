@@ -102,9 +102,14 @@ const MeetPage = () => {
   const handleJitsiIFrameRef1 = (iframeRef) => {
     iframeRef.style.border = "10px solid #3d3d3d";
     iframeRef.style.background = "#3d3d3d";
-    iframeRef.style.height = "400px";
-    iframeRef.style.marginBottom = "20px";
+    iframeRef.style.width = "100%";
+    iframeRef.style.height = "100%";
+    iframeRef.style.position = "absolute";
+    iframeRef.style.top = "0";
+    iframeRef.style.left = "0";
+    iframeRef.style.margin = "0";
   };
+
 
   const handleApiReady = (apiObj) => {
     apiRef.current = apiObj;
@@ -213,7 +218,7 @@ const MeetPage = () => {
     return <></>;
   }
   return (
-    <div className="p-6 md:p-4 md:pt-24 text-blue-800">
+    <div className="p-4 md:p-6 lg:p-8 text-blue-800">
     {!isMeetEnded && (
       <>
         <h2 className="flex items-center justify-center text-2xl font-bold mb-4">
@@ -234,7 +239,9 @@ const MeetPage = () => {
             )}
           </span>
         </h2>
-        <div className="mx-auto my-4" id="jaas-meet-video">
+        <div className="w-full max-w-3xl mx-auto px-4" id="jaas-meet-video">
+        <div className="relative w-full" style={{ paddingTop: "100%" }}>
+        <div className="absolute inset-0">
           <JaaSMeeting
             appId={JaasAppId}
             roomName={meetId}
@@ -271,6 +278,8 @@ const MeetPage = () => {
               displayName: isDoctor ? searchparams.get("selectedDoc") : searchparams.get("name")
             }}
           />
+          </div>
+          </div>
         </div>
       </>
     )}
