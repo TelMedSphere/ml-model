@@ -213,25 +213,29 @@ const MeetPage = () => {
     return <></>;
   }
   return (
-    <div id="meet-page">
-      {!isMeetEnded && 
+    <div className="p-6 md:p-4 md:pt-24 text-blue-800">
+    {!isMeetEnded && (
       <>
-      <h2 className="meet-header">Live Meet  
-        <span className="copy-icon" onClick={() => {
-          setCopyAlert(true);
-          navigator.clipboard.writeText(`https://8x8.vc/${JaasAppId}/${meetId}`);
-          setTimeout(() => setCopyAlert(false), 2000);
-        }}>
-          <MdContentCopy />
-        { copyAlert && (
-          <div className="copy-alert">
-            <Alert severity="success">Copied</Alert>
-          </div>
-        )}
-        </span>
-      </h2>
-      <div className="jitsi-component-div" id="jaas-meet-video">
-        <JaaSMeeting
+        <h2 className="flex items-center justify-center text-2xl font-bold mb-4">
+          Live Meet
+          <span 
+            className="ml-2 text-blue-500 cursor-pointer hover:text-blue-600 relative transition-colors duration-300"
+            onClick={() => {
+              setCopyAlert(true);
+              navigator.clipboard.writeText(`https://8x8.vc/${JaasAppId}/${meetId}`);
+              setTimeout(() => setCopyAlert(false), 2000);
+            }}
+          >
+            <MdContentCopy />
+            {copyAlert && (
+              <div className="absolute top-10 -left-10">
+                <Alert severity="success">Copied</Alert>
+              </div>
+            )}
+          </span>
+        </h2>
+        <div className="mx-auto my-4" id="jaas-meet-video">
+          <JaaSMeeting
             appId={JaasAppId}
             roomName={meetId}
             spinner={renderSpinner}
@@ -243,7 +247,7 @@ const MeetPage = () => {
               startScreenSharing: false,
               enableEmailInStats: false,
               enableClosePage: false,
-              toolbarButtons:[
+              toolbarButtons: [
                 'camera',
                 'fullscreen',
                 'chat',
@@ -253,115 +257,148 @@ const MeetPage = () => {
                 'participants-pane',
                 'settings',
                 'toggle-camera'
-              ]  
+              ]
             }}
-            onApiReady={(externalApi) => handleApiReady(externalApi)}
+            onApiReady={handleApiReady}
             onReadyToClose={isDoctor ? handleDocEndMeeting : handleEndMeeting}
             getIFrameRef={handleJitsiIFrameRef1}
-            interfaceConfigOverwrite = {{
-                DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
-                SHOW_PROMOTIONAL_CLOSE_PAGE: false,
-                SHOW_JITSI_WATERMARK: false
+            interfaceConfigOverwrite={{
+              DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
+              SHOW_PROMOTIONAL_CLOSE_PAGE: false,
+              SHOW_JITSI_WATERMARK: false
             }}
-            userInfo = {{
-                displayName: isDoctor ? searchparams.get("selectedDoc") : searchparams.get("name")
+            userInfo={{
+              displayName: isDoctor ? searchparams.get("selectedDoc") : searchparams.get("name")
             }}
-            
-        />
-      </div>
-      </>
-      }
-
-      {isDoctor && (
-
-        <div className="doctor-prescription">
-            <h2 className="prescription-header">Prescription</h2>
-
-            {  prescription.length > 0 && (
-                <div className="prescription-items">
-                    { prescription.map((item, index) => (
-                        <div className="item" key={index}>
-                            <div className="prescription">
-                                <p>{item}</p>
-                            </div>
-                            <div className="delete-item">
-                                <span onClick={() => {deletePrescriptionItem(index)}}>
-                                    <TbTrash />
-                                </span>
-                                <div className="tooltip">Remove Item</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-            <div className="new_prescription">
-                <div className="input_boxes">
-                    <div className="input_box">
-                      <input
-                          type="text"
-                          className="input_field"
-                          value={newPrescription.name}
-                          onChange={(e) => {
-                            setInvName(prescription.filter(item => item.split(" | ")[0].toLowerCase()===e.target.value.toLowerCase()).length > 0);
-                            setNewPrescription({...newPrescription, name: e.target.value});
-                          }}
-                          placeholder="Medicine Name"
-                      />
-                    </div>
-                    <div className="input_box">
-                      <div className="box">
-                        <input
-                            type="text"
-                            className="input_field"
-                            value={newPrescription.dosage}
-                            onChange={(e) => {
-                              setInvDosage(!(/^[0-5]-[0-5]-[0-5]$/.test(e.target.value)));
-                              setNewPrescription({...newPrescription, dosage: e.target.value});
-                            }}
-                            placeholder="Dosage i.e. 1-0-0"
-                        />
-                        <select value={newPrescription.dosageTime} onChange={(e) => setNewPrescription({...newPrescription, dosageTime: e.target.value})}>
-                          <option value="Before Food">Before Food</option>
-                          <option value="After Food">After Food</option>
-                        </select>
-                      </div>
-                      <div className="box">
-                        <input
-                            type="text"
-                            className="input_field"
-                            value={newPrescription.duration}
-                            onChange={(e) => {
-                              setInvDuration(!(/^[0-9]{1,9}$/.test(e.target.value)) || (Number(e.target.value)===0));
-                              setNewPrescription({...newPrescription, duration: e.target.value});
-                            }}
-                            placeholder="Duration"
-                        />
-                        <select value={newPrescription.durationUnit} onChange={(e) => setNewPrescription({...newPrescription, durationUnit: e.target.value})}>
-                          <option value="day(s)">day(s)</option>
-                          <option value="month(s)">month(s)</option>
-                        </select>
-                      </div>
-                    </div>
-                </div>
-                <div className="add-btn">
-                  <button onClick={addPrescriptionItem} disabled={(newPrescription.name.length===0) || newPrescription.dosage==="" || newPrescription.duration==="" || isInvName || isInvDosage || isInvDuration}>
-                      Add
-                  </button>
-                  {isInvName && <Alert severity="error">Medicine Name already exists</Alert>}
-                  {isInvDosage && <Alert severity="error">Dosage should be in the form of n-n-n and between 0-5</Alert>}
-                  {isInvDuration && <Alert severity="error">Invalid Duration</Alert>}
-                </div>
-            </div>
-            <div className="send-prescription">
-                <button className="send-btn" onClick={handleFormSubmit}>{sendingMsg}</button>
-                <button className="download-btn" onClick={handleDownload}>Download</button>
-            </div>
-            <div style={{marginTop: "20px"}}>Note: Please ensure that you covered the prescription correctly before clicking the 'send' button.
-            As the page will redirect to the home page.</div>
+          />
         </div>
+      </>
+    )}
 
-      )}
-    </div>
+    {isDoctor && (
+      <div className="mt-8 text-center">
+        <h2 className="text-2xl font-bold mb-4">Prescription</h2>
+
+        {prescription.length > 0 && (
+          <div className="flex flex-wrap justify-start items-center mx-auto mb-8 border-2 border-blue-500 p-4 rounded-lg md:p-0 md:w-[90vw]">
+            {prescription.map((item, index) => (
+              <div key={index} 
+                className="m-4 p-4 flex justify-around items-center bg-gray-700 text-white rounded-lg shadow-md hover:bg-blue-800 transition-colors duration-300"
+              >
+                <div className="relative">
+                  <p className="whitespace-nowrap text-ellipsis overflow-hidden max-w-[800px] md:whitespace-normal md:overflow-visible">
+                    {item}
+                  </p>
+                </div>
+                <div className="ml-4 cursor-pointer hover:text-red-500 relative group">
+                  <span onClick={() => deletePrescriptionItem(index)}>
+                    <TbTrash />
+                  </span>
+                  <div className="invisible group-hover:visible absolute top-full left-1/2 transform -translate-x-1/2 text-sm">
+                    Remove Item
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="flex flex-col items-center justify-center mt-4">
+          <div className="w-[500px] max-w-[95vw]">
+            <div className="w-full mb-4">
+              <input
+                type="text"
+                className="w-full text-center bg-white border border-blue-400 text-blue-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md p-2"
+                value={newPrescription.name}
+                onChange={(e) => {
+                  setInvName(prescription.filter(item => item.split(" | ")[0].toLowerCase() === e.target.value.toLowerCase()).length > 0);
+                  setNewPrescription({ ...newPrescription, name: e.target.value });
+                }}
+                placeholder="Medicine Name"
+              />
+            </div>
+
+            <div className="flex flex-wrap justify-center items-center mb-4 w-full">
+              <div className="flex flex-wrap justify-center items-center mb-4 w-full">
+                <input
+                  type="text"
+                  className="w-[250px] max-w-[95vw] mx-2 my-1 text-center bg-white border border-blue-400 text-blue-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md p-2"
+                  value={newPrescription.dosage}
+                  onChange={(e) => {
+                    setInvDosage(!(/^[0-5]-[0-5]-[0-5]$/.test(e.target.value)));
+                    setNewPrescription({ ...newPrescription, dosage: e.target.value });
+                  }}
+                  placeholder="Dosage i.e. 1-0-0"
+                />
+                <select
+                  value={newPrescription.dosageTime}
+                  onChange={(e) => setNewPrescription({ ...newPrescription, dosageTime: e.target.value })}
+                  className="w-[200px] max-w-[95vw] p-2 border border-blue-400 text-blue-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md text-center font-montserrat"
+                >
+                  <option value="Before Food">Before Food</option>
+                  <option value="After Food">After Food</option>
+                </select>
+              </div>
+
+              <div className="flex flex-wrap justify-center items-center mb-4 w-full">
+                <input
+                  type="text"
+                  className="w-[250px] max-w-[95vw] mx-2 my-1 text-center bg-white border border-blue-400 text-blue-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md p-2"
+                  value={newPrescription.duration}
+                  onChange={(e) => {
+                    setInvDuration(!(/^[0-9]{1,9}$/.test(e.target.value)) || (Number(e.target.value) === 0));
+                    setNewPrescription({ ...newPrescription, duration: e.target.value });
+                  }}
+                  placeholder="Duration"
+                />
+                <select
+                  value={newPrescription.durationUnit}
+                  onChange={(e) => setNewPrescription({ ...newPrescription, durationUnit: e.target.value })}
+                  className="w-[200px] max-w-[95vw] p-2 border border-blue-400 text-blue-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md text-center font-montserrat"
+                >
+                  <option value="day(s)">day(s)</option>
+                  <option value="month(s)">month(s)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center justify-center w-[300px] max-w-[90vw]">
+            <button
+              onClick={addPrescriptionItem}
+              disabled={(newPrescription.name.length === 0) || newPrescription.dosage === "" || newPrescription.duration === "" || isInvName || isInvDosage || isInvDuration}
+              className="w-full py-2 px-4 rounded bg-blue-600 text-white transition-colors duration-300 hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-700"
+            >
+              Add
+            </button>
+            {isInvName && <Alert severity="error">Medicine Name already exists</Alert>}
+            {isInvDosage && <Alert severity="error">Dosage should be in the form of n-n-n and between 0-5</Alert>}
+            {isInvDuration && <Alert severity="error">Invalid Duration</Alert>}
+          </div>
+
+          <div className="mt-8 flex justify-center items-center flex-wrap">
+            <button
+              onClick={handleFormSubmit}
+              className="py-2 px-4 ml-4 rounded bg-blue-800 text-white transition-colors duration-300 hover:bg-blue-900 shadow-lg shadow-blue-500"
+            >
+              {sendingMsg}
+            </button>
+            <button
+              onClick={handleDownload}
+              className="py-2 px-4 ml-4 rounded bg-blue-800 text-white transition-colors duration-300 hover:bg-blue-900 shadow-lg shadow-blue-500"
+            >
+              Download
+            </button>
+          </div>
+
+          <div className="mt-5">
+            Note: Please ensure that you covered the prescription correctly before clicking the 'send' button.
+            As the page will redirect to the home page.
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
   );
 };
 
