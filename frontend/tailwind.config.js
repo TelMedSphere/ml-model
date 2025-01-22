@@ -20,6 +20,14 @@ module.exports = {
         purple: colors.purple,
         social: colors.social,
       },
+      backgroundImage: {
+        "curvy-shape": "url('/curvy-shape-img.png')",
+        "landing-bg":
+          "linear-gradient(white 20%, #d4ddf1 40%, #b0bbd8 60%, #6575a5 80%, #4a4cb2 100%)",
+      },
+      textShadow: {
+        "landing-highlight": "2px 2px 4px rgba(0, 0, 0, 0.3)",
+      },
       fontFamily: {
         sans: ["Montserrat", ...defaultTheme.fontFamily.sans],
       },
@@ -75,5 +83,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwind-scrollbar")],
+  plugins: [require("tailwind-scrollbar"), require("tailwindcss-textshadow")],
 };

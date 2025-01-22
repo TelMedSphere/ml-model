@@ -1,18 +1,18 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import useDocTitle from "../hooks/useDocTitle";
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import { MdExpandMore } from 'react-icons/md';
-import { AiFillLinkedin, AiFillGithub } from 'react-icons/ai';
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import { MdExpandMore } from "react-icons/md";
+import { AiFillLinkedin, AiFillGithub } from "react-icons/ai";
 import { TbStethoscope, TbHeartPlus } from "react-icons/tb";
 import { BsRobot } from "react-icons/bs";
 import { GiMedicines } from "react-icons/gi";
 import { MdOutlineHealthAndSafety } from "react-icons/md";
-import { MdAccountCircle } from 'react-icons/md';
-import { IoMdMail } from 'react-icons/io';
-import { FaPhoneAlt, FaHospital } from 'react-icons/fa';
+import { MdAccountCircle } from "react-icons/md";
+import { IoMdMail } from "react-icons/io";
+import { FaPhoneAlt, FaHospital } from "react-icons/fa";
 import { IoAccessibility } from "react-icons/io5";
 import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
@@ -21,243 +21,302 @@ import bg from "../assets/landing-bg.png";
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
 
-
 const LandingPage = () => {
-    const { isLoading, toggleLoading } = useContext(commonContext);
-    const [openFaqIndex, setOpenFaqIndex] = useState(null);
-    const faqRef = useRef(null);
+  const { isLoading, toggleLoading } = useContext(commonContext);
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const faqRef = useRef(null);
 
-    useEffect(() => {
-        toggleLoading(true);
-        setTimeout(() => toggleLoading(false), 2000);
-    }, []);
+  useEffect(() => {
+    toggleLoading(true);
+    setTimeout(() => toggleLoading(false), 2000);
+  }, []);
 
-    useScrollDisable(isLoading);
-    useDocTitle();
-    const navigate = useNavigate();
+  useScrollDisable(isLoading);
+  useDocTitle();
+  const navigate = useNavigate();
 
-    const handleFaqClick = (index) => {
-        setOpenFaqIndex(prevIndex => (prevIndex === index ? null : index));
+  const handleFaqClick = (index) => {
+    setOpenFaqIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
+
+  const handleOutsideClick = (event) => {
+    if (faqRef.current && !faqRef.current.contains(event.target)) {
+      setOpenFaqIndex(null);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleOutsideClick);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
     };
+  }, []);
 
-    const handleOutsideClick = (event) => {
-        if (faqRef.current && !faqRef.current.contains(event.target)) {
-            setOpenFaqIndex(null);
-        }
-    };
+  if (isLoading) {
+    return <Preloader />;
+  }
 
-    useEffect(() => {
-        document.addEventListener("click", handleOutsideClick);
-        return () => {
-            document.removeEventListener("click", handleOutsideClick);
-        };
-    }, []);
+  const handleOnCLick = () => {
+    navigate("/doctors");
+  };
 
-    if (isLoading) {
-        return <Preloader />;
-    }
+  const faqs = [
+    {
+      question: "What is TelMedSphere?",
+      answer:
+        "It is the web application that connects patients to the right doctor or allow them to choose a doctor as per their need. It provides information about users, doctors, news, appointments, and prescriptions. It also allows users to create instant meetings with doctors, and buy medicines. It allows users to check their health status by using his/her symptoms.",
+    },
+    {
+      question:
+        "Can we get a free account in TelMedSphere and use all its features for free?",
+      answer:
+        "Yes, Ofcourse. You can use all the features provided by TelMedSphere for free.",
+    },
+    {
+      question: "Can we book an appointment at any time?",
+      answer:
+        "Yes. You can book an appointment of a doctor if he/she is free at that time.",
+    },
+    {
+      question: "Is there a way to test our health?",
+      answer:
+        "Yes. You can test your health by a Model that predicts the disease probability in the future.",
+    },
+    {
+      question: "Can we purchase the medicines from here?",
+      answer: "Yes. You can purchase the medicines from TelMedSphere store.",
+    },
+  ];
 
-    const handleOnCLick = () => {
-         navigate('/doctors');
-    }
+  if (isLoading) {
+    return <Preloader />;
+  }
 
-    const faqs = [
-        {
-            question: "What is TelMedSphere?",
-            answer: "It is the web application that connects patients to the right doctor or allow them to choose a doctor as per their need. It provides information about users, doctors, news, appointments, and prescriptions. It also allows users to create instant meetings with doctors, and buy medicines. It allows users to check their health status by using his/her symptoms."
-        },
-        {
-            question: "Can we get a free account in TelMedSphere and use all its features for free?",
-            answer: "Yes, Ofcourse. You can use all the features provided by TelMedSphere for free."
-        },
-        {
-            question: "Can we book an appointment at any time?",
-            answer: "Yes. You can book an appointment of a doctor if he/she is free at that time."
-        },
-        {
-            question: "Is there a way to test our health?",
-            answer: "Yes. You can test your health by a Model that predicts the disease probability in the future."
-        },
-        {
-            question: "Can we purchase the medicines from here?",
-            answer: "Yes. You can purchase the medicines from TelMedSphere store."
-        },
-    ];
-
-    if (isLoading) {
-        return <Preloader />;
-    }
-
-    return (
-        <>
-            {/* <div id="landing-page-bg"></div> */}
-            <div id="landing-page">
-
-                <section className="intro-section">
-                    <div className="curvy-img"></div>
-                    <div className="content">
-                        <div className="text">
-                            <h2 className="highlight-heading animated-heading">Healing Hands & Caring Hearts</h2>
-                            <p className="highlight-text">
-                                Connecting patients and doctors, no matter the distance <br />
-                                we are dedicated to your wellbeing & committed to your care...
-                            </p>
-                            {/* {localStorage.getItem("username") && localStorage.getItem("username") !== "undefined" && localStorage.getItem("usertype") === "patient" && (
+  return (
+    <>
+      {/* <div id="landing-page-bg" classname="bg-landing-bg"></div> */}
+      <div className="top-0 left-0 h-full w-full">
+        <section className="h-screen w-full">
+          {/* curvy-img */}
+          <div className="relative h-[90%] bg-left bg-no-repeat bg-cover -b-4 left-0 z-0 bg-curvy-shape"></div>
+          <div className="absolute left-0 top-0 h-[85%] z-[1] flex justify-evenly items-center w-full text-blue-8 text-shadow-landing-highlight">
+            <div className="max-w-[50%]">
+              {/* highlight-heading */}
+              <h2 className="text-[2.5rem] mb-4 text-shado animated-heading">
+                Healing Hands & Caring Hearts
+              </h2>
+              {/* highlight-text */}
+              <p className="text-[1rem] mt-[1.4rem] animate-fadeIn duration-200 ease-in-out gap-[2em]">
+                Connecting patients and doctors, no matter the distance <br />
+                we are dedicated to your wellbeing & committed to your care...
+              </p>
+              {/* {localStorage.getItem("username") && localStorage.getItem("username") !== "undefined" && localStorage.getItem("usertype") === "patient" && (
                                 <button onClick={() => navigate("/wellness-programs")}>Join Wellness Program</button>
                             )} */}
-                        </div>
-
-                        <div className="doctor-img">
-                            <img src={bg} alt="landing bg" />
-                        </div>
-
-
-                    </div>
-                </section>
-
-                <section className="services-section">
-                    <div className="header">
-                        <h2>Services we provide</h2>
-                    </div>
-                    <div className="service-list">
-                        <div className="service-item">
-                            <div className="icon-container">
-                                <div className="icon icon-1">
-                                    <TbStethoscope />
-                                </div>
-                            </div>
-                            <h3>Experienced Doctors</h3>
-                            <p>Connect with doctors through live video calls and receive prescriptions.</p>
-                        </div>
-                        <div className="service-item">
-                            <div className="icon-container">
-                                <div className="icon icon-2">
-                                    <BsRobot />
-                                </div>
-                            </div>
-                            <h3>Health Prediction</h3>
-                            <p>Assess your health status with our advanced disease detection model.</p>
-                        </div>
-                        <div className="service-item">
-                            <div className="icon-container">
-                                <div className="icon icon-3">
-                                    <GiMedicines />
-                                </div>
-                            </div>
-                            <h3>Pharmacy store</h3>
-                            <p>Buy medications securely through our integrated pharmacy service.</p>
-                        </div>
-                    </div>
-                </section>
-
-
-                <section className="need-section">
-                    <div className="need-div">
-                        <div className="img-div">
-                            <img src={need} alt="why" />
-                        </div>
-                        <div className="content">
-                            <h2>Why do we need a proper health care?</h2>
-                            <ul>
-                                <li>WHO recommends 44.5 doctors per 10,000 people but India has only 22 per 10k people so major supply demand mismatchIndia has 22.8 doctors for every 10K citizens, the half of what WHO recommends.</li>
-                                <li>Also, local doctors may fail to provide  the best consultation as they lack expertise & experience.</li>
-                                <li>Thus all-in-one online hospital was created. It offers a disease prediction system, pharmacy, and payments.</li>
-                                <li>This platform provides access to quality healthcare from anywhere, improving healthcare outcomes and accessibility.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="benefits-section">
-                    <div className="content">
-                        <h2>Our Benefits</h2>
-                        <div className="benefits">
-                            <div className="first">
-                                <div className="icon"><MdOutlineHealthAndSafety /> </div>
-                                <p>TeleHealth services</p>
-                            </div>
-                            <div className="second">
-                                <div className="icon"><IoAccessibility /> </div>
-                                <p>Convenience and accessibility</p>
-                            </div>
-                            <div className="third">
-                                <div className="icon"><TbStethoscope /> </div>
-                                <p>Online Appointment Booking</p>
-                            </div>
-                            <div className="fourth">
-                                <div className="icon"><TbHeartPlus /> </div>
-                                <p>Competitive advantage</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {(localStorage.getItem("username") && localStorage.getItem("username") !== "undefined") && localStorage.getItem("usertype") === "patient" &&
-                    <section className="team-section">
-                        <div className="team-div">
-                            <div className="head"><h2>Meet Our Team</h2></div>
-                            <div className="team">
-                            {profiles.map(profile => (
-                                <div className="item" key={profile.id}>
-                                    <div className="img-div">
-                                        <img src={profile.imgSrc} alt={profile.name} className="img" />
-                                        <div className="contact-div">
-                                            {profile.contact.map((contact, index) => {
-                                                const IconComponent = contact.icon === "IoMdMail" ? IoMdMail :
-                                                    contact.icon === "FaPhoneAlt" ? FaPhoneAlt :
-                                                        FaHospital; 
-                                                return (
-                                                    <div className="contact-icon" key={index} onClick={handleOnCLick}>
-                                                        <IconComponent />
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                    <h3>{profile.name}</h3>
-                                    <p>{profile.specialty}</p>
-                                </div>
-                            ))}
-                            </div>
-                        </div>
-                    </section>
-                }
-
-
-
-              <section className="faq-section">
-                    <div className="faq-div" ref={faqRef}>
-                       <div className="img-div">
-                            <img src="faq-img.png" alt="faq" />
-                        </div>
-                        <div className="content">
-                            <h2 className="head">Any Queries ?</h2>
-                            <div className="faqs">
-                                {faqs.map((item, index) => (
-                                    <Accordion
-                                        key={index}
-                                        className="faq-item object-cover shadow-md hover:shadow-[0px_0px_10px_2px_rgba(59,130,246,0.6)]"
-                                        expanded={openFaqIndex === index}
-                                        onChange={() => handleFaqClick(index)}
-                                    >
-                                        <AccordionSummary
-                                            expandIcon={<MdExpandMore className="icon" />}
-                                            className="expand-icon"
-                                        >
-                                            <div className="item-qn">{item.question}</div>
-                                        </AccordionSummary>
-                                        <AccordionDetails>
-                                            <div className="item-ans">{item.answer}</div>
-                                        </AccordionDetails>
-                                    </Accordion>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </section>
             </div>
-        </>
-    )
-}
+
+            <div className="max-w-[50%] text-center">
+              <img src={bg} alt="landing bg" className="my-[20px] mx-auto" />
+            </div>
+          </div>
+        </section>
+        {/* services-section */}
+        <section className="py-16 px-0 text-center bg-white-1">
+          <div>
+            <h2 className="text-[#333] mb-8">Services we provide</h2>
+          </div>
+          {/* service-list */}
+          <div className="flex flex-wrap justify-around mt-8 max-w-[1200px] my-0 mx-auto">
+            {/* service-item */}
+            <div className="flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] bg-white-1 m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+              {/* icon-container */}
+              <div className="flex items-center justify-center min-h-[80px] max-h-[80px]">
+                {/* icon icon-1*/}
+                <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center text-[1.8rem] bg-[rgba(25, 150, 143, 0.1)] text-[#19958f] border-[2px] border-[#19958f]">
+                  <TbStethoscope />
+                </div>
+              </div>
+              <h3 className="text-[#222] mb-3 text-[1.25rem]">
+                Experienced Doctors
+              </h3>
+              <p className="text-[#555] text-[0.9rem]">
+                Connect with doctors through live video calls and receive
+                prescriptions.
+              </p>
+            </div>
+            <div className="flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] bg-white-1 m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+              <div className="flex items-center justify-center min-h-[80px] max-h-[80px]">
+                <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center text-[1.8rem] bg-[rgba(245, 158, 50, 0.1)] text-[#f59c23] border-[2px] border-[#f59c23]">
+                  <BsRobot />
+                </div>
+              </div>
+              <h3 className="text-[#222] mb-3 text-[1.25rem]">
+                Health Prediction
+              </h3>
+              <p className="text-[#555] text-[0.9rem]">
+                Assess your health status with our advanced disease detection
+                model.
+              </p>
+            </div>
+            <div className="flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] bg-white-1 m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+              <div className="flex items-center justify-center min-h-[80px] max-h-[80px]">
+                <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center text-[1.8rem] bg-[rgba(240, 80, 50, 0.1)] text-[#f05032] border-[2px] border-[#f05032]">
+                  <GiMedicines />
+                </div>
+              </div>
+              <h3 className="text-[#222] mb-3 text-[1.25rem]">
+                Pharmacy store
+              </h3>
+              <p className="text-[#555] text-[0.9rem]">
+                Buy medications securely through our integrated pharmacy
+                service.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="need-section">
+          <div className="need-div">
+            <div className="img-div">
+              <img src={need} alt="why" />
+            </div>
+            <div className="content">
+              <h2>Why do we need a proper health care?</h2>
+              <ul>
+                <li>
+                  WHO recommends 44.5 doctors per 10,000 people but India has
+                  only 22 per 10k people so major supply demand mismatchIndia
+                  has 22.8 doctors for every 10K citizens, the half of what WHO
+                  recommends.
+                </li>
+                <li>
+                  Also, local doctors may fail to provide the best consultation
+                  as they lack expertise & experience.
+                </li>
+                <li>
+                  Thus all-in-one online hospital was created. It offers a
+                  disease prediction system, pharmacy, and payments.
+                </li>
+                <li>
+                  This platform provides access to quality healthcare from
+                  anywhere, improving healthcare outcomes and accessibility.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section className="benefits-section">
+          <div className="content">
+            <h2>Our Benefits</h2>
+            <div className="benefits">
+              <div className="first">
+                <div className="icon">
+                  <MdOutlineHealthAndSafety />{" "}
+                </div>
+                <p>TeleHealth services</p>
+              </div>
+              <div className="second">
+                <div className="icon">
+                  <IoAccessibility />{" "}
+                </div>
+                <p>Convenience and accessibility</p>
+              </div>
+              <div className="third">
+                <div className="icon">
+                  <TbStethoscope />{" "}
+                </div>
+                <p>Online Appointment Booking</p>
+              </div>
+              <div className="fourth">
+                <div className="icon">
+                  <TbHeartPlus />{" "}
+                </div>
+                <p>Competitive advantage</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {localStorage.getItem("username") &&
+          localStorage.getItem("username") !== "undefined" &&
+          localStorage.getItem("usertype") === "patient" && (
+            <section className="team-section">
+              <div className="team-div">
+                <div className="head">
+                  <h2>Meet Our Team</h2>
+                </div>
+                <div className="team">
+                  {profiles.map((profile) => (
+                    <div className="item" key={profile.id}>
+                      <div className="img-div">
+                        <img
+                          src={profile.imgSrc}
+                          alt={profile.name}
+                          className="img"
+                        />
+                        <div className="contact-div">
+                          {profile.contact.map((contact, index) => {
+                            const IconComponent =
+                              contact.icon === "IoMdMail"
+                                ? IoMdMail
+                                : contact.icon === "FaPhoneAlt"
+                                ? FaPhoneAlt
+                                : FaHospital;
+                            return (
+                              <div
+                                className="contact-icon"
+                                key={index}
+                                onClick={handleOnCLick}
+                              >
+                                <IconComponent />
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      <h3>{profile.name}</h3>
+                      <p>{profile.specialty}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+        <section className="faq-section">
+          <div className="faq-div" ref={faqRef}>
+            <div className="img-div">
+              <img src="faq-img.png" alt="faq" />
+            </div>
+            <div className="content">
+              <h2 className="head">Any Queries ?</h2>
+              <div className="faqs">
+                {faqs.map((item, index) => (
+                  <Accordion
+                    key={index}
+                    className="faq-item object-cover shadow-md hover:shadow-[0px_0px_10px_2px_rgba(59,130,246,0.6)]"
+                    expanded={openFaqIndex === index}
+                    onChange={() => handleFaqClick(index)}
+                  >
+                    <AccordionSummary
+                      expandIcon={<MdExpandMore className="icon" />}
+                      className="expand-icon"
+                    >
+                      <div className="item-qn">{item.question}</div>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <div className="item-ans">{item.answer}</div>
+                    </AccordionDetails>
+                  </Accordion>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+};
 
 export default LandingPage;
