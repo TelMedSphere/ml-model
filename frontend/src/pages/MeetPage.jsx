@@ -100,8 +100,8 @@ const MeetPage = () => {
   };
 
   const handleJitsiIFrameRef1 = (iframeRef) => {
-    iframeRef.style.border = "10px solid #3d3d3d";
-    iframeRef.style.background = "#3d3d3d";
+    iframeRef.style.border = "10px solid #2d2d2d";
+    iframeRef.style.background = "#2d2d2d";
     iframeRef.style.width = "100%";
     iframeRef.style.height = "100%";
     iframeRef.style.position = "absolute";
@@ -218,30 +218,33 @@ const MeetPage = () => {
     return <></>;
   }
   return (
-    <div className="p-4 md:p-6 lg:p-8 text-blue-800">
+    <div className="p-4 md:p-6 lg:p-8 text-black">
     {!isMeetEnded && (
-      <>
-        <h2 className="flex items-center justify-center text-2xl font-bold mb-4">
-          Live Meet
+      <div className="max-w-4xl mx-auto text-center">
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold mb-4">Live Meet</h2>
+        <div className="flex items-center justify-center gap-4 mb-6">
           <span 
-            className="ml-2 text-blue-500 cursor-pointer hover:text-blue-600 relative transition-colors duration-300"
+            className="cursor-pointer hover:text-gray-600 relative transition-colors duration-300"
             onClick={() => {
               setCopyAlert(true);
               navigator.clipboard.writeText(`https://8x8.vc/${JaasAppId}/${meetId}`);
               setTimeout(() => setCopyAlert(false), 2000);
             }}
           >
-            <MdContentCopy />
+            <MdContentCopy size={20} />
             {copyAlert && (
-              <div className="absolute top-10 -left-10">
+              <div className="absolute -top-5 -right-10">
                 <Alert severity="success">Copied</Alert>
               </div>
             )}
           </span>
-        </h2>
-        <div className="w-full max-w-3xl mx-auto px-4" id="jaas-meet-video">
-        <div className="relative w-full" style={{ paddingTop: "100%" }}>
-        <div className="absolute inset-0">
+        </div>
+      </div>
+
+
+      <div className="relative w-full" style={{ paddingTop: "75%" }}>
+       <div className="absolute inset-0">
           <JaaSMeeting
             appId={JaasAppId}
             roomName={meetId}
@@ -281,7 +284,7 @@ const MeetPage = () => {
           </div>
           </div>
         </div>
-      </>
+
     )}
 
     {isDoctor && (
@@ -292,7 +295,7 @@ const MeetPage = () => {
           <div className="flex flex-wrap justify-start items-center mx-auto mb-8 border-2 border-blue-500 p-4 rounded-lg md:p-0 md:w-[90vw]">
             {prescription.map((item, index) => (
               <div key={index} 
-                className="m-4 p-4 flex justify-around items-center bg-gray-700 text-white rounded-lg shadow-md hover:bg-blue-800 transition-colors duration-300"
+                className="m-4 p-4 flex justify-around items-center bg-gray-700 text-white rounded-lg shadow-md hover:bg-gray-800 transition-colors duration-300"
               >
                 <div className="relative">
                   <p className="whitespace-nowrap text-ellipsis overflow-hidden max-w-[800px] md:whitespace-normal md:overflow-visible">
@@ -317,7 +320,7 @@ const MeetPage = () => {
             <div className="w-full mb-4">
               <input
                 type="text"
-                className="w-full text-center bg-white border border-blue-400 text-blue-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md p-2"
+                className="w-full text-center bg-white border border-gray-400 text-gray-800 focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-md p-2"
                 value={newPrescription.name}
                 onChange={(e) => {
                   setInvName(prescription.filter(item => item.split(" | ")[0].toLowerCase() === e.target.value.toLowerCase()).length > 0);
@@ -331,7 +334,7 @@ const MeetPage = () => {
               <div className="flex flex-wrap justify-center items-center mb-4 w-full">
                 <input
                   type="text"
-                  className="w-[250px] max-w-[95vw] mx-2 my-1 text-center bg-white border border-blue-400 text-blue-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md p-2"
+                  className="w-[250px] max-w-[95vw] mx-2 my-1 text-center bg-white border border-gray-400 text-gray-800 focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-md p-2"
                   value={newPrescription.dosage}
                   onChange={(e) => {
                     setInvDosage(!(/^[0-5]-[0-5]-[0-5]$/.test(e.target.value)));
@@ -342,7 +345,7 @@ const MeetPage = () => {
                 <select
                   value={newPrescription.dosageTime}
                   onChange={(e) => setNewPrescription({ ...newPrescription, dosageTime: e.target.value })}
-                  className="w-[200px] max-w-[95vw] p-2 border border-blue-400 text-blue-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md text-center font-montserrat"
+                  className="w-[200px] max-w-[95vw] p-2 border border-gray-400 text-gray-800 focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-md text-center font-montserrat"
                 >
                   <option value="Before Food">Before Food</option>
                   <option value="After Food">After Food</option>
@@ -352,7 +355,7 @@ const MeetPage = () => {
               <div className="flex flex-wrap justify-center items-center mb-4 w-full">
                 <input
                   type="text"
-                  className="w-[250px] max-w-[95vw] mx-2 my-1 text-center bg-white border border-blue-400 text-blue-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md p-2"
+                  className="w-[250px] max-w-[95vw] mx-2 my-1 text-center bg-white border border-gray-400 text-gray-800 focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-md p-2"
                   value={newPrescription.duration}
                   onChange={(e) => {
                     setInvDuration(!(/^[0-9]{1,9}$/.test(e.target.value)) || (Number(e.target.value) === 0));
@@ -363,7 +366,7 @@ const MeetPage = () => {
                 <select
                   value={newPrescription.durationUnit}
                   onChange={(e) => setNewPrescription({ ...newPrescription, durationUnit: e.target.value })}
-                  className="w-[200px] max-w-[95vw] p-2 border border-blue-400 text-blue-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-md text-center font-montserrat"
+                  className="w-[200px] max-w-[95vw] p-2 border border-gray-400 text-gray-800 focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-md text-center font-montserrat"
                 >
                   <option value="day(s)">day(s)</option>
                   <option value="month(s)">month(s)</option>
@@ -376,7 +379,7 @@ const MeetPage = () => {
             <button
               onClick={addPrescriptionItem}
               disabled={(newPrescription.name.length === 0) || newPrescription.dosage === "" || newPrescription.duration === "" || isInvName || isInvDosage || isInvDuration}
-              className="w-full py-2 px-4 rounded bg-blue-600 text-white transition-colors duration-300 hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-700"
+              className="w-full py-2 px-4 rounded bg-gray-600 text-white transition-colors duration-300 hover:bg-gray-700 disabled:cursor-not-allowed disabled:bg-blue-700"
             >
               Add
             </button>
@@ -388,13 +391,13 @@ const MeetPage = () => {
           <div className="mt-8 flex justify-center items-center flex-wrap">
             <button
               onClick={handleFormSubmit}
-              className="py-2 px-4 ml-4 rounded bg-blue-800 text-white transition-colors duration-300 hover:bg-blue-900 shadow-lg shadow-blue-500"
+              className="py-2 px-4 ml-4 rounded bg-gray-800 text-white transition-colors duration-300 hover:bg-gray-900 shadow-lg shadow-gray-500"
             >
               {sendingMsg}
             </button>
             <button
               onClick={handleDownload}
-              className="py-2 px-4 ml-4 rounded bg-blue-800 text-white transition-colors duration-300 hover:bg-blue-900 shadow-lg shadow-blue-500"
+              className="py-2 px-4 ml-4 rounded bg-gray-800 text-white transition-colors duration-300 hover:bg-gray-900 shadow-lg shadow-gray-500"
             >
               Download
             </button>
