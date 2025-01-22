@@ -322,43 +322,48 @@ const Home = () => {
             </div>
         )}
 
-        <div className="mx-auto w-[93vw] max-w-[1100px] mb-16">
-            <h2 className="mb-4 text-blue-800">Upcoming Appointments</h2>
-            <div>
-                <ul>
-                    {upcomingAppointments.map((item, index) => (
-                        <li key={index} className="flex justify-between items-center p-2 px-4 mb-4 border border-blue-400 bg-blue-200 rounded-lg transition-all duration-300 hover:border-2 hover:border-blue-500 hover:p-3">
-                            <div className="text-blue-800 flex flex-wrap items-end">
-                                <p className="text-lg mr-2">
-                                    {new Date(item.date + " " + item.time).toString().slice(0,3) + "," + 
-                                    new Date(item.date + " " + item.time).toString().slice(3, 16) + 
-                                    "at " + new Date(item.date + " " + item.time).toString().slice(16,21)},
-                                </p>
-                                <p> By {item.doctor ? item.doctor : item.patient}</p>
-                            </div>
-                            <button 
-                                className="bg-blue-800 text-white px-8 py-4 rounded-lg transition-all duration-300 shadow-lg hover:bg-blue-900 disabled:cursor-not-allowed disabled:bg-blue-900"
-                                disabled={new Date(item.date+" "+item.time) > new Date()}
-                                onClick={() => handleappointmentmeet(item.doctor,item.demail,item.link)}>
-                                Join
-                            </button>
-                        </li>
-                    ))}
-                    {upcomingAppointments.length === 0 && (
-                        <li className="flex justify-between items-center p-2 px-4 mb-4 border border-blue-400 bg-blue-200 rounded-lg">
-                            <div className="text-blue-800">No appointments found...</div>
-                            {!isDoctor && (
-                                <button 
-                                    className="bg-blue-800 text-white px-8 py-4 rounded-lg hover:bg-blue-900 transition-all duration-300 shadow-lg"
-                                    onClick={() => navigate('/doctors')}>
-                                    Book
-                                </button>
-                            )}
-                        </li>
-                    )}
-                </ul>
-            </div>
-        </div>
+<div className="mx-auto w-[93vw] max-w-[1100px] mb-16">
+      <h2 className="mb-4 text-indigo-900">Upcoming Appointments</h2>
+      <div>
+        <ul>
+          {upcomingAppointments.map((item, index) => (
+            <li key={index} className="flex justify-between items-center p-2 px-4 mb-4 bg-slate-200 rounded-lg transition-all duration-300 hover:bg-slate-300">
+              <div className="text-slate-700 flex flex-wrap items-end">
+                <p className="text-lg mr-2">
+                  {new Date(item.date + " " + item.time).toString().slice(0,3) + "," + 
+                  new Date(item.date + " " + item.time).toString().slice(3, 16) + 
+                  "at " + new Date(item.date + " " + item.time).toString().slice(16,21)},
+                </p>
+                <p> By {item.doctor ? item.doctor : item.patient}</p>
+              </div>
+              <button 
+                className="bg-[#000066] text-white px-8 py-4 rounded-lg transition-all duration-300 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={new Date(item.date+" "+item.time) > new Date()}
+                onClick={() => handleappointmentmeet(item.doctor,item.demail,item.link)}>
+                Join
+              </button>
+            </li>
+          ))}
+          {upcomingAppointments.length === 0 && (
+            <li className="flex justify-between items-center p-4 px-6 mb-4 bg-slate-200 rounded-lg">
+              <div className="text-slate-700">No appointments found...</div>
+              {!isDoctor && (
+                <button 
+                  className="bg-[#000066] text-white px-8 py-3 rounded-lg hover:opacity-90 transition-all duration-300"
+                  onClick={() => navigate('/doctors')}>
+                  Book
+                </button>
+              )}
+            </li>
+          )}
+        </ul>
+      </div>
+    </div>
+
+
+                    
+
+
 
         <div className="mx-auto w-[93vw] max-w-[1100px] bg-[#eedfa3] border-2 border-[#ff5500] p-6 text-[#ff5500] rounded-lg mb-20 transition-all duration-300 hover:w-[95vw] hover:p-8 hover:border-3">
             <div className="flex items-center mb-4 text-[#ff5900]">
