@@ -289,205 +289,231 @@ const Doctors = () => {
 
   return (
     <>
-      <div id="doctors-page">
-        <div className="doctor-details">
-          <div className="heading">
-            <h3>Doctor Details</h3>
-            <div className="refresh-btn" onClick={fetchDoctors}>
-              <span className={`${fetchingData ? "active" : ""}`}>
-                <IoMdRefresh className="refresh-icon" />
+      <div className="py-24 text-center">
+        <div className="min-h-[600px] p-2.5 mx-auto text-blue-800 max-w-[1300px] w-full">
+          <div className="flex justify-center items-center">
+            <h3 className="text-2xl font-semibold">Doctor Details</h3>
+            <div className="relative ml-2.5 group">
+              <span 
+                className={`${fetchingData ? 'cursor-not-allowed' : 'cursor-pointer'} 
+                  bg-blue-500 hover:bg-blue-700 transition-all duration-300 rounded px-1.5 pb-0.5 text-2xl text-white inline-flex`}
+                onClick={fetchDoctors}
+              >
+                <IoMdRefresh className={`${fetchingData ? 'animate-spin' : ''}`} />
               </span>
-              <div className="refresh-tooltip tooltip">Refresh details</div>
+              <div className="invisible group-hover:visible absolute top-[-8px] left-12 bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap">
+                Refresh details
+              </div>
             </div>
           </div>
-          <DataGrid
-            className="doctor-details-table"
-            rows={doctors}
-            columns={columns}
-            components={{ Toolbar: GridToolbar }
-            }
-          />
+
+          <div className="min-h-[500px] max-h-[500px] shadow-lg rounded-lg my-5 mx-auto">
+            <DataGrid
+              className="w-full border-none"
+              rows={doctors}
+              columns={columns}
+              components={{ Toolbar: GridToolbar }}
+            />
+          </div>
         </div>
       </div>
+
       <Modal
         open={meetModal && isLowBalance}
         onClose={() => {
-          setMessage("")
+          setMessage("");
           setMeetModal(false);
         }}
       >
-        <div id="meet-modal" style={{ width: "min(400px, 90vw)" }}>
-          <div className="close_btn_div"> 
-            <IoMdClose onClick={() => {
-              setMessage("")
-              setMeetModal(false)
-              setConnecting(false)
-              httpClient.put('/delete_meet', { email: selectEmail} )
-            }} />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[min(400px,90vw)] p-4 bg-white rounded-lg shadow-lg border-2 border-blue-200">
+          <div className="text-right">
+            <IoMdClose 
+              className="text-blue-500 hover:text-blue-800 transition-all duration-300 cursor-pointer" 
+              onClick={() => {
+                setMessage("");
+                setMeetModal(false);
+                setConnecting(false);
+                httpClient.put('/delete_meet', { email: selectEmail });
+              }}
+            />
           </div>
-          <div className="balance-details">
-            <h3>Uhuh!!</h3>
-            <p>Low Balance!</p>
-            <div className="fee-split">
-              <div className="text">Doctor Fee {`(${selectedDoc})`}</div>
-              <div className="fee">₹ {curFee}</div>
+          <div className="flex flex-col items-start justify-center mx-4">
+            <h3 className="text-xl text-blue-800">Uhuh!!</h3>
+            <p className="text-red-600">Low Balance!</p>
+            <div className="flex justify-between items-center w-full mt-4">
+              <div className="text-blue-800 text-lg">{`Doctor Fee (${selectedDoc})`}</div>
+              <div className="text-lg font-bold">₹ {curFee}</div>
             </div>
-            <div className="fee-split">
-              <div className="text">Available Balance</div>
-              <div className="fee">₹ {balance}</div>
+            <div className="flex justify-between items-center w-full mt-4">
+              <div className="text-blue-800 text-lg">Available Balance</div>
+              <div className="text-lg font-bold">₹ {balance}</div>
             </div>
-            <div className="fee-split last">
-              <div className="text">Remaining Balance</div>
-              <div className="fee">₹ {(curFee - balance).toFixed(2)}</div>
+            <div className="flex justify-between items-center w-full mt-4 pt-4 border-t-2 border-blue-700">
+              <div className="text-red-600 text-lg">Remaining Balance</div>
+              <div className="text-red-600 text-lg font-bold">₹ {(curFee - balance).toFixed(2)}</div>
             </div>
-            <button className="recharge-btn" onClick={() => navigate(`/my-wallet?recharge=${curFee - balance}`)}>Recharge Wallet</button>
+            <button 
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mx-auto my-6 mt-8 transition-all duration-300"
+              onClick={() => navigate(`/my-wallet?recharge=${curFee - balance}`)}
+            >
+              Recharge Wallet
+            </button>
           </div>
         </div>
       </Modal>
+
       <Modal
         open={meetModal && !isLowBalance}
         onClose={() => {
-          setMessage("")
+          setMessage("");
           setMeetModal(false);
           setConnecting(false);
         }}
       >
-        <div id="meet-modal" style={{ width: `${!selectedDocAvailable && selectedDocStatus ? "min(570px, 90vw)" : "min(400px, 90vw)"}` }}>
-          <div className="close_btn_div">
-            <IoMdClose onClick={() => {
-              setMessage("")
-              setMeetModal(false)
-              setConnecting(false)
-              httpClient.put('/delete_meet', { email: selectEmail} )
-            }} />
+        <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+          ${!selectedDocAvailable && selectedDocStatus ? "w-[min(570px,90vw)]" : "w-[min(400px,90vw)]"}
+          p-4 bg-white rounded-lg shadow-lg border-2 border-blue-200 text-blue-700 text-center`}>
+          
+          <div className="text-right">
+            <IoMdClose 
+              className="text-blue-500 hover:text-blue-800 transition-all duration-300 cursor-pointer" 
+              onClick={() => {
+                setMessage("");
+                setMeetModal(false);
+                setConnecting(false);
+                httpClient.put('/delete_meet', { email: selectEmail });
+              }}
+            />
           </div>
-          <div className="meet-details-div">
-            <h3>Wanna meet?</h3>
-            <div className="meet-details">
-              {selectedDocStatus && !selectedDocAvailable && <div className="create-meet" onClick={() => {
-                setScheduleMeet(false);
-                setInstantMeet(!isInstantMeet);
-                setConnecting(false);
-              }}>Create an Instant meet</div>}
-              <div className="create-meet" onClick={() => {
-                const d = new Date();
-                setCurDate(`${d.getFullYear()}-${parseInt(d.getMonth()) < 9 ? '0' : ''}${d.getMonth() + 1}-${parseInt(d.getDate()) < 10 ? '0' : ''}${d.getDate()}`);
-                setCurTime(`${parseInt(d.getHours()) < 10 ? '0' : ''}${d.getHours()}:${parseInt(d.getMinutes()) < 10 ? '0' : ''}${d.getMinutes()}`);
-                setInvDateTime(true);
-                setScheduleMeet(!isScheduleMeet);
-                setInstantMeet(false);
-                setConnecting(false);
-              }}>Schedule a meet</div>
-              {message && <div className="not-available-note">Oops! {selectedDoc} is currently in another meet, you can wait a few minutes or else schedule your meet. </div>}
-              {selectedDocStatus && selectedDocAvailable && <div className="not-available-note">Oops! {selectedDoc} is currently in another meet, you can wait a few minutes or else schedule your meet. </div>}
+
+          <div>
+            <h3 className="text-xl mb-4">Wanna meet?</h3>
+            <div className="flex justify-center items-center flex-wrap mb-6">
+              {selectedDocStatus && !selectedDocAvailable && (
+                <div 
+                  className="bg-gray-300 text-white p-4 m-4 rounded-lg cursor-pointer hover:bg-blue-700 transition-all duration-300 shadow-md"
+                  onClick={() => {
+                    setScheduleMeet(false);
+                    setInstantMeet(!isInstantMeet);
+                    setConnecting(false);
+                  }}
+                >
+                  Create an Instant meet
+                </div>
+              )}
+              <div 
+                className="bg-gray-300 text-white p-4 m-4 rounded-lg cursor-pointer hover:bg-blue-700 transition-all duration-300 shadow-md"
+                onClick={() => {
+                  const d = new Date();
+                  setCurDate(`${d.getFullYear()}-${parseInt(d.getMonth()) < 9 ? '0' : ''}${d.getMonth() + 1}-${parseInt(d.getDate()) < 10 ? '0' : ''}${d.getDate()}`);
+                  setCurTime(`${parseInt(d.getHours()) < 10 ? '0' : ''}${d.getHours()}:${parseInt(d.getMinutes()) < 10 ? '0' : ''}${d.getMinutes()}`);
+                  setInvDateTime(true);
+                  setScheduleMeet(!isScheduleMeet);
+                  setInstantMeet(false);
+                  setConnecting(false);
+                }}
+              >
+                Schedule a meet
+              </div>
             </div>
+            {message && (
+              <div className="text-red-500 mb-4">
+                Oops! {selectedDoc} is currently in another meet, you can wait a few minutes or else schedule your meet.
+              </div>
+            )}
           </div>
 
           {isInstantMeet && (
-            isConnecting ? (
-              <div className="instant-meet-div">
-                <div className="loader">
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
+            <div className="pb-6 text-center">
+              {isConnecting ? (
+                <div>
+                  <div className="flex justify-center items-center space-x-2">
+                    {[...Array(10)].map((_, index) => (
+                      <div
+                        key={index}
+                        className="w-1 h-24 bg-gradient-to-tr from-red-500 to-gray-100 rounded-lg animate-wave"
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                      />
+                    ))}
+                  </div>
+                  <div className="mt-4">Connecting...</div>
                 </div>
-                <div>Connecting...</div>
-              </div>
-            ) : (
-              <div className="instant-meet-div">
-                <button onClick={() => {
-                  setConnecting(true);
-                  handlemeet();
-                }}>Connect <FaVideo /></button>
-              </div>
-            )
+              ) : (
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-all duration-300 flex items-center justify-center space-x-2"
+                  onClick={() => {
+                    setConnecting(true);
+                    handlemeet();
+                  }}
+                >
+                  <span>Connect</span>
+                  <FaVideo />
+                </button>
+              )}
+            </div>
           )}
 
           {isScheduleMeet && (
-            <div className="schedule-meet-div">
-              <h3>Pick a Date and Time</h3>
+            <div className="pb-6">
+              <h3 className="text-xl mb-4">Pick a Date and Time</h3>
               {isInvDateTime && <Alert severity="error">Pick a future date and time</Alert>}
-              {scheduleAlert !== 0 && <Alert severity={`${scheduleAlert === 1 ? "error" : "success"}`}>{scheduleAlert === 1 ? "Doctor isn't available at that time. Please pick up some other time" : "Meet scheduled successfully"}</Alert>}
-              <div className="schedule-meet">
-                <input type="date" id="date"
+              {scheduleAlert !== 0 && (
+                <Alert severity={scheduleAlert === 1 ? "error" : "success"}>
+                  {scheduleAlert === 1 
+                    ? "Doctor isn't available at that time. Please pick up some other time" 
+                    : "Meet scheduled successfully"}
+                </Alert>
+              )}
+              
+              <div className="flex flex-col items-center justify-center p-5">
+                <input
+                  type="date"
+                  id="date"
                   value={curDate}
-                  onChange={(e) => { }}
+                  onChange={(e) => {}}
                   onChangeCapture={(e) => {
                     setCurDate(e.target.value);
                     checkInvDateTime(e.target.value, curTime);
                   }}
+                  className="border-2 border-blue-500 rounded-lg p-3 mb-2.5 cursor-pointer"
                 />
-                <div className="timings">
+                
+                <div className="grid grid-cols-3 gap-1 p-1 border-2 border-blue-500 rounded-lg w-[min(360px,90vw)]">
                   {timings.map((item, index) => (
-                    <div className={`timing-slot ${!item.available && "not-avail"} ${activeClass(index)}`} onClick={() => { handleActive(index); checkInvDateTime(curDate, item.time); setCurTime(item.time) }} key={index}>
-                      <div className="slot"><TbPointFilled /></div>
-                      <div className="time">{item.time}</div>
-                      <div className="clock-icon"><AiOutlineClockCircle /></div>
+                    <div
+                      key={index}
+                      className={`flex justify-center items-center p-2.5 border-2 border-blue-500 rounded-lg cursor-pointer
+                        ${!item.available ? 'bg-blue-100 cursor-not-allowed' : ''}
+                        ${activeClass(index)}
+                      `}
+                      onClick={() => {
+                        handleActive(index);
+                        checkInvDateTime(curDate, item.time);
+                        setCurTime(item.time);
+                      }}
+                    >
+                      <TbPointFilled className={`${!item.available ? 'text-red-500' : 'text-green-500'}`} />
+                      <span className="mx-2.5">{item.time}</span>
+                      <AiOutlineClockCircle />
                     </div>
                   ))}
                 </div>
-
               </div>
-              <div className="schedule-btn">
-                <button onClick={() => {
-                  setMeetScheduling(true);
-                  setTimeout(() => {
-                    setMeetScheduling(false);
 
-                    httpClient.post('/set_appointment', {
-                      email: selectEmail
-                    }).then((res) => {
-                      // console.log(res.data);
-                      if (handleSchedule(res.data.appointments)) {
-                        setScheduleAlert(2);
-                        const datetime = `${curDate}${curTime.replace(":", "")}`;
-                        const link = `/instant-meet?meetId=${datetime}&selectedDoc=${selectedDoc}&selectedMail=${encodeURIComponent(selectEmail)}&name=${localStorage.getItem("username")}&age=${localStorage.getItem("age")}&gender=${localStorage.getItem("gender")}&pemail=${localStorage.getItem("email")}fee=${curFee}`;
-                        httpClient.put('/patient_apo', { email: localStorage.getItem('email'), date: curDate, time: curTime, doctor: selectedDoc, demail: selectEmail, link: link }).then((res) => {
-                          console.log(res);
-                        }).catch((err) => {
-                          console.log(err);
-                        });
-
-                        httpClient.put('/set_appointment', { email: selectEmail, date: curDate, time: curTime, patient: localStorage.getItem('username'), pemail: localStorage.getItem("email"), link: link }).then((res) => {
-                          console.log(res);
-                        }).catch((err) => {
-                          console.log(err);
-                        });
-                        // TODO: 
-                        // Append the date, time, patient details and meet link to the <<doctor.upcomingAppointments>>
-                      } else {
-                        setScheduleAlert(1);
-                      }
-                    }).catch((err) => {
-                      console.log(err);
-                    });
-
-                    // TODO: fetch the <<selectedDoc>> doctor data 
-                    // check the doctor availability using <<doctor.upcomingAppointments>>
-                    // now pass the in the <<handleSchedule(doctor.upcomingAppointments)>>
-                    // Note that the <<doctor.upcomingAppointments>> should be an array and it should contain date and time
-                    // <<handleSchedule>> function returns true if slot is available
-
-                    setTimeout(() => {
-                      setScheduleAlert(0);
-                      setMeetModal(false);
-                    }, 4000);
-                  }, 2000);
-                }}
+              <div className="flex justify-center">
+                <button
+                  className={`bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-all duration-300
+                    ${isInvDateTime ? 'opacity-50 cursor-not-allowed' : ''}
+                  `}
+                  onClick={() => handleScheduleClick()}
                   disabled={isInvDateTime}
-                >{meetScheduling ? (
-                  <CircularProgress
-                    size={18}
-                    sx={{ color: "#f5f5f5", margin: "0px 30px" }}
-                  />
-                ) : "Schedule"}</button>
+                >
+                  {meetScheduling ? (
+                    <CircularProgress size={18} sx={{ color: "#f5f5f5", margin: "0px 30px" }} />
+                  ) : (
+                    "Schedule"
+                  )}
+                </button>
               </div>
             </div>
           )}
