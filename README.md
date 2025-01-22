@@ -5,7 +5,6 @@
 
 [![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)
-![Discord](https://github.com/tandpfun/skill-icons/blob/main/icons/Discord.svg?style=flat)
 ![Visitors](https://api.visitorbadge.io/api/visitors?path=PratikMane0112%2FTelMedSphere%20&countColor=%23263759&style=flat)
 ![GitHub forks](https://img.shields.io/github/forks/PratikMane0112/TelMedSphere)
 ![GitHub Repo stars](https://img.shields.io/github/stars/PratikMane0112/TelMedSphere)
@@ -17,6 +16,7 @@
 ![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/PratikMane0112/TelMedSphere)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/PratikMane0112/TelMedSphere)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/PratikMane0112/TelMedSphere)
+[![Discord](https://img.shields.io/discord/your-discord-server-id?label=Discord&logo=discord&color=7289DA)](https://discord.gg/your-discord-invite-link)
  </p>
  </div>
 
