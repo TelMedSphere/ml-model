@@ -223,7 +223,7 @@ const AccountForm = () => {
                                                 placeholder="Username"
                                                 value={username}
                                                 onChange={(e) => setUsername(e.target.value)}
-                                                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                className="w-full pl-10 pr-4 py-3 border border-gray-200 text-black-1 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                                 required
                                             />
                                         </div>
@@ -235,7 +235,7 @@ const AccountForm = () => {
                                                     placeholder="Specialization (e.g., Cancer Surgeon)"
                                                     value={specialization}
                                                     onChange={(e) => setSpecialization(e.target.value)}
-                                                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                    className="w-full px-4 py-3 border border-gray-200 text-black-1 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                                     required
                                                 />
                                                 <input
@@ -243,7 +243,7 @@ const AccountForm = () => {
                                                     placeholder="Doctor ID"
                                                     value={doctorId}
                                                     onChange={(e) => setDoctorId(e.target.value)}
-                                                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                    className="w-full px-4 py-3 border border-gray-200 text-black-1 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                                     required
                                                 />
                                             </>
@@ -259,7 +259,7 @@ const AccountForm = () => {
                                                         checkAge(e.target.value);
                                                         setAge(e.target.value);
                                                     }}
-                                                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                    className="w-full px-4 py-3 border border-gray-200 text-black-1 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                                     required
                                                 />
                                                 {age !== "" && isInvAge && (
@@ -294,7 +294,7 @@ const AccountForm = () => {
                                                     validatePhoneNumber(e.target.value);
                                                     setPhone(e.target.value);
                                                 }}
-                                                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                className="w-full pl-10 pr-4 py-3 border border-gray-200 text-black-1 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                                 required
                                             />
                                             {phone !== "" && isInvPhone && (
@@ -314,7 +314,7 @@ const AccountForm = () => {
                                             checkEmail(e.target.value);
                                             setEmail(e.target.value);
                                         }}
-                                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        className="w-full pl-10 pr-4 py-3 border border-gray-200 text-black-1 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         required
                                     />
                                     {email !== "" && isInvEmail && (
@@ -333,7 +333,7 @@ const AccountForm = () => {
                                                 checkPasswd(e.target.value);
                                                 setPasswd(e.target.value);
                                             }}
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-200 text-black-1 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                             required
                                         />
                                         {isSignupVisible && passwd !== "" && isInvPass && (
