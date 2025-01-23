@@ -61,7 +61,7 @@ except Exception as e:
     print(f"Error connecting to MongoDB: {e}")
 @app.get("/")
 def getInfo():
-    return "API WORKING"
+    return "WelCome to 💖TelMedSphere server !!!!!"
 
 @app.before_request
 def before_request():
