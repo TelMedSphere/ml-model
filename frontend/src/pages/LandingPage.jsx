@@ -174,29 +174,29 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section className="need-section">
-          <div className="need-div">
-            <div className="img-div">
-              <img src={need} alt="why" />
+        <section className="py-20 px-0">
+          <div className="w-full flex flex-wrap my-0 mx-auto justify-center items-center max-w-[1300px] max-md:flex max-md:flex-col">
+            <div className="flex-shrink-0 flex-grow-0 basis-[40%] w-full p-4 text-center max-md:mb-8">
+              <img src={need} alt="why" className="w-[90%] max-ma:max-w-[400px] max-md:w-[90%]"/>
             </div>
-            <div className="content">
-              <h2>Why do we need a proper health care?</h2>
+            <div className="flex-shrink-0 flex-grow-0 basis-[55%] p-4 max-md:p-8">
+              <h2 className="text-blue-9 mb-8">Why do we need a proper health care?</h2>
               <ul>
-                <li>
+                <li className="my-4 mx-auto text-blue-8">
                   WHO recommends 44.5 doctors per 10,000 people but India has
                   only 22 per 10k people so major supply demand mismatchIndia
                   has 22.8 doctors for every 10K citizens, the half of what WHO
                   recommends.
                 </li>
-                <li>
+                <li className="my-4 mx-auto text-blue-8">
                   Also, local doctors may fail to provide the best consultation
                   as they lack expertise & experience.
                 </li>
-                <li>
+                <li className="my-4 mx-auto text-blue-8">
                   Thus all-in-one online hospital was created. It offers a
                   disease prediction system, pharmacy, and payments.
                 </li>
-                <li>
+                <li className="my-4 mx-auto text-blue-8">
                   This platform provides access to quality healthcare from
                   anywhere, improving healthcare outcomes and accessibility.
                 </li>
@@ -205,33 +205,36 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section className="benefits-section">
-          <div className="content">
+        <section className="py-12 px-0 bg-white-1">
+          <div className="text-center text-blue-9">
             <h2>Our Benefits</h2>
-            <div className="benefits">
-              <div className="first">
-                <div className="icon">
+            <div className="flex flex-wrap my-0 mx-auto max-w-[1000px] justify-center mt-8 text-blue-7">
+              {/* first */}
+              <div   className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(246,171,47,0.1)] m-4 hover:shadow-[0_0_4px_0_#f6ab2f]"
+              >
+                {/* icon */}
+                <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#f6ab2f]">
                   <MdOutlineHealthAndSafety />{" "}
                 </div>
-                <p>TeleHealth services</p>
+                <p className="flex shrink-0 grow-0 basis-[70%]">TeleHealth services</p>
               </div>
-              <div className="second">
-                <div className="icon">
+              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(12,184,182,0.1)] m-4 hover:shadow-[0_0_4px_0_#0cb8b6]">
+                <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#0cb8b6]">
                   <IoAccessibility />{" "}
                 </div>
-                <p>Convenience and accessibility</p>
+                <p className="flex shrink-0 grow-0 basis-[70%]">Convenience and accessibility</p>
               </div>
-              <div className="third">
-                <div className="icon">
+              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(230,73,45,0.1)] m-4 hover:shadow-[0_0_4px_0_#e6492d]">
+                <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#e6492d] ">
                   <TbStethoscope />{" "}
                 </div>
-                <p>Online Appointment Booking</p>
+                <p className="flex shrink-0 grow-0 basis-[70%]">Online Appointment Booking</p>
               </div>
-              <div className="fourth">
-                <div className="icon">
+              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(22,101,216,0.1)] m-4 hover:shadow-[0_0_4px_0_#1665d8]">
+                <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#1665d8] ">
                   <TbHeartPlus />{" "}
                 </div>
-                <p>Competitive advantage</p>
+                <p className="flex shrink-0 grow-0 basis-[70%]">Competitive advantage</p>
               </div>
             </div>
           </div>
