@@ -14,9 +14,7 @@ import os
 import json
 from threading import Thread
 import requests
-import pickle
-import numpy as np
-import pandas as pd
+
 
 load_dotenv()
 secret_key = secrets.token_hex(16)
