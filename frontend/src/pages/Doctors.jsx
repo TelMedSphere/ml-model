@@ -39,6 +39,7 @@ const Doctors = () => {
   const [selectEmail, setSelectEmail] = useState("");
   const [message, setMessage] = useState("");
   const { handleActive, activeClass } = useActive(-1);
+  const [selectedTime, setSelectedTime] = useState(null);
 
   const [available, setAvailable] = useState({
     "08:00": true, "09:00": true, "10:00": true,
@@ -303,49 +304,20 @@ const Doctors = () => {
     return true;
   };
 
-  const handleMeetSchedule = () => {
-    setMeetScheduling(true);
-    setTimeout(() => {
-      setMeetScheduling(false);
+  const checkInvDateTime = (date, time) => {
+    if (!date || !time) {
+      setInvDateTime(true);
+      return;
+    }
 
-      httpClient.post('/set_appointment', {
-        email: selectEmail
-      }).then((res) => {
-        if (handleSchedule(res.data.appointments)) {
-          setScheduleAlert(2);
-          const datetime = `${curDate}${curTime.replace(":", "")}`;
-          const meetLink = `/instant-meet?meetId=${datetime}&selectedDoc=${selectedDoc}&selectedMail=${encodeURIComponent(selectEmail)}&name=${localStorage.getItem("username")}&age=${localStorage.getItem("age")}&gender=${localStorage.getItem("gender")}&pemail=${localStorage.getItem("email")}fee=${curFee}`;
-          
-          Promise.all([
-            httpClient.put('/patient_apo', {
-              email: localStorage.getItem('email'),
-              date: curDate,
-              time: curTime,
-              doctor: selectedDoc,
-              demail: selectEmail,
-              link: meetLink
-            }),
-            httpClient.put('/set_appointment', {
-              email: selectEmail,
-              date: curDate,
-              time: curTime,
-              patient: localStorage.getItem('username'),
-              pemail: localStorage.getItem("email"),
-              link: meetLink
-            })
-          ]).catch(console.error);
-          
-        } else {
-          setScheduleAlert(1);
-        }
-        
-        setTimeout(() => {
-          setScheduleAlert(0);
-          setMeetModal(false);
-        }, 4000);
-      }).catch(console.error);
-    }, 2000);
+    const selectedDateTime = new Date(`${date} ${time}`);
+    const currentDateTime = new Date();
+
+    // Check if selected date and time are in the future
+    const isValidDateTime = selectedDateTime > currentDateTime;
+    setInvDateTime(!isValidDateTime);
   };
+
 
 
   return (
@@ -403,49 +375,46 @@ const Doctors = () => {
           </div>
         </div>
 
-      {/* Low Balance Modal */}
-      <Modal
+       {/* Low Balance Modal */}
+       <Modal
         open={meetModal && isLowBalance}
         onClose={() => {
           setMessage("");
           setMeetModal(false);
         }}
       >
-       <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-              <div className="relative transform overflow-hidden bg-white-1 rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-
-              <div className="flex justify-between items-center">
-                <h3 className="text-xl font-medium text-gray-900">Insufficient Balance</h3>
-                <IoMdClose 
-                  className="text-gray-400 hover:text-gray-600 cursor-pointer"
-                  onClick={() => setMeetModal(false)}
-                />
-              </div>
-
-              <div className="space-y-4 text-gray-600">
-                <div className="flex justify-between">
-                  <span>Doctor Fee (Dr. Singh)</span>
-                  <span className="text-gray-900">₹ 199</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Available Balance</span>
-                  <span className="text-gray-900">₹ 0</span>
-                </div>
-                <div className="flex justify-between pt-4 border-t">
-                  <span className="text-red-500">Required Amount</span>
-                  <span className="text-red-500">₹ 199.00</span>
-                </div>
-              </div>
-
-              <button 
-                className="w-full bg-[#818CF8] hover:bg-[#6366F1] text-white py-3 rounded-md
-                  font-medium transition-colors"
-                onClick={() => navigate(`/my-wallet?recharge=${curFee - balance}`)}
-              >
-                Recharge Wallet
-              </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 relative bg-white-1">
+            <div className="flex justify-between items-center border-b pb-4 mb-4">
+              <h3 className="text-xl font-semibold text-blue-800">Insufficient Balance</h3>
+              <IoMdClose 
+                className="text-blue-500 hover:text-blue-700 cursor-pointer text-2xl"
+                onClick={() => setMeetModal(false)}
+              />
             </div>
+
+            <div className="space-y-4">
+              <div className="flex justify-between">
+                <span className="text-blue-700">Doctor Fee</span>
+                <span className="font-bold text-blue-900">₹ {curFee}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-blue-700">Available Balance</span>
+                <span className="font-bold text-blue-900">₹ {balance}</span>
+              </div>
+              <div className="flex justify-between pt-4 border-t border-blue-200">
+                <span className="text-red-600 font-semibold">Required Amount</span>
+                <span className="text-red-600 font-bold">₹ {curFee - balance}</span>
+              </div>
+            </div>
+
+            <button 
+              className="w-full mt-6 bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg 
+              font-semibold transition-colors duration-300 shadow-md"
+              onClick={() => navigate(`/my-wallet?recharge=${curFee - balance}`)}
+            >
+              Recharge Wallet
+            </button>
           </div>
         </div>
       </Modal>
@@ -459,173 +428,191 @@ const Doctors = () => {
           setConnecting(false);
         }}
       >
-       <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-              <div className="relative transform overflow-hidden bg-white-1 rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-
-            <h3 className="text-xl text-gray-800">Schedule Appointment</h3>
-            <IoMdClose 
-              className="text-gray-500 hover:text-gray-700 cursor-pointer" 
-              onClick={() => {
-                setMessage("");
-                setMeetModal(false);
-                setConnecting(false);
-                httpClient.put('/delete_meet', { email: selectEmail });
-              }}
-            />
-          </div>
-          {/* Meeting Options */}
-          <div className="space-y-6">
-            <div className="flex justify-center gap-4">
-              {selectedDocStatus && !selectedDocAvailable && (
-               <button
-               className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 
-                 transition-all duration-300 shadow-md hover:shadow-lg"
-               onClick={() => {
-                 setScheduleMeet(false);
-                 setInstantMeet(!isInstantMeet);
-                 setConnecting(false);
-               }}
-             >
-               Instant Meeting
-             </button>
-              )}
-              <button
-                className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 
-                  transition-all duration-300 shadow-md"
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 relative bg-white-1">
+            <div className="flex justify-between items-center border-b pb-4 mb-4">
+              <h3 className="text-xl font-semibold text-blue-800">Schedule Appointment</h3>
+              <IoMdClose 
+                className="text-blue-500 hover:text-blue-700 cursor-pointer text-2xl"
                 onClick={() => {
-                  const d = new Date();
-                  setCurDate(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
-                  setCurTime(`${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`);
-                  setInvDateTime(true);
-                  setScheduleMeet(!isScheduleMeet);
-                  setInstantMeet(false);
+                  setMessage("");
+                  setMeetModal(false);
                   setConnecting(false);
+                  httpClient.put('/delete_meet', { email: selectEmail });
                 }}
-              >
-                Schedule Meeting
-              </button>
+              />
             </div>
 
-            {message && (
-              <Alert severity="error" className="mt-4">
-                {message}
-              </Alert>
-            )}
-
-            {/* Instant Meeting Section */}
-            {isInstantMeet && (
-              <div className="text-center py-4">
-                {isConnecting ? (
-                  <div className="space-y-4">
-                    <div className="flex justify-center items-end space-x-1">
-                      {[...Array(10)].map((_, index) => (
-                        <div
-                          key={index}
-                          className="w-1 h-8 bg-gradient-to-t from-purple-600 to-purple-300 rounded-full animate-wave"
-                          style={{ 
-                            animationDelay: `${index * 0.1}s`,
-                            height: `${(index + 1) * 8}px`
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <p className="text-gray-600">Connecting to doctor...</p>
-                  </div>
-                ) : (
-                  <button
-                    className="flex items-center justify-center gap-2 mx-auto px-6 py-3 
-                      bg-purple-600 text-white rounded-lg hover:bg-purple-700 
-                      transition-all duration-300 shadow-md"
-                    onClick={() => {
-                      setConnecting(true);
-                      handleMeet();
-                    }}
-                  >
-                    <span>Start Meeting</span>
-                    <FaVideo />
-                  </button>
+            {/* Meeting Options */}
+            <div className="space-y-6">
+              <div className="flex justify-center gap-4">
+                {selectedDocStatus && !selectedDocAvailable && (
+                 <button
+                 className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 
+                   transition-all duration-300 shadow-md"
+                 onClick={() => {
+                   setScheduleMeet(false);
+                   setInstantMeet(!isInstantMeet);
+                   setConnecting(false);
+                 }}
+               >
+                 Instant Meeting
+               </button>
                 )}
+                <button
+                  className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 
+                    transition-all duration-300 shadow-md"
+                  onClick={() => {
+                    const d = new Date();
+                    setCurDate(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
+                    setCurTime(`${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`);
+                    setInvDateTime(true);
+                    setScheduleMeet(!isScheduleMeet);
+                    setInstantMeet(false);
+                    setConnecting(false);
+                  }}
+                >
+                  Schedule Meeting
+                </button>
               </div>
-            )}
 
-            {/* Schedule Meeting Section */}
-            {isScheduleMeet && (
-              <div className="space-y-6">
-                <h4 className="text-lg font-medium text-gray-800">Select Date and Time</h4>
-                
-                {isInvDateTime && (
-                  <Alert severity="error">Please select a future date and time</Alert>
-                )}
-                
-                {scheduleAlert !== 0 && (
-                  <Alert severity={scheduleAlert === 1 ? "error" : "success"}>
-                    {scheduleAlert === 1 
-                      ? "Doctor is unavailable at selected time" 
-                      : "Meeting scheduled successfully"}
-                  </Alert>
-                )}
+              {message && (
+                <Alert severity="error" className="mt-4">
+                  {message}
+                </Alert>
+              )}
 
-                <div className="space-y-4">
-                  <input
-                    type="date"
-                    value={curDate || ''}
-                    onChange={(e) => {
-                      setCurDate(e.target.value);
-                      checkInvDateTime(e.target.value, curTime);
-                    }}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 
-                      focus:ring-purple-500 focus:border-transparent"
-                  />
-
-                  <div className="grid grid-cols-3 gap-2">
-                    {timings.map((item, index) => (
-                      <button
-                      key={index}
-                      className={`p-3 border rounded-lg flex items-center justify-center gap-2
-                        transition-all duration-200
-                        ${item.available 
-                          ? 'hover:bg-indigo-50 border-indigo-200 text-indigo-700' 
-                          : 'bg-gray-50 border-gray-200 text-gray-400'
-                        }
-                        ${activeClass(index)}`}
-                      disabled={!item.available}
+              {/* Instant Meeting Section */}
+              {isInstantMeet && (
+                <div className="text-center py-4">
+                  {isConnecting ? (
+                    <div className="space-y-4">
+                      <div className="flex justify-center items-end space-x-1">
+                        {[...Array(10)].map((_, index) => (
+                          <div
+                            key={index}
+                            className="w-1 bg-gradient-to-t from-purple-600 to-purple-300 rounded-full animate-wave"
+                            style={{ 
+                              animationDelay: `${index * 0.1}s`,
+                              height: `${(index + 1) * 8}px`
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-gray-600">Connecting to doctor...</p>
+                    </div>
+                  ) : (
+                    <button
+                      className="flex items-center justify-center gap-2 mx-auto px-6 py-3 
+                        bg-purple-500 text-white rounded-lg hover:bg-purple-600 
+                        transition-all duration-300 shadow-md"
                       onClick={() => {
-                        if (item.available) {
-                          handleActive(index);
-                          checkInvDateTime(curDate, item.time);
-                          setCurTime(item.time);
-                        }
+                        setConnecting(true);
+                        handleMeet();
                       }}
                     >
-                        <TbPointFilled className={item.available ? 'text-green-500' : 'text-red-500'} />
-                        <span>{item.time}</span>
-                        <AiOutlineClockCircle />
-                      </button>
-                    ))}
-                  </div>
-
-                  <button
-                    className={`w-full py-3 rounded-lg text-white transition-all duration-300
-                      ${isInvDateTime 
-                        ? 'bg-gray-400 cursor-not-allowed' 
-                        : 'bg-purple-600 hover:bg-purple-700'}
-                    `}
-                    onClick={handleScheduleClick}
-                    disabled={isInvDateTime || meetScheduling}
-                  >
-                    {meetScheduling ? (
-                      <CircularProgress size={24} sx={{ color: "white" }} />
-                    ) : (
-                      "Schedule Meeting"
-                    )}
-                  </button>
+                      <span>Start Meeting</span>
+                      <FaVideo />
+                    </button>
+                  )}
                 </div>
-              </div>
-            )}
+              )}
+
+              {/* Schedule Meeting Section */}
+              {isScheduleMeet && (
+                <div className="space-y-6">
+                  <h4 className="text-lg font-medium text-blue-800">Select Date and Time</h4>
+                  
+                  {isInvDateTime && (
+                      <Alert severity="error" className="mb-4">
+                        Please select a future date and time
+                      </Alert>
+                    )}
+
+                 {scheduleAlert !== 0 && (
+                    <Alert 
+                      severity={scheduleAlert === 1 ? "error" : "success"}
+                      className="mb-4"
+                    >
+                      {scheduleAlert === 1 
+                        ? "Doctor is unavailable at selected time" 
+                        : "Meeting scheduled successfully"}
+                    </Alert>
+                  )}
+
+<div className="space-y-4">
+        <input
+          type="date"
+          min={new Date().toISOString().split('T')[0]} // Prevent selecting past dates
+          value={curDate || ''}
+          onChange={(e) => {
+            const selectedDate = e.target.value;
+            setCurDate(selectedDate);
+            checkInvDateTime(selectedDate, curTime);
+          }}
+          className="w-full p-3 border-2 border-blue-300 rounded-lg focus:ring-2 
+            focus:ring-blue-500 focus:border-transparent"
+        />
+
+        <div className="grid grid-cols-3 gap-2">
+            {timings.map((item, index) => (
+              <button
+                key={index}
+                className={`p-3 border-2 rounded-lg flex items-center justify-center gap-2
+                  transition-all duration-200
+                  ${item.available 
+                    ? `border-blue-300 text-blue-700 hover:bg-blue-50
+                      ${selectedTime === item.time 
+                        ? 'bg-blue-500 text-white' 
+                        : 'hover:bg-blue-50'}` 
+                    : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
+                  }`}
+                disabled={!item.available}
+                onClick={() => {
+                  if (item.available) {
+                    handleActive(index);
+                    checkInvDateTime(curDate, item.time);
+                    setCurTime(item.time);
+                    setSelectedTime(item.time);
+                  }
+                }}
+              >
+                <TbPointFilled 
+                  className={
+                    selectedTime === item.time 
+                      ? 'text-white' 
+                      : (item.available ? 'text-green-500' : 'text-red-500')
+                  } 
+                />
+                <span>{item.time}</span>
+                <AiOutlineClockCircle />
+              </button>
+            ))}
+          </div>
+
+
+        <button
+          className={`w-full py-3 rounded-lg text-white transition-all duration-300
+            ${isInvDateTime 
+              ? 'bg-gray-400 cursor-not-allowed' 
+              : 'bg-blue-500 hover:bg-blue-600'}
+          `}
+          onClick={handleScheduleClick}
+          disabled={isInvDateTime || meetScheduling || !curDate || !curTime}
+        >
+          {meetScheduling ? (
+            <CircularProgress size={24} sx={{ color: "white" }} />
+          ) : (
+            "Schedule Meeting"
+          )}
+        </button>
+      </div>
+      
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
       </Modal>
       
     </div>
