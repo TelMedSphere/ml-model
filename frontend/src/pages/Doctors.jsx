@@ -1,28 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
-import { IconButton } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { IoMdMail } from "react-icons/io";
-import { RiWhatsappFill } from "react-icons/ri";
-import Modal from '@mui/material/Modal';
-import { IoMdClose } from "react-icons/io";
-import useDocTitle from "../hooks/useDocTitle";
+import { FaVideo } from "react-icons/fa";
+import { IoMdClose, IoMdRefresh } from "react-icons/io";
 import { AiFillStar, AiOutlineClockCircle } from 'react-icons/ai';
 import { TbPointFilled } from 'react-icons/tb';
 import { useNavigate } from "react-router-dom";
-import httpClient from "../httpClient";
+import Modal from '@mui/material/Modal';
 import { Alert, CircularProgress } from "@mui/material";
-import { IoMdRefresh } from "react-icons/io";
+import useDocTitle from "../hooks/useDocTitle";
 import useActive from "../hooks/useActive";
-import { FaVideo } from "react-icons/fa";
 import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
+import httpClient from "../httpClient";
 
 const Doctors = () => {
-
   useDocTitle("Doctors");
-
   const { isLoading, toggleLoading } = useContext(commonContext);
+  const navigate = useNavigate();
 
   const [meetModal, setMeetModal] = useState(false);
   const [doctors, setDoctors] = useState([]);
@@ -35,55 +30,267 @@ const Doctors = () => {
   const [curDate, setCurDate] = useState(null);
   const [curTime, setCurTime] = useState(null);
   const [fetchingData, setFetchingData] = useState(false);
-  const [available, setAvailable] = useState({
-    "08:00": true, "09:00": true, "10:00": true, "11:00": true, "12:00": true, "15:00": true, "16:00": true, "17:00": true, "18:00": true
-  });
-
-  // Set this to user's balance amount
   const [balance, setBalance] = useState(0);
   const [isLowBalance, setLowBalance] = useState(false);
   const [curFee, setCurFee] = useState(0);
+  const [selectedDoc, setSelectedDoc] = useState("");
+  const [selectedDocStatus, setSelectedDocStatus] = useState(false);
+  const [selectedDocAvailable, setSelectedDocAvailable] = useState(false);
+  const [selectEmail, setSelectEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const { handleActive, activeClass } = useActive(-1);
 
+  const [available, setAvailable] = useState({
+    "08:00": true, "09:00": true, "10:00": true,
+    "11:00": true, "12:00": true, "15:00": true,
+    "16:00": true, "17:00": true, "18:00": true
+  });
 
-  const navigate = useNavigate();
-  const userNotExists = localStorage.getItem("usertype") === undefined || localStorage.getItem("usertype") === null;
+  const timings = Object.entries(available).map(([time, isAvailable]) => ({
+    time,
+    available: isAvailable
+  }));
 
   useEffect(() => {
+    const userNotExists = !localStorage.getItem("usertype");
     if (userNotExists) {
       navigate("/");
-    }
-    else {
+    } else {
       fetchDoctors();
     }
-    //eslint-disable-next-line 
   }, []);
- 
-  useEffect(() => {
-    handletimings();
-  }, [isScheduleMeet, curDate])
 
-  function fetchDoctors() {
+  useEffect(() => {
+    handleTimings();
+  }, [isScheduleMeet, curDate]);
+
+  useEffect(() => {
+    httpClient.post("/get_wallet", { 
+      email: localStorage.getItem("email") 
+    }).then((res) => {
+      setBalance(res.data.wallet);
+    }).catch(console.error);
+  }, []);
+
+  const fetchDoctors = () => {
     setFetchingData(true);
     toggleLoading(true);
-    httpClient.get("/get_status").then((res) => {
-      setDoctors(res.data.details);
-      // console.log(doctors)
-      toggleLoading(false);
-      setFetchingData(false); 
+    httpClient.get("/get_status")
+      .then((res) => {
+        setDoctors(res.data.details);
+        toggleLoading(false);
+        setFetchingData(false);
+      })
+      .catch(() => {
+        toggleLoading(false);
+        setFetchingData(false);
+      });
+  };
+
+  const handleMeet = () => {
+    const time = new Date().getTime();
+    httpClient.post("/meet_status", { email: selectEmail })
+      .then((res) => {
+        if (res.status === 200) {
+          const meetLink = `/instant-meet?meetId=${time}&selectedDoc=${selectedDoc}&selectedMail=${encodeURIComponent(selectEmail)}&name=${localStorage.getItem("username")}&age=${localStorage.getItem("age")}&gender=${localStorage.getItem("gender")}&pemail=${localStorage.getItem("email")}&fee=${curFee}`;
+          
+          httpClient.put("/make_meet", {
+            email: selectEmail,
+            link: meetLink,
+            patient: localStorage.getItem("username")
+          }).then(() => {
+            setTimeout(() => {
+              httpClient.post("/currently_in_meet", { email: selectEmail })
+                .then((res) => {
+                  if (res.data.curmeet) {
+                    setConnecting(false);
+                    navigate(meetLink);
+                  } else {
+                    httpClient.put('/delete_meet', { email: selectEmail });
+                    setConnecting(false);
+                    setMessage(res.data.message);
+                  }
+                });
+            }, 20000);
+          });
+        } else {
+          setConnecting(false);
+          setMessage(res.data.message);
+        }
+      });
+  };
+
+  const handleTimings = () => {
+    if (!selectEmail) return;
+
+    httpClient.post('/set_appointment', { email: selectEmail })
+      .then((res) => {
+        const appointments = res.data.appointments;
+        let times = {...available};
+        appointments
+          .filter(item => item.date === curDate)
+          .forEach(item => {
+            times[item.time] = false;
+          });
+        setAvailable(times);
+      })
+      .catch(console.error);
+  };
+
+  const handleScheduleClick = () => {
+    setMeetScheduling(true);
+    const now = new Date(curDate + " " + curTime);
+    
+    httpClient.post("/schedule_meet", {
+      email: selectEmail,
+      date: curDate,
+      time: curTime,
+      doctor: selectedDoc,
+      patient: localStorage.getItem("username"),
+      patientEmail: localStorage.getItem("email")
+    }).then((res) => {
+      setScheduleAlert(res.status === 200 ? 2 : 1);
+      setMeetScheduling(false);
+      if (res.status === 200) {
+        setTimeout(() => {
+          setMeetModal(false);
+          setScheduleAlert(0);
+        }, 2000);
+      }
     }).catch(() => {
-      // console.log(res)
-      toggleLoading(false);
-      setFetchingData(false);
+      setScheduleAlert(1);
+      setMeetScheduling(false);
     });
   };
 
-  function checkInvDateTime(date, time) {
-    const now = new Date(new Date().getTime() + 30 * 60000);
-    const d = new Date(date + ' ' + time);
-    setInvDateTime(now >= d);
-  }
+  const columns = [
+    { 
+      field: "id", 
+      headerName: "#", 
+      width: 80,
+      headerAlign: 'center',
+      align: 'center',
+    },
+    {
+      field: "username",
+      headerName: "Doctor",
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => (
+        <div className="text-gray-800">
+          {`Dr. ${params.row.username.split(" ")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(" ")}`}
+        </div>
+      ),
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: 200,
+      headerAlign: 'center',
+      align: 'center',
+    },
+    {
+      field: "specialization",
+      headerName: "Specialization",
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+    },
+    {
+      field: "fee",
+      headerName: "Fee",
+      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => (
+        <div>₹ {params.row.fee}</div>
+      ),
+    },
+    {
+      field: "languages",
+      headerName: "Languages",
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: () => "English / Hindi",
+    },
+    {
+      field: "ratings",
+      headerName: "Ratings",
+      width: 120,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => (
+        <div className="flex items-center justify-center gap-1">
+          <span>
+            {params.row.noOfAppointments 
+              ? (params.row.noOfStars / params.row.noOfAppointments).toFixed(1)
+              : "0"}
+          </span>
+          <AiFillStar className="text-yellow-400" />
+        </div>
+      ),
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 120,
+      headerAlign: 'center',
+      align: 'center', 
+      renderCell: (params) => (
+        <div className="flex items-center justify-center gap-1">
+          <TbPointFilled 
+            className={params.row.status === "online" 
+              ? "text-green-400" 
+              : "text-red-400"
+            } 
+          />
+          <span className="font-medium">{params.row.status}</span>
+        </div>
+      ),
+    },
+    {
+      field: "appointments",
+      headerName: "Book an Appointment",
+      width: 180,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => (
+        <button
+          onClick={() => {
+            if (params.row.fee > balance) {
+              setLowBalance(true);
+              setCurFee(params.row.fee);
+            } else {
+              setSelectEmail(params.row.email);
+              setSelectedDocStatus(params.row.status === "online");
+              setSelectedDocAvailable(params.row.isInMeet);
+              setScheduleMeet(false);
+              setInstantMeet(false);
+              setLowBalance(false);
+            }
+            setSelectedDoc(`Dr. ${params.row.username.split(" ")
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+              .join(" ")}`);
+            setMeetModal(true);
+          }}
+         className="px-4 py-2 bg-[#818CF8] text-white rounded hover:bg-[#6366F1] 
+  transition-colors duration-200"
+        >
+          BOOK
+        </button>
+      ),
+    },
+  ];
 
+  useScrollDisable(isLoading);
 
+  if (isLoading) return <Preloader />;
+
+  
   const handleSchedule = (upcomingAppointments) => {
     for (let i = 0; i < upcomingAppointments.length; i++) {
       const now = new Date(curDate + " " + curTime);
@@ -92,408 +299,336 @@ const Doctors = () => {
 
       if (d1 < now && now <= d2)
         return false;
-    };
+    }
     return true;
   };
 
-  const handletimings = () => {
+  const handleMeetSchedule = () => {
+    setMeetScheduling(true);
+    setTimeout(() => {
+      setMeetScheduling(false);
 
-    {
-      selectEmail !== "" ? httpClient.post('/set_appointment', {
+      httpClient.post('/set_appointment', {
         email: selectEmail
       }).then((res) => {
-        // console.log(res.data);
-        const appointments = res.data.appointments;
-        let times = {
-          "08:00": true, "09:00": true, "10:00": true, "11:00": true, "12:00": true, "15:00": true, "16:00": true, "17:00": true, "18:00": true
-        };
-        console.log(curDate)
-        appointments.filter((item) => item.date === curDate).map((item) => {
-          times[item.time] = false;
-          return null;
-        });
-        setAvailable(times);
-      }).catch((err) => {
-        console.log(err);
-      }) : null
-    }
-  };
-
-  const doctorNames = doctors.map(item => "Dr. " + item.username.split(" ").map(item => item[0].toUpperCase() + item.slice(1).toLowerCase()).join(" "));
-  const [selectedDoc, setSelectedDoc] = useState(doctorNames[0]);
-  const [selectedDocStatus, setSelectedDocStatus] = useState(false);
-  const [selectedDocAvailable, setSelectedDocAvailable] = useState(false);
-  const [selectEmail, setSelectEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const timings = [{ time: "08:00", available: available["08:00"] }, { time: "09:00", available: available["09:00"] }, { time: "10:00", available: available["10:00"] }, { time: "11:00", available: available["11:00"] }, { time: "12:00", available: available["12:00"] }, { time: "15:00", available: available["15:00"] }, { time: "16:00", available: available["16:00"] }, { time: "17:00", available: available["17:00"] }, { time: "18:00", available: available["18:00"] }];
-  const { handleActive, activeClass } = useActive(-1);
-
-  const handlemeet = () => {
-    const time = new Date().getTime();
-    console.log(time)
-    httpClient.post("/meet_status", { "email": selectEmail }).then((res) => {
-      if (res.status === 200) {
-        httpClient.put("/make_meet", {
-          "email": selectEmail,
-          "link": `/instant-meet?meetId=${time}&selectedDoc=${selectedDoc}&selectedMail=${encodeURIComponent(selectEmail)}&name=${localStorage.getItem("username")}&age=${localStorage.getItem("age")}&gender=${localStorage.getItem("gender")}&pemail=${localStorage.getItem("email")}&fee=${curFee}`,
-          "patient": localStorage.getItem("username")
-        }).then((res) => {
-          setTimeout(() => {
-            httpClient.post("/currently_in_meet", { "email": selectEmail }).then((res) => {
-              if (res.data.curmeet) {
-                setConnecting(false);
-                navigate(`/instant-meet?meetId=${time}&selectedDoc=${selectedDoc}&selectedMail=${encodeURIComponent(selectEmail)}&name=${localStorage.getItem("username")}&age=${localStorage.getItem("age")}&gender=${localStorage.getItem("gender")}&pemail=${localStorage.getItem("email")}fee=${curFee}`);
-              }
-              else {
-                httpClient.put('/delete_meet', { "email": selectEmail })
-                setConnecting(false);
-                setMessage(res.data.message);
-              }
+        if (handleSchedule(res.data.appointments)) {
+          setScheduleAlert(2);
+          const datetime = `${curDate}${curTime.replace(":", "")}`;
+          const meetLink = `/instant-meet?meetId=${datetime}&selectedDoc=${selectedDoc}&selectedMail=${encodeURIComponent(selectEmail)}&name=${localStorage.getItem("username")}&age=${localStorage.getItem("age")}&gender=${localStorage.getItem("gender")}&pemail=${localStorage.getItem("email")}fee=${curFee}`;
+          
+          Promise.all([
+            httpClient.put('/patient_apo', {
+              email: localStorage.getItem('email'),
+              date: curDate,
+              time: curTime,
+              doctor: selectedDoc,
+              demail: selectEmail,
+              link: meetLink
+            }),
+            httpClient.put('/set_appointment', {
+              email: selectEmail,
+              date: curDate,
+              time: curTime,
+              patient: localStorage.getItem('username'),
+              pemail: localStorage.getItem("email"),
+              link: meetLink
             })
-          }, 20000);
-        }).catch(() => {
-          // console.log(res)
-        })
-      }
-      else {
-        setConnecting(false);
-        setMessage(res.data.message);
-      }
-    }).catch(() => {
-      // console.log(res)
-    })
-
+          ]).catch(console.error);
+          
+        } else {
+          setScheduleAlert(1);
+        }
+        
+        setTimeout(() => {
+          setScheduleAlert(0);
+          setMeetModal(false);
+        }, 4000);
+      }).catch(console.error);
+    }, 2000);
   };
 
-  useEffect(() => {
-    httpClient.post("/get_wallet", { "email": localStorage.getItem("email") }).then((res) => {
-      setBalance(res.data.wallet);
-    }).catch(() => {
-      // console.log(res)
-    })
-  }, []);
-
-  const columns = [
-    { field: "id", headerName: "#", headerAlign: "center", align: "center", width: 100 },
-    {
-      field: "username", headerName: "Doctor", headerAlign: "center", align: "left", width: 150,
-      renderCell: (params) => {
-        const fullname = "Dr. " + params.row.username.split(" ").map(item => item[0].toUpperCase() + item.slice(1).toLowerCase()).join(" ");
-        return (
-          <div className="name-column--cell">
-            {fullname}
-          </div>
-        );
-      }
-    },
-    { field: "email", headerName: "Email", headerAlign: "center", align: "left", width: 150 },
-    {
-      field: "gender", headerName: "Gender", headerAlign: "center", align: "center", width: 100, renderCell: (params) => {
-        return <>{params.row.gender[0].toUpperCase() + params.row.gender.slice(1).toLowerCase()}</>
-      }
-    },
-    { field: "specialization", headerName: "Specialization", headerAlign: "center", align: "center", width: 150, },
-    { field: "fee", headerName: "Fee", headerAlign: "center", align: "center", width: 100,
-      renderCell: (params) => {
-        return (
-          <div>₹ {params.row.fee}</div>
-        )
-      }
-     },
-    {
-      field: "languages", headerName: "Languages", headerAlign: "center", align: "center", width: 100,
-      renderCell: () => {
-        return (
-          <div className="social-column--cell">
-            English / Hindi
-          </div>
-        )
-      },
-    },
-    // {
-    //   field: "contact", headerName: "Contact", headerAlign: "center", align: "center", width: 100,
-    //   renderCell: (params) => {
-    //     return (
-    //       <div className="social-column--cell">
-    //         <IconButton onClick={() => {
-    //           const shareUrl = `https://wa.me/${params.row.phone}?text=Hello sir,%0AI want to talk to you!!`;
-    //           window.open(shareUrl, "_blank");
-    //         }}>
-    //           <RiWhatsappFill className="social-icon whatsapp" />
-    //         </IconButton>
-    //         <IconButton onClick={() => {
-    //           window.open(`mailto:${params.row.email}`, "_blank");
-    //         }}>
-    //           <IoMdMail className="social-icon mail" />
-    //         </IconButton>
-    //       </div>
-    //     )
-    //   },
-    // },
-    {
-      field: "ratings",
-      headerName: "Ratings", headerAlign: "center", align: "center", width: 100,
-      renderCell: (params) => {
-        return (
-          <div className="ratings-column--cell">
-            {params.row.noOfAppointments ? <>{(params.row.noOfStars / params.row.noOfAppointments).toFixed(1)} <AiFillStar className="ratings-icon" /></> : <>0 <AiFillStar className="ratings-icon" /></>}
-          </div>
-        );
-      },
-    },
-    {
-      field: "status",
-      headerName: "Status", headerAlign: "center", align: "center", width: 100,
-      renderCell: (params) => {
-        return (
-          <div className="status-column--cell">
-            <TbPointFilled className={`${params.row.status === "online" ? "green-icon" : "red-icon"}`} /> {params.row.status}
-          </div>
-        );
-      },
-    },
-    {
-      field: "appointments",
-      headerName: "Book an Appointment", headerAlign: "center", align: "center", width: 150,
-      renderCell: (params) => {
-        return (
-          <div className="appointment-column--cell">
-            <button onClick={() => {
-              if(params.row.fee > balance) {
-                setLowBalance(true);
-                setCurFee(params.row.fee);
-              } else {
-                setSelectEmail(params.row.email);
-                setSelectedDocStatus(params.row.status === "online");
-                setSelectedDocAvailable(params.row.isInMeet);
-                setScheduleMeet(false);
-                setInstantMeet(false);
-                setLowBalance(false);
-              }
-              setSelectedDoc("Dr. " + params.row.username.split(" ").map(item => item[0].toUpperCase() + item.slice(1).toLowerCase()).join(" "));
-              setMeetModal(true);
-            }}>
-              BOOK
-            </button>
-          </div>
-        );
-      },
-    },
-  ];
-
-  useScrollDisable(isLoading);
-
-  if(isLoading) {
-    return <Preloader />;
-  };
 
   return (
-    <>
-      <div id="doctors-page">
-        <div className="doctor-details">
-          <div className="heading">
-            <h3>Doctor Details</h3>
-            <div className="refresh-btn" onClick={fetchDoctors}>
-              <span className={`${fetchingData ? "active" : ""}`}>
-                <IoMdRefresh className="refresh-icon" />
-              </span>
-              <div className="refresh-tooltip tooltip">Refresh details</div>
-            </div>
-          </div>
-          <DataGrid
-            className="doctor-details-table"
-            rows={doctors}
-            columns={columns}
-            components={{ Toolbar: GridToolbar }
-            }
-          />
+    <div className="py-24 text-center">
+      <div className="min-h-[600px] p-2.5 mx-auto text-gray-800 max-w-[1300px] w-full 
+  shadow-[0_0_15px_rgba(0,0,0,0.1)] rounded-lg">
+        <div className="flex justify-center items-center mb-6">
+          <h3 className="text-2xl font-semibold">Doctor Details</h3>
+          <button
+            className={`ml-2.5 p-2 rounded ${
+              fetchingData 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-[#818CF8] hover:bg-[#6366F1] cursor-pointer'
+            } text-white transition-all duration-300`}
+            onClick={fetchDoctors}
+            disabled={fetchingData}
+          >
+            <IoMdRefresh className={fetchingData ? 'animate-spin' : ''} />
+          </button>
         </div>
-      </div>
+
+        <div className="border border-gray-200 rounded-lg shadow-lg">
+        <DataGrid
+          rows={doctors}
+          columns={columns}
+          components={{
+            Toolbar: GridToolbar,
+          }}
+          className="border-none rounded-lg"
+          autoHeight
+          pageSize={10}
+          disableSelectionOnClick
+          sx={{
+            '& .MuiDataGrid-toolbarContainer': {
+              backgroundColor: '#F9FAFB',
+              padding: '12px',
+              '& button': {
+                backgroundColor: '#818CF8',
+                color: 'white',
+                padding: '8px 16px',
+                '&:hover': {
+                  backgroundColor: '#6366F1',
+                },
+              },
+            },
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: '#F3F4F6',
+              borderBottom: '1px solid #E5E7EB',
+            },
+            '& .MuiDataGrid-cell': {
+              borderBottom: '1px solid #E5E7EB',
+            },
+          }}
+        />
+          </div>
+        </div>
+
+      {/* Low Balance Modal */}
       <Modal
         open={meetModal && isLowBalance}
         onClose={() => {
-          setMessage("")
+          setMessage("");
           setMeetModal(false);
         }}
       >
-        <div id="meet-modal" style={{ width: "min(400px, 90vw)" }}>
-          <div className="close_btn_div"> 
-            <IoMdClose onClick={() => {
-              setMessage("")
-              setMeetModal(false)
-              setConnecting(false)
-              httpClient.put('/delete_meet', { email: selectEmail} )
-            }} />
-          </div>
-          <div className="balance-details">
-            <h3>Uhuh!!</h3>
-            <p>Low Balance!</p>
-            <div className="fee-split">
-              <div className="text">Doctor Fee {`(${selectedDoc})`}</div>
-              <div className="fee">₹ {curFee}</div>
+       <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <div className="relative transform overflow-hidden bg-white-1 rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+
+              <div className="flex justify-between items-center">
+                <h3 className="text-xl font-medium text-gray-900">Insufficient Balance</h3>
+                <IoMdClose 
+                  className="text-gray-400 hover:text-gray-600 cursor-pointer"
+                  onClick={() => setMeetModal(false)}
+                />
+              </div>
+
+              <div className="space-y-4 text-gray-600">
+                <div className="flex justify-between">
+                  <span>Doctor Fee (Dr. Singh)</span>
+                  <span className="text-gray-900">₹ 199</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Available Balance</span>
+                  <span className="text-gray-900">₹ 0</span>
+                </div>
+                <div className="flex justify-between pt-4 border-t">
+                  <span className="text-red-500">Required Amount</span>
+                  <span className="text-red-500">₹ 199.00</span>
+                </div>
+              </div>
+
+              <button 
+                className="w-full bg-[#818CF8] hover:bg-[#6366F1] text-white py-3 rounded-md
+                  font-medium transition-colors"
+                onClick={() => navigate(`/my-wallet?recharge=${curFee - balance}`)}
+              >
+                Recharge Wallet
+              </button>
             </div>
-            <div className="fee-split">
-              <div className="text">Available Balance</div>
-              <div className="fee">₹ {balance}</div>
-            </div>
-            <div className="fee-split last">
-              <div className="text">Remaining Balance</div>
-              <div className="fee">₹ {(curFee - balance).toFixed(2)}</div>
-            </div>
-            <button className="recharge-btn" onClick={() => navigate(`/my-wallet?recharge=${curFee - balance}`)}>Recharge Wallet</button>
           </div>
         </div>
       </Modal>
+
+      {/* Appointment Modal */}
       <Modal
         open={meetModal && !isLowBalance}
         onClose={() => {
-          setMessage("")
+          setMessage("");
           setMeetModal(false);
           setConnecting(false);
         }}
       >
-        <div id="meet-modal" style={{ width: `${!selectedDocAvailable && selectedDocStatus ? "min(570px, 90vw)" : "min(400px, 90vw)"}` }}>
-          <div className="close_btn_div">
-            <IoMdClose onClick={() => {
-              setMessage("")
-              setMeetModal(false)
-              setConnecting(false)
-              httpClient.put('/delete_meet', { email: selectEmail} )
-            }} />
-          </div>
-          <div className="meet-details-div">
-            <h3>Wanna meet?</h3>
-            <div className="meet-details">
-              {selectedDocStatus && !selectedDocAvailable && <div className="create-meet" onClick={() => {
-                setScheduleMeet(false);
-                setInstantMeet(!isInstantMeet);
+       <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <div className="relative transform overflow-hidden bg-white-1 rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+
+            <h3 className="text-xl text-gray-800">Schedule Appointment</h3>
+            <IoMdClose 
+              className="text-gray-500 hover:text-gray-700 cursor-pointer" 
+              onClick={() => {
+                setMessage("");
+                setMeetModal(false);
                 setConnecting(false);
-              }}>Create an Instant meet</div>}
-              <div className="create-meet" onClick={() => {
-                const d = new Date();
-                setCurDate(`${d.getFullYear()}-${parseInt(d.getMonth()) < 9 ? '0' : ''}${d.getMonth() + 1}-${parseInt(d.getDate()) < 10 ? '0' : ''}${d.getDate()}`);
-                setCurTime(`${parseInt(d.getHours()) < 10 ? '0' : ''}${d.getHours()}:${parseInt(d.getMinutes()) < 10 ? '0' : ''}${d.getMinutes()}`);
-                setInvDateTime(true);
-                setScheduleMeet(!isScheduleMeet);
-                setInstantMeet(false);
-                setConnecting(false);
-              }}>Schedule a meet</div>
-              {message && <div className="not-available-note">Oops! {selectedDoc} is currently in another meet, you can wait a few minutes or else schedule your meet. </div>}
-              {selectedDocStatus && selectedDocAvailable && <div className="not-available-note">Oops! {selectedDoc} is currently in another meet, you can wait a few minutes or else schedule your meet. </div>}
-            </div>
+                httpClient.put('/delete_meet', { email: selectEmail });
+              }}
+            />
           </div>
-
-          {isInstantMeet && (
-            isConnecting ? (
-              <div className="instant-meet-div">
-                <div className="loader">
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                  <div className="wave"></div>
-                </div>
-                <div>Connecting...</div>
-              </div>
-            ) : (
-              <div className="instant-meet-div">
-                <button onClick={() => {
-                  setConnecting(true);
-                  handlemeet();
-                }}>Connect <FaVideo /></button>
-              </div>
-            )
-          )}
-
-          {isScheduleMeet && (
-            <div className="schedule-meet-div">
-              <h3>Pick a Date and Time</h3>
-              {isInvDateTime && <Alert severity="error">Pick a future date and time</Alert>}
-              {scheduleAlert !== 0 && <Alert severity={`${scheduleAlert === 1 ? "error" : "success"}`}>{scheduleAlert === 1 ? "Doctor isn't available at that time. Please pick up some other time" : "Meet scheduled successfully"}</Alert>}
-              <div className="schedule-meet">
-                <input type="date" id="date"
-                  value={curDate}
-                  onChange={(e) => { }}
-                  onChangeCapture={(e) => {
-                    setCurDate(e.target.value);
-                    checkInvDateTime(e.target.value, curTime);
-                  }}
-                />
-                <div className="timings">
-                  {timings.map((item, index) => (
-                    <div className={`timing-slot ${!item.available && "not-avail"} ${activeClass(index)}`} onClick={() => { handleActive(index); checkInvDateTime(curDate, item.time); setCurTime(item.time) }} key={index}>
-                      <div className="slot"><TbPointFilled /></div>
-                      <div className="time">{item.time}</div>
-                      <div className="clock-icon"><AiOutlineClockCircle /></div>
-                    </div>
-                  ))}
-                </div>
-
-              </div>
-              <div className="schedule-btn">
-                <button onClick={() => {
-                  setMeetScheduling(true);
-                  setTimeout(() => {
-                    setMeetScheduling(false);
-
-                    httpClient.post('/set_appointment', {
-                      email: selectEmail
-                    }).then((res) => {
-                      // console.log(res.data);
-                      if (handleSchedule(res.data.appointments)) {
-                        setScheduleAlert(2);
-                        const datetime = `${curDate}${curTime.replace(":", "")}`;
-                        const link = `/instant-meet?meetId=${datetime}&selectedDoc=${selectedDoc}&selectedMail=${encodeURIComponent(selectEmail)}&name=${localStorage.getItem("username")}&age=${localStorage.getItem("age")}&gender=${localStorage.getItem("gender")}&pemail=${localStorage.getItem("email")}fee=${curFee}`;
-                        httpClient.put('/patient_apo', { email: localStorage.getItem('email'), date: curDate, time: curTime, doctor: selectedDoc, demail: selectEmail, link: link }).then((res) => {
-                          console.log(res);
-                        }).catch((err) => {
-                          console.log(err);
-                        });
-
-                        httpClient.put('/set_appointment', { email: selectEmail, date: curDate, time: curTime, patient: localStorage.getItem('username'), pemail: localStorage.getItem("email"), link: link }).then((res) => {
-                          console.log(res);
-                        }).catch((err) => {
-                          console.log(err);
-                        });
-                        // TODO: 
-                        // Append the date, time, patient details and meet link to the <<doctor.upcomingAppointments>>
-                      } else {
-                        setScheduleAlert(1);
-                      }
-                    }).catch((err) => {
-                      console.log(err);
-                    });
-
-                    // TODO: fetch the <<selectedDoc>> doctor data 
-                    // check the doctor availability using <<doctor.upcomingAppointments>>
-                    // now pass the in the <<handleSchedule(doctor.upcomingAppointments)>>
-                    // Note that the <<doctor.upcomingAppointments>> should be an array and it should contain date and time
-                    // <<handleSchedule>> function returns true if slot is available
-
-                    setTimeout(() => {
-                      setScheduleAlert(0);
-                      setMeetModal(false);
-                    }, 4000);
-                  }, 2000);
+          {/* Meeting Options */}
+          <div className="space-y-6">
+            <div className="flex justify-center gap-4">
+              {selectedDocStatus && !selectedDocAvailable && (
+               <button
+               className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 
+                 transition-all duration-300 shadow-md hover:shadow-lg"
+               onClick={() => {
+                 setScheduleMeet(false);
+                 setInstantMeet(!isInstantMeet);
+                 setConnecting(false);
+               }}
+             >
+               Instant Meeting
+             </button>
+              )}
+              <button
+                className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 
+                  transition-all duration-300 shadow-md"
+                onClick={() => {
+                  const d = new Date();
+                  setCurDate(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
+                  setCurTime(`${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`);
+                  setInvDateTime(true);
+                  setScheduleMeet(!isScheduleMeet);
+                  setInstantMeet(false);
+                  setConnecting(false);
                 }}
-                  disabled={isInvDateTime}
-                >{meetScheduling ? (
-                  <CircularProgress
-                    size={18}
-                    sx={{ color: "#f5f5f5", margin: "0px 30px" }}
-                  />
-                ) : "Schedule"}</button>
-              </div>
+              >
+                Schedule Meeting
+              </button>
             </div>
-          )}
+
+            {message && (
+              <Alert severity="error" className="mt-4">
+                {message}
+              </Alert>
+            )}
+
+            {/* Instant Meeting Section */}
+            {isInstantMeet && (
+              <div className="text-center py-4">
+                {isConnecting ? (
+                  <div className="space-y-4">
+                    <div className="flex justify-center items-end space-x-1">
+                      {[...Array(10)].map((_, index) => (
+                        <div
+                          key={index}
+                          className="w-1 h-8 bg-gradient-to-t from-purple-600 to-purple-300 rounded-full animate-wave"
+                          style={{ 
+                            animationDelay: `${index * 0.1}s`,
+                            height: `${(index + 1) * 8}px`
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-gray-600">Connecting to doctor...</p>
+                  </div>
+                ) : (
+                  <button
+                    className="flex items-center justify-center gap-2 mx-auto px-6 py-3 
+                      bg-purple-600 text-white rounded-lg hover:bg-purple-700 
+                      transition-all duration-300 shadow-md"
+                    onClick={() => {
+                      setConnecting(true);
+                      handleMeet();
+                    }}
+                  >
+                    <span>Start Meeting</span>
+                    <FaVideo />
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Schedule Meeting Section */}
+            {isScheduleMeet && (
+              <div className="space-y-6">
+                <h4 className="text-lg font-medium text-gray-800">Select Date and Time</h4>
+                
+                {isInvDateTime && (
+                  <Alert severity="error">Please select a future date and time</Alert>
+                )}
+                
+                {scheduleAlert !== 0 && (
+                  <Alert severity={scheduleAlert === 1 ? "error" : "success"}>
+                    {scheduleAlert === 1 
+                      ? "Doctor is unavailable at selected time" 
+                      : "Meeting scheduled successfully"}
+                  </Alert>
+                )}
+
+                <div className="space-y-4">
+                  <input
+                    type="date"
+                    value={curDate || ''}
+                    onChange={(e) => {
+                      setCurDate(e.target.value);
+                      checkInvDateTime(e.target.value, curTime);
+                    }}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 
+                      focus:ring-purple-500 focus:border-transparent"
+                  />
+
+                  <div className="grid grid-cols-3 gap-2">
+                    {timings.map((item, index) => (
+                      <button
+                      key={index}
+                      className={`p-3 border rounded-lg flex items-center justify-center gap-2
+                        transition-all duration-200
+                        ${item.available 
+                          ? 'hover:bg-indigo-50 border-indigo-200 text-indigo-700' 
+                          : 'bg-gray-50 border-gray-200 text-gray-400'
+                        }
+                        ${activeClass(index)}`}
+                      disabled={!item.available}
+                      onClick={() => {
+                        if (item.available) {
+                          handleActive(index);
+                          checkInvDateTime(curDate, item.time);
+                          setCurTime(item.time);
+                        }
+                      }}
+                    >
+                        <TbPointFilled className={item.available ? 'text-green-500' : 'text-red-500'} />
+                        <span>{item.time}</span>
+                        <AiOutlineClockCircle />
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    className={`w-full py-3 rounded-lg text-white transition-all duration-300
+                      ${isInvDateTime 
+                        ? 'bg-gray-400 cursor-not-allowed' 
+                        : 'bg-purple-600 hover:bg-purple-700'}
+                    `}
+                    onClick={handleScheduleClick}
+                    disabled={isInvDateTime || meetScheduling}
+                  >
+                    {meetScheduling ? (
+                      <CircularProgress size={24} sx={{ color: "white" }} />
+                    ) : (
+                      "Schedule Meeting"
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
+      </div>
       </Modal>
-    </>
+      
+    </div>
   );
 };
 
