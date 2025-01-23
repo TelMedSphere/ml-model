@@ -94,19 +94,18 @@ const LandingPage = () => {
 
   return (
     <>
-      {/* <div id="landing-page-bg" classname="bg-landing-bg"></div> */}
-      <div className="top-0 left-0 h-full w-full">
+      <div id="landing-page">
         <section className="h-screen w-full">
           {/* curvy-img */}
-          <div className="relative h-[90%] bg-left bg-no-repeat bg-cover -b-4 left-0 z-0 bg-curvy-shape"></div>
-          <div className="absolute left-0 top-0 h-[85%] z-[1] flex justify-evenly items-center w-full text-blue-8 text-shadow-landing-highlight">
-            <div className="max-w-[50%]">
+          <div className="relative top-[5.5rem] h-[90%] bg-left bg-no-repeat bg-cover -b-4 left-0 z-0 bg-curvy-shape max-lg:h-[95%] max-md:h-[80%] max-md:top-[23.5rem]"></div>
+          <div className="absolute left-0 top-0 h-[85%] z-[1] flex justify-evenly items-center w-full text-blue-8 text-shadow-landing-highlight max-md:flex max-md:justify-end max-md:items-center max-md:flex-col-reverse max-xxs:top-12 max-lg:px-4">
+            <div className="max-w-[50%] max-md:pt-8 max-md:max-w-[90%]">
               {/* highlight-heading */}
-              <h2 className="text-[2.5rem] mb-4 text-shado animated-heading">
+              <h2 className="text-[2.5rem] mb-4 text-shado animated-heading max-md:text-[1.7em]">
                 Healing Hands & Caring Hearts
               </h2>
               {/* highlight-text */}
-              <p className="text-[1rem] mt-[1.4rem] animate-fadeIn duration-200 ease-in-out gap-[2em]">
+              <p className="text-[1rem] mt-[1.4rem] animate-fadeIn duration-200 ease-in-out gap-[2em] max-md:text-[1em]">
                 Connecting patients and doctors, no matter the distance <br />
                 we are dedicated to your wellbeing & committed to your care...
               </p>
@@ -115,8 +114,8 @@ const LandingPage = () => {
                             )} */}
             </div>
 
-            <div className="max-w-[50%] text-center">
-              <img src={bg} alt="landing bg" className="my-[20px] mx-auto" />
+            <div className="max-w-[50%] text-center max-md:max-w-full">
+              <img src={bg} alt="landing bg" className="my-[20px] mx-auto max-md:max-w-[90%]" />
             </div>
           </div>
         </section>
@@ -128,7 +127,7 @@ const LandingPage = () => {
           {/* service-list */}
           <div className="flex flex-wrap justify-around mt-8 max-w-[1200px] my-0 mx-auto">
             {/* service-item */}
-            <div className="flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] bg-white-1 m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+            <div className="bg-[#f5f5f5] flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
               {/* icon-container */}
               <div className="flex items-center justify-center min-h-[80px] max-h-[80px]">
                 {/* icon icon-1*/}
@@ -144,7 +143,7 @@ const LandingPage = () => {
                 prescriptions.
               </p>
             </div>
-            <div className="flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] bg-white-1 m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+            <div className="flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] bg-[#f5f5f5] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
               <div className="flex items-center justify-center min-h-[80px] max-h-[80px]">
                 <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center text-[1.8rem] bg-[rgba(245, 158, 50, 0.1)] text-[#f59c23] border-[2px] border-[#f59c23]">
                   <BsRobot />
@@ -158,7 +157,7 @@ const LandingPage = () => {
                 model.
               </p>
             </div>
-            <div className="flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] bg-white-1 m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+            <div className="flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] bg-[#f5f5f5] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
               <div className="flex items-center justify-center min-h-[80px] max-h-[80px]">
                 <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center text-[1.8rem] bg-[rgba(240, 80, 50, 0.1)] text-[#f05032] border-[2px] border-[#f05032]">
                   <GiMedicines />
