@@ -20,6 +20,7 @@ import useScrollDisable from "../hooks/useScrollDisable";
 import bg from "../assets/landing-bg.png";
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
+import shadows from "@mui/material/styles/shadows";
 
 const LandingPage = () => {
   const { isLoading, toggleLoading } = useContext(commonContext);
@@ -94,7 +95,7 @@ const LandingPage = () => {
 
   return (
     <>
-      <div id="landing-page">
+      <div>
         <section className="h-screen w-full">
           {/* curvy-img */}
           <div className="relative top-[5.5rem] h-[90%] bg-left bg-no-repeat bg-cover -b-4 left-0 z-0 bg-curvy-shape max-lg:h-[95%] max-md:h-[80%] max-md:top-[23.5rem]"></div>
@@ -115,7 +116,11 @@ const LandingPage = () => {
             </div>
 
             <div className="max-w-[50%] text-center max-md:max-w-full">
-              <img src={bg} alt="landing bg" className="my-[20px] mx-auto max-md:max-w-[90%]" />
+              <img
+                src={bg}
+                alt="landing bg"
+                className="my-[20px] mx-auto max-md:max-w-[90%]"
+              />
             </div>
           </div>
         </section>
@@ -177,10 +182,16 @@ const LandingPage = () => {
         <section className="py-20 px-0">
           <div className="w-full flex flex-wrap my-0 mx-auto justify-center items-center max-w-[1300px] max-md:flex max-md:flex-col">
             <div className="flex-shrink-0 flex-grow-0 basis-[40%] w-full p-4 text-center max-md:mb-8">
-              <img src={need} alt="why" className="w-[90%] max-ma:max-w-[400px] max-md:w-[90%]"/>
+              <img
+                src={need}
+                alt="why"
+                className="w-[90%] max-ma:max-w-[400px] max-md:w-[90%]"
+              />
             </div>
             <div className="flex-shrink-0 flex-grow-0 basis-[55%] p-4 max-md:p-8">
-              <h2 className="text-blue-9 mb-8">Why do we need a proper health care?</h2>
+              <h2 className="text-blue-9 mb-8">
+                Why do we need a proper health care?
+              </h2>
               <ul>
                 <li className="my-4 mx-auto text-blue-8">
                   WHO recommends 44.5 doctors per 10,000 people but India has
@@ -210,105 +221,154 @@ const LandingPage = () => {
             <h2>Our Benefits</h2>
             <div className="flex flex-wrap my-0 mx-auto max-w-[1000px] justify-center mt-8 text-blue-7">
               {/* first */}
-              <div   className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(246,171,47,0.1)] m-4 hover:shadow-[0_0_4px_0_#f6ab2f]"
-              >
+              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(246,171,47,0.1)] m-4 hover:shadow-[0_0_4px_0_#f6ab2f]">
                 {/* icon */}
                 <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#f6ab2f]">
                   <MdOutlineHealthAndSafety />{" "}
                 </div>
-                <p className="flex shrink-0 grow-0 basis-[70%]">TeleHealth services</p>
+                <p className="flex shrink-0 grow-0 basis-[70%]">
+                  TeleHealth services
+                </p>
               </div>
               <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(12,184,182,0.1)] m-4 hover:shadow-[0_0_4px_0_#0cb8b6]">
                 <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#0cb8b6]">
                   <IoAccessibility />{" "}
                 </div>
-                <p className="flex shrink-0 grow-0 basis-[70%]">Convenience and accessibility</p>
+                <p className="flex shrink-0 grow-0 basis-[70%]">
+                  Convenience and accessibility
+                </p>
               </div>
               <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(230,73,45,0.1)] m-4 hover:shadow-[0_0_4px_0_#e6492d]">
                 <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#e6492d] ">
                   <TbStethoscope />{" "}
                 </div>
-                <p className="flex shrink-0 grow-0 basis-[70%]">Online Appointment Booking</p>
+                <p className="flex shrink-0 grow-0 basis-[70%]">
+                  Online Appointment Booking
+                </p>
               </div>
               <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(22,101,216,0.1)] m-4 hover:shadow-[0_0_4px_0_#1665d8]">
                 <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#1665d8] ">
                   <TbHeartPlus />{" "}
                 </div>
-                <p className="flex shrink-0 grow-0 basis-[70%]">Competitive advantage</p>
+                <p className="flex shrink-0 grow-0 basis-[70%]">
+                  Competitive advantage
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {localStorage.getItem("username") &&
-          localStorage.getItem("username") !== "undefined" &&
-          localStorage.getItem("usertype") === "patient" && (
-            <section className="team-section">
-              <div className="team-div">
-                <div className="head">
-                  <h2>Meet Our Team</h2>
-                </div>
-                <div className="team">
-                  {profiles.map((profile) => (
-                    <div className="item" key={profile.id}>
-                      <div className="img-div">
-                        <img
-                          src={profile.imgSrc}
-                          alt={profile.name}
-                          className="img"
-                        />
-                        <div className="contact-div">
-                          {profile.contact.map((contact, index) => {
-                            const IconComponent =
-                              contact.icon === "IoMdMail"
-                                ? IoMdMail
-                                : contact.icon === "FaPhoneAlt"
-                                ? FaPhoneAlt
-                                : FaHospital;
-                            return (
-                              <div
-                                className="contact-icon"
-                                key={index}
-                                onClick={handleOnCLick}
-                              >
-                                <IconComponent />
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                      <h3>{profile.name}</h3>
-                      <p>{profile.specialty}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-          )}
-
-        <section className="faq-section">
-          <div className="faq-div" ref={faqRef}>
-            <div className="img-div">
-              <img src="faq-img.png" alt="faq" />
+        {/* team-section */}
+        <section className="py-20 px-0 text-center bg-white-1">
+          {/* team-div */}
+          <div>
+            <div>
+              <h2 className="text-blue-9 mb-8">Meet Our Team</h2>
             </div>
-            <div className="content">
-              <h2 className="head">Any Queries ?</h2>
-              <div className="faqs">
+            {/* team */}
+            <div className="flex flex-wrap my-0 mx-auto max-w-[1200px] justify-center mt-8">
+              {profiles.map((profile) => (
+                // item
+                <div
+                  className="flex justify-center items-center flex-col flex-grow-0 flex-shrink-0 basis-[25%] relative min-w-[250px] max-w-[250px] text-center rounded-[12px] transition-all duration-300 bg-white-1 border-[1px] border-[#eaeaea] m-4 py-4 px-0 hover:shadow-[0_0_10px_10px_#fff] group cursor-pointer"
+                  key={profile.id}
+                >
+                  <div>
+                    <img
+                      src={profile.imgSrc}
+                      alt={profile.name}
+                      className="w-[250px] h-[250px] border-[1px] border-[#eaeaea]"
+                    />
+                    {/* contact-div */}
+                    <div className="absolute bottom-[85px] text-[0] opacity-0 flex justify-center items-center transition-all duration-500 ease-linear bg-[rgba(74,76,178,0.8)] w-[250px] h-[70px] rounded-tl-[70%] rounded-tr-[70%] group-hover:opacity-100 group-hover:visible group-hover:text-[30px]">
+                      {profile.contact.map((contact, index) => {
+                        const IconComponent =
+                          contact.icon === "IoMdMail"
+                            ? IoMdMail
+                            : contact.icon === "FaPhoneAlt"
+                            ? FaPhoneAlt
+                            : FaHospital;
+                        return (
+                          <div
+                            // contact-icon
+                            className="text-white-1 p-[5px] pl-0 m-[7px] cursor-pointer transition-all duration-100 ease-linear hover:text-white-1"
+                            key={index}
+                            onClick={handleOnCLick}
+                          >
+                            <IconComponent />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <h3 className="text-blue-6 mt-4 mb-[0.7rem] cursor-pointer hover:text-blue-9">
+                    {profile.name}
+                  </h3>
+                  <p className="text-grey-3">{profile.specialty}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        {/* faq-section */}
+        <section className="py-20 px-0 text-center text-white-1">
+          {/* faq-div */}
+          <div
+            className="w-full flex flex-wrap my-0 mx-auto p-[5px] justify-between items-start max-w-[1300px] max-md:flex max-md:flex-col max-md:justify-center"
+            ref={faqRef}
+          >
+            {/* img-div */}
+            <div className="shrink-0 grow-0 basis-[40%] w-full p-4 text-center max-md:mb-8">
+              <img
+                src="faq-img.png"
+                alt="faq"
+                className="w-[90%] max-md:max-w-[400px] max-md:w-full"
+              />
+            </div>
+            {/* content */}
+            <div className="shrink-0 grow-0 basis-[55%] p-4 max-md:p-8">
+              <h2 className="text-blue-8 mb-8">Any Queries ?</h2>
+              {/* faqs */}
+              <div className="w-full my-0 mx-auto rounded-[12px]">
                 {faqs.map((item, index) => (
                   <Accordion
                     key={index}
-                    className="faq-item object-cover shadow-md hover:shadow-[0px_0px_10px_2px_rgba(59,130,246,0.6)]"
+                    // faq-item
+                    sx={{
+                      backgroundColor: "#7584ae", // Equivalent to bg-blue-3
+                      color: "#FFFFFF", // Equivalent to text-white-1
+                      borderRadius: "5px",
+                      marginBottom: "15px",
+                      border: "none",
+                      outline: "none",
+                      transition: "box-shadow 0.1s ease",
+                      ":hover": {
+                        boxShadow: "0px 0px 10px 2px rgba(59, 130, 246, 0.6)", // Hover shadow effect
+                      },
+                    }}
                     expanded={openFaqIndex === index}
                     onChange={() => handleFaqClick(index)}
                   >
                     <AccordionSummary
-                      expandIcon={<MdExpandMore className="icon" />}
+                      expandIcon={<MdExpandMore style={{ color: "#FFFFFF" }} />}
                       className="expand-icon"
                     >
-                      <div className="item-qn">{item.question}</div>
+                      {/* item-qn */}
+                      <div className="text-left">{item.question}</div>
                     </AccordionSummary>
-                    <AccordionDetails>
-                      <div className="item-ans">{item.answer}</div>
+                    <AccordionDetails
+                      sx={{
+                        backgroundColor: "#FFFFFF", // Equivalent to bg-white-1
+                        color: "#4A4CB2", // Equivalent to text-blue-7
+                        borderRadius: "12px",
+                        padding: "3px",
+                        margin: "10px",
+                      }}
+                    >
+                      {/* item-ans */}
+                      <div className="w-full p-4 rounded-[12px] bg-white-1 text-blue-7 text-left">
+                        {item.answer}
+                      </div>
                     </AccordionDetails>
                   </Accordion>
                 ))}
