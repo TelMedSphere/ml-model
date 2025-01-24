@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useRef} from "react";
 import { FaChevronUp } from "react-icons/fa";
 import { AiFillWechat } from "react-icons/ai";
 import { MdClear } from "react-icons/md"; 
@@ -11,6 +11,7 @@ import {
   MessageInput,
   TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
+import useOutsideClose from "../../hooks/useOutsideClose";
 
 const ChatBot = () => {
   const API_KEY = import.meta.env.VITE_API_KEY;
@@ -154,6 +155,12 @@ const ChatBot = () => {
     }
   };
   
+  const chatbotRef = useRef(null);
+  useOutsideClose(chatbotRef, () => {
+    if (open) {
+      setOpen(false);
+    }
+  });
   
 
   return (
@@ -177,6 +184,7 @@ const ChatBot = () => {
         {open ? <MdClear /> : <AiFillWechat />}
       </div>
       <div
+        ref={chatbotRef}
         className={`fixed right-[1.5vw] bg-white-1 z-40 border-[2px] border-blue-2 rounded-[10px] pt-4 transition-all duration-300 ease-in-out ${
           open
             ? "bottom-[13vh] w-[300px] h-[450px] opacity-100 visible"
