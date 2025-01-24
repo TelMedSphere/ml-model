@@ -121,32 +121,25 @@ const Profile = () => {
   return (
     <>
       {isProfileOpen && (
-        // backdrop
         <div className="relative">
-          {/* modal_centered */}
-          <div className="fixed inset-0 flex items-center justify-center z-[9] bg-black-1/50">
-            {/* account_form */}
+          <div className="fixed inset-0 flex items-center justify-center z-[9999] bg-black-1/50 pointer-events-none">
             <form
               id=""
-              className="relative bg-blue-3 text-blue-8 max-w-[450px] w-full p-12 rounded-[3px] z-[99] max-xs:px-4 max-xs:py-8 mx-4"
+              className="relative bg-blue-3 text-blue-8 max-w-[450px] max-h-[90vh] overflow-y-auto scrollbar-none w-full p-12 rounded-[3px] z-[99] max-xs:px-4 max-xs:py-8 mx-4 pointer-events-auto"
               ref={profileRef}
               onSubmit={handleFormSubmit}
             >
               {renderAlert()}
 
               {/*===== Form-Header =====*/}
-              {/* form_head */}
               <div className="text-white-1">
                 <h2 className="mb-[0.6rem]">Profile</h2>
                 <p>Check your profile</p>
               </div>
 
               {/*===== Form-Body =====*/}
-              {/* form_body */}
               <div className="mt-10">
-                {/* input_box */}
                 <div className="relative mb-4">
-                  {/* input_field */}
                   <input
                     type="text"
                     name="username"
@@ -156,7 +149,6 @@ const Profile = () => {
                     onChange={(e) => setUsername(e.target.value)}
                     required
                   />
-                  {/* input_label */}
                   <label className="peer-disabled:transform peer-disabled:scale-[0.85] peer-disabled:text-blue-1 absolute -top-[10px] left-[10px] bg-blue-3 text-blue-1 px-[5px] text-sm">
                     Username
                   </label>
@@ -208,9 +200,7 @@ const Profile = () => {
 
                 <div className="relative mb-5">
                   <label className="text-blue-1">Gender</label>
-                  {/* radio_inputs */}
                   <div className="mt-[10px]">
-                    {/* radio_input_field */}
                     <input
                       type="radio"
                       name="gender"
