@@ -139,25 +139,6 @@ const Home = () => {
             })
     }
 
-    // setInterval(() => {
-    //     httpClient.post('make_meet', { email: localStorage.getItem('email') })
-    //         .then((res) => {
-    //             if (res.data.link!==null) {
-    //                 setPatient_name(res.data.link['name']);
-    //                 setMeetlink(res.data.link['link']);
-    //                 setSearchPatient(true);
-    //                 setSearching(2);
-    //             }
-    //             else {
-    //                 setSearchPatient(false);
-    //                 setSearching(0);
-    //             }
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         })
-    // }, 25000);
-
     {localStorage.getItem("usertype")==="doctor" &&
     setInterval(() => {
         setMeetlink(localStorage.getItem("curmlink"));
@@ -376,157 +357,178 @@ const Home = () => {
         </div>
 
         {isDoctor && isVerified && (
-            <div 
+                <div 
                 onClick={() => setAvailablemodal(true)}
-                className="fixed bottom-10 left-5 p-3 rounded-lg bg-blue-900 text-white cursor-pointer z-50 flex flex-col items-center transition-all duration-300 hover:bg-blue-800">
+                className="fixed bottom-10 left-5 p-3 rounded-lg bg-blue-900 text-white cursor-pointer z-50 flex flex-col items-center transition-all duration-300 hover:bg-blue-800"
+            >
                 {isAlert !== "" && (
-                    <Alert severity={isAlert} className="absolute -top-16 text-black w-64 left-0">
-                        {alertmessage}
-                    </Alert>
+                <Alert severity={isAlert} className="absolute -top-16 text-black w-64 left-0">
+                    {alertmessage}
+                </Alert>
                 )}
                 Set your availability
-                <span className={`w-full h-[3px] mt-1 rounded-lg bg-red-500 ${available ? "bg-green-500" : ""}`}></span>
+                <span className={`w-full h-[3px] mt-1 rounded-lg ${available ? "bg-green-500" : "bg-red-500"}`}></span>
             </div>
         )}
                 
 
+            {/* Feedback Modal for Patients */}
+            <Modal 
+                    open={haslastMeet && (!isDoctor)} 
+                    onClose={handleFeedbackClose}
+                    className="flex items-center justify-center"
+                    >
+                    <div className="w-[min(500px,90vw)] bg-white-1 border-2 border-blue-200 rounded-lg p-4 shadow-lg text-blue-700 text-center relative">
+                        <div 
+                        className="absolute top-2 right-2 text-blue-500 hover:text-blue-800 cursor-pointer transition-colors duration-300"
+                        onClick={handleFeedbackClose}
+                        >
+                        <IoMdClose className="text-2xl" />
+                        </div>
 
-            <Modal open={haslastMeet && (!isDoctor)} onClose={handleFeedbackClose}>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[500px] p-4 px-5 shadow-lg border-2 border-blue-200 bg-white rounded-lg text-blue-700 text-center">
-                    <div className="text-right text-blue-500 hover:text-blue-800 transition-all duration-300 cursor-pointer">
-                        <IoMdClose onClick={handleFeedbackClose} />
-                    </div>
-                    <div className="feedback-details">
+                        <div className="feedback-details">
                         {feedbackAlert && <Alert severity="success">Thank you for your response</Alert>}
-                        <h3 className="my-4">Feedback</h3>
+                        <h3 className="my-4 text-xl font-semibold">Feedback</h3>
                         <div className="mb-3">How was your consultation with {localStorage.getItem("lastMeetWith")}?</div>
+                        
                         <div className="ratings">
-                            <div className="flex justify-center items-center">
+                            <div className="flex justify-center items-center mb-4">
+                            {[0, 1, 2, 3, 4].map((rate, index) => (
                                 <div 
-                                    className={`text-4xl mx-2 cursor-pointer ${feedbackRate === 0 ? 'text-red-500' : 'text-gray-500'}`}
-                                    onClick={() => setFeedbackRate(0)}>
-                                    <BsEmojiAngry />
+                                key={rate}
+                                className={`text-4xl mx-2 cursor-pointer ${
+                                    feedbackRate === rate 
+                                    ? (rate < 2 ? 'text-red-500' : rate < 3 ? 'text-orange-500' : 'text-green-500')
+                                    : 'text-gray-500'
+                                }`}
+                                onClick={() => setFeedbackRate(rate)}
+                                >
+                                {[BsEmojiAngry, BsEmojiFrown, BsEmojiExpressionless, BsEmojiSmile, BsEmojiLaughing][index]}
                                 </div>
-                                <div 
-                                    className={`text-4xl mx-2 cursor-pointer ${feedbackRate === 1 ? 'text-red-500' : 'text-gray-500'}`}
-                                    onClick={() => setFeedbackRate(1)}>
-                                    <BsEmojiFrown />
-                                </div>
-                                <div 
-                                    className={`text-4xl mx-2 cursor-pointer ${feedbackRate === 2 ? 'text-orange-500' : 'text-gray-500'}`}
-                                    onClick={() => setFeedbackRate(2)}>
-                                    <BsEmojiExpressionless />
-                                </div>
-                                <div 
-                                    className={`text-4xl mx-2 cursor-pointer ${feedbackRate === 3 ? 'text-green-500' : 'text-gray-500'}`}
-                                    onClick={() => setFeedbackRate(3)}>
-                                    <BsEmojiSmile />
-                                </div>
-                                <div 
-                                    className={`text-4xl mx-2 cursor-pointer ${feedbackRate === 4 ? 'text-green-500' : 'text-gray-500'}`}
-                                    onClick={() => setFeedbackRate(4)}>
-                                    <BsEmojiLaughing />
-                                </div>
+                            ))}
                             </div>
-                            <div className="mt-4 mb-4">
-                                {ratings[feedbackRate]}
+                            
+                            <div className="mt-4 mb-4 text-lg">
+                            {ratings[feedbackRate]}
                             </div>
                         </div>
-                    </div>
-                    <div>
+                        </div>
+
+                        <div>
                         <button 
                             onClick={handleFeedbackClose}
                             disabled={feedbackAlert}
-                            className="bg-blue-300 border border-blue-500 text-white px-3 py-2.5 rounded my-2 mx-1.5 font-montserrat transition-all duration-300 hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-blue-500">
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
                             {feedbackAlert ? "Submitted" : "Submit"}
                         </button>
+                        </div>
                     </div>
-                </div>
             </Modal>
 
             {/* Feedback Modal for Doctors */}
-            <Modal open={haslastMeet && isDoctor} onClose={() => {
+            <Modal 
+            open={haslastMeet && isDoctor} 
+            onClose={() => {
                 localStorage.setItem("lastMeetWith", null);
                 setHasLastMeet(false);
-            }}>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[500px] p-4 px-5 shadow-lg border-2 border-blue-200 bg-white rounded-lg text-blue-700 text-center">
-                    <div className="text-right text-blue-500 hover:text-blue-800 transition-all duration-300 cursor-pointer">
-                        <IoMdClose onClick={() => {
-                            localStorage.setItem("lastMeetWith", null);
-                            httpClient.put('/delete_meet', { "email": doctormail });
-                            setHasLastMeet(false);
-                        }} />
-                    </div>
-                    <div className="pb-6">
-                        <h3 className="my-3">Thank You <BsEmojiSmile /> </h3>
-                        <div className="thankyou-note">
-                            Thank you, {localStorage.getItem("username")}!!<br /> You just treated one more life!
-                        </div>
-                    </div>
+            }}
+            className="flex items-center justify-center"
+            >
+            <div className="w-[min(500px,90vw)] bg-white-1 border-2 border-blue-200 rounded-lg p-4 shadow-lg text-blue-700 text-center relative">
+                <div 
+                className="absolute top-2 right-2 text-blue-500 hover:text-blue-800 cursor-pointer transition-colors duration-300"
+                onClick={() => {
+                    localStorage.setItem("lastMeetWith", null);
+                    httpClient.put('/delete_meet', { "email": doctormail });
+                    setHasLastMeet(false);
+                }}
+                >
+                <IoMdClose className="text-2xl" />
                 </div>
+
+                <div className="pb-6 text-center">
+                <h3 className="my-3 text-xl font-semibold flex items-center justify-center">
+                    Thank You <BsEmojiSmile className="ml-2" /> 
+                </h3>
+                <div className="thankyou-note text-blue-600">
+                    Thank you, {localStorage.getItem("username")}!!<br /> 
+                    You just treated one more life!
+                </div>
+                </div>
+            </div>
             </Modal>
 
             {/* Search Patient Modal */}
-            <Modal open={searchPatient} onClose={() => setSearchPatient(false)}>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[500px] p-4 px-5 shadow-lg border-2 border-blue-200 bg-white rounded-lg text-blue-700 text-center">
-                    <div className="text-right text-blue-500 hover:text-blue-800 transition-all duration-300 cursor-pointer">
-                        <IoMdClose onClick={() => setSearchPatient(false)} />
+            <Modal
+            open={searchPatient}
+            onClose={() => setSearchPatient(false)}
+            className="flex items-center justify-center"
+            >
+            <div className="w-[min(500px,90vw)] bg-white-1 border-2 border-blue-200 rounded-lg p-4 shadow-lg text-blue-700 text-center relative">
+            <div
+            className="absolute top-2 right-2 text-blue-500 hover:text-blue-800 cursor-pointer transition-colors duration-300"
+            onClick={() => setSearchPatient(false)}
+            >
+            <IoMdClose className="text-2xl" />
+            </div>
+
+
+            {searching === 0 && (
+            <div className="text-center bg-white-1 flex flex-col items-center">
+                <div className="relative p-4">
+                <HiUserGroup className="w-[min(70vw,200px)] h-[min(70vw,200px)] text-blue-500" />
+                <div className="absolute bottom-2.5 right-2.5 w-[min(100px,50vw)] h-[min(100px,50vw)]">
+                    <div className="w-full h-full animate-spin">
+                    <div className="absolute bottom-0 right-0 w-[min(150px,40vw)] h-[min(150px,40vw)] animate-pulse">
+                        <img className="w-full h-full" src="search-img.png" alt="searching" />
                     </div>
-                    
-                    {searching === 0 && (
-                        <div className="text-center flex flex-col items-center">
-                            <div className="relative p-4">
-                                <HiUserGroup className="w-[min(70vw,200px)] h-[min(70vw,200px)] text-blue-500" />
-                                <div className="absolute bottom-2.5 right-2.5 w-[min(100px,50vw)] h-[min(100px,50vw)]">
-                                    <div className="w-full h-full animate-spin">
-                                        <div className="absolute bottom-0 right-0 w-[min(150px,40vw)] h-[min(150px,40vw)] animate-maintain">
-                                            <img className="w-full h-full" src="search-img.png" alt="searching" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <h3>Searching...</h3>
-                        </div>
-                    )}
-
-                    {searching === 1 && (
-                        <div className="text-center flex flex-col items-center">
-                            <div className="relative p-4">
-                                <HiUserGroup className="w-[min(70vw,200px)] h-[min(70vw,200px)] text-blue-500" />
-                                <div className="absolute bottom-2.5 right-2.5 w-[min(100px,50vw)] h-[min(100px,50vw)] rounded-full bg-white border-5 border-green-500 p-2.5 text-green-500 flex items-center justify-center">
-                                    <IoCheckmarkDone className="w-[min(90px,45vw)] h-[min(90px,45vw)]" />
-                                </div>
-                            </div>
-                            <h3>No Patients Found!</h3>
-                        </div>
-                    )}
-
-                    {searching === 2 && (
-                        <div className="text-center flex flex-col items-center">
-                            <h3>Patient Found!</h3>
-                            <div className="flex flex-col items-center">
-                                <div>Name: {patient_name}</div>
-                                <div className="py-4 text-white">
-                                    <button
-                                        onClick={() => {
-                                            httpClient.post("meet_status", {email: localStorage.getItem("email")});
-                                            httpClient.put("/currently_in_meet", {email: localStorage.getItem("email")})
-                                                .then(res => {
-                                                    setSearchPatient(false);
-                                                    localStorage.setItem("setSearchPatient", false);
-                                                    navigate(`${meetlink}`);
-                                                })
-                                                .catch(err => console.log(err));
-                                        }}
-                                        className="bg-blue-300 border border-blue-500 text-white px-3 py-2.5 rounded my-2 mx-1.5 transition-all duration-300 hover:bg-blue-500">
-                                        Connect now <FaVideo className="inline" />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    </div>
                 </div>
-            </Modal>
+                </div>
+                <h3 className="text-lg">Searching...</h3>
+            </div>
+            )}
+
+            {searching === 1 && (
+            <div className="text-center bg-white-1 flex flex-col items-center">
+                <div className="relative p-4">
+                <HiUserGroup className="w-[min(70vw,200px)] h-[min(70vw,200px)] text-blue-500" />
+                <div className="absolute bottom-2.5 right-2.5 w-[min(100px,50vw)] h-[min(100px,50vw)] rounded-full bg-white border-5 border-green-500 p-2.5 text-green-500 flex items-center justify-center">
+                    <IoCheckmarkDone className="w-[min(90px,45vw)] h-[min(90px,45vw)]" />
+                </div>
+                </div>
+                <h3>No Patients Found!</h3>
+            </div>
+            )}
+
+            {searching === 2 && (
+            <div className="text-center bg-white-1 flex flex-col items-center">
+                <h3>Patient Found!</h3>
+                <div className="flex flex-col items-center">
+                <div>Name: {patient_name}</div>
+                <div className="py-4 text-white">
+                    <button
+                    onClick={() => {
+                        httpClient.post("meet_status", { email: localStorage.getItem("email") });
+                        httpClient.put("/currently_in_meet", { email: localStorage.getItem("email") })
+                        .then(res => {
+                            setSearchPatient(false);
+                            localStorage.setItem("setSearchPatient", false);
+                            navigate(`${meetlink}`);
+                        })
+                        .catch(err => console.log(err));
+                    }}
+                    className="bg-blue-300 border border-blue-500 text-white px-3 py-2.5 rounded my-2 mx-1.5 transition-all duration-300 hover:bg-blue-500"
+                    >
+                    Connect now <FaVideo className="inline" />
+                    </button>
+                </div>
+                </div>
+            </div>
+            )}
+            </div>
+             </Modal>
 
             {/* Join Meet Modal */}
             <Modal open={joinmeet} onClose={() => {
@@ -537,8 +539,8 @@ const Home = () => {
                 setDoctorName("");
                 setJoinlink("");
             }}>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[500px] p-4 px-5 shadow-lg border-2 border-blue-200 bg-white rounded-lg text-blue-700 text-center">
-                    <div className="text-right text-blue-500 hover:text-blue-800 transition-all duration-300 cursor-pointer">
+                <div className="absolute top-1/2 bg-white-1 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[500px] p-4 px-5 shadow-lg border-2 border-blue-200 bg-white rounded-lg text-blue-700 text-center">
+                    <div className="text-right text-blue-500  hover:text-blue-800 transition-all duration-300 cursor-pointer">
                         <IoMdClose onClick={() => {
                             setJoinmeet(false);
                             setIsConnecting(false);
@@ -577,24 +579,27 @@ const Home = () => {
 
             {/* Available Modal */}
             <Modal open={availablemodal} onClose={() => setAvailablemodal(false)}>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[min(400px,90vw)] p-4 px-5 shadow-lg border-2 border-blue-200 bg-white rounded-lg text-blue-700 text-center">
-                    <div className="text-right text-blue-500 hover:text-blue-800 transition-all duration-300 cursor-pointer">
-                        <IoMdClose onClick={() => setAvailablemodal(false)} />
-                    </div>
-                    <div className="flex flex-col items-center text-white gap-2.5">
-                        <div 
-                            onClick={() => iamavailable()}
-                            className="bg-blue-500 p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-600">
-                            Yes, I am available!
-                        </div>
-                        <div 
-                            onClick={() => iamnotavailable()}
-                            className="bg-blue-500 p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-600">
-                            No, I am not available!
-                        </div>
-                    </div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[min(95%,400px)] p-3.5 px-5 shadow-lg border-2 border-blue-200 bg-[#F5F5F5] rounded-lg text-blue-700 text-center">
+                <div className="text-right text-blue-500 hover:text-blue-800 transition-all duration-300 cursor-pointer">
+                <IoMdClose onClick={() => setAvailablemodal(false)} />
                 </div>
+                <div className="flex flex-col items-center justify-center gap-2.5 text-white">
+                <div 
+                    onClick={() => iamavailable()}
+                    className="bg-blue-500 p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-600"
+                >
+                    Yes, I am available!
+                </div>
+                <div 
+                    onClick={() => iamnotavailable()}
+                    className="bg-blue-500 p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-600"
+                >
+                    No, I am not available!
+                </div>
+                </div>
+            </div>
             </Modal>
+          
 
         </div>
     );
