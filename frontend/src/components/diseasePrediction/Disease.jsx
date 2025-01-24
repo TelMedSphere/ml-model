@@ -1,11 +1,33 @@
 import React, { Component } from "react";
 
 
+// class Disease extends Component {
+//   state = {
+//     patientInfo: this.props.patientInfo,
+//     disease_with_possibility: this.props.disease_with_possibility,
+//   };
 class Disease extends Component {
   state = {
-    patientInfo: this.props.patientInfo,
-    disease_with_possibility: this.props.disease_with_possibility,
+    patientInfo: [],
+    disease_with_possibility: [],
+    gender: "",
+    age: "",
   };
+
+  componentDidMount() {
+    // Fetch data from the Flask backend
+    fetch("http://127.0.0.1:5000/disease") // Update this endpoint as per your Flask route
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          patientInfo: data.patientInfo,
+          disease_with_possibility: data.disease_with_possibility,
+          gender: data.gender,
+          age: data.age,
+        });
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }
 
   get_current_html = () => {
     const filtered_list = this.state.disease_with_possibility.filter((e) => {
