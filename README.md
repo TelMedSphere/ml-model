@@ -16,7 +16,7 @@
 ![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/PratikMane0112/TelMedSphere)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/PratikMane0112/TelMedSphere)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/PratikMane0112/TelMedSphere)
-[![Discord](https://img.shields.io/discord/qsdDRKak28?label=Discord&logo=discord&color=7289DA)](https://discord.gg/qsdDRKak28)
+[![Discord](https://img.shields.io/discord/1310161724590129233?label=Discord&logo=discord&color=7289DA)](https://discord.gg/qsdDRKak28)
  </p>
  </div>
 
