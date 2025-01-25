@@ -143,8 +143,7 @@ const Profile = () => {
                   <input
                     type="text"
                     name="username"
-                    className="py-3 px-3 text-white-1
-                                        peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
+                    className="py-3 px-3 text-white-1 peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -159,8 +158,7 @@ const Profile = () => {
                     <input
                       type="text"
                       name="specialization"
-                      className="py-3 px-3 text-white-1
-                                        peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
+                      className="py-3 px-3 text-white-1 peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
                       value={specialization}
                       onChange={(e) => setSpecialization(e.target.value)}
                       required
@@ -177,8 +175,7 @@ const Profile = () => {
                       <input
                         type="text"
                         name="age"
-                        className="py-3 px-3 text-white-1
-                                        peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
+                        className="py-3 px-3 text-white-1 peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
                         value={age}
                         onChange={(e) => {
                           checkAge(e.target.value);
@@ -210,7 +207,12 @@ const Profile = () => {
                       checked={gender === "male"}
                       onChange={(e) => setGender(e.target.value)}
                     />{" "}
-                    <label htmlFor="male" className="cursor-pointer text-white-1 mr-4">Male</label>
+                    <label
+                      htmlFor="male"
+                      className="cursor-pointer text-white-1 mr-4"
+                    >
+                      Male
+                    </label>
                     <input
                       type="radio"
                       name="gender"
@@ -220,7 +222,12 @@ const Profile = () => {
                       checked={gender === "female"}
                       onChange={(e) => setGender(e.target.value)}
                     />{" "}
-                    <label htmlFor="female" className="cursor-pointer text-white-1 mr-4">Female</label>
+                    <label
+                      htmlFor="female"
+                      className="cursor-pointer text-white-1 mr-4"
+                    >
+                      Female
+                    </label>
                     <input
                       type="radio"
                       name="gender"
@@ -230,7 +237,12 @@ const Profile = () => {
                       checked={gender === "other"}
                       onChange={(e) => setGender(e.target.value)}
                     />{" "}
-                    <label htmlFor="other" className="cursor-pointer text-white-1 mr-4">Other</label>
+                    <label
+                      htmlFor="other"
+                      className="cursor-pointer text-white-1 mr-4"
+                    >
+                      Other
+                    </label>
                   </div>
                 </div>
 
@@ -238,8 +250,7 @@ const Profile = () => {
                   <input
                     type="text"
                     name="phone"
-                    className="py-3 px-3 text-white-1
-                                        peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
+                    className="py-3 px-3 text-white-1 peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     required
@@ -254,8 +265,7 @@ const Profile = () => {
                     <input
                       type="number"
                       name="fee"
-                      className="py-3 px-3 text-white-1
-                                        peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
+                      className="py-3 px-3 text-white-1 peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
                       value={fee}
                       onChange={(e) => setFee(e.target.value)}
                       min={1}
@@ -271,8 +281,7 @@ const Profile = () => {
                     <input
                       type="text"
                       name="email"
-                      className="py-3 px-3 text-white-1
-                                        peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
+                      className="py-3 px-3 text-white-1 peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
                       value={email}
                       disabled
                     />
@@ -293,7 +302,7 @@ const Profile = () => {
                       onChange={() => setChPasswd((prev) => !prev)}
                     />
                     <label
-                    htmlFor="passcheck"
+                      htmlFor="passcheck"
                       className="cursor-pointer text-white-1"
                     >
                       {" "}
@@ -308,8 +317,7 @@ const Profile = () => {
                       <input
                         type="password"
                         name="password"
-                        className="py-3 px-3 text-white-1
-                                        peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
+                        className="py-3 px-3 text-white-1 peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
                         value={passwd}
                         onChange={(e) => {
                           checkPasswd(e.target.value);
@@ -344,7 +352,6 @@ const Profile = () => {
               </div>
 
               {/*===== Form-Close-Btn =====*/}
-              {/*  */}
               <div
                 className="bg-[rgba(176,187,216,0.5)] text-white-1 absolute top-0 right-0 w-[30px] h-[30px] text-[1.8rem] leading-[30px] text-center cursor-pointer overflow-hidden opacity-80 transition-opacity duration-200 hover:opacity-100"
                 title="Close"

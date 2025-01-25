@@ -4,15 +4,12 @@ import useOutsideClose from "../../hooks/useOutsideClose";
 import useScrollDisable from "../../hooks/useScrollDisable";
 import { Alert, CircularProgress } from "@mui/material";
 import httpClient from "../../httpClient";
-// import { Lock, Mail, Phone, User, UserClock  } from "lucide-react";
 import {
   FaUser,
   FaUserMd,
   FaUserClock,
   FaIdCard,
   FaPhoneAlt,
-  FaRegEye,
-  FaRegEyeSlash,
 } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa6";
@@ -38,6 +35,7 @@ const AccountForm = () => {
   const [doctorId, setDoctorId] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const formRef = useRef();
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
 
   useOutsideClose(formRef, () => {
     toggleForm(false);
@@ -48,6 +46,7 @@ const AccountForm = () => {
     setPhone("");
     setEmail("");
     setPasswd("");
+    setIsForgotPassword(false);
     setSpecialization("");
   });
 
@@ -58,6 +57,7 @@ const AccountForm = () => {
   // Signup-form visibility toggling
   const handleIsSignupVisible = () => {
     setIsSignupVisible((prevState) => !prevState);
+    setIsForgotPassword(false);
   };
 
   const checkAge = (a) => {
@@ -88,6 +88,27 @@ const AccountForm = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    if (isInvEmail) return;
+
+    setIsSuccessLoading(true);
+    try {
+      await httpClient.post("/forgot_password", { email });
+      setIsAlert("success");
+      setAlertCont("Password reset link sent to your email");
+      setTimeout(() => {
+        setIsAlert("");
+        setIsForgotPassword(false);
+      }, 1500);
+    } catch (err) {
+      setIsAlert("error");
+      setAlertCont("Email not found");
+      setTimeout(() => setIsAlert(""), 1500);
+    }
+    setIsSuccessLoading(false);
   };
 
   const handleFormSubmit = (e) => {
@@ -183,15 +204,15 @@ const AccountForm = () => {
   return (
     <>
       {isFormOpen && (
-        // backdrop
         <div className="relative">
-          {/* modal_centered */}
           <div className="fixed inset-0 flex items-center justify-center z-[9999] bg-black-1/50 pointer-events-none">
             <form
               id=""
               className="relative bg-blue-3 text-blue-8 max-w-[450px] max-h-[90vh] overflow-y-auto scrollbar-none w-full p-12 rounded-[3px] z-[99] max-xs:px-4 max-xs:py-8 mx-4 pointer-events-auto"
               ref={formRef}
-              onSubmit={handleFormSubmit}
+              onSubmit={
+                isForgotPassword ? handleForgotPassword : handleFormSubmit
+              }
             >
               {isAlert !== "" && (
                 <Alert severity={isAlert} className="form_sucess_alert">
@@ -202,21 +223,27 @@ const AccountForm = () => {
               {/*===== Form-Header =====*/}
               <div className="text-white-1">
                 <h2 className="mb-[0.6rem]">
-                  {isSignupVisible ? "Signup" : "Login"}
+                  {isForgotPassword
+                    ? "Forgot Password"
+                    : isSignupVisible
+                    ? "Sign Up"
+                    : "Login"}
                 </h2>
-                <p>
-                  {isSignupVisible
-                    ? "Already have an account ?"
-                    : "New to TelMedSphere ?"}
-                  &nbsp;&nbsp;
-                  <button
-                    type="button"
-                    onClick={handleIsSignupVisible}
-                    className="text-blue-1 opacity-80 hover:opacity-100"
-                  >
-                    {isSignupVisible ? "Login" : "Create an account"}
-                  </button>
-                </p>
+                {!isForgotPassword && (
+                  <p>
+                    {isSignupVisible
+                      ? "Already have an account ?"
+                      : "New to TelMedSphere ?"}
+                    &nbsp;&nbsp;
+                    <button
+                      type="button"
+                      onClick={handleIsSignupVisible}
+                      className="text-blue-1 opacity-80 hover:opacity-100"
+                    >
+                      {isSignupVisible ? "Login" : "Create an account"}
+                    </button>
+                  </p>
+                )}
               </div>
 
               {/*===== Form-Body =====*/}
@@ -442,43 +469,65 @@ const AccountForm = () => {
                   )}
                 </div>
 
-                <div>
-                  <div className="relative mb-4">
-                    <FaLock
-                      className="absolute left-3 top-[15px] text-white-1"
-                      size={16}
-                    />
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      name="password"
-                      placeholder="Password"
-                      className=" appearance-none py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
-                      value={passwd}
-                      onChange={(e) => {
-                        checkPasswd(e.target.value);
-                        setPasswd(e.target.value);
-                      }}
-                      required
-                      autoComplete=""
-                    />
-                    <span
-                      onClick={togglePasswordVisibility}
-                      className="absolute right-3 top-[15px] cursor-pointer"
-                    >
-                      {showPassword ? (
-                        <IoEyeOffOutline className="text-white-1" size={18} />
-                      ) : (
-                        <IoEyeOutline className="text-white-1" size={18} />
-                      )}
-                    </span>
-                  </div>
+                {!isForgotPassword && (
+                  <div>
+                    <div className="relative mb-4">
+                      <FaLock
+                        className="absolute left-3 top-[15px] text-white-1"
+                        size={16}
+                      />
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        placeholder="Password"
+                        className=" appearance-none py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
+                        value={passwd}
+                        onChange={(e) => {
+                          checkPasswd(e.target.value);
+                          setPasswd(e.target.value);
+                        }}
+                        required
+                        autoComplete=""
+                      />
+                      <span
+                        onClick={togglePasswordVisibility}
+                        className="absolute right-3 top-[15px] cursor-pointer"
+                      >
+                        {showPassword ? (
+                          <IoEyeOffOutline className="text-white-1" size={18} />
+                        ) : (
+                          <IoEyeOutline className="text-white-1" size={18} />
+                        )}
+                      </span>
+                    </div>
 
-                  {isSignupVisible && passwd !== "" && isInvPass && (
-                    <Alert severity="warning" className="input_alert">
-                      Password should contain at least 6 characters
-                    </Alert>
-                  )}
-                </div>
+                    {isSignupVisible && passwd !== "" && isInvPass && (
+                      <Alert severity="warning" className="input_alert">
+                        Password should contain at least 6 characters
+                      </Alert>
+                    )}
+                  </div>
+                )}
+
+                {!isSignupVisible && !isForgotPassword && (
+                  <button
+                    type="button"
+                    onClick={() => setIsForgotPassword(true)}
+                    className="text-blue-1 text-sm hover:underline text-left outline-none border-none"
+                  >
+                    Forgot Password?
+                  </button>
+                )}
+
+                {isForgotPassword && (
+                  <button
+                    type="button"
+                    onClick={() => setIsForgotPassword(false)}
+                    className="text-blue-1 text-sm hover:underline text-left outline-none border-none"
+                  >
+                    Back to Login
+                  </button>
+                )}
 
                 <button
                   type="submit"
@@ -486,9 +535,11 @@ const AccountForm = () => {
                   disabled={isInvAge || isInvEmail || isInvPass}
                 >
                   {isSuccessLoading ? (
-                    <CircularProgress size={24} sx={{ color: "#f5f5f5" }} />
+                    <CircularProgress size={24} />
+                  ) : isForgotPassword ? (
+                    "Send Reset Link"
                   ) : isSignupVisible ? (
-                    "Signup"
+                    "Sign Up"
                   ) : (
                     "Login"
                   )}
