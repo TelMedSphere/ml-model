@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef  } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { FaVideo } from "react-icons/fa";
 import { IoMdClose, IoMdRefresh } from "react-icons/io";
@@ -13,6 +13,7 @@ import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 import httpClient from "../httpClient";
+import useOutsideClose from "../hooks/useOutsideClose";
 
 const Doctors = () => {
   useDocTitle("Doctors");
@@ -40,6 +41,7 @@ const Doctors = () => {
   const [message, setMessage] = useState("");
   const { handleActive, activeClass } = useActive(-1);
   const [selectedTime, setSelectedTime] = useState(null);
+  const modalRef = useRef(null);
 
   const [available, setAvailable] = useState({
     "08:00": true, "09:00": true, "10:00": true,
@@ -72,6 +74,13 @@ const Doctors = () => {
       setBalance(res.data.wallet);
     }).catch(console.error);
   }, []);
+
+  useOutsideClose(modalRef, () => {
+    setMessage("");
+    setMeetModal(false);
+    setConnecting(false);
+    httpClient.put('/delete_meet', { email: selectEmail });
+  });
 
   const fetchDoctors = () => {
     setFetchingData(true);
@@ -384,7 +393,7 @@ const Doctors = () => {
         }}
       >
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 relative bg-white-1">
+          <div className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 relative bg-white-1"    ref={modalRef} >
             <div className="flex justify-between items-center border-b pb-4 mb-4">
               <h3 className="text-xl font-semibold text-blue-800">Insufficient Balance</h3>
               <IoMdClose 
@@ -429,7 +438,7 @@ const Doctors = () => {
         }}
       >
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 relative bg-white-1">
+          <div className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 relative bg-white-1"    ref={modalRef} >
             <div className="flex justify-between items-center border-b pb-4 mb-4">
               <h3 className="text-xl font-semibold text-blue-800">Schedule Appointment</h3>
               <IoMdClose 
