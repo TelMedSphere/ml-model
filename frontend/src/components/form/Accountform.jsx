@@ -452,7 +452,7 @@ const AccountForm = () => {
                     <input
                       type="text"
                       name="email"
-                      placeholder="Username"
+                      placeholder="Email"
                       className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
                       value={email}
                       onChange={(e) => {
@@ -532,7 +532,14 @@ const AccountForm = () => {
                 <button
                   type="submit"
                   className="mt-[0.8rem] mb-[0.4rem] relative bg-blue-7 hover:bg-blue-6 disabled:bg-blue-7 disabled:cursor-not-allowed py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out text-blue-1 w-full"
-                  disabled={isInvAge || isInvEmail || isInvPass}
+                  disabled={
+                    (isForgotPassword && isInvEmail) || // Disable if Forgot Password and email is invalid
+                    (isSignupVisible &&
+                      (isInvAge || isInvEmail || isInvPass)) || // Disable if Sign Up and any input is invalid
+                    (!isForgotPassword &&
+                      !isSignupVisible &&
+                      (isInvEmail || isInvPass)) // Disable if Login and email or password is invalid
+                  }
                 >
                   {isSuccessLoading ? (
                     <CircularProgress size={24} />
