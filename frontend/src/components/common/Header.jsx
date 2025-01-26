@@ -358,7 +358,10 @@ const Header = () => {
                         }`}
                       >
                         <span
-                          onClick={() => navigate("/home")}
+                          onClick={() => {
+                            navigate("/home");
+                            setSideBarOpen((prev) => !prev);
+                          }}
                           className="cursor-pointer font-bold text-center w-full"
                         >
                           HOME
@@ -374,7 +377,10 @@ const Header = () => {
                           }`}
                         >
                           <span
-                            onClick={() => navigate("/doctors")}
+                            onClick={() => {
+                              navigate("/doctors");
+                              setSideBarOpen((prev) => !prev);
+                            }}
                             className="cursor-pointer font-bold text-center w-full"
                           >
                             DOCTORS
@@ -389,7 +395,10 @@ const Header = () => {
                         }`}
                       >
                         <span
-                          onClick={() => navigate("/disease-prediction")}
+                          onClick={() => {
+                            navigate("/disease-prediction");
+                            setSideBarOpen((prev) => !prev);
+                          }}
                           className="cursor-pointer font-bold text-center w-full"
                         >
                           MODEL
@@ -410,7 +419,10 @@ const Header = () => {
                         }`}
                       >
                         <span
-                          onClick={() => navigate("/buy-medicines")}
+                          onClick={() => {
+                            navigate("/buy-medicines");
+                            setSideBarOpen((prev) => !prev);
+                          }}
                           className="cursor-pointer font-bold relative text-center w-full"
                         >
                           MEDICINES
