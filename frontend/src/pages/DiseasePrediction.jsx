@@ -1,4 +1,4 @@
-import React, { Component, useContext, useEffect } from "react";
+import React, { createRef,Component, useContext, useEffect,useState,useRef } from "react";
 import Home from "../components/diseasePrediction/Home";
 // import Patient from "../components/diseasePrediction/Patient1";
 // import Patient2 from "../components/diseasePrediction/Patient2";
@@ -39,9 +39,10 @@ class DP extends Component {
       user_symptoms: [],
       user_symptom_length: "",
     };
-    this.symptomPage = React.createRef();
+    // this.symptomPage = React.createRef();
+    this.symptomRef=React.createRef();
   }
-
+  
   get_next_page = (e) => {
     // eslint-disable-next-line default-case
     switch (this.state.current_page) {
@@ -72,6 +73,10 @@ class DP extends Component {
       //     user_symptom_length: 0,
       //   });
       case "Symptom":
+        // Call the Symptom component's sendSymptomsToBackend method
+        if (this.symptomRef.current) {
+          this.symptomRef.current.sendSymptomsToBackend();
+        }
         return this.setState({
           current_page: "Disease",
           button_name: "Retry",
@@ -80,7 +85,7 @@ class DP extends Component {
           disease_nav_value: true,
         });
       case "Disease":
-        return this.setState({
+        return this.setState({ 
           tab_progress: 25,
           current_page: "Home", // Name of the current component
           button_is_disabled: true, // Next button disabled if not agreed to terms
@@ -218,7 +223,7 @@ class DP extends Component {
   };
 
   showPage = (e) => {
-    const { current_page, home_button_checked, age, gender } = this.state;
+    const { current_page, home_button_checked, age, gender,result } = this.state;
     // eslint-disable-next-line default-case
     switch (current_page) {
       case "Home":
@@ -235,11 +240,12 @@ class DP extends Component {
       case "Symptom":
         return (
           <Symptom
-            ref={this.symptomPage}
+            ref={this.symptomRef}
             userSymptoms={this.state.user_symptoms}
             diseasePossibility={this.state.disease_possibility}
             getPossibleDisease={this.symptomInfoCallback}
             pageCallback={this.symptom_page_button_callback}
+            setResult={(result)=>this.setState({result})}
           />
         );
       case "Disease":
@@ -249,6 +255,7 @@ class DP extends Component {
             disease_with_possibility={this.state.disease_possibility}
             gender={gender}
             age={age}
+            result={result}
           />
         );
     }
