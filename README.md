@@ -75,10 +75,10 @@ TelMedSphere is designed to make healthcare simple and accessible for both docto
   <a href="https://www.educative.io/blog/docker-compose-tutorial" ><img src="https://img.icons8.com/?size=64&id=22813&format=png&color=000000" alt="Docker"></a>
 </p>
 
-🚨 Frontend: HTML, CSS, JS, ReactJs <br>
-🚨 Styling: SCSS <br>
+🚨 Frontend: ReactJs <br>
+🚨 Styling: TailwindCSS <br>
 🚨 Backend: Python, Flask <br>
-🚨 Database: MongoDB <br>
+🚨 Database: MongoDB Atlas<br>
 🚨 Containerization: Docker <br>
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
@@ -213,15 +213,19 @@ docker-compose kill
 <table>
 <tr>
 <td align="center">
-<a href="https://kwoc.kossiitkgp.org/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/KWoC.png" height="100px" width="100px" alt="KWOC2024"></a><br><sub><b>KWOC 2k24</b></sub>
+<a href="https://kwoc.kossiitkgp.org/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/KWoC.png" height="100px" width="100px" alt="KWOC2024"></a><br><sub><b>KWoC 2k24</b></sub>
 </td>
 <td></td>
  <td align="center">
-<a href="https://kwoc.kossiitkgp.org/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/SWoC.png" height="100px" width="100px" alt="SWOC2025"></a><br><sub><b>SWOC 2k25</b></sub>
+<a href="https://kwoc.kossiitkgp.org/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/SWoC.png" height="100px" width="100px" alt="SWOC2025"></a><br><sub><b>SWoC 2k25</b></sub>
 </td>
  <td></td>
  <td align="center">
-<a href="https://dwoc.io/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/DWoC.jpg" height="100px" width="100px" alt="SWOC2025"></a><br><sub><b>DWOC 2k25</b></sub>
+<a href="https://dwoc.io/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/DWoC.jpg" height="100px" width="100px" alt="SWOC2025"></a><br><sub><b>DWoC 2k25</b></sub>
+</td>
+<td></td>
+ <td align="center">
+<a href="https://iwoc3.devfolio.co/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/IWoC.png" height="100px" width="100px" alt="IWOC2025"></a><br><sub><b>IWoC 2k25</b></sub>
 </td>
 </tr>
 </table>
