@@ -1,254 +1,537 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { AiOutlineShoppingCart } from 'react-icons/ai';
-import { RiFileList3Line } from 'react-icons/ri';
-import { FiMail, FiPhoneCall } from 'react-icons/fi';
-import { CiMenuFries } from 'react-icons/ci';
-import { MdClose } from 'react-icons/md';
-import { IoWalletOutline } from 'react-icons/io5';
-import commonContext from '../../contexts/common/commonContext';
-import cartContext from '../../contexts/cart/cartContext';
-import useOutsideClose from '../../hooks/useOutsideClose';
-import Profile from './Profile';
+import React, { useContext, useEffect, useState, useRef } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import commonContext from "../../contexts/common/commonContext";
+import AccountForm from "../form/Accountform";
+import cartContext from "../../contexts/cart/cartContext";
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import useOutsideClose from "../../hooks/useOutsideClose";
+import httpClient from "../../httpClient";
+import { RiFileList3Line } from "react-icons/ri";
+import Profile from "./Profile";
+import { FiMail } from "react-icons/fi";
+import { FiPhoneCall } from "react-icons/fi";
+import { CiMenuFries } from "react-icons/ci";
+import { MdClose } from "react-icons/md";
+import { IoWalletOutline } from "react-icons/io5";
 import logo from "../../assets/header.png";
-import AccountForm from '../form/Accountform';
 
 const Header = () => {
-    const { toggleForm, userLogout, toggleProfile } = useContext(commonContext);
-    const { cartItems } = useContext(cartContext);
-    const [isSticky, setIsSticky] = useState(false);
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const curPath = location.pathname;
-    
-    const dropdownRef = useRef();
-    const mobileMenuRef = useRef();
+  const { toggleForm, setFormUserInfo, userLogout, toggleProfile } =
+    useContext(commonContext);
+  const { cartItems, setCartItems } = useContext(cartContext);
+  const [isSticky, setIsSticky] = useState(false);
+  const [isSignup, setIsSignup] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const curPath = location.pathname;
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const windowWidth = window.innerWidth;
+  const [isSideBarOpen, setSideBarOpen] = useState(false);
 
-    useOutsideClose(dropdownRef, () => setShowDropdown(false));
-    useOutsideClose(mobileMenuRef, () => setMobileMenuOpen(false));
+  useEffect(() => {
+    const handleIsSticky = () =>
+      window.scrollY >= 50 ? setIsSticky(true) : setIsSticky(false);
+    const handleIsScrolled = () =>
+      window.scrollY >= 1 ? setIsScrolled(true) : setIsScrolled(false);
 
-    const navItems = [
-        { path: '/home', label: 'HOME' },
-        { path: '/doctors', label: 'DOCTORS', showFor: 'patient' },
-        { path: '/disease-prediction', label: 'MODEL' },
-        { path: '/buy-medicines', label: 'MEDICINES', badge: '20% off' }
-    ];
+    window.addEventListener("scroll", handleIsSticky);
+    window.addEventListener("scroll", handleIsScrolled);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsSticky(window.scrollY >= 50);
-            setIsScrolled(window.scrollY >= 1);
-        };
+    return () => {
+      window.removeEventListener("scroll", handleIsSticky);
+      window.removeEventListener("scroll", handleIsScrolled);
+    };
+  }, [isSticky, isScrolled]);
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+  useEffect(() => {
+    console.log(showDropdown);
+  }, [showDropdown]);
 
-    const NavLink = ({ path, label, badge }) => (
-        <div className={`relative group`}>
-            <span 
-                className={`text-xs font-bold cursor-pointer transition-colors duration-300
-                    ${curPath === path ? "text-blue-900" : "text-blue-800 hover:text-blue-900"}`}
-                onClick={() => {
-                    navigate(path);
-                    setMobileMenuOpen(false);
-                }}
+  const updatestatus = () => {
+    httpClient.put("/doc_status", { email: localStorage.getItem("email") });
+    userLogout();
+  };
+
+  useEffect(() => {
+    {
+      localStorage.getItem("email") &&
+        localStorage.getItem("email") !== "undefined" &&
+        httpClient
+          .post("/get_cart", { email: localStorage.getItem("email") })
+          .then((res) => {
+            setCartItems(res.data.cart);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    }
+  }, [localStorage.getItem("email")]);
+
+  const dropdownRef = useRef();
+  const sidebarRef = useRef();
+
+  useOutsideClose(dropdownRef, () => {
+    setShowDropdown(false);
+  });
+  useOutsideClose(sidebarRef, () => setSideBarOpen(false));
+
+  const handleLoginClick = () => {
+    setIsSignup(false);
+    toggleForm(true);
+  };
+
+  const handleRegisterClick = () => {
+    setIsSignup(true);
+    toggleForm(true);
+  };
+
+  return (
+    <>
+      {localStorage.getItem("username") &&
+        localStorage.getItem("username") !== "undefined" &&
+        localStorage.getItem("usertype") === "patient" && (
+          <div
+            className={`overflow-x-hidden flex justify-between items-center py-4 px-40 border-b-[1px] border-blue-8 h-full transition-all duration-300 ease-out max-lg:px-5 max-sm:px-8 max-sm:py-4 max-xs:p-4 ${
+              isScrolled ? "opacity-0 h-0 p-0" : ""
+            }`}
+          >
+            <div
+              className={`flex justify-center items-center flex-wrap text-grey-3 transition-transform duration-500 max-lg:justify-start ${
+                isScrolled
+                  ? "-translate-x-full opacity-0"
+                  : "translate-x-0 opacity-100"
+              }`}
             >
-                {label}
-                {badge && (
-                    <span className="absolute -right-0 md:-right-10 top-0 flex items-center justify-center w-12 h-5 bg-blue-20 rounded-full text-xs text-white-6">
-                        {badge}
+              <Link
+                to="/"
+                className="flex justify-center items-center transition-all duration-300 ease-out hover:text-[#333] mr-[20px] max-xs:mr-0"
+              >
+                <FiMail className="text-[0.9em] leading-[1.4rem] mr-[5px]" />
+                <p className="text-[0.9em] leading-[1.4rem]">
+                  telmedsphere489@gmail.com
+                </p>
+              </Link>
+              <Link
+                to="/"
+                className="flex justify-center items-center transition-all duration-300 ease-out hover:text-[#333]"
+              >
+                <FiPhoneCall className="text-[0.9em] leading-[1.4rem] mr-[5px]" />
+                <p className="text-[0.9em] leading-[1.4rem]">+91 12345 67890</p>
+              </Link>
+            </div>
+            <div
+              className={`transition-transform duration-500 ${
+                isScrolled
+                  ? "translate-x-full opacity-0"
+                  : "translate-x-0 opacity-100"
+              }`}
+            >
+              <Link
+                to="/doctors"
+                className="text-blue-5 font-bold transition-all duration-300 ease-out hover:text-blue-7"
+              >
+                Appointment
+              </Link>
+            </div>
+          </div>
+        )}
+      <header
+        id=""
+        className={`z-[999]  w-full text-blue-8 px-8 pt-6 pb-6 transition-colors duration-0 ease-linear h-full ${
+          isSticky ? "top-0 sticky bg-blue-1" : ""
+        } `}
+      >
+        <div className="max-w-[1440px] mx-auto px-6 max-xl:max-w-[1280px] max-lg:max-w-[1024px] max-md:max-w-[768px] max-sm:max-w-[640px] max-xs:max-w-full h-full">
+          <div className="flex justify-between items-center gap-4">
+            <h2 className="flex items-center">
+              <Link to="/">
+                <img
+                  src={logo}
+                  alt=""
+                  className="max-h-[45px] h-auto w-auto hover:text-blue-9"
+                />
+              </Link>
+            </h2>
+            {!localStorage.getItem("username") && (
+              <>
+                <div className="flex gap-4 items-center ml-auto">
+                  <button
+                    type="button"
+                    onClick={handleLoginClick}
+                    className="py-[0.7rem] px-6 rounded-[4px] text-white-1 bg-blue-4 transition-colors duration-300 cursor-pointer hover:bg-blue-6"
+                  >
+                    Login
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleRegisterClick}
+                    className="py-[0.7rem] px-6 rounded-[4px] text-white-1 bg-blue-4 transition-colors duration-300 cursor-pointer hover:bg-blue-6"
+                  >
+                    Register
+                  </button>
+                </div>
+              </>
+            )}
+
+            {localStorage.getItem("username") !== null &&
+            localStorage.getItem("username") !== undefined ? (
+              windowWidth >= 800 ? (
+                <nav className="hidden md:flex items-center gap-12">
+                  <div
+                    className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
+                      curPath === "/home"
+                        ? "text-blue-9 border-b-[2px] border-blue-9"
+                        : ""
+                    }`}
+                  >
+                    <span
+                      onClick={() => navigate("/home")}
+                      className="cursor-pointer font-bold"
+                    >
+                      HOME
                     </span>
-                )}
-            </span>
-            {curPath === path && (
-                <div className="absolute bottom-[-6px] left-1/2 transform -translate-x-1/2 h-0.5 w-full bg-blue-900" />
-            )}
+                  </div>
+
+                  {localStorage.getItem("usertype") === "patient" && (
+                    <div
+                      className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
+                        curPath === "/doctors"
+                          ? "text-blue-9 border-b-[2px] border-blue-9"
+                          : ""
+                      }`}
+                    >
+                      <span
+                        onClick={() => navigate("/doctors")}
+                        className="cursor-pointer font-bold"
+                      >
+                        DOCTORS
+                      </span>
+                    </div>
+                  )}
+                  <div
+                    className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
+                      curPath === "/disease-prediction"
+                        ? "text-blue-9 border-b-[2px] border-blue-9"
+                        : ""
+                    }`}
+                  >
+                    <span
+                      onClick={() => navigate("/disease-prediction")}
+                      className="cursor-pointer font-bold"
+                    >
+                      MODEL
+                    </span>
+                  </div>
+
+                  {/* <div className={`model_action ${curPath==="/dispred"? "active" : ""}`}>
+                                            <span onClick={() => navigate("/dispred")}>
+                                                MODEL 2
+                                            </span>
+                                        </div> */}
+
+                  <div
+                    className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
+                      curPath === "/buy-medicines"
+                        ? "text-blue-9 border-b-[2px] border-blue-9"
+                        : ""
+                    }`}
+                  >
+                    <span
+                      onClick={() => navigate("/buy-medicines")}
+                      className="cursor-pointer font-bold relative"
+                    >
+                      MEDICINES
+                      <span className="cursor-pointerfont-bold px-[5px] py-[3px] bg-blue-8 absolute -top-[14px] text-white-1 -right-[40px] rounded-[40px] hover:bg-blue-9 text-[10px] z-9999">
+                        20% off
+                      </span>
+                    </span>
+                  </div>
+
+                  {/* Account Dropdown */}
+                  <div
+                    className="relative hover:text-blue-9  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 text-blue-8 "
+                    ref={dropdownRef}
+                  >
+                    <span
+                      className="cursor-pointer font-bold"
+                      onClick={() => setShowDropdown(!showDropdown)}
+                    >
+                      ACCOUNT
+                    </span>
+                    {showDropdown && (
+                      <div className="absolute top-[5rem] right-0 w-[17rem] bg-blue-6 p-6 text-[0.9rem] rounded-[3px] text-[#eee] border-[1px] border-grey-3  z-50 transition-all duration-200 ease-in-out">
+                        <div>
+                          <h4 className="font-semibold space-x-[0.5px]  text-blue-2">
+                            <span className=" text-[1em] opacity-95 hover:opacity-100 text-white-1">
+                              Hello! &nbsp;
+                            </span>
+                            {localStorage.getItem("username")}
+                          </h4>
+                          <p className="text-[0.8rem] mt-2">
+                            Have a great health!!
+                          </p>
+                          <button
+                            type="button"
+                            className="mt-4 py-[0.8rem] px-4 rounded-[4px] border-[1px]  transition-all duration-300 hover:text-blue-1 hover:border-blue-5 hover:bg-blue-5 text-blue-1 border-blue-3 mr-[10px] bg-blue-3"
+                            onClick={() => {
+                              setShowDropdown(false);
+                              toggleProfile(true);
+                            }}
+                          >
+                            Profile
+                          </button>
+                          <button
+                            type="button"
+                            className="mt-4 py-[0.8rem] px-4 rounded-[4px] border-[1px]  transition-all duration-300 hover:text-blue-1 hover:border-blue-5 hover:bg-blue-5 text-blue-1 border-blue-3 mr-[10px]"
+                            onClick={() => {
+                              setShowDropdown(false);
+                              localStorage.getItem("usertype") === "doctor"
+                                ? updatestatus()
+                                : userLogout();
+                              navigate("/");
+                            }}
+                          >
+                            Logout
+                          </button>
+                          <div className="my-4 border-t-[1px] border-grey-2"></div>
+                          <ul>
+                            <li className="mb-[0.7rem] flex">
+                              <IoWalletOutline className="text-[1.4em] mr-[5px]" />
+                              <Link
+                                to="/my-wallet"
+                                onClick={() => setShowDropdown(false)}
+                              >
+                                My Wallet
+                              </Link>
+                            </li>
+                            <li className="mb-[0.7rem] flex">
+                              <AiOutlineShoppingCart className="text-[1.4em] mr-[5px]" />
+                              <Link
+                                to="/my-cart"
+                                onClick={() => setShowDropdown(false)}
+                              >
+                                My Cart
+                              </Link>
+                              <span className="bg-blue-3 text-[0.8rem] rounded-[3px] ml-[10px] py-[0.1rem] px-[0.4rem] text-white">
+                                {cartItems.length}
+                              </span>
+                            </li>
+                            <li className="flex">
+                              <RiFileList3Line className="text-[1.4em] mr-[5px]" />
+                              <Link
+                                to="/my-orders"
+                                onClick={() => setShowDropdown(false)}
+                              >
+                                My Orders
+                              </Link>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </nav>
+              ) : (
+                <div
+                  id="sidebar"
+                  className="w-auto max-sm:relative max-sm:ml-10"
+                >
+                  <div
+                    className="text-[1.5em] cursor-pointer font-bold"
+                    onClick={() => setSideBarOpen((prev) => !prev)}
+                  >
+                    {isSideBarOpen ? <MdClose /> : <CiMenuFries />}
+                  </div>
+                  <div
+                    className={`relative transition-all duration-300 ease-in ${
+                      isSideBarOpen ? "visible opacity-100" : "hidden opacity-0"
+                    }`}
+                    ref={sidebarRef}
+                  >
+                    <nav className="absolute flex flex-col top-[30px] right-0 gap-6 bg-blue-1 z-[99] py-4 px-20 rounded-[20px]">
+                      <div
+                        className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 r ${
+                          curPath === "/home"
+                            ? "text-blue-9 border-b-[2px] border-blue-9"
+                            : ""
+                        }`}
+                      >
+                        <span
+                          onClick={() => {
+                            navigate("/home");
+                            setSideBarOpen((prev) => !prev);
+                          }}
+                          className="cursor-pointer font-bold text-center w-full"
+                        >
+                          HOME
+                        </span>
+                      </div>
+
+                      {localStorage.getItem("usertype") === "patient" && (
+                        <div
+                          className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
+                            curPath === "/doctors"
+                              ? "text-blue-9 border-b-[2px] border-blue-9"
+                              : ""
+                          }`}
+                        >
+                          <span
+                            onClick={() => {
+                              navigate("/doctors");
+                              setSideBarOpen((prev) => !prev);
+                            }}
+                            className="cursor-pointer font-bold text-center w-full"
+                          >
+                            DOCTORS
+                          </span>
+                        </div>
+                      )}
+                      <div
+                        className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
+                          curPath === "/disease-prediction"
+                            ? "text-blue-9 border-b-[2px] border-blue-9"
+                            : ""
+                        }`}
+                      >
+                        <span
+                          onClick={() => {
+                            navigate("/disease-prediction");
+                            setSideBarOpen((prev) => !prev);
+                          }}
+                          className="cursor-pointer font-bold text-center w-full"
+                        >
+                          MODEL
+                        </span>
+                      </div>
+
+                      {/* <div className={`model_action ${curPath==="/dispred"? "active" : ""}`}>
+                                            <span onClick={() => navigate("/dispred")}>
+                                                MODEL 2
+                                            </span>
+                                        </div> */}
+
+                      <div
+                        className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
+                          curPath === "/buy-medicines"
+                            ? "text-blue-9 border-b-[2px] border-blue-9"
+                            : ""
+                        }`}
+                      >
+                        <span
+                          onClick={() => {
+                            navigate("/buy-medicines");
+                            setSideBarOpen((prev) => !prev);
+                          }}
+                          className="cursor-pointer font-bold relative text-center w-full"
+                        >
+                          MEDICINES
+                          <span className="cursor-pointerfont-bold px-[5px] py-[3px] bg-blue-8 absolute -top-[14px] text-white-1 -right-[40px] rounded-[40px] hover:bg-blue-9 text-[10px] z-9999">
+                            20% off
+                          </span>
+                        </span>
+                      </div>
+
+                      <div
+                        className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8`}
+                      >
+                        <span
+                          className=" font-bold text-center w-full"
+                          onClick={() => {
+                            setSideBarOpen((prev) => !prev);
+                            setShowDropdown(true);
+                          }}
+                        >
+                          ACCOUNT
+                        </span>
+                      </div>
+                    </nav>
+                  </div>
+                  {showDropdown && (
+                    <div
+                      className={`absolute top-[4rem] right-0 w-[17rem] bg-blue-6 p-6 text-[0.9rem] rounded-[3px] text-[#eee] border-[1px] border-grey-3  z-50 transition-all duration-200 ease-in-out8 ${
+                        showDropdown && "active"
+                      }`}
+                      ref={dropdownRef}
+                    >
+                      <h4 className="font-semibold space-x-[0.5px]  text-blue-2">
+                        <span className=" text-[1em] opacity-95 hover:opacity-100 text-white-1">
+                          Hello! &nbsp;
+                        </span>
+                        {localStorage.getItem("username")}
+                      </h4>
+                      <p className="text-[0.8rem] mt-2">
+                        Have a great health!!
+                      </p>
+                      <button
+                        type="button"
+                        className="mt-4 py-[0.8rem] px-4 rounded-[4px] border-[1px]  transition-all duration-300 hover:text-blue-1 hover:border-blue-5 hover:bg-blue-5 text-blue-1 border-blue-3 mr-[10px] bg-blue-3"
+                        onClick={() => {
+                          setShowDropdown(false);
+                          toggleProfile(true);
+                        }}
+                      >
+                        Profile
+                      </button>
+                      <button
+                        type="button"
+                        className="mt-4 py-[0.8rem] px-4 rounded-[4px] border-[1px]  transition-all duration-300 hover:text-blue-1 hover:border-blue-5 hover:bg-blue-5 text-blue-1 border-blue-3 mr-[10px]"
+                        onClick={() => {
+                          setShowDropdown(false);
+                          localStorage.getItem("usertype") === "doctor"
+                            ? updatestatus()
+                            : userLogout();
+                          navigate("/");
+                        }}
+                      >
+                        Logout
+                      </button>
+                      <div className="my-4 border-t-[1px] border-grey-2"></div>
+                      <ul>
+                        <li className="mb-[0.7rem] flex">
+                          <IoWalletOutline className="text-[1.4em] mr-[5px]" />
+                          <Link
+                            to="/my-wallet"
+                            onClick={() => setShowDropdown(false)}
+                          >
+                            My Wallet
+                          </Link>
+                        </li>
+                        <li className="mb-[0.7rem] flex">
+                          <AiOutlineShoppingCart className="text-[1.4em] mr-[5px]" />
+                          <Link
+                            to="/my-cart"
+                            onClick={() => setShowDropdown(false)}
+                          >
+                            My Cart
+                          </Link>
+                          <span className="bg-blue-3 text-[0.8rem] rounded-[3px] ml-[10px] py-[0.1rem] px-[0.4rem] text-white">
+                            {cartItems.length}
+                          </span>
+                        </li>
+                        <li className="flex">
+                          <RiFileList3Line className="text-[1.4em] mr-[5px]" />
+                          <Link
+                            to="/my-orders"
+                            onClick={() => setShowDropdown(false)}
+                          >
+                            My Orders
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )
+            ) : null}
+          </div>
         </div>
-    );
+      </header>
 
-    return (
-        <>
-            {/* Top Contact Bar */}
-            {localStorage.getItem("username") && localStorage.getItem("usertype") === "patient" && (
-                <div className={`hidden md:flex justify-between items-center px-4 lg:px-40 py-4 border-b border-blue-800
-                    transition-all duration-300 ${isScrolled ? 'h-0 opacity-0 invisible p-0' : 'h-full opacity-100 visible'}`}>
-                    <div className="flex items-center gap-5 text-gray-600">
-                        <Link to="/" className="flex items-center hover:text-gray-800 transition-colors duration-300">
-                            <FiMail className="mr-1" />
-                            <span className="text-sm">telmedsphere489@gmail.com</span>
-                        </Link>
-                        <Link to="/" className="flex items-center hover:text-gray-800 transition-colors duration-300">
-                            <FiPhoneCall className="mr-1" />
-                            <span className="text-sm">+91 12345 67890</span>
-                        </Link>
-                    </div>
-                    <Link to="/doctors" className="text-blue-500 font-bold hover:text-blue-700 transition-colors duration-300">
-                        Appointment
-                    </Link>
-                </div>
-            )}
-
-            {/* Main Header */}
-            <header className={`relative w-full py-6 transition-colors duration-200 
-                ${isSticky ? 'sticky top-0 left-0 z-1000 shadow-md bg-gradient-to-br from-blue-1 to-blue-2' : ''}`}>
-                <div className="container mx-auto px-4">
-                    <div className="flex justify-between items-center">
-                        <Link to="/" className="flex items-center">
-                            <img src={logo} alt="TelMedSphere" className="h-12 w-auto" />
-                        </Link>
-
-                        {localStorage.getItem("username") ? (
-                            <>
-                                {/* Desktop Navigation */}
-                                <nav className="hidden md:flex items-center gap-12">
-                                    {navItems.map((item) => (
-                                        (!item.showFor || localStorage.getItem("usertype") === item.showFor) && (
-                                            <NavLink key={item.path} {...item} />
-                                        )
-                                    ))}
-                                    
-                                    {/* Account Dropdown */}
-                                    <div className="relative" ref={dropdownRef}>
-                                        <span 
-                                            className="text-xs font-bold text-blue-800 hover:text-blue-900 transition-colors duration-300 cursor-pointer"
-                                            onClick={() => setShowDropdown(!showDropdown)}
-                                        >
-                                            ACCOUNT
-                                        </span>
-                                        {showDropdown && (
-                                            <div className="absolute top-12 right-0 w-64bg-gradient-to-br from-blue-1 to-blue-2 p-6 rounded-lg shadow-lg z-50
-                                                animate-fadeIn">
-                                                <div className="text-white space-y-4">
-                                                    <h4 className="font-semibold">
-                                                        Hello! {localStorage.getItem("username")}
-                                                    </h4>
-                                                    <div className="flex gap-2">
-                                                        <button 
-                                                            className="px-4 py-2 bg-blue-9 rounded hover:bg-slate-800 transition-colors duration-300"
-                                                            onClick={() => {
-                                                                setShowDropdown(false);
-                                                                toggleProfile(true);
-                                                            }}
-                                                        >
-                                                            Profile
-                                                        </button>
-                                                        <button 
-                                                            className="px-4 py-2 border rounded hover:bg-blue-500 transition-colors duration-300"
-                                                            onClick={() => {
-                                                                userLogout();
-                                                                navigate("/");
-                                                            }}
-                                                        >
-                                                            Logout
-                                                        </button>
-                                                    </div>
-                                                    <div className="space-y-3 pt-4 border-t border-blue-400">
-                                                        <Link to="/my-wallet" className="flex items-center gap-2 hover:text-blue-200 transition-colors duration-300">
-                                                            <IoWalletOutline />
-                                                            My Wallet
-                                                        </Link>
-                                                        <Link to="/my-cart" className="flex items-center gap-2 hover:text-blue-200 transition-colors duration-300">
-                                                            <AiOutlineShoppingCart />
-                                                            My Cart
-                                                            <span className="px-2 py-1 bg-blue-500 rounded-full text-xs">
-                                                                {cartItems.length}
-                                                            </span>
-                                                        </Link>
-                                                        <Link to="/my-orders" className="flex items-center gap-2 hover:text-blue-200 transition-colors duration-300">
-                                                            <RiFileList3Line />
-                                                            My Orders
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </nav>
-
-                                {/* Mobile Menu */}
-                                <div className="md:hidden" ref={mobileMenuRef}>
-                                    <button 
-                                        onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-                                        className="text-2xl text-blue-800 hover:text-blue-900 transition-colors duration-300"
-                                    >
-                                        {isMobileMenuOpen ? <MdClose /> : <CiMenuFries />}
-                                    </button>
-
-                                    {isMobileMenuOpen && (
-                                        <div className="absolute top-full right-0 w-64 bg-gradient-to-br from-blue-1 to-blue-2 shadow-lg rounded-lg mt-2 p-4 z-50
-                                            animate-fadeInLeft">
-                                            <div className="space-y-4">
-                                                {navItems.map((item) => (
-                                                    (!item.showFor || localStorage.getItem("usertype") === item.showFor) && (
-                                                        <div key={item.path} className="px-4 py-2 hover:bg-blue-50 rounded transition-colors duration-300">
-                                                            <NavLink {...item} />
-                                                        </div>
-                                                    )
-                                                ))}
-                                                <hr className="my-2 border-blue-100" />
-                                                <div className="space-y-3 px-4">
-                                                    <Link to="/my-wallet" className="flex items-center gap-2 text-blue-800 hover:text-blue-600 transition-colors duration-300">
-                                                        <IoWalletOutline />
-                                                        My Wallet
-                                                    </Link>
-                                                    <Link to="/my-cart" className="flex items-center gap-2 text-blue-800 hover:text-blue-600 transition-colors duration-300">
-                                                        <AiOutlineShoppingCart />
-                                                        My Cart
-                                                        <span className="px-2 py-1 bg-blue-100 rounded-full text-xs">
-                                                            {cartItems.length}
-                                                        </span>
-                                                    </Link>
-                                                    <Link to="/my-orders" className="flex items-center gap-2 text-blue-800 hover:text-blue-600 transition-colors duration-300">
-                                                        <RiFileList3Line />
-                                                        My Orders
-                                                    </Link>
-                                                </div>
-                                                <hr className="my-2 border-blue-100" />
-                                                <div className="px-4 space-y-2">
-                                                    <button 
-                                                        className="w-full px-4 py-2 bg-blue-9 text-white rounded hover:bg-slate-800 transition-colors duration-300"
-                                                        onClick={() => {
-                                                            setMobileMenuOpen(false);
-                                                            toggleProfile(true);
-                                                        }}
-                                                    >
-                                                        Profile
-                                                    </button>
-                                                    <button 
-                                                        className="w-full px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 transition-colors duration-300"
-                                                        onClick={() => {
-                                                            userLogout();
-                                                            navigate("/");
-                                                        }}
-                                                    >
-                                                        Logout
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </>
-                        ) : (
-                            <button 
-                                onClick={toggleForm}
-                                className="px-4 py-2 bg-blue-4 text-white-6 rounded hover:bg-slate-600 transition-colors duration-300"
-                            >
-                                Login
-                            </button>
-                        )}
-                    </div>
-                </div>
-            </header>
-
-            <AccountForm />
-            <Profile />
-        </>
-    );
+      <AccountForm isSignup={isSignup} setIsSignup={setIsSignup} />
+      <Profile />
+    </>
+  );
 };
 
 export default Header;

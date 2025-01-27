@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Hide the default "reveal" icon */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-outer-spin-button,
+input[type="password"]::-webkit-appearance {
+  display: none;
+}

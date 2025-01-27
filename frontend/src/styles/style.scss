@@ -2,9 +2,5 @@
 @import "./base/variables";
 @import "./base/mixins";
 @import "./base/reset";
-@import "./base/common";
 
-// Pages
-@import "./pages/home";
-@import "./pages/doctors";
-@import "./pages/meetpage";
+@import "./base/common";
