@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFacebookF, FaGithub,FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import { FaFacebookF, FaDiscord, FaGithub,FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import { IoMdMail } from 'react-icons/io';
 import { FaPhoneAlt, FaHospital } from 'react-icons/fa';
 
@@ -49,6 +49,12 @@ export const footSocial = [
         icon: <FaGithub />,
         cls: "GitHub",
         path: "https://github.com/PratikMane0112/TelMedSphere",
+    },
+        {
+        id: 5,
+        icon: <FaDiscord />,
+        cls: "Discord",
+        path: "https://discord.gg/qsdDRKak28",
     },
        {
         id: 2,
