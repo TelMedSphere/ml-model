@@ -226,7 +226,8 @@ const Symptom = forwardRef((props, ref) => {
   const sendSymptomsToBackend = () => {
     console.log("Method called!")
 
-    fetch("http://127.0.0.1:5000/predict", {
+        fetch("https://telmedsphere.onrender.com/predict", {
+
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -237,7 +238,6 @@ const Symptom = forwardRef((props, ref) => {
       .then((result) => {
         console.log("Response from Flask:", result);
         props.setResult(result); 
-        // Handle the response from the backend
       })
       .catch((error) => {
         console.error("Error sending symptoms:", error);
