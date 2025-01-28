@@ -321,9 +321,7 @@ def send_media(path):
 @app.route('/mail_file', methods=['POST'])
 def mail_file():
     # Get form data
-    print("print1.......................")
     user = request.form.get("email")
-    print("print2...................")
     f = request.files['file']
     
     # Save the uploaded file
