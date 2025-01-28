@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request
 import numpy as np
 import pandas as pd
 import pickle
-
+import os
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -73,4 +73,5 @@ def predict():
     return jsonify(response)
 
 if __name__ == "__main__":
-    app.run(debug=True,port=5001)
+    port = int(os.environ.get("PORT", 5000))  # Default to 5000 if PORT is not set
+    app.run(host="0.0.0.0", port=port)
