@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import commonContext from "../../contexts/common/commonContext";
 import useOutsideClose from "../../hooks/useOutsideClose";
 import useScrollDisable from "../../hooks/useScrollDisable";
@@ -15,7 +15,7 @@ import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa6";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
-const AccountForm = () => {
+const AccountForm = ({isSignup, setIsSignup}) => {
   const { isFormOpen, toggleForm, setFormUserInfo } = useContext(commonContext);
   const [username, setUsername] = useState("");
   const [usertype, setUsertype] = useState("patient");
@@ -52,7 +52,10 @@ const AccountForm = () => {
 
   useScrollDisable(isFormOpen);
 
-  const [isSignupVisible, setIsSignupVisible] = useState(false);
+  const [isSignupVisible, setIsSignupVisible] = useState(isSignup);
+  useEffect(() => {
+    setIsSignupVisible(isSignup);
+  }, [isSignup]);
 
   // Signup-form visibility toggling
   const handleIsSignupVisible = () => {

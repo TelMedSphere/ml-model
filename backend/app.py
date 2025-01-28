@@ -15,6 +15,7 @@ import os
 import json
 from threading import Thread
 import requests
+from twilio.rest import Client
 
 load_dotenv()
 secret_key = secrets.token_hex(16)
@@ -38,10 +39,12 @@ CORS(app, supports_credentials=True)
 bcrypt = Bcrypt(app)
 
 URI = os.getenv("DBURL")
-TOKEN = os.getenv("WHATSAPP")
+twilioWhatsappAccountSid = os.getenv("TWILIO_WHATSAPP_ACCOUNT_SID")
+twilioWhatsappAuthToken = os.getenv("TWILIO_WHATSAPP_AUTH_TOKEN")
+twilioWhatsappFrom = os.getenv("TWILIO_WHATSAPP_FROM")
+whatsappclient = Client(twilioWhatsappAccountSid, twilioWhatsappAuthToken)
 
 client = pymongo.MongoClient(URI, server_api=ServerApi('1'))
-
 
 doctor = client.get_database("telmedsphere").doctors
 patients = client.get_database("telmedsphere").patients
@@ -66,15 +69,27 @@ def before_request():
         return Response()
 
 def whatsapp_message(msg):
-    reqUrl = "https://graph.facebook.com/v16.0/100184439766915/messages"
-    headersList = {
-     "Accept": "*/*",
-     "Authorization": "Bearer {TOKEN}",
-     "Content-Type": "application/json" 
-    }
-    payload = json.dumps(msg)
-    response = requests.request("POST", reqUrl, data=payload,  headers=headersList)
-    print(response)
+    try:
+        # Extract recipient and message content from the msg dictionary
+        to = msg.get('to')  # Recipient's phone number in the format 'whatsapp:+<phone_number>'
+        body = msg.get('body')  # The message content (text part)
+
+        # Prepare the message sending parameters
+        message_params = {
+            "from_": twilioWhatsappFrom,  # Your Twilio WhatsApp number
+            "to": to,
+            "body": body
+        }
+
+        # Send the WhatsApp message
+        message = whatsappclient.messages.create(**message_params)
+
+        print(f"Message sent! SID: {message.sid}")
+        return {"status": "success", "message_sid": message.sid}
+    
+    except Exception as e:
+        print(f"Error sending message: {str(e)}")
+        return {"status": "error", "message": str(e)}
 
 # ----------- stripe payment routes -----------------
 
@@ -121,6 +136,7 @@ def create_payment():
 def register():
     if request.is_json:
         data = request.get_json()
+        
         if data['registerer'] == 'patient':
             if doctor.find_one({'email': data['email']}):
                 return jsonify({'message': 'User already exists'}), 400
@@ -134,16 +150,14 @@ def register():
                 if 'specialization' in data:
                     del data['specialization']
                 patients.insert_one(data)
-                payload = {
-                      "messaging_product": "whatsapp",
-                      "to": data['phone'],
-                      "text": {
-                        "body": "Thank You for Signing up on TelMedSphere"
-                    }
-                }
-                whatsapp_message(payload)
+
+                whatsapp_message({
+                    "to": f"whatsapp:{data['phone']}",
+                    "body": "Thank You for Signing up on TelMedSphere"
+                })
 
                 return jsonify({'message': 'User created successfully'}), 200
+            
         elif data['registerer'] == 'doctor':
             if patients.find_one({'email': data['email']}):
                 return jsonify({'message': 'User already exists'}), 400
@@ -306,31 +320,42 @@ def send_media(path):
 
 @app.route('/mail_file', methods=['POST'])
 def mail_file():
-    # get form data
+    # Get form data
+    print("print1.......................")
     user = request.form.get("email")
+    print("print2...................")
     f = request.files['file']
-    f.save(os.path.join(app.root_path, 'upload', 'Receipt.pdf'))
-    msg = Message("Receipt cum Prescription for your Consultancy",
-                  sender="deexithmadas277@gmail.com",
-                  recipients=[user])
+    
+    # Save the uploaded file
+    file_path = os.path.join(app.root_path, 'upload', 'Receipt.pdf')
+    f.save(file_path)
+    
+    # Prepare the email message
+    msg = Message(
+        "Receipt cum Prescription for your Consultancy",
+        sender="deexithmadas277@gmail.com",
+        recipients=[user]
+    )
+    
+    # Retrieve patient details from the database
     pat = patients.find_one({'email': user})
-    msg.html = render_template('email.html', Name=pat['username'] )
-    payload = {
-          "messaging_product": "whatsapp",
-          "to": pat['phone'],
-          "type": "document",
-          "document": {
-            "filename": "Receipt.pdf",
-            "link" : "http://34.93.183.254/media/Receipt.pdf",
-          }
-        }
-    whatsapp_message(payload)
-
-    with app.open_resource(os.path.join(app.root_path, 'upload', 'Receipt.pdf')) as fp:
+    
+    # Render the email HTML template with patient's username
+    msg.html = render_template('email.html', Name=pat['username'])
+    
+    # Prepare and send the WhatsApp message with the PDF link
+    whatsapp_message({
+        "to": f"whatsapp:{pat['phone']}",
+        "body": "Thank you for taking our consultancy. Please find your receipt attached. [link: https://pratik0112-telmedsphere.vercel.app/]",
+    })
+    
+    # Attach the receipt PDF to the email message
+    with app.open_resource(file_path) as fp:
         msg.attach("Receipt.pdf", "application/pdf", fp.read())
     thread = Thread(target=send_message_async, args=(msg,))
     thread.start()
-    return jsonify({"message": "Sucess"}), 200
+    
+    return jsonify({"message": "Success"}), 200
 
 # ----------- appointment routes -----------------
 
@@ -358,14 +383,11 @@ def set_appointment():
         })
 
         pat = patients.find_one({'email': data['pemail']})
-        payload = {
-                "messaging_product": "whatsapp",
-                "to": pat['phone'],
-                "text": {
-                "body": "Your Appointment has been booked on " + data['date'] + " at "+ data['time'] + " with Dr." + doc['username'] +"."
-            }
-        }
-        whatsapp_message(payload)
+    
+        whatsapp_message({
+            "to": f"whatsapp:{pat['phone']}",
+            "body": "Your Appointment has been booked on " + data['date'] + " at "+ data['time'] + " with Dr. " + doc['username'] +"."
+        })
 
         doctor.update_one({'email': email}, {'$set': {'upcomingAppointments': doc['upcomingAppointments']}})
         return jsonify({'message': 'Doctor status updated successfully'}), 200
