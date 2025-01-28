@@ -1,5 +1,4 @@
 import datetime
-import pickle
 import uuid
 from flask import Flask, request, Response, redirect, render_template, send_from_directory, jsonify, url_for
 import secrets
@@ -778,8 +777,9 @@ def contact():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
+##################################################################
 ### ---------         disease prediction      --------------- ####
+##################################################################
 # import numpy as np
 # import pandas as pd
 # model = pickle.load(open('./MLmodel/ExtraTrees', 'rb'))
