@@ -33,6 +33,12 @@ body:
 
         - label: "I am a KWOC'24 contributor."
           required: false
+
+        - label: "I am a DWOC'25 contributor."
+          required: false
+        
+        - label: "I am a IWOC'25 contributor."
+          required: false
   
   - type: checkboxes
     id: terms
