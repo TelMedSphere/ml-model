@@ -15,6 +15,3 @@ pymongo
 python-dotenv
 werkzeug
 pandas
-numpy
-scikit-learn==1.5.2
-twilio
