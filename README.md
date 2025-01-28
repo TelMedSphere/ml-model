@@ -203,6 +203,9 @@ docker-compose kill
 <td align="center">
 <a href="https://github.com/AdityaBavadekar"><img src="https://avatars.githubusercontent.com/u/64344960?v=4" height="140px" width="140px" alt="Pratik Mane"></a><br><sub><b>SWoC Mentor - Aditya Bavadekar</b></sub>
 </td>
+<td align="center">
+<a href="https://github.com/RajKhanke"><img src="https://avatars.githubusercontent.com/u/137288727?v=4" height="140px" width="140px" alt="Raj Khanke"></a><br><sub><b>DWoC Mentor - Raj Khanke</b></sub>
+</td>
 
 </tr>
 </table>
