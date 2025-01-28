@@ -21,7 +21,7 @@ import MyOrders from "../pages/MyOrders";
 import MyWallet from "../pages/MyWallet";
 import RecentTransactions from "../pages/RecentTransactions";
 import Feedback from "../pages/Feedback";
- 
+import ResetPassword from "../components/resetPassword/ResetPassword";
 
 const RouterRoutes = () => {
   useScrollRestore();
@@ -52,6 +52,7 @@ const RouterRoutes = () => {
         {/* Add About Us route */}
         <Route path="/about" element={<AboutUs />} />
         <Route path="/feedback" element={<Feedback />} />
+        <Route path="/reset-password/:token" element={<ResetPassword/>} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </>
