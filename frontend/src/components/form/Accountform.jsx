@@ -133,7 +133,7 @@ const AccountForm = ({isSignup, setIsSignup}) => {
             registerer: usertype,
             age,
             gender,
-            phone: "91" + phone,
+            phone: "+91" + phone,
             email,
             passwd,
             specialization,

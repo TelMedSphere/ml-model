@@ -44,10 +44,6 @@ const Header = () => {
     };
   }, [isSticky, isScrolled]);
 
-  useEffect(() => {
-    console.log(showDropdown);
-  }, [showDropdown]);
-
   const updatestatus = () => {
     httpClient.put("/doc_status", { email: localStorage.getItem("email") });
     userLogout();
