@@ -253,7 +253,7 @@ def forgot_password():
     msg = Message("Password Reset Request",
                     sender=os.getenv('HOST_EMAIL'),
                     recipients=[email])
-    msg.body = f"To reset your password, visit the following link: {reset_url}"
+    msg.body = f"To reset your password, visit the following link: https://pratik0112-telmedsphere.vercel.app/reset-password/{token}"
     mail.send(msg)
 
     return jsonify({'message': 'Password reset link sent'}), 200
