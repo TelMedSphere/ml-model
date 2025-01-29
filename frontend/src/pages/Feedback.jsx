@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import useDocTitle from '../hooks/useDocTitle';
 import Rating from 'react-rating-stars-component';
+import { useNavigate } from 'react-router-dom';
 
 const Feedback = () => {
   useDocTitle('Feedback - TelMedSphere');
@@ -11,7 +12,12 @@ const Feedback = () => {
   });
   const [submitStatus, setSubmitStatus] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
+  const handleClose = () => {
+    setIsModalOpen(false);
+    navigate('/');
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
@@ -89,7 +95,7 @@ const Feedback = () => {
 
               <button 
                     type="submit" 
-                    className="w-full bg-[rgb(123,116,215)] text-white font-bold py-3 px-6 rounded-lg hover:bg-[rgb(94, 88, 184)] transition-colors duration-300">
+                    className="w-full text-white-1 bg-[rgb(123,116,215)] text-white font-bold py-3 px-6 rounded-lg hover:bg-[rgb(94, 88, 184)] transition-colors duration-300">
                     Submit Feedback
               </button>
 
@@ -102,12 +108,12 @@ const Feedback = () => {
 
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded-xl shadow-lg max-w-md mx-4">
+            <div className="bg-white-1 p-8 rounded-xl shadow-lg max-w-md mx-4">
               <h2 className="text-2xl font-bold mb-4 text-blue-600">Thank You!</h2>
               <p className="mb-6 text-gray-600">Your feedback has been successfully submitted.</p>
               <button
                 className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
-                onClick={() => setIsModalOpen(false)}
+                onClick={handleClose}
               >
                 Close
               </button>
