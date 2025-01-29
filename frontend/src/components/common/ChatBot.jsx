@@ -20,8 +20,13 @@ const ChatBot = () => {
     console.error("API_KEY is missing in environment variables");
     return null;
   }
-
-  const INTRO_WORDS = ["hi", "Hi", "hii", "hello", "hey", "namaste"];
+  const INTRO_WORDS = [
+    "hi", "hello", "hey", "howdy", "namaste", "hola", "bonjour", "greetings", 
+    "salutations", "what's up", "yo", "sup", "good morning", "good afternoon", 
+    "good evening", "how's it going", "hey there", "how are you", "yo yo", "what's good",
+    "hello there"  
+  ];
+  
 
   const [open, setOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
