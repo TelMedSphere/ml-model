@@ -61,34 +61,39 @@ const ChatBot = () => {
     const sanitizedMessage = msg.replace(/&nbsp;/g, "").trim();
 
     const newMessage = {
-      message: sanitizedMessage,
-      direction: "outgoing",
-      sender: "user",
+        message: sanitizedMessage,
+        direction: "outgoing",
+        sender: "user",
     };
-
+    const systemMessage = {
+        message: "You are a helpful assistant. Provide friendly, professional, and contextually accurate responses. If you don't know something, let the user know.",
+        direction: "incoming",
+        sender: "system", 
+    };
     if (INTRO_WORDS.includes(sanitizedMessage.toLowerCase())) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        newMessage,
-        {
-          message: "Hello!! Welcome to TelMedSphere!!!",
-          sender: "gemini-pro",
-        },
-      ]);
-      return;
+        setMessages((prevMessages) => [
+            ...prevMessages,
+            newMessage,
+            {
+                message: "Hello!! Welcome to TelMedSphere!!!",
+                sender: "gemini-pro",
+            },
+        ]);
+        return;
     }
 
-    const updatedMessages = [...messages, newMessage];
+    const updatedMessages = [systemMessage, ...messages, newMessage]; 
     setMessages(updatedMessages);
     setIsTyping(true);
 
     try {
-      await processMessageToGemini(updatedMessages);
+        await processMessageToGemini(updatedMessages);
     } catch (error) {
-      console.error("Error processing message:", error);
-      setIsTyping(false);
+        console.error("Error processing message:", error);
+        setIsTyping(false);
     }
-  };
+};
+
 
   const processMessageToGemini = async (chatMessages) => {
   
