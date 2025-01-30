@@ -18,18 +18,43 @@ const Feedback = () => {
     setIsModalOpen(false);
     navigate('/');
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formDataToSend = new FormData();
-    formDataToSend.append('type', formData.type);
-    formDataToSend.append('rating', formData.rating);
-    formDataToSend.append('comments', formData.comments);
+    
 
-    setTimeout(() => {
+    const feedbackData = {
+      feedbackid: Date.now().toString(), 
+      type: formData.type,
+      rating: formData.rating,
+      comments: formData.comments,
+      timestamp: new Date().toISOString()
+    };
+
+    try {
+      const response = await fetch('https://telmedsphere-server.vercel.app/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add CORS headers if needed
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(feedbackData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit feedback');
+      }
+
+      const result = await response.json();
       setSubmitStatus('success');
       setFormData({ type: '', rating: 0, comments: '' });
       setIsModalOpen(true);
-    }, 1000);
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      setSubmitStatus('error');
+      document.querySelector('.error-message')?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const ratingChanged = (newRating) => {
@@ -59,7 +84,7 @@ const Feedback = () => {
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                   required
-                  className="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 text-black-1 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select...</option>
                   <option value="Services">Services</option>
@@ -81,14 +106,14 @@ const Feedback = () => {
               </div>
 
               <div className="mb-6">
-                <label htmlFor="comments" className="block text-gray-700 font-semibold mb-2">Comments</label>
+                <label htmlFor="comments" className="block text-black-1 font-semibold mb-2">Comments</label>
                 <textarea
                   id="comments"
                   value={formData.comments}
                   onChange={(e) => setFormData({ ...formData, comments: e.target.value })}
                   rows="4"
                   required
-                  className="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 text-black-1 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Share your thoughts..."
                 />
               </div>
@@ -107,19 +132,31 @@ const Feedback = () => {
         </div>
 
         {isModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white-1 p-8 rounded-xl shadow-lg max-w-md mx-4">
-              <h2 className="text-2xl font-bold mb-4 text-blue-600">Thank You!</h2>
-              <p className="mb-6 text-gray-600">Your feedback has been successfully submitted.</p>
-              <button
-                className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
-                onClick={handleClose}
-              >
-                Close
-              </button>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-blue-7 p-8 rounded-[3px] shadow-lg max-w-md mx-4 relative">
+        
+            <div
+              className="bg-[rgba(176,187,216,0.5)] text-white-1 absolute top-0 right-0 w-[30px] h-[30px] text-[1.8rem] leading-[30px] text-center cursor-pointer overflow-hidden opacity-80 transition-opacity duration-200 hover:opacity-100"
+              title="Close"
+              onClick={handleClose}
+            >
+              &times;
             </div>
+
+            <h2 className="text-2xl font-bold mb-4 text-blue-1">Thank You!</h2>
+            <p className="mb-6 text-white-1 text-opacity-50">
+              Your feedback has been successfully submitted.
+            </p>
+    
+            <button
+              className="w-full bg-gray-400 hover:bg-blue-6 text-blue-1 py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out"
+              onClick={handleClose}
+            >
+              Close
+            </button>
           </div>
-        )}
+        </div>
+      )}
       </div>
     </section>
   );
