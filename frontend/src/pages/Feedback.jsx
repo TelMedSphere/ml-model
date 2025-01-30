@@ -8,11 +8,16 @@ const Feedback = () => {
   const [formData, setFormData] = useState({
     type: '',
     rating: 0,
-    comments: ''
+    comments: '',
+    email: localStorage.getItem('email')
   });
   const [submitStatus, setSubmitStatus] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const [error, setError] = useState('');
+
+  const isLoggedIn = localStorage.getItem('username') && 
+                    localStorage.getItem('username') !== 'undefined';
 
   const handleClose = () => {
     setIsModalOpen(false);
@@ -20,21 +25,51 @@ const Feedback = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formDataToSend = new FormData();
-    formDataToSend.append('type', formData.type);
-    formDataToSend.append('rating', formData.rating);
-    formDataToSend.append('comments', formData.comments);
+    if (!isLoggedIn) {
+      setError('Please login to submit feedback');
+      return;
+    }
 
-    setTimeout(() => {
-      setSubmitStatus('success');
-      setFormData({ type: '', rating: 0, comments: '' });
-      setIsModalOpen(true);
-    }, 1000);
+    try {
+      const response = await httpClient.post('/feedback', {
+        ...formData,
+        timestamp: new Date(),
+        username: localStorage.getItem('username')
+      });
+
+      if (response.status === 200) {
+        setSubmitStatus('success');
+        setFormData({ type: '', rating: 0, comments: '', email: localStorage.getItem('email') });
+        setIsModalOpen(true);
+      }
+    } catch (err) {
+      setSubmitStatus('error');
+      setError('Failed to submit feedback. Please try again.');
+    }
   };
+
 
   const ratingChanged = (newRating) => {
     setFormData({ ...formData, rating: newRating });
   };
+
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="bg-white p-8 rounded-xl shadow-lg max-w-md mx-4 text-center">
+          <h2 className="text-2xl font-bold mb-4 text-red-600">Access Denied</h2>
+          <p className="mb-6 text-gray-600">Please login to submit feedback.</p>
+          <button
+            className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
+            onClick={() => navigate('/')}
+          >
+            Go to Home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
 
   return (
     <section className="py-8 md:py-12 bg-gray-50">
