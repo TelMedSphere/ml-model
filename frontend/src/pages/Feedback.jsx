@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useDocTitle from '../hooks/useDocTitle';
 import Rating from 'react-rating-stars-component';
 import { useNavigate } from 'react-router-dom';
 
 const Feedback = () => {
   useDocTitle('Feedback - TelMedSphere');
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/');
+    }
+  }, []);
   
   const [formData, setFormData] = useState({
     type: '',
@@ -71,10 +77,7 @@ const Feedback = () => {
     setFormData({ ...formData, rating: newRating });
   };
 
-  if (!isLoggedIn) {
-    navigate('/');
-    return null; // Prevent rendering anything
-  }
+ 
   
   return (
     <section className="py-8 md:py-12 bg-gray-50">
