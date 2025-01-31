@@ -96,7 +96,7 @@ const LandingPage = () => {
   return (
     <>
       <div>
-        <section className="h-screen w-full">
+        <section className="h-screen w-full bg-[#f5f5f5]">
           {/* curvy-img */}
           <div className="relative top-[5.5rem] h-[90%] bg-left bg-no-repeat bg-cover -b-4 left-0 z-0 bg-curvy-shape max-lg:h-[95%] max-md:h-[80%] max-md:top-[23.5rem]"></div>
           <div className="absolute left-0 top-0 h-[85%] z-[1] flex justify-evenly items-center w-full text-blue-8 text-shadow-landing-highlight max-md:flex max-md:justify-end max-md:items-center max-md:flex-col-reverse max-xxs:top-12 max-lg:px-4">
@@ -179,14 +179,16 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section className="py-20 px-0">
+        <section className="py-20 px-0 bg-[#f5f5f5]">
           <div className="w-full flex flex-wrap my-0 mx-auto justify-center items-center max-w-[1300px] max-md:flex max-md:flex-col">
             <div className="flex-shrink-0 flex-grow-0 basis-[40%] w-full p-4 text-center max-md:mb-8">
+              <div className="max-sm:flex max-sm:justify-center">
               <img
                 src={need}
                 alt="why"
                 className="w-[90%] max-ma:max-w-[400px] max-md:w-[90%]"
               />
+              </div>
             </div>
             <div className="flex-shrink-0 flex-grow-0 basis-[55%] p-4 max-md:p-8">
               <h2 className="text-blue-9 mb-8">
