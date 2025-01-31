@@ -43,21 +43,21 @@ const Doctors = () => {
   const [selectedTime, setSelectedTime] = useState(null);
   const modalRef = useRef(null);
 
-  const [available, setAvailable] = useState({
-    "08:00": true,
-    "09:00": true,
-    "10:00": true,
-    "11:00": true,
-    "12:00": true,
-    "15:00": true,
-    "16:00": true,
-    "17:00": true,
-    "18:00": true,
-  });
+  const [available, setAvailable] = useState([
+    { time: "08:00", available: true },
+    { time: "09:00", available: true },
+    { time: "10:00", available: true },
+    { time: "11:00", available: true },
+    { time: "12:00", available: true },
+    { time: "15:00", available: true },
+    { time: "16:00", available: true },
+    { time: "17:00", available: true },
+    { time: "18:00", available: true },
+  ]);
 
   const timings = Object.entries(available).map(([time, isAvailable]) => ({
     time,
-    available: isAvailable,
+    available: true,
   }));
 
   useEffect(() => {
@@ -72,6 +72,10 @@ const Doctors = () => {
   useEffect(() => {
     handleTimings();
   }, [isScheduleMeet, curDate]);
+
+  useEffect(() => {
+    console.log("available", available);
+  }, [available]);
 
   useEffect(() => {
     httpClient
@@ -155,10 +159,25 @@ const Doctors = () => {
       .post("/set_appointment", { email: selectEmail })
       .then((res) => {
         const appointments = res.data.appointments;
-        let times = { ...available };
+        let times = {
+          "08:00": true,
+          "09:00": true,
+          "10:00": true,
+          "11:00": true,
+          "12:00": true,
+          "15:00": true,
+          "16:00": true,
+          "17:00": true,
+          "18:00": true,
+        };
         appointments
-          .filter((item) => item.date === curDate)
+          .filter((item) => {
+            const itemDate = item.date.split("T")[0]; // Extract YYYY-MM-DD
+            const selectedDate = curDate.split("T")[0]; // Ensure same format
+            return itemDate === selectedDate;
+          })
           .forEach((item) => {
+            console.log("item", item);
             times[item.time] = false;
           });
         setAvailable(times);
@@ -362,7 +381,7 @@ const Doctors = () => {
             );
             setMeetModal(true);
           }}
-          className="px-4 py-2 bg-[#818CF8] text-white rounded hover:bg-[#6366F1] 
+          className="px-4 py-2 bg-blue-3 text-white-1 rounded hover:bg-blue-7 
   transition-colors duration-200"
         >
           BOOK
@@ -411,18 +430,18 @@ const Doctors = () => {
   };
 
   return (
-    <div className="py-24 text-center">
+    <div className="py-24 text-center h-full">
       <div
-        className="min-h-[600px] p-2.5 mx-auto text-gray-800 max-w-[1300px] w-full 
-  shadow-[0_0_15px_rgba(0,0,0,0.1)] rounded-lg"
+        className="min-h-[600px] mx-auto text-gray-800 max-w-[1300px] w-full 
+   rounded-lg h-full"
       >
-        <div className="flex justify-center items-center mb-6">
-          <h3 className="text-2xl font-semibold">Doctor Details</h3>
+        <div className="flex justify-center items-center mb-6 ">
+          <h3 className="text-2xl font-semibold bg">Doctor Details</h3>
           <button
             className={`ml-2.5 p-2 rounded ${
               fetchingData
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-[#818CF8] hover:bg-[#6366F1] cursor-pointer"
+                : "bg-blue-3 text-white-1 hover:bg-blue-7 cursor-pointer"
             } text-white transition-all duration-300`}
             onClick={fetchDoctors}
             disabled={fetchingData}
@@ -431,27 +450,29 @@ const Doctors = () => {
           </button>
         </div>
 
-        <div className="border border-gray-200 rounded-lg shadow-lg">
+        <div className="w-full flex justify-center px-4">
           <DataGrid
             rows={doctors}
             columns={columns}
             components={{
               Toolbar: GridToolbar,
             }}
-            className="border-none rounded-lg"
-            autoHeight
-            pageSize={10}
-            disableSelectionOnClick
             sx={{
+              border: "none",
+              borderRadius: "0.5rem",
+              maxHeight: "600px",
+              height: "100vh",
+              padding: "1rem",
+              boxShadow: "0 0 10px 1px #b0bbd8",
               "& .MuiDataGrid-toolbarContainer": {
-                backgroundColor: "#F9FAFB",
-                padding: "12px",
+                backgroundColor: "",
+
                 "& button": {
-                  backgroundColor: "#818CF8",
+                  backgroundColor: "#7584ae",
                   color: "white",
-                  padding: "8px 16px",
+
                   "&:hover": {
-                    backgroundColor: "#6366F1",
+                    backgroundColor: "#282f42",
                   },
                 },
               },
@@ -480,26 +501,26 @@ const Doctors = () => {
             className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 relative bg-white-1"
             ref={modalRef}
           >
-            <div className="flex justify-between items-center border-b pb-4 mb-4">
-              <h3 className="text-xl font-semibold text-blue-800">
-                Insufficient Balance
-              </h3>
-              <IoMdClose
-                className="text-blue-500 hover:text-blue-700 cursor-pointer text-2xl"
+            <div className="justify-between items-center border-b pb-4 mb-4">
+            <IoMdClose
+                className="text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300 ease-in-out block"
                 onClick={() => setMeetModal(false)}
               />
+              <h3 className="text-red-600 font-semibold text-[1em] my-4">
+                Insufficient Balance
+              </h3>
             </div>
 
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span className="text-blue-700">Doctor Fee</span>
-                <span className="font-bold text-blue-900">₹ {curFee}</span>
+                <span className="text-blue-7 text-[1.3em] font-normal">Doctor Fee {`(${selectedDoc})`}</span>
+                <span className="font-bold text-blue-7 w-12">₹ {curFee}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-blue-700">Available Balance</span>
-                <span className="font-bold text-blue-900">₹ {balance}</span>
+                <span className="text-blue-7 text-[1.3em] font-normal">Available Balance</span>
+                <span className="font-bold text-blue-7">₹ {balance}</span>
               </div>
-              <div className="flex justify-between pt-4 border-t border-blue-200">
+              <div className="flex justify-between pt-4 border-t border-blue-2">
                 <span className="text-red-600 font-semibold">
                   Required Amount
                 </span>
@@ -510,8 +531,7 @@ const Doctors = () => {
             </div>
 
             <button
-              className="w-full mt-6 bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg 
-              font-semibold transition-colors duration-300 shadow-md"
+              className="w-full mt-6 bg-blue-5 hover:bg-blue-6 text-white-1 py-3 rounded-lg transition-colors duration-300 shadow-md"
               onClick={() =>
                 navigate(`/my-wallet?recharge=${curFee - balance}`)
               }
@@ -533,15 +553,12 @@ const Doctors = () => {
       >
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
-            className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 relative bg-white-1"
+            className="rounded-[8px] w-auto py-[14px] px-[20px] pb-[20px] relative shadow-[0_0_10px_#b0bbd8] border-[2px] border-blue-2 bg-white-1 text-blue-7 text-center"
             ref={modalRef}
           >
-            <div className="flex justify-between items-center border-b pb-4 mb-4">
-              <h3 className="text-xl font-semibold text-blue-800">
-                Schedule Appointment
-              </h3>
+            <div className="justify-between items-center pb-4">
               <IoMdClose
-                className="text-blue-500 hover:text-blue-700 cursor-pointer text-2xl"
+                className="text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300 ease-in-out block"
                 onClick={() => {
                   setMessage("");
                   setMeetModal(false);
@@ -549,27 +566,26 @@ const Doctors = () => {
                   httpClient.put("/delete_meet", { email: selectEmail });
                 }}
               />
+              <h3 className="text-center border-none">Wanna meet?</h3>
             </div>
 
             {/* Meeting Options */}
-            <div className="space-y-6">
-              <div className="flex justify-center gap-4">
+            <div className="">
+              <div className="flex justify-center text-white-1 mx-[25px] mb-[10px] max-sm:flex max-sm:flex-col">
                 {selectedDocStatus && !selectedDocAvailable && (
                   <button
-                    className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 
-                   transition-all duration-300 shadow-md"
+                    className="px-8 py-4 bg-grey-3 m-4 text-white-1 rounded-[8px] cursor-pointer hover:bg-blue-6 transition-all duration-300 w-auto shadow-[0_0_10px_1px_#b3b8d0;] active:bg-blue-6"
                     onClick={() => {
                       setScheduleMeet(false);
                       setInstantMeet(!isInstantMeet);
                       setConnecting(false);
                     }}
                   >
-                    Instant Meeting
+                    Create an Instant meet
                   </button>
                 )}
                 <button
-                  className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 
-                    transition-all duration-300 shadow-md"
+                  className="px-8 py-4 bg-grey-3 m-4 text-white-1 rounded-[8px] cursor-pointer hover:bg-blue-6 transition-all duration-300 w-auto shadow-[0_0_10px_1px_#b3b8d0;] active:bg-blue-6"
                   onClick={() => {
                     const d = new Date();
                     setCurDate(
@@ -589,7 +605,7 @@ const Doctors = () => {
                     setConnecting(false);
                   }}
                 >
-                  Schedule Meeting
+                  Schedule a meet
                 </button>
               </div>
 
@@ -610,8 +626,9 @@ const Doctors = () => {
                             key={index}
                             className="w-1 bg-gradient-to-t from-purple-600 to-purple-300 rounded-full animate-wave"
                             style={{
-                              animationDelay: `${index * 0.1}s`,
-                              height: `${(index + 1) * 8}px`,
+                              animationDelay: `${index * 0.1}s,
+                              height: ${(index + 1) * 8}px,
+                            `,
                             }}
                           />
                         ))}
@@ -621,8 +638,8 @@ const Doctors = () => {
                   ) : (
                     <button
                       className="flex items-center justify-center gap-2 mx-auto px-6 py-3 
-                        bg-purple-500 text-white rounded-lg hover:bg-purple-600 
-                        transition-all duration-300 shadow-md"
+                        bg-blue-3 text-white rounded-lg hover:bg-blue-5
+                        transition-all duration-300 shadow-md text-white-1"
                       onClick={() => {
                         setConnecting(true);
                         handleMeet();
@@ -637,10 +654,8 @@ const Doctors = () => {
 
               {/* Schedule Meeting Section */}
               {isScheduleMeet && (
-                <div className="space-y-6">
-                  <h4 className="text-lg font-medium text-blue-800">
-                    Select Date and Time
-                  </h4>
+                <div className="pb-[25px] mb-1">
+                  <h4 className="">Select Date and Time</h4>
 
                   {isInvDateTime && (
                     <Alert severity="error" className="mb-4">
@@ -658,81 +673,75 @@ const Doctors = () => {
                         : "Meeting scheduled successfully"}
                     </Alert>
                   )}
+                  <div className="w-full flex justify-center">
+                    <div className="space-y-4 w-[70%]">
+                      <input
+                        type="date"
+                        min={new Date().toISOString().split("T")[0]} // Prevent selecting past dates
+                        value={curDate || ""}
+                        onChange={(e) => {
+                          const selectedDate = e.target.value;
+                          setCurDate(selectedDate);
+                          checkInvDateTime(selectedDate, curTime);
+                        }}
+                        className="py-[11px] px-[12px] cursor-pointer border-[2px] border-blue-3 rounded-[8px]"
+                      />
 
-                  <div className="space-y-4">
-                    <input
-                      type="date"
-                      min={new Date().toISOString().split("T")[0]} // Prevent selecting past dates
-                      value={curDate || ""}
-                      onChange={(e) => {
-                        const selectedDate = e.target.value;
-                        setCurDate(selectedDate);
-                        checkInvDateTime(selectedDate, curTime);
-                      }}
-                      className="w-full p-3 border-2 border-blue-300 rounded-lg focus:ring-2 
-            focus:ring-blue-500 focus:border-transparent"
-                    />
+                      <div className="w-full flex justify-center">
+                        <div className="grid grid-cols-3 gap-[5px] max-w-[360px] w-[90vw] border-[2px] border-blue-3 rounded-[8px] p-[5px]">
+                          {console.log("timing in map", timings)}
+                          {Object.keys(available).map((time, index) => (
+                            <button
+                              key={index}
+                              className={`border-[2px] boder-blue-3 rounded-[8px] cursor-pointer flex items-center justify-center py-[10px] px-[5px] ${
+                                available[time]
+                                  ? `border-[2px] border-blue-3 ${
+                                      selectedTime === time && "bg-blue-1"
+                                    }`
+                                  : "bg-blue-2 cursor-not-allowed"
+                              }`}
+                              disabled={!available[time]} // Accessing the value for each time slot
+                              onClick={() => {
+                                if (available[time]) {
+                                  // Check availability for each time slot
+                                  handleActive(index);
+                                  checkInvDateTime(curDate, time);
+                                  setCurTime(time);
+                                  setSelectedTime(time);
+                                }
+                              }}
+                            >
+                              <TbPointFilled
+                                className={
+                                  available[time]
+                                    ? "text-[#0f0]"
+                                    : "text-[#f00]"
+                                } // Using available[time] here
+                              />
+                              <span className="mx-[10px]">{time}</span>
+                              <AiOutlineClockCircle />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
 
-                    <div className="grid grid-cols-3 gap-2">
-                      {timings.map((item, index) => (
-                        <button
-                          key={index}
-                          className={`p-3 border-2 rounded-lg flex items-center justify-center gap-2
-                  transition-all duration-200
-                  ${
-                    item.available
-                      ? `border-blue-300 text-blue-700 hover:bg-blue-50
-                      ${
-                        selectedTime === item.time
-                          ? "bg-blue-500 text-white"
-                          : "hover:bg-blue-50"
-                      }`
-                      : "bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed"
-                  }`}
-                          disabled={!item.available}
-                          onClick={() => {
-                            if (item.available) {
-                              handleActive(index);
-                              checkInvDateTime(curDate, item.time);
-                              setCurTime(item.time);
-                              setSelectedTime(item.time);
-                            }
-                          }}
-                        >
-                          <TbPointFilled
-                            className={
-                              selectedTime === item.time
-                                ? "text-white"
-                                : item.available
-                                ? "text-green-500"
-                                : "text-red-500"
-                            }
-                          />
-                          <span>{item.time}</span>
-                          <AiOutlineClockCircle />
-                        </button>
-                      ))}
+                      <button
+                        className={`bg-blue-3 border-[2px] border-blue-5 text-white-1 py-[10px] px-[12px] rounded-[5px] my-[8px] mx-[5px] transition-all duration-300 hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed`}
+                        onClick={handleScheduleClick}
+                        disabled={
+                          isInvDateTime ||
+                          meetScheduling ||
+                          !curDate ||
+                          !curTime
+                        }
+                      >
+                        {meetScheduling ? (
+                          <CircularProgress size={24} sx={{ color: "white" }} />
+                        ) : (
+                          "Schedule Meeting"
+                        )}
+                      </button>
                     </div>
-
-                    <button
-                      className={`w-full py-3 rounded-lg text-white transition-all duration-300
-            ${
-              isInvDateTime
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-500 hover:bg-blue-600"
-            }
-          `}
-                      onClick={handleScheduleClick}
-                      disabled={
-                        isInvDateTime || meetScheduling || !curDate || !curTime
-                      }
-                    >
-                      {meetScheduling ? (
-                        <CircularProgress size={24} sx={{ color: "white" }} />
-                      ) : (
-                        "Schedule Meeting"
-                      )}
-                    </button>
                   </div>
                 </div>
               )}
@@ -745,3 +754,4 @@ const Doctors = () => {
 };
 
 export default Doctors;
+
