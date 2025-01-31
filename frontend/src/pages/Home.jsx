@@ -277,7 +277,7 @@ const Home = () => {
                 <h3>Wanna check your verification status? </h3>
                 <button 
                     onClick={check}
-                    className="ml-4 bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-blue-900 transition-all duration-300 shadow-lg">
+                    className="ml-4 bg-blue-4 text-white-1 px-6 py-3 rounded-lg hover:bg-blue-9 transition-all duration-300 shadow-lg">
                     Check
                 </button>
             </div>
@@ -295,7 +295,7 @@ const Home = () => {
                         <button 
                             onClick={searchmeet}
                             disabled={!isVerified}
-                            className="bg-blue-800 text-white px-8 py-4 rounded-lg hover:bg-blue-900 transition-all duration-300 shadow-lg disabled:cursor-not-allowed">
+                            className="bg-blue-8 text-white-1 px-9 py-4 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#B0BBD8] hover:bg-blue-9 active:bg-blue-9">
                             Search
                         </button>
                     </div>
@@ -318,7 +318,7 @@ const Home = () => {
                 <p> By {item.doctor ? item.doctor : item.patient}</p>
               </div>
               <button 
-                className="bg-[#000066] text-white px-8 py-4 rounded-lg transition-all duration-300 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                className="bg-[#000066] text-white-1 px-8 py-4 rounded-lg transition-all duration-300 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={new Date(item.date+" "+item.time) > new Date()}
                 onClick={() => handleappointmentmeet(item.doctor,item.demail,item.link)}>
                 Join
@@ -330,9 +330,9 @@ const Home = () => {
               <div className="text-slate-700">No appointments found...</div>
               {!isDoctor && (
                 <button 
-                  className="bg-[#000066] text-white px-8 py-3 rounded-lg hover:opacity-90 transition-all duration-300"
+                  className="bg-blue-8 text-white-1 px-9 py-4 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#B0BBD8] hover:bg-blue-9 active:bg-blue-9"
                   onClick={() => navigate('/doctors')}>
-                  Book
+                  Book 
                 </button>
               )}
             </li>
@@ -359,7 +359,7 @@ const Home = () => {
         {isDoctor && isVerified && (
                 <div 
                 onClick={() => setAvailablemodal(true)}
-                className="fixed bottom-10 left-5 p-3 rounded-lg bg-blue-900 text-white cursor-pointer z-50 flex flex-col items-center transition-all duration-300 hover:bg-blue-800"
+                className="fixed bottom-10 left-5 p-3 rounded-lg cursor-pointer z-50 flex flex-col items-center bg-blue-8 text-white-1 transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#B0BBD8] hover:bg-blue-9 active:bg-blue-9 "
             >
                 {isAlert !== "" && (
                 <Alert severity={isAlert} className="absolute -top-16 text-black w-64 left-0">
@@ -418,7 +418,7 @@ const Home = () => {
                         <button 
                             onClick={handleFeedbackClose}
                             disabled={feedbackAlert}
-                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="bg-blue-4 text-white-1 px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {feedbackAlert ? "Submitted" : "Submit"}
                         </button>
@@ -507,7 +507,7 @@ const Home = () => {
                 <h3>Patient Found!</h3>
                 <div className="flex flex-col items-center">
                 <div>Name: {patient_name}</div>
-                <div className="py-4 text-white">
+                <div className="py-4 text-white-1">
                     <button
                     onClick={() => {
                         httpClient.post("meet_status", { email: localStorage.getItem("email") });
@@ -519,7 +519,7 @@ const Home = () => {
                         })
                         .catch(err => console.log(err));
                     }}
-                    className="bg-blue-300 border border-blue-500 text-white px-3 py-2.5 rounded my-2 mx-1.5 transition-all duration-300 hover:bg-blue-500"
+                    className="bg-blue-4 border text-white-1 px-3 py-2.5 rounded my-2 mx-1.5 transition-all duration-300 hover:bg-blue-9"
                     >
                     Connect now <FaVideo className="inline" />
                     </button>
@@ -557,7 +557,7 @@ const Home = () => {
                         <div className="flex flex-col items-center justify-center">
                             <div className="flex space-x-1">
                                 {[...Array(10)].map((_, i) => (
-                                    <div key={i} className="w-2 h-8 bg-blue-500 animate-wave" style={{animationDelay: `${i * 0.1}s`}}></div>
+                                    <div key={i} className="w-2 h-8 bg-blue-4 animate-wave" style={{animationDelay: `${i * 0.1}s`}}></div>
                                 ))}
                             </div>
                             <div>Connecting...</div>
@@ -569,7 +569,7 @@ const Home = () => {
                                     setIsConnecting(true);
                                     handlemeet();
                                 }}
-                                className="bg-blue-300 border border-blue-500 text-white px-3 py-2.5 rounded my-2 mx-1.5 transition-all duration-300 hover:bg-blue-500">
+                                className="bg-blue-4 border text-white-1 px-3 py-2.5 rounded my-2 mx-1.5 transition-all duration-300 hover:bg-blue-9">
                                 Connect <FaVideo className="inline" />
                             </button>
                         </div>
@@ -583,16 +583,16 @@ const Home = () => {
                 <div className="text-right text-blue-500 hover:text-blue-800 transition-all duration-300 cursor-pointer">
                 <IoMdClose onClick={() => setAvailablemodal(false)} />
                 </div>
-                <div className="flex flex-col items-center justify-center gap-2.5 text-white">
+                <div className="flex flex-col items-center justify-center gap-2.5 text-white-1">
                 <div 
                     onClick={() => iamavailable()}
-                    className="bg-blue-500 p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-600"
+                    className="bg-blue-4 text-white-1  p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9"
                 >
                     Yes, I am available!
                 </div>
                 <div 
                     onClick={() => iamnotavailable()}
-                    className="bg-blue-500 p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-600"
+                    className="bg-blue-4 text-white-1 p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9"
                 >
                     No, I am not available!
                 </div>

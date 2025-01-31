@@ -5,12 +5,10 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { MdExpandMore } from "react-icons/md";
-import { AiFillLinkedin, AiFillGithub } from "react-icons/ai";
 import { TbStethoscope, TbHeartPlus } from "react-icons/tb";
 import { BsRobot } from "react-icons/bs";
 import { GiMedicines } from "react-icons/gi";
 import { MdOutlineHealthAndSafety } from "react-icons/md";
-import { MdAccountCircle } from "react-icons/md";
 import { IoMdMail } from "react-icons/io";
 import { FaPhoneAlt, FaHospital } from "react-icons/fa";
 import { IoAccessibility } from "react-icons/io5";
@@ -20,7 +18,6 @@ import useScrollDisable from "../hooks/useScrollDisable";
 import bg from "../assets/landing-bg.png";
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
-import shadows from "@mui/material/styles/shadows";
 
 const LandingPage = () => {
   const { isLoading, toggleLoading } = useContext(commonContext);

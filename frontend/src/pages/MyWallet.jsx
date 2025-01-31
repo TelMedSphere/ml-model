@@ -103,7 +103,7 @@ const MyWallet = () => {
     // my-wallet
     <div className="w-full flex justify-center">
       <div className="max-w-[400px] w-[93vw] my-auto text-blue-8">
-        <h2 className="mb-8">My Wallet</h2>
+        <h2 className="mb-8 mt-4 text-xl">My Wallet</h2>
         {/* check-balance */}
         <section className="flex justify-between item-center text-[1.2rem]">
           <div className="max-w-[50%]">Available balance</div>
