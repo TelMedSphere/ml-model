@@ -2,16 +2,12 @@ import React, { useEffect, useState } from 'react';
 import useDocTitle from '../hooks/useDocTitle';
 import Rating from 'react-rating-stars-component';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from "react";
+import commonContext from '../contexts/common/commonContext';
 
 const Feedback = () => {
   useDocTitle('Feedback - TelMedSphere');
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate('/');
-    }
-  }, []);
-  
   const [formData, setFormData] = useState({
     type: '',
     rating: 0,
@@ -76,7 +72,16 @@ const Feedback = () => {
   const ratingChanged = (newRating) => {
     setFormData({ ...formData, rating: newRating });
   };
+  
+  const { toggleForm } = useContext(commonContext);
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/');
+      // Set signup to false and show the login form
+      toggleForm(true); // Opens the form modal
+    }
+  }, [isLoggedIn, navigate, toggleForm]);
  
   
   return (
