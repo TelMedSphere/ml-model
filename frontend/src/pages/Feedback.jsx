@@ -5,14 +5,20 @@ import { useNavigate } from 'react-router-dom';
 
 const Feedback = () => {
   useDocTitle('Feedback - TelMedSphere');
+  
   const [formData, setFormData] = useState({
     type: '',
     rating: 0,
-    comments: ''
+    comments: '',
+    email: localStorage.getItem('email') || ''
   });
+
   const [submitStatus, setSubmitStatus] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const isLoggedIn = localStorage.getItem('username') && localStorage.getItem('username') !== 'undefined';
 
   const handleClose = () => {
     setIsModalOpen(false);
@@ -21,14 +27,20 @@ const Feedback = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    if (!isLoggedIn) {
+      setError('Please login to submit feedback');
+      return;
+    }
 
     const feedbackData = {
-      feedbackid: Date.now().toString(), 
+      feedbackid: Date.now().toString(),
       type: formData.type,
       rating: formData.rating,
       comments: formData.comments,
-      timestamp: new Date().toISOString()
+      email: formData.email,
+      timestamp: new Date().toISOString(),
+      username: localStorage.getItem('username')
     };
 
     try {
@@ -36,7 +48,6 @@ const Feedback = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Add CORS headers if needed
           'Accept': 'application/json'
         },
         body: JSON.stringify(feedbackData)
@@ -46,14 +57,13 @@ const Feedback = () => {
         throw new Error('Failed to submit feedback');
       }
 
-      const result = await response.json();
       setSubmitStatus('success');
-      setFormData({ type: '', rating: 0, comments: '' });
+      setFormData({ type: '', rating: 0, comments: '', email: localStorage.getItem('email') });
       setIsModalOpen(true);
     } catch (error) {
       console.error('Error submitting feedback:', error);
       setSubmitStatus('error');
-      document.querySelector('.error-message')?.scrollIntoView({ behavior: 'smooth' });
+      setError('Failed to submit feedback. Please try again.');
     }
   };
 
@@ -61,13 +71,20 @@ const Feedback = () => {
     setFormData({ ...formData, rating: newRating });
   };
 
+  if (!isLoggedIn) {
+    navigate('/');
+    return null; // Prevent rendering anything
+  }
+  
   return (
     <section className="py-8 md:py-12 bg-gray-50">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="order-2 md:order-1">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 ">Share Your Feedback</h1>
-            <h2 className="text-lg md:text-xl mb-6 text-gray-600">Your feedback matters to us, Help us improve our services!</h2>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">Share Your Feedback</h1>
+            <h2 className="text-lg md:text-xl mb-6 text-gray-600">
+              Your feedback matters to us! Help us improve our services.
+            </h2>
             <img 
               src="https://i.pinimg.com/474x/95/6f/29/956f29bdd6ece3f6e2f7f476f65ef994.jpg" 
               alt="Feedback" 
@@ -119,44 +136,42 @@ const Feedback = () => {
               </div>
 
               <button 
-                    type="submit" 
-                    className="w-full text-white-1 bg-[rgb(123,116,215)] text-white font-bold py-3 px-6 rounded-lg hover:bg-[rgb(94, 88, 184)] transition-colors duration-300">
-                    Submit Feedback
+                type="submit" 
+                className="w-full text-white-1 bg-[rgb(123,116,215)] text-white font-bold py-3 px-6 rounded-lg hover:bg-[rgb(94,88,184)] transition-colors duration-300"
+              >
+                Submit Feedback
               </button>
 
               {submitStatus === 'error' && (
-                <div className="mt-4 text-red-600">Failed to submit feedback. Please try again.</div>
+                <div className="mt-4 text-red-600">{error}</div>
               )}
             </form>
           </div>
         </div>
 
         {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-blue-7 p-8 rounded-[3px] shadow-lg max-w-md mx-4 relative">
-        
-            <div
-              className="bg-[rgba(176,187,216,0.5)] text-white-1 absolute top-0 right-0 w-[30px] h-[30px] text-[1.8rem] leading-[30px] text-center cursor-pointer overflow-hidden opacity-80 transition-opacity duration-200 hover:opacity-100"
-              title="Close"
-              onClick={handleClose}
-            >
-              &times;
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-blue-7 p-8 rounded-[3px] shadow-lg max-w-md mx-4 relative">
+              <div
+                className="bg-[rgba(176,187,216,0.5)] text-white-1 absolute top-0 right-0 w-[30px] h-[30px] text-[1.8rem] leading-[30px] text-center cursor-pointer overflow-hidden opacity-80 transition-opacity duration-200 hover:opacity-100"
+                title="Close"
+                onClick={handleClose}
+              >
+                &times;
+              </div>
+              <h2 className="text-2xl font-bold mb-4 text-blue-1">Thank You!</h2>
+              <p className="mb-6 text-white-1 text-opacity-50">
+                Your feedback has been successfully submitted.
+              </p>
+              <button
+                className="w-full bg-gray-400 hover:bg-blue-6 text-blue-1 py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out"
+                onClick={handleClose}
+              >
+                Close
+              </button>
             </div>
-
-            <h2 className="text-2xl font-bold mb-4 text-blue-1">Thank You!</h2>
-            <p className="mb-6 text-white-1 text-opacity-50">
-              Your feedback has been successfully submitted.
-            </p>
-    
-            <button
-              className="w-full bg-gray-400 hover:bg-blue-6 text-blue-1 py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out"
-              onClick={handleClose}
-            >
-              Close
-            </button>
           </div>
-        </div>
-      )}
+        )}
       </div>
     </section>
   );
