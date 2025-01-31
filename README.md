@@ -113,7 +113,8 @@ TelMedSphere is designed to make healthcare simple and accessible for both docto
  # Navigate to frontend directory
  cd frontend    
  # Install all npm packages for react frontend
- npm install
+ # Use `npm ci` to avoid changing package-lock.json after every install https://stackoverflow.com/a/56254478  
+ npm ci
  # Set .env file
  copy .env.example .env
  # (For linux) cp .env.example .env
