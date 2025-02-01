@@ -134,11 +134,11 @@ const AboutUs = () => {
   return (
     <div className="w-full bg-gray-50">
       <section className="min-h-screen flex items-center relative bg-gradient-to-br from-blue-50 to-purple-50 py-20 px-4">
-        <div className="max-w-5xl mx-auto w-full">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
-            <div className="lg:w-1/2 space-y-8">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="flex flex-col lg:flex-row items-center">
+            <div className="lg:w-5/12 space-y-8 z-10 lg:pr-8">
               <div>
-                <span className="inline-block px-4 py-1 text-sm font-medium bg-blue-600 text-white rounded-full mb-4">
+                <span className="inline-block px-4 py-1 text-sm font-medium bg-blue-600 text-white-1 rounded-full mb-4">
                   Open Source Healthcare Initiative
                 </span>
                 <h1 className="text-5xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
@@ -157,16 +157,26 @@ const AboutUs = () => {
                 </a>
               </div>
             </div>
-            <div className="lg:w-1/2">
-              <div className="relative group">
-                <div className="absolute inset-0 bg-blue-100 rounded-3xl blur-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-300" />
-                <img
-                  src="https://github-production-user-asset-6210df.s3.amazonaws.com/153143167/408791415-344755fc-0398-4646-ae0c-e9af330e74b7.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20250201%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250201T102714Z&X-Amz-Expires=300&X-Amz-Signature=7d27d4240c2455cab4a55f27b6d25248c87731b206f975671bb3dbdba3165d9d&X-Amz-SignedHeaders=host"
-                  alt="Platform Preview"
-                  className="relative rounded-2xl shadow-2xl transform group-hover:scale-101 transition-transform duration-300"
-                />
-              </div>
-            </div>
+   
+           {/* Updated image container */}
+      <div className="lg:w-7/12 relative h-full mt-8 lg:mt-0">
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-blue-100/20 rounded-full blur-3xl"
+          style={{ mixBlendMode: 'multiply' }}
+        />
+        <div className="relative">
+          <img
+            src="aboutus-image.png"
+            alt="Platform Preview"
+            className="w-full h-auto max-w-[800px] object-contain"
+            style={{ 
+              mixBlendMode: 'multiply',
+              filter: 'contrast(1.1)',
+              transform: 'scale(1.15)'
+            }}
+          />
+        </div>
+      </div>
           </div>
         </div>
       </section>
