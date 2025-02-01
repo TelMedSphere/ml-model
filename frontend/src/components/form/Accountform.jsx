@@ -123,34 +123,35 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
       const idToken = await result.user.getIdToken(); // Get the ID token
 
       // Send idToken along with userType to the backend for registration
-      await httpClient.post("/register", {
-        registerer: usertype, // 'patient' or 'doctor'
-        email: result.user.email, // Use email from Google account
-        id_token: idToken, // Send the ID token received from Google
-      })
-      .then((res) => {
-        setIsAlert("success");
-        setAlertCont("Signup Successful");
-        setTimeout(() => {
-          setIsAlert("");
-          toggleForm(false);
-          console.log(res.data)
-          setFormUserInfo({
-            username: res.data.username,
-            email: result.user.email,
-            usertype: res.data.usertype,
-          });
-          toggleForm(false);
-        }, 1500);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsAlert("error");
-        setAlertCont("User already exists");
-        setTimeout(() => {
-          setIsAlert("");
-        }, 1500);
-      });
+      await httpClient
+        .post("/register", {
+          registerer: usertype, // 'patient' or 'doctor'
+          email: result.user.email, // Use email from Google account
+          id_token: idToken, // Send the ID token received from Google
+        })
+        .then((res) => {
+          setIsAlert("success");
+          setAlertCont("Signup Successful");
+          setTimeout(() => {
+            setIsAlert("");
+            toggleForm(false);
+            console.log(res.data);
+            setFormUserInfo({
+              username: res.data.username,
+              email: result.user.email,
+              usertype: res.data.usertype,
+            });
+            toggleForm(false);
+          }, 1500);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsAlert("error");
+          setAlertCont("User already exists");
+          setTimeout(() => {
+            setIsAlert("");
+          }, 1500);
+        });
     } catch (error) {
       console.error(error);
       setIsAlert("error");
@@ -194,8 +195,8 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
             setIsAlert("");
           }, 1500);
         });
-    } catch (e){
-      console.error(e)
+    } catch (e) {
+      console.error(e);
       setIsAlert("error");
       setAlertCont("Login Failed");
       setTimeout(() => {
@@ -653,32 +654,36 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                   </>
                 )}
 
-                <div className="mb-4">
-                  <div className="flex justify-start items-center mt-6">
-                    <input
-                      type="checkbox"
-                      name="passcheck"
-                      id="passcheck"
-                      className="mr-[10px] cursor-pointer"
-                      checked={isGoogleAuth}
-                      onChange={() => setIsGoogleAuth((prev) => !prev)}
-                    />
-                    <label
-                      htmlFor="passcheck"
-                      className="cursor-pointer text-white-1"
-                    >
-                      {` Wanna use google ${
-                        isSignupVisible ? "Sign Up" : "Sign In"
-                      } ?`}
-                    </label>
+                {!isForgotPassword && (
+                  <div className="mb-4">
+                    <div className="flex justify-start items-center mt-6">
+                      <input
+                        type="checkbox"
+                        name="passcheck"
+                        id="passcheck"
+                        className="mr-[10px] cursor-pointer"
+                        checked={isGoogleAuth}
+                        onChange={() => setIsGoogleAuth((prev) => !prev)}
+                      />
+                      <label
+                        htmlFor="passcheck"
+                        className="cursor-pointer text-white-1"
+                      >
+                        {` Wanna use google ${
+                          isSignupVisible ? "Sign Up" : "Sign In"
+                        } ?`}
+                      </label>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <button
                   type="submit"
                   className="mt-[0.8rem] mb-[0.4rem] relative bg-blue-7 hover:bg-blue-6 disabled:bg-blue-7 disabled:cursor-not-allowed py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out text-blue-1 w-full"
                   disabled={
-                    (isForgotPassword && isInvEmail) || // Disable if Forgot Password and email is invalid
+                    // Disable the button in the following cases:
+                    // - If "Forgot Password" is active and the email is invalid, but only if Google Auth is not used
+                    (!isGoogleAuth && isForgotPassword && isInvEmail) || // Disable if Forgot Password and email is invalid, unless Google Auth
                     (isSignupVisible &&
                       (isInvAge || isInvEmail || isInvPass)) || // Disable if Sign Up and any input is invalid
                     (!isForgotPassword &&
@@ -688,10 +693,10 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                 >
                   {isSuccessLoading ? (
                     <CircularProgress size={24} />
+                  ) : isGoogleAuth ? (
+                    `${isSignupVisible ? "Sign Up" : "Sign In"} with Google`
                   ) : isForgotPassword ? (
                     "Send Reset Link"
-                  ) : isGoogleAuth ? ( // Correct check for Google Signup
-                    `${isSignupVisible ? "Sign Up" : "Sign In"} with Google`
                   ) : isSignupVisible ? (
                     "Sign Up"
                   ) : (
