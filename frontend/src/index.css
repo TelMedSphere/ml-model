@@ -25,16 +25,16 @@ input[type="password"]::-webkit-appearance {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: "#6575A5";
+  background-color: #6575A5;
 }
 
 ::selection {
-  background-color: "#515E84";
+  background-color: #515E84;
   color: #fff;
 }
 
 ::-moz-selection {
-  background-color: "#515E84";
+  background-color: #515E84;
   color: #fff;
 }
 
