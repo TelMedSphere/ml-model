@@ -7,6 +7,7 @@ import RouterRoutes from "./routes/RouterRoutes";
 import Footer from "./components/common/Footer";
 import httpClient from "./httpClient";
 import ChatBot from "./components/common/ChatBot";
+import CursorTrail from "./components/common/Cursortrail";
 
 const App = () => {
 
@@ -33,6 +34,7 @@ const App = () => {
     }, 25000);
 
   return (
+
     <>
       <CommonProvider>
         <FiltersProvider>
@@ -44,6 +46,7 @@ const App = () => {
           </CartProvider>
         </FiltersProvider>
       </CommonProvider>
+    <CursorTrail/>
     </>
   );
 };
