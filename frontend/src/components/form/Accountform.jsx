@@ -138,8 +138,14 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
             console.log(res.data);
             setFormUserInfo({
               username: res.data.username,
-              email: result.user.email,
-              usertype: res.data.usertype,
+              usertype: usertype,
+              gender: res.data.gender,
+              phone: res.data.phone,
+              email: res.data.email,
+              passwd,
+              specialization: res.data.specialization,
+              age: res.data.age,
+              verified: false,
             });
             toggleForm(false);
           }, 1500);
@@ -183,7 +189,13 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
             setFormUserInfo({
               username: res.data.username,
               usertype: res.data.usertype,
-              email,
+              gender: res.data.gender,
+              phone: res.data.phone,
+              email: res.data.email,
+              passwd,
+              specialization: res.data.specialization,
+              age: res.data.age,
+              verified: res.data.verified,
             });
           }, 1500);
         })
@@ -235,7 +247,6 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
               specialization,
             })
             .then((res) => {
-              console.log(res);
               setIsAlert("success");
               setAlertCont("Signup Successful");
               setTimeout(() => {
@@ -286,7 +297,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                   usertype: res.data.usertype,
                   gender: res.data.gender,
                   phone: res.data.phone,
-                  email,
+                  email: res.data.email,
                   passwd,
                   specialization: res.data.specialization,
                   age: res.data.age,
