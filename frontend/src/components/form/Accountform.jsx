@@ -135,7 +135,6 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
           setTimeout(() => {
             setIsAlert("");
             toggleForm(false);
-            console.log(res.data);
             setFormUserInfo({
               username: res.data.username,
               usertype: usertype,

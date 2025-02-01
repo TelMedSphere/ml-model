@@ -210,7 +210,6 @@ def register():
         elif data['registerer'] == 'doctor':
             if patients.find_one({'email': email}) or doctor.find_one({'email': email}):
                 return jsonify({'message': 'User already exists'}), 400
-            print("call1.....")
 
             if 'id_token' not in data:
                 hashed_password = bcrypt.generate_password_hash(data['passwd']).decode('utf-8')
@@ -249,8 +248,6 @@ def register():
                 data['wallet'] = 0 
 
             doctor.insert_one(data)
-            print("call2.....")
-
 
             return jsonify({
                 'message': 'User created successfully',
@@ -300,7 +297,6 @@ def login():
                 "gender": var["gender"],
                 "phone": var["phone"],
                 "email": var["email"],
-                "specialization": data["specialization"],
                 "age": var["age"]
             }), 200
         return jsonify({'message': 'Invalid password'}), 400
@@ -315,10 +311,11 @@ def login():
                 'message': 'User logged in successfully',
                 'access_token': access_token,
                 "username": var["username"],
-                "usertype": "patient",
+                "usertype": "doctor",
                 "gender": var["gender"],
                 "phone": var["phone"],
                 "email": var["email"],
+                "specialization": var["specialization"],
                 "verified": var.get("verified", False)
             }), 200
         return jsonify({'message': 'Invalid password'}), 400
