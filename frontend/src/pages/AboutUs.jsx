@@ -56,15 +56,78 @@ const AboutUs = () => {
   const pandemicFeatures = [
     {
       title: "Remote Consultations",
-      description: "Secure video conferencing and chat features to maintain social distancing while providing quality care"
+      description: "Secure video conferencing and chat features to maintain social distancing while providing quality care. Connect with specialists worldwide.",
+      icon: "🏥",
+      image: "https://raw.githubusercontent.com/PratikMane0112/TelMedSphere/master/Overview/telemedicine.jpg",
+      stats: {
+        value: "90%",
+        label: "Patient Satisfaction"
+      },
+      features: [
+        "24/7 Access",
+        "Multi-language Support",
+        "HD Video Quality"
+      ]
     },
     {
       title: "AI Symptom Checker",
-      description: "Early detection system for COVID-19 and other pandemic-related symptoms using machine learning"
+      description: "Advanced AI-powered system for early detection of COVID-19 and other health conditions using machine learning algorithms.",
+      icon: "🤖",
+      image: "https://raw.githubusercontent.com/PratikMane0112/TelMedSphere/master/Overview/ai-health.jpg",
+      stats: {
+        value: "95%",
+        label: "Accuracy Rate"
+      },
+      features: [
+        "Real-time Analysis",
+        "Multiple Symptoms",
+        "Risk Assessment"
+      ]
     },
     {
       title: "Resource Allocation",
-      description: "Real-time tracking of medical resources and hospital bed availability during health crises"
+      description: "Smart tracking system for medical resources, hospital beds, and emergency services availability during health crises.",
+      icon: "📊",
+      image: "https://raw.githubusercontent.com/PratikMane0112/TelMedSphere/master/Overview/hospital-resources.jpg",
+      stats: {
+        value: "500+",
+        label: "Connected Hospitals"
+      },
+      features: [
+        "Live Bed Tracking",
+        "Equipment Monitoring",
+        "Staff Allocation"
+      ]
+    },
+    {
+      title: "Health Analytics",
+      description: "Comprehensive health data analytics platform for tracking pandemic trends and patient outcomes.",
+      icon: "📈",
+      image: "https://raw.githubusercontent.com/PratikMane0112/TelMedSphere/master/Overview/health-analytics.jpg",
+      stats: {
+        value: "1M+",
+        label: "Data Points Analyzed"
+      },
+      features: [
+        "Trend Analysis",
+        "Predictive Modeling",
+        "Regional Insights"
+      ]
+    },
+    {
+      title: "Emergency Response",
+      description: "Rapid emergency response system with real-time coordination between healthcare providers and emergency services.",
+      icon: "🚑",
+      image: "https://raw.githubusercontent.com/PratikMane0112/TelMedSphere/master/Overview/emergency.jpg",
+      stats: {
+        value: "3min",
+        label: "Avg. Response Time"
+      },
+      features: [
+        "Quick Dispatch",
+        "GPS Tracking",
+        "Priority Routing"
+      ]
     }
   ];
 
@@ -110,37 +173,36 @@ const AboutUs = () => {
 
       {/* Pandemic Features - Zigzag Layout */}
       <section className="py-16 px-4 bg-white">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4">Pandemic-Ready Infrastructure</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Designed with lessons from COVID-19 to handle future health emergencies effectively
             </p>
           </div>
-          <div className="space-y-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {pandemicFeatures.map((feature, index) => (
-              <div key={index} className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-8`}>
-                <div className="md:w-1/2">
-                  <div className="relative .h-80 rounded-2xl overflow-hidden shadow-xl">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50" />
-                    <div className="relative h-full flex items-center justify-center p-8">
-                      <div className="text-5xl text-blue-600 font-bold">0{index + 1}</div>
-                    </div>
+              <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-3xl">{feature.icon}</span>
                   </div>
-                </div>
-                <div className="md:w-1/2">
-                  <h3 className="text-3xl font-bold mb-6">{feature.title}</h3>
-                  <p className="text-xl text-gray-600 leading-relaxed">{feature.description}</p>
-                  <ul className="mt-6 space-y-3">
-                    {["Real-time analytics", "Multi-language support", "Cross-platform compatibility"].map((item, i) => (
-                      <li key={i} className="flex items-center text-gray-600">
-                        <svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
+                  <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {feature.description}
+                  </p>
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    <ul className="space-y-2">
+                      {["Analytics", "Multi-language", "Cross-platform"].map((item, i) => (
+                        <li key={i} className="text-sm text-gray-600 flex items-center justify-center">
+                          <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             ))}
@@ -213,7 +275,7 @@ const AboutUs = () => {
           <div className="mt-16 text-center">
             <a 
               href="https://discord.gg/qsdDRKak28"
-              className="inline-flex items-center px-8 py-4 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all duration-300 text-lg"
+              className="inline-flex items-center px-8 py-4 bg-blue-600 text-white-1 font-medium rounded-xl hover:bg-blue-700 transition-all duration-300 text-lg"
             >
               <FaDiscord className="mr-3 text-2xl" /> Become a Contributor
             </a>
