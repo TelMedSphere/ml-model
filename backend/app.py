@@ -231,6 +231,8 @@ def register():
             if 'verified' not in data:
                 data['verified'] = False  
             if 'cart' not in data:
+                data['cart'] = [] 
+            if 'meet' not in data:
                 data['cart'] = []  
             if 'wallet_history' not in data:
                 data['wallet_history'] = []  
@@ -301,7 +303,6 @@ def login():
                 "gender": var["gender"],
                 "phone": var["phone"],
                 "specialization": var["specialization"],
-                "meet": var["meet"],
                 "verified": var.get("verified", False)
             }), 200
         return jsonify({'message': 'Invalid password'}), 400
