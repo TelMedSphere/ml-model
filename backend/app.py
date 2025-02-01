@@ -739,20 +739,27 @@ def save_feedback():
 @app.route('/feedback',methods=['GET'])
 def get_all_feedback():
     try:
-        feedbacks = list(feedback_collection.find({}, {"_id": 0}))
+        feedbacks = list(feedback.find({}, {"_id": 0}))
         return jsonify(feedbacks),200
     except Exception as e:
         return jsonify({"error": str(e)}), 500    
 
-@app.route('/feedback/<id>',methods=['GET'])
+@app.route('/feedback/<id>', methods=['GET'])
 def get_feedback(id):
     try:
-        result = feedback.find_one({'feedbackid':id})         
-        if(result):
-            return jsonify({"message":"Feedback found","data":result}), 200
-        else: return jsonify({"message": "Feedback Not Found"}),400    
+        print(f"Feedback ID: {id}")
+        result = feedback.find_one({'feedbackid': str(id)})  
+
+        print(f"Feedback: {result}")
+        if result:
+            # Convert ObjectId to string
+            result['_id'] = str(result['_id'])
+            return jsonify({"message": "Feedback found", "data": result}), 200
+        else:
+            return jsonify({"message": "Feedback Not Found"}), 400    
+
     except Exception as e:
-        return jsonify({"error": str(e)}), 500  
+        return jsonify({"error": str(e)}), 500
                        
 # ----------- email for contact us routes -----------------
 @app.route('/contact', methods=['POST'])
