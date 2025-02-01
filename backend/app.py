@@ -171,10 +171,12 @@ def register():
             # Add default values if not provided
             if 'username' not in data:
                 data['username'] = 'Patient-' + email.split('@')[0]  # Username based on email
+            if 'email' not in data:
+                data['email'] = email
             if 'age' not in data:
-                data['age'] = '21'  
+                data['age'] = ''  
             if 'gender' not in data:
-                data['gender'] = 'male'  
+                data['gender'] = ''  
             if 'phone' not in data:
                 data['phone'] = ''  
             if 'cart' not in data:
@@ -199,12 +201,17 @@ def register():
                 'message': 'User created successfully',
                 "username": data["username"],
                 "usertype": "patient",
+                "gender": data["gender"],
+                "phone": data["phone"],
+                "email": data["email"],
+                "age": data["age"],
             }), 200
         
         elif data['registerer'] == 'doctor':
             if patients.find_one({'email': email}) or doctor.find_one({'email': email}):
                 return jsonify({'message': 'User already exists'}), 400
-            
+            print("call1.....")
+
             if 'id_token' not in data:
                 hashed_password = bcrypt.generate_password_hash(data['passwd']).decode('utf-8')
                 data['passwd'] = hashed_password
@@ -212,10 +219,12 @@ def register():
            # Add default values if not provided
             if 'username' not in data:
                 data['username'] = 'Doctor-' + email.split('@')[0]  # Username based on email
+            if 'email' not in data:
+                data['email'] = email 
             if 'specialization' not in data:
-                data['specialization'] = 'General'  
+                data['specialization'] = ''  
             if 'gender' not in data:
-                data['gender'] = 'male'  
+                data['gender'] = ''  
             if 'phone' not in data:
                 data['phone'] = ''  
             if 'appointments' not in data:
@@ -238,15 +247,20 @@ def register():
                 data['wallet_history'] = []  
             if 'wallet' not in data:
                 data['wallet'] = 0 
-            if 'age' in data:
-                del data["age"]
 
             doctor.insert_one(data)
+            print("call2.....")
+
 
             return jsonify({
                 'message': 'User created successfully',
                 "username": data["username"],
                 "usertype": "doctor",
+                "gender": data["gender"],
+                "phone": data["phone"],
+                "email": data["email"],
+                "specialization": data["specialization"],
+                "verified": data["verified"]
             }), 200
         
         else:
@@ -285,6 +299,8 @@ def login():
                 "usertype": "patient",
                 "gender": var["gender"],
                 "phone": var["phone"],
+                "email": var["email"],
+                "specialization": data["specialization"],
                 "age": var["age"]
             }), 200
         return jsonify({'message': 'Invalid password'}), 400
@@ -299,10 +315,10 @@ def login():
                 'message': 'User logged in successfully',
                 'access_token': access_token,
                 "username": var["username"],
-                "usertype": "doctor",
+                "usertype": "patient",
                 "gender": var["gender"],
                 "phone": var["phone"],
-                "specialization": var["specialization"],
+                "email": var["email"],
                 "verified": var.get("verified", False)
             }), 200
         return jsonify({'message': 'Invalid password'}), 400
