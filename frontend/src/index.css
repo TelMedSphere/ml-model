@@ -29,13 +29,13 @@ input[type="password"]::-webkit-appearance {
 }
 
 ::selection {
-  background-color: "#515E84";
-  color: #fff;
+  background-color: #60a5fa; /* Changed to lighter blue */
+  color: #000000;
 }
 
 ::-moz-selection {
-  background-color: "#515E84";
-  color: #fff;
+  background-color: #60a5fa; /* Changed to lighter blue */
+  color: #000000;
 }
 
 *,
