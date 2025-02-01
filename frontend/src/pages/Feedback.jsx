@@ -120,16 +120,28 @@ const Feedback = () => {
               </div>
 
               <div className="mb-6">
-                <label htmlFor="rating" className="block text-gray-700 font-semibold mb-2">Rating</label>
-                <Rating
-                  count={5}
-                  value={formData.rating}
-                  onChange={ratingChanged}
-                  size={32}
-                  activeColor="#FFBF00"
-                />
+                  <label htmlFor="rating" className="block text-gray-700 font-semibold mb-2">
+                    Rating
+                  </label>
+                  <Rating
+                    count={5}
+                    value={formData.rating}
+                    onChange={ratingChanged}
+                    size={32}
+                    activeColor="#FFBF00"
+                  />
+                  <input
+                    type="number"
+                    id="rating"
+                    name="rating"
+                    required
+                    value={formData.rating}
+                    onChange={ratingChanged}
+                    className="absolute opacity-0 w-1 h-1"
+                    min="1"
+                    max="5"
+                  />
               </div>
-
               <div className="mb-6">
                 <label htmlFor="comments" className="block text-black-1 font-semibold mb-2">Comments</label>
                 <textarea

@@ -18,6 +18,7 @@ import useScrollDisable from "../hooks/useScrollDisable";
 import bg from "../assets/landing-bg.png";
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
+import TestimonialSection from "../components/landingPage/TestimonialCarousel";
 
 const LandingPage = () => {
   const { isLoading, toggleLoading } = useContext(commonContext);
@@ -308,6 +309,9 @@ const LandingPage = () => {
               ))}
             </div>
           </div>
+        
+          <TestimonialSection />
+
         </section>
         {/* faq-section */}
         <section className="py-20 px-0 text-center text-white-1">
