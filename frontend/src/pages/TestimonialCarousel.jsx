@@ -95,7 +95,7 @@ const TestimonialSection = () => {
             {[...testimonials, ...testimonials].map((testimonial, index) => (
             <div 
                 key={`${testimonial.feedbackid}-${index}`}
-                className="w-full md:w-1/3 flex-shrink-0 max-w-[440px] bg-[#f5f5f5] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
+                className="w-full md:w-1/3 flex-shrink-0 max-w-[440px] bg-[#f5f5f3] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
                 >
               <div className="relative pt-12">
          
@@ -110,7 +110,7 @@ const TestimonialSection = () => {
                 </div>
 
                 {/* Card Content */}
-                <div className="bg-[#faf7f1] rounded-2xl p-8 pt-12 relative">
+                <div className="bg-[#faf2f1] rounded-2xl p-8 pt-12 relative">
                   {/* Quote Mark */}
                   <div className="absolute left-8 top-8">
                     <span className="text-4xl font-serif text-[#d4cbc2]">"</span>
