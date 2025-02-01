@@ -149,8 +149,6 @@ def register():
             try:
                 decoded_token = auth.verify_id_token(data['id_token'])
                 email = decoded_token.get('email')
-                print("id token", decoded_token)
-                print("email",  email)
             except:
                 return jsonify({'message': 'Invalid Firebase token'}), 401
         else:
