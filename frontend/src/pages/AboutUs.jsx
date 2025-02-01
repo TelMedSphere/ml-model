@@ -86,7 +86,7 @@ const AboutUs = () => {
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
-                <Link to="/learn-more" className="inline-flex items-center px-8 py-4 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all duration-300 text-lg">
+                <Link to="/learn-more" className="inline-flex items-center px-8 py-4 bg-blue-600 text-white-1 font-medium rounded-xl hover:bg-blue-700 transition-all duration-300 text-lg">
                   Start Free Consultation
                 </Link>
                 <a href="https://discord.gg/qsdDRKak28" className="inline-flex items-center px-8 py-4 bg-white text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-all duration-300 text-lg border-2 border-gray-200">
@@ -98,7 +98,7 @@ const AboutUs = () => {
               <div className="relative group">
                 <div className="absolute inset-0 bg-blue-100 rounded-3xl blur-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-300" />
                 <img
-                  src="https://raw.githubusercontent.com/PratikMane0112/TelMedSphere/master/frontend/src/assets/landing-bg.png"
+                  src="https://github-production-user-asset-6210df.s3.amazonaws.com/153143167/408791415-344755fc-0398-4646-ae0c-e9af330e74b7.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20250201%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250201T102714Z&X-Amz-Expires=300&X-Amz-Signature=7d27d4240c2455cab4a55f27b6d25248c87731b206f975671bb3dbdba3165d9d&X-Amz-SignedHeaders=host"
                   alt="Platform Preview"
                   className="relative rounded-2xl shadow-2xl transform group-hover:scale-101 transition-transform duration-300"
                 />
@@ -208,11 +208,6 @@ const AboutUs = () => {
                 alt="Project Contributors"
                 className="w-full h-auto min-h-[400px] object-contain transform group-hover:scale-102 transition-transform duration-500"
               />
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-colors duration-300">
-                <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-lg font-medium">
-                  Click to view all contributors
-                </span>
-              </div>
             </a>
           </div>
           <div className="mt-16 text-center">
