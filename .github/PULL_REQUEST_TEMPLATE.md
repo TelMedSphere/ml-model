@@ -24,7 +24,7 @@ Closes #
 - [ ] I have performed a self-review of my code
 - [ ] My code follows the style guidelines of this project
 - [ ] I have commented on my code, particularly in hard-to-understand areas
-- [ ] I have installed pacakages from `frontend` folder by `npm ci` instead of `npm i`
+- [ ] I have installed packages from `frontend` folder by `npm ci` instead of `npm i`
 
 # Screenshots/GIF📷
 <!-- Please add screenshots or a GIF to demonstrate your changes. -->
