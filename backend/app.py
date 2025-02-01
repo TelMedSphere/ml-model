@@ -48,7 +48,8 @@ twilioWhatsappFrom = os.getenv("TWILIO_WHATSAPP_FROM")
 whatsappclient = Client(twilioWhatsappAccountSid, twilioWhatsappAuthToken)
 
 # firebase google authentication variables
-cred = credentials.Certificate("telmedsphere-firebase-adminsdk.json")
+credJSON = os.getenv("FIREBASE_GOOGLE_AUTH")
+cred = credentials.Certificate()
 firebase_admin.initialize_app(cred)
 
 client = pymongo.MongoClient(URI, server_api=ServerApi('1'))
