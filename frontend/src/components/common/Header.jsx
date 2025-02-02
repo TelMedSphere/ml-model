@@ -88,12 +88,12 @@ const Header = () => {
         localStorage.getItem("username") !== "undefined" &&
         localStorage.getItem("usertype") === "patient" && (
           <div
-            className={`overflow-x-hidden flex justify-between items-center py-4 px-40 border-b-[1px] border-blue-8 h-full transition-all duration-300 ease-out max-lg:px-5 max-sm:px-8 max-sm:py-4 max-xs:p-4 ${
+            className={`overflow-x-hidden flex justify-between items-center py-4 px-40 border-b-[1px] border-blue-8 h-full transition-all duration-300 ease-out max-lg:px-5 max-sm:px-8 max-sm:py-4 max-xs:p-4 bg-[#f5f5f5]${
               isScrolled ? "opacity-0 h-0 p-0" : ""
             }`}
           >
             <div
-              className={`flex justify-center items-center flex-wrap text-grey-3 transition-transform duration-500 max-lg:justify-start ${
+              className={`flex justify-center items-center flex-wrap text-grey-3 transition-transform duration-500 max-lg:justify-start bg-[#f5f5f5] ${
                 isScrolled
                   ? "-translate-x-full opacity-0"
                   : "translate-x-0 opacity-100"
@@ -134,18 +134,18 @@ const Header = () => {
         )}
       <header
         id=""
-        className={`z-[999]  w-full text-blue-8 px-8 pt-6 pb-6 transition-colors duration-0 ease-linear h-full ${
+        className={`z-[999]  w-full text-blue-8 px-8 pt-6 pb-6 transition-colors duration-0 ease-linear h-full bg-[#f5f5f5] ${
           isSticky ? "top-0 sticky bg-blue-1" : ""
         } `}
       >
         <div className="max-w-[1440px] mx-auto px-6 max-xl:max-w-[1280px] max-lg:max-w-[1024px] max-md:max-w-[768px] max-sm:max-w-[640px] max-xs:max-w-full h-full">
-          <div className="flex justify-between items-center gap-4">
+          <div className="flex justify-between items-center gap-10 md:gap-4">
             <h2 className="flex items-center">
               <Link to="/">
                 <img
                   src={logo}
                   alt=""
-                  className="max-h-[45px] h-auto w-auto hover:text-blue-9"
+                  className=" h-8 w-full md:max-h-[45px] md:h-auto md:w-auto hover:text-blue-9"
                 />
               </Link>
             </h2>
@@ -162,7 +162,7 @@ const Header = () => {
                   <button
                     type="button"
                     onClick={handleRegisterClick}
-                    className="py-[0.7rem] px-6 rounded-[4px] text-white-1 bg-blue-4 transition-colors duration-300 cursor-pointer hover:bg-blue-6"
+                    className="py-[0.7rem] hidden md:block px-6 rounded-[4px] text-white-1 bg-blue-4 transition-colors duration-300 cursor-pointer hover:bg-blue-6"
                   >
                     Register
                   </button>
