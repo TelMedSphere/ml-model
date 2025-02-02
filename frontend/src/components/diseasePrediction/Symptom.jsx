@@ -222,10 +222,9 @@ import { forwardRef, useImperativeHandle } from "react";
 const Symptom = forwardRef((props, ref) => {
   const [userSymptoms, setUserSymptoms] = useState([]);
   const [searched, setSearched] = useState("");
-  const API_URL = process.env.REACT_APP_API_URL || "https://telmedsphere.onrender.com/predict";
+  const API_URL = import.meta.env.VITE_MODEL_URL || "https://telmedsphere.onrender.com/predict";
   const sendSymptomsToBackend = () => {
     console.log("Method called!")
-
         fetch(API_URL, {
 
       method: "POST",
