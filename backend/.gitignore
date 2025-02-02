@@ -10,6 +10,3 @@ venv/
 .env.test.local
 .env.production.local
 __pycache__
-
-# Firebase Admin SDK service account file
-telmedsphere-firebase-adminsdk.json

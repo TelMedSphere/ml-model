@@ -48,9 +48,17 @@ twilioWhatsappFrom = os.getenv("TWILIO_WHATSAPP_FROM")
 whatsappclient = Client(twilioWhatsappAccountSid, twilioWhatsappAuthToken)
 
 # firebase google authentication variables
-credJSON = os.getenv("FIREBASE_GOOGLE_AUTH")
-cred = credentials.Certificate()
-firebase_admin.initialize_app(cred)
+cred_json = os.getenv("FIREBASE_GOOGLE_AUTH")
+if cred_json:
+    try:
+        cred_dict = json.loads(cred_json)
+        cred = credentials.Certificate(cred_dict)
+        firebase_admin.initialize_app(cred)
+        print("Firebase initialized successfully!")
+    except json.JSONDecodeError as e:
+        print(f"JSON Decode Error: {e}")
+else:
+    print("Error: Firebase credentials not found in environment variables.")
 
 client = pymongo.MongoClient(URI, server_api=ServerApi('1'))
 
