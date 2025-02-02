@@ -15,6 +15,9 @@ import json
 from threading import Thread
 import requests
 from twilio.rest import Client
+from flask import Flask, request, jsonify
+import firebase_admin
+from firebase_admin import credentials, auth
 
 load_dotenv()
 secret_key = secrets.token_hex(16)
@@ -38,10 +41,25 @@ CORS(app, supports_credentials=True)
 bcrypt = Bcrypt(app)
 
 URI = os.getenv("DBURL")
+
+# Twilio Whatsapp notification variables
 twilioWhatsappAccountSid = os.getenv("TWILIO_WHATSAPP_ACCOUNT_SID")
 twilioWhatsappAuthToken = os.getenv("TWILIO_WHATSAPP_AUTH_TOKEN")
 twilioWhatsappFrom = os.getenv("TWILIO_WHATSAPP_FROM")
 whatsappclient = Client(twilioWhatsappAccountSid, twilioWhatsappAuthToken)
+
+# firebase google authentication variables
+cred_json = os.getenv("FIREBASE_GOOGLE_AUTH")
+if cred_json:
+    try:
+        cred_dict = json.loads(cred_json)
+        cred = credentials.Certificate(cred_dict)
+        firebase_admin.initialize_app(cred)
+        print("Firebase initialized successfully!")
+    except json.JSONDecodeError as e:
+        print(f"JSON Decode Error: {e}")
+else:
+    print("Error: Firebase credentials not found in environment variables.")
 
 client = pymongo.MongoClient(URI, server_api=ServerApi('1'))
 
@@ -70,12 +88,12 @@ def before_request():
 def whatsapp_message(msg):
     try:
         # Extract recipient and message content from the msg dictionary
-        to = msg.get('to')  # Recipient's phone number in the format 'whatsapp:+<phone_number>'
-        body = msg.get('body')  # The message content (text part)
+        to = msg.get('to')  
+        body = msg.get('body')  
 
         # Prepare the message sending parameters
         message_params = {
-            "from_": twilioWhatsappFrom,  # Your Twilio WhatsApp number
+            "from_": twilioWhatsappFrom,
             "to": to,
             "body": body
         }
@@ -129,54 +147,129 @@ def create_payment():
         print(e)
         return jsonify(error=str(e)), 403
 
-# # ----------- Authentication routes ----------------
-# 
+# ----------- Authentication routes ----------------
+
 @app.route('/register', methods=['POST'])
 def register():
     if request.is_json:
         data = request.get_json()
+
+        # Firebase Google Register
+        if 'id_token' in data:
+            try:
+                decoded_token = auth.verify_id_token(data['id_token'])
+                email = decoded_token.get('email')
+            except:
+                return jsonify({'message': 'Invalid Firebase token'}), 401
+        else:
+            email = data.get('email')
+
+        if not email:
+            return jsonify({'message': 'Email is required'}), 400
         
+        # Custom Register
         if data['registerer'] == 'patient':
-            if doctor.find_one({'email': data['email']}):
+            if doctor.find_one({'email': email}) or patients.find_one({'email': email}):
                 return jsonify({'message': 'User already exists'}), 400
-            user = patients.find_one({'email': data['email']})
-            if user:
-                return jsonify({'message': 'User already exists'}), 400
-            else:
+            
+            if 'id_token' not in data:
                 hashed_password = bcrypt.generate_password_hash(data['passwd']).decode('utf-8')
                 data['passwd'] = hashed_password
-                data['upcomingAppointments'] = []
-                if 'specialization' in data:
-                    del data['specialization']
-                patients.insert_one(data)
+            
+            # Add default values if not provided
+            if 'username' not in data:
+                data['username'] = 'Patient-' + email.split('@')[0]  # Username based on email
+            if 'email' not in data:
+                data['email'] = email
+            if 'age' not in data:
+                data['age'] = ''  
+            if 'gender' not in data:
+                data['gender'] = ''  
+            if 'phone' not in data:
+                data['phone'] = ''  
+            if 'cart' not in data:
+                data['cart'] = []  
+            if 'wallet' not in data:
+                data['wallet'] = 0  
+            if 'wallet_history' not in data:
+                data['wallet_history'] = []  
+            data['upcomingAppointments'] = []
+            if 'specialization' in data:
+                del data['specialization']
 
+            patients.insert_one(data)
+
+            if 'phone' in data:
                 whatsapp_message({
                     "to": f"whatsapp:{data['phone']}",
                     "body": "Thank You for Signing up on TelMedSphere"
                 })
 
-                return jsonify({'message': 'User created successfully'}), 200
-            
+            return jsonify({
+                'message': 'User created successfully',
+                "username": data["username"],
+                "usertype": "patient",
+                "gender": data["gender"],
+                "phone": data["phone"],
+                "email": data["email"],
+                "age": data["age"],
+            }), 200
+        
         elif data['registerer'] == 'doctor':
-            if patients.find_one({'email': data['email']}):
+            if patients.find_one({'email': email}) or doctor.find_one({'email': email}):
                 return jsonify({'message': 'User already exists'}), 400
-            user = doctor.find_one({'email': data['email']})
-            if user:
-                return jsonify({'message': 'User already exists'}), 400
-            else:
+
+            if 'id_token' not in data:
                 hashed_password = bcrypt.generate_password_hash(data['passwd']).decode('utf-8')
                 data['passwd'] = hashed_password
-                data['meet'] = False
-                data['appointments'] = 0
-                data['stars'] = 0
-                data["status"] = "offline"
-                data['upcomingAppointments'] = []
-                if 'age' in data:
-                    del data["age"]
-                doctor.insert_one(data)
-                return jsonify({'message': 'User created successfully'}), 200
+            
+           # Add default values if not provided
+            if 'username' not in data:
+                data['username'] = 'Doctor-' + email.split('@')[0]  # Username based on email
+            if 'email' not in data:
+                data['email'] = email 
+            if 'specialization' not in data:
+                data['specialization'] = ''  
+            if 'gender' not in data:
+                data['gender'] = ''  
+            if 'phone' not in data:
+                data['phone'] = ''  
+            if 'appointments' not in data:
+                data['appointments'] = 0  
+            if 'stars' not in data:
+                data['stars'] = 0  
+            if 'status' not in data:
+                data['status'] = 'offline'  
+            if 'upcomingAppointments' not in data:
+                data['upcomingAppointments'] = []  
+            if 'fee' not in data:
+                data['fee'] = 0  
+            if 'verified' not in data:
+                data['verified'] = False  
+            if 'cart' not in data:
+                data['cart'] = [] 
+            if 'meet' not in data:
+                data['cart'] = []  
+            if 'wallet_history' not in data:
+                data['wallet_history'] = []  
+            if 'wallet' not in data:
+                data['wallet'] = 0 
+
+            doctor.insert_one(data)
+
+            return jsonify({
+                'message': 'User created successfully',
+                "username": data["username"],
+                "usertype": "doctor",
+                "gender": data["gender"],
+                "phone": data["phone"],
+                "email": data["email"],
+                "specialization": data["specialization"],
+                "verified": data["verified"]
+            }), 200
+        
         else:
-            return jsonify({'message': 'Invalid registerAs'}), 400
+            return jsonify({'message': 'Invalid registerer type'}), 400
     else:
         return jsonify({'message': 'Invalid request'}), 400
 
@@ -185,26 +278,57 @@ def login():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
     data = request.get_json()
-    var = patients.find_one({'email': data['email']})
-    if var:
-        if bcrypt.check_password_hash(var['passwd'], data['passwd']):
-            access_token = create_access_token(identity=data['email'])
-            # token = access_token.decode('utf-8')
-            return jsonify({'message': 'User logged in successfully', 'access_token': access_token, "username": var["username"], "usertype": "patient", "gender": var["gender"], "phone": var["phone"], "age": var["age"]}), 200
-        else:
-            return jsonify({'message': 'Invalid password'}), 400
+
+    # Firebase Google Login
+    if 'id_token' in data:
+        try:
+            decoded_token = auth.verify_id_token(data['id_token'])
+            email = decoded_token.get('email')
+        except:
+            return jsonify({'message': 'Invalid Firebase token'}), 401
     else:
-        doctor.update_one({'email': data['email']}, {'$set': {'status': 'online'}})
-        var = doctor.find_one({'email': data['email']})
-        if var:
-            if bcrypt.check_password_hash(var['passwd'], data['passwd']):
-                access_token = create_access_token(identity=data['email'])
-                # token = access_token.decode('utf-8')
-                return jsonify({'message': 'User logged in successfully', 'access_token': access_token, "username": var["username"], "usertype": "doctor", "gender": var["gender"], "phone": var["phone"], "specialization": var["specialization"], "meet": var["meet"], "verified": var.get("verified", False)}), 200
-            else:
-                return jsonify({'message': 'Invalid password'}), 400
-        else:
-            return jsonify({'message': 'Invalid username or password'}), 401
+        email = data.get('email')
+
+    if not email:
+        return jsonify({'message': 'Email is required'}), 400
+    
+    # Custom Login
+    var = patients.find_one({'email': email})
+    if var:
+        if 'id_token' in data or ('passwd' in data and bcrypt.check_password_hash(var['passwd'], data['passwd'])):
+            access_token = create_access_token(identity=email)
+            return jsonify({
+                'message': 'User logged in successfully',
+                'access_token': access_token,
+                "username": var["username"],
+                "usertype": "patient",
+                "gender": var["gender"],
+                "phone": var["phone"],
+                "email": var["email"],
+                "age": var["age"]
+            }), 200
+        return jsonify({'message': 'Invalid password'}), 400
+
+    var = doctor.find_one({'email': email})
+    if var:
+        if 'id_token' in data or ('passwd' in data and bcrypt.check_password_hash(var['passwd'], data['passwd'])):
+            # Update doctor status only if login is successful
+            doctor.update_one({'email': email}, {'$set': {'status': 'online'}})
+            access_token = create_access_token(identity=email)
+            return jsonify({
+                'message': 'User logged in successfully',
+                'access_token': access_token,
+                "username": var["username"],
+                "usertype": "doctor",
+                "gender": var["gender"],
+                "phone": var["phone"],
+                "email": var["email"],
+                "specialization": var["specialization"],
+                "verified": var.get("verified", False)
+            }), 200
+        return jsonify({'message': 'Invalid password'}), 400
+
+    return jsonify({'message': 'Invalid username or password'}), 401
         
 @app.route('/verify', methods=['POST'])
 def verify():
