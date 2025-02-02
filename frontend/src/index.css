@@ -16,26 +16,26 @@ input[type="password"]::-webkit-appearance {
 }
 
 ::-webkit-scrollbar-track {
-  background-color: "#B0BBD8";
+  background-color: #B0BBD8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: "#7584AE";
+  background-color: #7584AE;
   border-radius: 100px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: "#6575A5";
+  background-color: #6575A5;
 }
 
 ::selection {
-  background-color: #60a5fa; 
-  color: #000000;
+  background-color: #515E84;
+  color: #fff;
 }
 
 ::-moz-selection {
-  background-color: #60a5fa; 
-  color: #000000;
+  background-color: #515E84;
+  color: #fff;
 }
 
 *,
@@ -49,7 +49,7 @@ input[type="password"]::-webkit-appearance {
 html {
   font-size: 16px;
   scrollbar-width: thin;
-  scrollbar-color: "#7584AE", "#B0BBD8";
+  scrollbar-color: #7584AE, #B0BBD8;
 }
 @media (max-width: 479.98px) {
   html {
@@ -59,7 +59,7 @@ html {
 
 body {
   font-family: "Montserrat", sans-serif;
-  background-color: "#f5f5f5";
+  background-color: #f5f5f5;
   color: "#B0BBD8";
 }
 
@@ -80,7 +80,7 @@ textarea {
 
 input[type="checkbox"],
 input[type="range"] {
-  accent-color: "#4A4CB2";
+  accent-color: #4A4CB2;
 }
 
 button {
@@ -112,5 +112,5 @@ svg {
 }
 
 del {
-  color: "#7584AE";
+  color: #7584AE;
 }

@@ -14,8 +14,9 @@ import {
 import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa6";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import { auth, signInWithPopup, provider } from "../../firebase";
 
-const AccountForm = ({isSignup, setIsSignup}) => {
+const AccountForm = ({ isSignup, setIsSignup }) => {
   const { isFormOpen, toggleForm, setFormUserInfo } = useContext(commonContext);
   const [username, setUsername] = useState("");
   const [usertype, setUsertype] = useState("patient");
@@ -36,6 +37,7 @@ const AccountForm = ({isSignup, setIsSignup}) => {
   const [showPassword, setShowPassword] = useState(false);
   const formRef = useRef();
   const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [isGoogleAuth, setIsGoogleAuth] = useState(false);
 
   useOutsideClose(formRef, () => {
     toggleForm(false);
@@ -114,6 +116,106 @@ const AccountForm = ({isSignup, setIsSignup}) => {
     setIsSuccessLoading(false);
   };
 
+  const handleGoogleRegister = async () => {
+    try {
+      // Sign in with Google
+      const result = await signInWithPopup(auth, provider);
+      const idToken = await result.user.getIdToken(); // Get the ID token
+
+      // Send idToken along with userType to the backend for registration
+      await httpClient
+        .post("/register", {
+          registerer: usertype, // 'patient' or 'doctor'
+          email: result.user.email, // Use email from Google account
+          id_token: idToken, // Send the ID token received from Google
+        })
+        .then((res) => {
+          setIsAlert("success");
+          setAlertCont("Signup Successful");
+          setTimeout(() => {
+            setIsAlert("");
+            toggleForm(false);
+            setFormUserInfo({
+              username: res.data.username,
+              usertype: usertype,
+              gender: res.data.gender,
+              phone: res.data.phone,
+              email: res.data.email,
+              passwd,
+              specialization: res.data.specialization,
+              age: res.data.age,
+              verified: false,
+            });
+            toggleForm(false);
+          }, 1500);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsAlert("error");
+          setAlertCont("User already exists");
+          setTimeout(() => {
+            setIsAlert("");
+          }, 1500);
+        });
+    } catch (error) {
+      console.error(error);
+      setIsAlert("error");
+      setAlertCont("Signup Failed");
+      setTimeout(() => {
+        setIsAlert("");
+      }, 1500);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      // Sign in with Google
+      const result = await signInWithPopup(auth, provider);
+      const idToken = await result.user.getIdToken(); // Get the ID token
+
+      // Send idToken along with userType to the backend for registration
+      await httpClient
+        .post("/login", {
+          id_token: idToken, // Send the ID token received from Google
+        })
+        .then((res) => {
+          localStorage.setItem("token", res.data.access_token);
+          setIsAlert("success");
+          setAlertCont("Login Successful");
+          setTimeout(() => {
+            setIsAlert("");
+            toggleForm(false);
+            setFormUserInfo({
+              username: res.data.username,
+              usertype: res.data.usertype,
+              gender: res.data.gender,
+              phone: res.data.phone,
+              email: res.data.email,
+              passwd,
+              specialization: res.data.specialization,
+              age: res.data.age,
+              verified: res.data.verified,
+            });
+          }, 1500);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsAlert("error");
+          setAlertCont("Login Failed");
+          setTimeout(() => {
+            setIsAlert("");
+          }, 1500);
+        });
+    } catch (e) {
+      console.error(e);
+      setIsAlert("error");
+      setAlertCont("Login Failed");
+      setTimeout(() => {
+        setIsAlert("");
+      }, 1500);
+    }
+  };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (isInvEmail || isInvPass || isInvPhone) {
@@ -127,79 +229,90 @@ const AccountForm = ({isSignup, setIsSignup}) => {
       setIsSuccessLoading(false);
 
       if (isSignupVisible) {
-        httpClient
-          .post("/register", {
-            username,
-            registerer: usertype,
-            age,
-            gender,
-            phone: "+91" + phone,
-            email,
-            passwd,
-            specialization,
-          })
-          .then((res) => {
-            console.log(res);
-            setIsAlert("success");
-            setAlertCont("Signup Successful");
-            setTimeout(() => {
-              setIsAlert("");
-              setFormUserInfo({
-                username: username,
-                usertype: usertype,
-                gender: gender,
-                phone: phone,
-                email: email,
-                passwd: passwd,
-                specialization: specialization,
-                age: age,
-                verified: false,
-              });
-              toggleForm(false);
-            }, 1500);
-          })
-          .catch((err) => {
-            console.log(err);
-            setIsAlert("error");
-            setAlertCont("User already exists");
-            setTimeout(() => {
-              setIsAlert("");
-            }, 1500);
-          });
+        if (isGoogleAuth) {
+          // Google signup (only asking for userType)
+          handleGoogleRegister(); // Call Google Signup
+        } else {
+          // Regular signup
+          httpClient
+            .post("/register", {
+              username,
+              registerer: usertype,
+              age,
+              gender,
+              phone: "+91" + phone,
+              email,
+              passwd,
+              specialization,
+            })
+            .then((res) => {
+              setIsAlert("success");
+              setAlertCont("Signup Successful");
+              setTimeout(() => {
+                setIsAlert("");
+                setFormUserInfo({
+                  username,
+                  usertype,
+                  gender,
+                  phone,
+                  email,
+                  passwd,
+                  specialization,
+                  age,
+                  verified: false,
+                });
+                toggleForm(false);
+              }, 1500);
+            })
+            .catch((err) => {
+              console.log(err);
+              setIsAlert("error");
+              setAlertCont("User already exists");
+              setTimeout(() => {
+                setIsAlert("");
+              }, 1500);
+            });
+        }
       } else {
-        httpClient
-          .post("/login", {
-            email,
-            passwd,
-          })
-          .then((res) => {
-            localStorage.setItem("token", res.data.access_token);
-            setIsAlert("success");
-            setAlertCont("Login Successful");
-            setTimeout(() => {
-              setIsAlert("");
-              toggleForm(false);
-              setFormUserInfo({
-                username: res.data.username,
-                usertype: res.data.usertype,
-                gender: res.data.gender,
-                phone: res.data.phone,
-                email,
-                passwd,
-                specialization: res.data.specialization,
-                age: res.data.age,
-                verified: res.data.verified,
-              });
-            }, 1500);
-          })
-          .catch((err) => {
-            console.log(err);
-            setIsAlert("error");
-            setAlertCont("Login Failed");
-            setTimeout(() => {
-              setIsAlert("");
-            }, 1500);
-          });
+        if (isGoogleAuth) {
+          // Google signup (only asking for userType)
+          handleGoogleLogin(); // Call Google Signup
+        } else {
+          // Login functionality here
+          httpClient
+            .post("/login", {
+              email,
+              passwd,
+            })
+            .then((res) => {
+              localStorage.setItem("token", res.data.access_token);
+              setIsAlert("success");
+              setAlertCont("Login Successful");
+              setTimeout(() => {
+                setIsAlert("");
+                toggleForm(false);
+                setFormUserInfo({
+                  username: res.data.username,
+                  usertype: res.data.usertype,
+                  gender: res.data.gender,
+                  phone: res.data.phone,
+                  email: res.data.email,
+                  passwd,
+                  specialization: res.data.specialization,
+                  age: res.data.age,
+                  verified: res.data.verified,
+                });
+              }, 1500);
+            })
+            .catch((err) => {
+              console.log(err);
+              setIsAlert("error");
+              setAlertCont("Login Failed");
+              setTimeout(() => {
+                setIsAlert("");
+              }, 1500);
+            });
+        }
       }
     }, 1500);
   };
@@ -289,254 +402,298 @@ const AccountForm = ({isSignup, setIsSignup}) => {
                       </div>
                     </div>
 
-                    <div className="relative mb-4">
-                      <FaUser
-                        className="absolute left-3 top-[15px] text-white-1"
-                        size={16}
-                      />
-                      <input
-                        type="text"
-                        name="username"
-                        placeholder="Username"
-                        className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    {usertype === "doctor" && (
+                    {!isGoogleAuth && (
                       <>
                         <div className="relative mb-4">
-                          <FaUserMd
+                          <FaUser
                             className="absolute left-3 top-[15px] text-white-1"
-                            size={18}
+                            size={16}
                           />
                           <input
                             type="text"
-                            name="specialization"
-                            placeholder="Specialization"
+                            name="username"
+                            placeholder="Username"
                             className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
-                            value={specialization}
-                            onChange={(e) => setSpecialization(e.target.value)}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                             required
                           />
                         </div>
 
-                        <div className="relative mb-4">
-                          <FaIdCard
-                            className="absolute left-3 top-[15px] text-white-1"
-                            size={18}
-                          />
-                          <input
-                            type="text"
-                            name="ID"
-                            placeholder="Doctor ID"
-                            className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
-                            value={doctorId}
-                            onChange={(e) => setDoctorId(e.target.value)}
-                            required
-                          />
-                        </div>
-                      </>
-                    )}
+                        {usertype === "doctor" && (
+                          <>
+                            <div className="relative mb-4">
+                              <FaUserMd
+                                className="absolute left-3 top-[15px] text-white-1"
+                                size={18}
+                              />
+                              <input
+                                type="text"
+                                name="specialization"
+                                placeholder="Specialization"
+                                className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
+                                value={specialization}
+                                onChange={(e) =>
+                                  setSpecialization(e.target.value)
+                                }
+                                required
+                              />
+                            </div>
 
-                    {usertype === "patient" && (
-                      <div>
+                            <div className="relative mb-4">
+                              <FaIdCard
+                                className="absolute left-3 top-[15px] text-white-1"
+                                size={18}
+                              />
+                              <input
+                                type="text"
+                                name="ID"
+                                placeholder="Doctor ID"
+                                className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
+                                value={doctorId}
+                                onChange={(e) => setDoctorId(e.target.value)}
+                                required
+                              />
+                            </div>
+                          </>
+                        )}
+
+                        {usertype === "patient" && (
+                          <div>
+                            <div className="relative mb-4">
+                              <FaUserClock
+                                className="absolute left-3 top-[15px] text-white-1"
+                                size={18}
+                              />
+                              <input
+                                type="text"
+                                name="age"
+                                placeholder="Age"
+                                className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
+                                value={age}
+                                onChange={(e) => {
+                                  checkAge(e.target.value);
+                                  setAge(e.target.value);
+                                }}
+                                required
+                              />
+                            </div>
+                            {age !== "" && isInvAge && (
+                              <Alert
+                                severity="error"
+                                className="form_sucess_alert"
+                              >
+                                Invalid Age
+                              </Alert>
+                            )}
+                          </div>
+                        )}
+
+                        <div className="relative mb-5">
+                          <label className="text-blue-1">Gender</label>
+                          <div className="mt-[10px]">
+                            <input
+                              type="radio"
+                              name="gender"
+                              id="male"
+                              className="appearance-none my-0 mx-[5px] w-[1.2em] h-[1.2em] bg-blue-1 content-none cursor-pointer outline-none rounded-[15px] -top-[2px] -left-[1px] relative inline-block visible border-[4px] border-blue-1 checked:bg-blue-8"
+                              value="male"
+                              checked={gender === "male"}
+                              onChange={(e) => setGender(e.target.value)}
+                            />{" "}
+                            <label
+                              htmlFor="male"
+                              className="cursor-pointer text-white-1 mr-4"
+                            >
+                              Male
+                            </label>
+                            <input
+                              type="radio"
+                              name="gender"
+                              id="female"
+                              className="appearance-none my-0 mx-[5px] w-[1.2em] h-[1.2em] bg-blue-1 content-none cursor-pointer outline-none rounded-[15px] -top-[2px] -left-[1px] relative inline-block visible border-[4px] border-blue-1 checked:bg-blue-8"
+                              value="female"
+                              checked={gender === "female"}
+                              onChange={(e) => setGender(e.target.value)}
+                            />{" "}
+                            <label
+                              htmlFor="female"
+                              className="cursor-pointer text-white-1 mr-4"
+                            >
+                              Female
+                            </label>
+                            <input
+                              type="radio"
+                              name="gender"
+                              id="other"
+                              className="appearance-none my-0 mx-[5px] w-[1.2em] h-[1.2em] bg-blue-1 content-none cursor-pointer outline-none rounded-[15px] -top-[2px] -left-[1px] relative inline-block visible border-[4px] border-blue-1 checked:bg-blue-8"
+                              value="other"
+                              checked={gender === "other"}
+                              onChange={(e) => setGender(e.target.value)}
+                            />{" "}
+                            <label
+                              htmlFor="other"
+                              className="cursor-pointer text-white-1 mr-4"
+                            >
+                              Other
+                            </label>
+                          </div>
+                        </div>
+
                         <div className="relative mb-4">
-                          <FaUserClock
+                          <FaPhoneAlt
                             className="absolute left-3 top-[15px] text-white-1"
-                            size={18}
+                            size={15}
                           />
                           <input
                             type="text"
-                            name="age"
-                            placeholder="Age"
+                            name="phone"
+                            placeholder="Phone Number"
                             className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
-                            value={age}
+                            value={phone}
                             onChange={(e) => {
-                              checkAge(e.target.value);
-                              setAge(e.target.value);
+                              validatePhoneNumber(e.target.value);
+                              setPhone(e.target.value);
                             }}
                             required
                           />
                         </div>
-                        {age !== "" && isInvAge && (
-                          <Alert severity="error" className="form_sucess_alert">
-                            Invalid Age
+                        {phone !== "" && isInvPhone && (
+                          <Alert severity="error" className="input_alert">
+                            Invalid Phone Number
+                          </Alert>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+
+                {!isGoogleAuth && (
+                  <>
+                    <div>
+                      <div className="relative mb-4">
+                        <MdEmail
+                          className="absolute left-3 top-[15px] text-white-1"
+                          size={18}
+                        />
+                        <input
+                          type="text"
+                          name="email"
+                          placeholder="Email"
+                          className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
+                          value={email}
+                          onChange={(e) => {
+                            checkEmail(e.target.value);
+                            setEmail(e.target.value);
+                          }}
+                          required
+                        />
+                      </div>
+                      {email !== "" && isInvEmail && (
+                        <Alert severity="error" className="input_alert">
+                          Invalid Email
+                        </Alert>
+                      )}
+                    </div>
+
+                    {!isForgotPassword && (
+                      <div>
+                        <div className="relative mb-4">
+                          <FaLock
+                            className="absolute left-3 top-[15px] text-white-1"
+                            size={16}
+                          />
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder="Password"
+                            className=" appearance-none py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
+                            value={passwd}
+                            onChange={(e) => {
+                              checkPasswd(e.target.value);
+                              setPasswd(e.target.value);
+                            }}
+                            required
+                            autoComplete=""
+                          />
+                          <span
+                            onClick={togglePasswordVisibility}
+                            className="absolute right-3 top-[15px] cursor-pointer"
+                          >
+                            {showPassword ? (
+                              <IoEyeOffOutline
+                                className="text-white-1"
+                                size={18}
+                              />
+                            ) : (
+                              <IoEyeOutline
+                                className="text-white-1"
+                                size={18}
+                              />
+                            )}
+                          </span>
+                        </div>
+
+                        {isSignupVisible && passwd !== "" && isInvPass && (
+                          <Alert severity="warning" className="input_alert">
+                            Password should contain at least 6 characters
                           </Alert>
                         )}
                       </div>
                     )}
 
-                    <div className="relative mb-5">
-                      <label className="text-blue-1">Gender</label>
-                      <div className="mt-[10px]">
-                        <input
-                          type="radio"
-                          name="gender"
-                          id="male"
-                          className="appearance-none my-0 mx-[5px] w-[1.2em] h-[1.2em] bg-blue-1 content-none cursor-pointer outline-none rounded-[15px] -top-[2px] -left-[1px] relative inline-block visible border-[4px] border-blue-1 checked:bg-blue-8"
-                          value="male"
-                          checked={gender === "male"}
-                          onChange={(e) => setGender(e.target.value)}
-                        />{" "}
-                        <label
-                          htmlFor="male"
-                          className="cursor-pointer text-white-1 mr-4"
-                        >
-                          Male
-                        </label>
-                        <input
-                          type="radio"
-                          name="gender"
-                          id="female"
-                          className="appearance-none my-0 mx-[5px] w-[1.2em] h-[1.2em] bg-blue-1 content-none cursor-pointer outline-none rounded-[15px] -top-[2px] -left-[1px] relative inline-block visible border-[4px] border-blue-1 checked:bg-blue-8"
-                          value="female"
-                          checked={gender === "female"}
-                          onChange={(e) => setGender(e.target.value)}
-                        />{" "}
-                        <label
-                          htmlFor="female"
-                          className="cursor-pointer text-white-1 mr-4"
-                        >
-                          Female
-                        </label>
-                        <input
-                          type="radio"
-                          name="gender"
-                          id="other"
-                          className="appearance-none my-0 mx-[5px] w-[1.2em] h-[1.2em] bg-blue-1 content-none cursor-pointer outline-none rounded-[15px] -top-[2px] -left-[1px] relative inline-block visible border-[4px] border-blue-1 checked:bg-blue-8"
-                          value="other"
-                          checked={gender === "other"}
-                          onChange={(e) => setGender(e.target.value)}
-                        />{" "}
-                        <label
-                          htmlFor="other"
-                          className="cursor-pointer text-white-1 mr-4"
-                        >
-                          Other
-                        </label>
-                      </div>
-                    </div>
+                    {!isSignupVisible && !isForgotPassword && (
+                      <button
+                        type="button"
+                        onClick={() => setIsForgotPassword(true)}
+                        className="text-blue-1 text-sm hover:underline text-left outline-none border-none"
+                      >
+                        Forgot Password?
+                      </button>
+                    )}
 
-                    <div className="relative mb-4">
-                      <FaPhoneAlt
-                        className="absolute left-3 top-[15px] text-white-1"
-                        size={15}
-                      />
-                      <input
-                        type="text"
-                        name="phone"
-                        placeholder="Phone Number"
-                        className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
-                        value={phone}
-                        onChange={(e) => {
-                          validatePhoneNumber(e.target.value);
-                          setPhone(e.target.value);
-                        }}
-                        required
-                      />
-                    </div>
-                    {phone !== "" && isInvPhone && (
-                      <Alert severity="error" className="input_alert">
-                        Invalid Phone Number
-                      </Alert>
+                    {isForgotPassword && (
+                      <button
+                        type="button"
+                        onClick={() => setIsForgotPassword(false)}
+                        className="text-blue-1 text-sm hover:underline text-left outline-none border-none"
+                      >
+                        Back to Login
+                      </button>
                     )}
                   </>
                 )}
 
-                <div>
-                  <div className="relative mb-4">
-                    <MdEmail
-                      className="absolute left-3 top-[15px] text-white-1"
-                      size={18}
-                    />
-                    <input
-                      type="text"
-                      name="email"
-                      placeholder="Email"
-                      className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
-                      value={email}
-                      onChange={(e) => {
-                        checkEmail(e.target.value);
-                        setEmail(e.target.value);
-                      }}
-                      required
-                    />
-                  </div>
-                  {email !== "" && isInvEmail && (
-                    <Alert severity="error" className="input_alert">
-                      Invalid Email
-                    </Alert>
-                  )}
-                </div>
-
                 {!isForgotPassword && (
-                  <div>
-                    <div className="relative mb-4">
-                      <FaLock
-                        className="absolute left-3 top-[15px] text-white-1"
-                        size={16}
-                      />
+                  <div className="mb-4">
+                    <div className="flex justify-start items-center mt-6">
                       <input
-                        type={showPassword ? "text" : "password"}
-                        name="password"
-                        placeholder="Password"
-                        className=" appearance-none py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
-                        value={passwd}
-                        onChange={(e) => {
-                          checkPasswd(e.target.value);
-                          setPasswd(e.target.value);
-                        }}
-                        required
-                        autoComplete=""
+                        type="checkbox"
+                        name="passcheck"
+                        id="passcheck"
+                        className="mr-[10px] cursor-pointer"
+                        checked={isGoogleAuth}
+                        onChange={() => setIsGoogleAuth((prev) => !prev)}
                       />
-                      <span
-                        onClick={togglePasswordVisibility}
-                        className="absolute right-3 top-[15px] cursor-pointer"
+                      <label
+                        htmlFor="passcheck"
+                        className="cursor-pointer text-white-1"
                       >
-                        {showPassword ? (
-                          <IoEyeOffOutline className="text-white-1" size={18} />
-                        ) : (
-                          <IoEyeOutline className="text-white-1" size={18} />
-                        )}
-                      </span>
+                        {` Wanna use google ${
+                          isSignupVisible ? "Sign Up" : "Sign In"
+                        } ?`}
+                      </label>
                     </div>
-
-                    {isSignupVisible && passwd !== "" && isInvPass && (
-                      <Alert severity="warning" className="input_alert">
-                        Password should contain at least 6 characters
-                      </Alert>
-                    )}
                   </div>
-                )}
-
-                {!isSignupVisible && !isForgotPassword && (
-                  <button
-                    type="button"
-                    onClick={() => setIsForgotPassword(true)}
-                    className="text-blue-1 text-sm hover:underline text-left outline-none border-none"
-                  >
-                    Forgot Password?
-                  </button>
-                )}
-
-                {isForgotPassword && (
-                  <button
-                    type="button"
-                    onClick={() => setIsForgotPassword(false)}
-                    className="text-blue-1 text-sm hover:underline text-left outline-none border-none"
-                  >
-                    Back to Login
-                  </button>
                 )}
 
                 <button
                   type="submit"
                   className="mt-[0.8rem] mb-[0.4rem] relative bg-blue-7 hover:bg-blue-6 disabled:bg-blue-7 disabled:cursor-not-allowed py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out text-blue-1 w-full"
                   disabled={
-                    (isForgotPassword && isInvEmail) || // Disable if Forgot Password and email is invalid
+                    // Disable the button in the following cases:
+                    // - If "Forgot Password" is active and the email is invalid, but only if Google Auth is not used
+                    (!isGoogleAuth && isForgotPassword && isInvEmail) || // Disable if Forgot Password and email is invalid, unless Google Auth
                     (isSignupVisible &&
                       (isInvAge || isInvEmail || isInvPass)) || // Disable if Sign Up and any input is invalid
                     (!isForgotPassword &&
@@ -546,6 +703,8 @@ const AccountForm = ({isSignup, setIsSignup}) => {
                 >
                   {isSuccessLoading ? (
                     <CircularProgress size={24} />
+                  ) : isGoogleAuth ? (
+                    `${isSignupVisible ? "Sign Up" : "Sign In"} with Google`
                   ) : isForgotPassword ? (
                     "Send Reset Link"
                   ) : isSignupVisible ? (
