@@ -86,12 +86,19 @@ const ChatBot = () => {
   };
 
   const processMessageToGemini = async (chatMessages) => {
-  
-    const apiRequestBody = {
-      contents: [{
-        parts: chatMessages.map(message => ({ text: message.message }))
-      }]
+
+    const systemMessage = {
+      role : "system",
+      text : "You are TelMedBot, an AI-powered medical assistant. Your job is to provide medically accurate, context-aware, and professional responses to user queries while aligning with ethical and medical guidelines. Avoid off-topic responses."
     };
+
+    const formattedMessages = [
+      { parts: [{ text: systemMessage.text }] }, // System message first
+      ...chatMessages.map((message) => ({ parts: [{ text: message.message }] })), // User and bot messages
+    ];
+  
+    const apiRequestBody = { contents: formattedMessages };
+
   
     try {
       const response = await fetch(
