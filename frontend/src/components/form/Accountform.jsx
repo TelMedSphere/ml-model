@@ -15,6 +15,7 @@ import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa6";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { auth, signInWithPopup, provider } from "../../firebase";
+import heartRateLogo from "../../assets/heart-rate-logo.png";
 
 const AccountForm = ({ isSignup, setIsSignup }) => {
   const { isFormOpen, toggleForm, setFormUserInfo } = useContext(commonContext);
@@ -38,6 +39,10 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
   const formRef = useRef();
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isGoogleAuth, setIsGoogleAuth] = useState(false);
+  const [isTelMedSphereAuth, setIsTelMedSphereAuth] = useState(true);
+
+  const setCurrAuthApp = [setIsTelMedSphereAuth, setIsGoogleAuth];
+  const [currAuthAppIdx, setCurrAuthAppIdx] = useState(0);
 
   useOutsideClose(formRef, () => {
     toggleForm(false);
@@ -114,6 +119,14 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
       setTimeout(() => setIsAlert(""), 1500);
     }
     setIsSuccessLoading(false);
+  };
+
+  const handleAuthApp = (idx) => {
+    setCurrAuthAppIdx((prevIdx) => {
+      setCurrAuthApp[prevIdx](false); // Reset previous auth to false
+      setCurrAuthApp[idx](true); // Set new auth to true
+      return idx; // Update index properly
+    });
   };
 
   const handleGoogleRegister = async () => {
@@ -664,56 +677,112 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                   </>
                 )}
 
-                {!isForgotPassword && (
-                  <div className="mb-4">
-                    <div className="flex justify-start items-center mt-6">
-                      <input
-                        type="checkbox"
-                        name="passcheck"
-                        id="passcheck"
-                        className="mr-[10px] cursor-pointer"
-                        checked={isGoogleAuth}
-                        onChange={() => setIsGoogleAuth((prev) => !prev)}
-                      />
-                      <label
-                        htmlFor="passcheck"
-                        className="cursor-pointer text-white-1"
-                      >
-                        {` Wanna use google ${
-                          isSignupVisible ? "Sign Up" : "Sign In"
-                        } ?`}
-                      </label>
-                    </div>
-                  </div>
+                {isTelMedSphereAuth && (
+                  <button
+                    type="submit"
+                    className="mt-[0.8rem] mb-[0.4rem] bg-blue-7 hover:bg-blue-6 disabled:bg-blue-7 disabled:cursor-not-allowed py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out text-blue-1 w-full"
+                    disabled={
+                      // Disable the button in the following cases:
+                      // - If "Forgot Password" is active and the email is invalid, but only if Google Auth is not used
+                      (!isGoogleAuth && isForgotPassword && isInvEmail) || // Disable if Forgot Password and email is invalid, unless Google Auth
+                      (isSignupVisible &&
+                        (isInvAge || isInvEmail || isInvPass)) || // Disable if Sign Up and any input is invalid
+                      (!isForgotPassword &&
+                        !isSignupVisible &&
+                        (isInvEmail || isInvPass)) // Disable if Login and email or password is invalid
+                    }
+                  >
+                    {isSuccessLoading ? (
+                      <CircularProgress size={24} />
+                    ) : isForgotPassword ? (
+                      "Send Reset Link"
+                    ) : isSignupVisible ? (
+                      "Sign Up"
+                    ) : (
+                      "Login"
+                    )}
+                  </button>
                 )}
 
-                <button
-                  type="submit"
-                  className="mt-[0.8rem] mb-[0.4rem] relative bg-blue-7 hover:bg-blue-6 disabled:bg-blue-7 disabled:cursor-not-allowed py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out text-blue-1 w-full"
-                  disabled={
-                    // Disable the button in the following cases:
-                    // - If "Forgot Password" is active and the email is invalid, but only if Google Auth is not used
-                    (!isGoogleAuth && isForgotPassword && isInvEmail) || // Disable if Forgot Password and email is invalid, unless Google Auth
-                    (isSignupVisible &&
-                      (isInvAge || isInvEmail || isInvPass)) || // Disable if Sign Up and any input is invalid
-                    (!isForgotPassword &&
-                      !isSignupVisible &&
-                      (isInvEmail || isInvPass)) // Disable if Login and email or password is invalid
-                  }
-                >
-                  {isSuccessLoading ? (
-                    <CircularProgress size={24} />
-                  ) : isGoogleAuth ? (
-                    `${isSignupVisible ? "Sign Up" : "Sign In"} with Google`
-                  ) : isForgotPassword ? (
-                    "Send Reset Link"
-                  ) : isSignupVisible ? (
-                    "Sign Up"
-                  ) : (
-                    "Login"
-                  )}
-                </button>
+                {isGoogleAuth && (
+                  <>
+                    <button
+                      type="submit"
+                      className="mt-[0.8rem] mb-[0.4rem] w-full flex justify-center items-center bg-white-1 dark:bg-gray-900 rounded-[3px] px-6 py-2 text-sm font-medium text-gray-800 dark:text-white hover:bg-gray-200"
+                    >
+                      <img
+                        src="https://img.icons8.com/fluency/48/google-logo.png"
+                        alt="google-logo"
+                        className="max-h-[25px] mr-2"
+                      />
+                      <span>
+                        {isSignupVisible ? "Sign Up" : "Login"} with Google
+                      </span>
+                    </button>
+                  </>
+                )}
               </div>
+
+              {!isForgotPassword && (
+                <div className="mt-12 w-full">
+                  <div className="mb-8">
+                    <div className="border-t-[2px] border-blue-1 w-full h-2"></div>
+                    <div className="relative flex justify-center">
+                      <span class="absolute -top-4 text-center text-sm text-blue-1 bg-blue-3 px-4">
+                        {isSignupVisible ? "Sign Up using" : "Sign In using"}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="rounded-md px-2 relative">
+                    <div class="flex items-center justify-center gap-x-6">
+                      <div class="relative flex h-[40px] w-[40px] items-center justify-center">
+                        <input
+                          type="radio"
+                          id="TelMedSphereAuth"
+                          name="authMethod"
+                          value="TelMedSphereAuth"
+                          class="peer z-10 h-full w-full opacity-0"
+                          onChange={() => handleAuthApp(0)}
+                          checked={isTelMedSphereAuth}
+                        />
+                        <label
+                          htmlFor="TelMedSphereAuth"
+                          className="absolute top-0 left-0 cursor-pointer peer-checked:translate peer-checked:scale-[1.1] peer-checked:bg-white-1 rounded-full peer-checked:p-[0.4rem] p-[0.3rem] flex justify-center items-center"
+                        >
+                          <img
+                            src={heartRateLogo}
+                            alt="telMedSphere-logo"
+                            className={`z-50 relative left-[0.39px] ${
+                              isTelMedSphereAuth ? "top-[1.5px]" : "top-[0.27px]"
+                            }`}
+                          />
+                        </label>
+                      </div>
+                      <div class="relative flex h-[40px] w-[40px] items-center justify-center">
+                        <input
+                          type="radio"
+                          id="GoogleAuth"
+                          name="authMethod"
+                          value="GoogleAuth"
+                          class="peer z-10 h-full w-full opacity-0"
+                          onChange={() => handleAuthApp(1)}
+                          checked={isGoogleAuth}
+                        />
+                        <label
+                          htmlFor="GoogleAuth"
+                          className="absolute z-50 top-0 left-0 cursor-pointer peer-checked:bg-white-1 rounded-full p-1"
+                        >
+                          <img
+                            src="https://img.icons8.com/fluency/48/google-logo.png"
+                            alt="google-logo"
+                            className="z-50 w-full h-full"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/*===== Form-Close-Btn =====*/}
               <div
