@@ -141,7 +141,23 @@ TelMedSphere is designed to make healthcare simple and accessible for both docto
  # deactivate the virtual environment, when you are done
  deactivate
  ```
-
+- Navigate to the project directory for ML model Setup.
+  
+ ```bash
+ # Navigate to backend directory
+ cd models
+ # Create a virtual environment
+ python -m venv venv # This will create a folder named venv inside your project directory
+ # Activate the virtual environment
+ venv\Scripts\activate
+ # Install all dependencies for flask server
+ pip install -r requirements.txt     
+ # Run flask server
+ flask run
+ #update the development server link in .env file of frontend(MODEL_URL)
+ # deactivate the virtual environment, when you are done
+ deactivate
+ ```
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
 ## How to Get `.env` File Variables
