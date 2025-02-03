@@ -15,6 +15,19 @@ import { MdClose } from "react-icons/md";
 import { IoWalletOutline } from "react-icons/io5";
 import logo from "../../assets/header.png";
 
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 const Header = () => {
   const { toggleForm, setFormUserInfo, userLogout, toggleProfile } =
     useContext(commonContext);
@@ -166,6 +179,12 @@ const Header = () => {
                   >
                     Register
                   </button>
+                   <button
+      onClick={() => setDarkMode(!darkMode)}
+      className="p-2 text-lg rounded bg-gray-200 dark:bg-gray-800 dark:text-white"
+    >
+      {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+    </button>
                 </div>
               </>
             )}
