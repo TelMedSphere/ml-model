@@ -121,7 +121,7 @@ This document provides a step-by-step guide to setting up the required `.env` fi
      1. **Go to Firebase Console:**
 
         - Visit [Firebase Console](https://console.firebase.google.com/).
-        - Select your project or create a new one.
+        - Select your project or create a new one (Keep the all options furthur default)
 
      2. **Navigate to Service Accounts:**
 
@@ -138,19 +138,18 @@ This document provides a step-by-step guide to setting up the required `.env` fi
         - **Note:** The entire JSON object should be wrapped as a string under the variable `FIREBASE_GOOGLE_AUTH` in your `.env` file.
 
      ```
-      FIREBASE_GOOGLE_AUTH='{
-      "type": "service_account",
-      "project_id": "your_project_id",
-      "private_key_id": "your_private_key_id",
-      "private_key": "your_private_key",
-      "client_email": "your_client_email",
-      "client_id": "your_client_id",
-      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-      "token_uri": "https://oauth2.googleapis.com/token",
-      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-      "client_x509_cert_url": "your_client_x509_cert_url",
-      "universe_domain": "googleapis.com"
-      }'
+      FIREBASE_TYPE=service_account
+      FIREBASE_PROJECT_ID=your-project-id
+      FIREBASE_PRIVATE_KEY_ID=your-private-key-id
+      FIREBASE_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\\nyour-private-key\\n-----END PRIVATE KEY-----\\n
+      FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@your-project-id.iam.gserviceaccount.com
+      FIREBASE_CLIENT_ID=your-client-id
+      FIREBASE_AUTH_URI=https://accounts.google.com/o/oauth2/auth
+      FIREBASE_TOKEN_URI=https://oauth2.googleapis.com/token
+      FIREBASE_AUTH_PROVIDER_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
+      FIREBASE_CLIENT_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-xxxxx%40your-project-id.iam.gserviceaccount.com
+      FIREBASE_UNIVERSE_DOMAIN=googleapis.com
+
      ```
 
 ---
@@ -184,7 +183,7 @@ This document provides a step-by-step guide to setting up the required `.env` fi
 
      `VITE_JAAS_APP_ID=your_jaas_app_id`
 
-   3. **`VITE_API_KEY`**
+3. **`VITE_API_KEY`**
 
    - **Description:** The API key for Chat-Bot
    - **How to Obtain:**
@@ -198,7 +197,7 @@ This document provides a step-by-step guide to setting up the required `.env` fi
      8. Replacing `your_api_key` with the key you copied:
         `VITE_API_KEY = your_API_key`
 
-   4. **`VITE_FIREBASE_CONFIG`**
+4. **`VITE_FIREBASE_CONFIG`**
 
    - **Description:** These credentials allow the frontend to interact with Firebase services, such as authentication and Firestore.
 
@@ -230,16 +229,17 @@ This document provides a step-by-step guide to setting up the required `.env` fi
         - **Note:** The entire `firebaseConfig` object should be wrapped as a string under the variable `VITE_FIREBASE_CONFIG` in your `.env` file.
 
      ```
-     VITE_FIREBASE_CONFIG='{
-     "apiKey": "your_api_key",
-     "authDomain": "your_project_id.firebaseapp.com",
-     "projectId": "your_project_id",
-     "storageBucket": "your_project_id.appspot.com",
-     "messagingSenderId": "your_messaging_sender_id",
-     "appId": "your_app_id",
-     "measurementId": "your_measurement_id"
-     }'
+     VITE_FIREBASE_API_KEY=your-api-key
+     VITE_FIREBASE_AUTH_DOMAIN=your-auth-domain
+     VITE_FIREBASE_PROJECT_ID=your-project-id
+     VITE_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+     VITE_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+     VITE_FIREBASE_APP_ID=your-app-id
+     VITE_FIREBASE_MEASUREMENT_ID=your-measurement-id
      ```
+     6. **Enabling Authentication**
+        - On your project console, left side bar click on `Authetication` & enable with google (email/password)
+        - Give your project name(your choice) & support email, then click save.
 
 ---
 
