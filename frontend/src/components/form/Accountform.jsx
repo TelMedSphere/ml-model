@@ -747,7 +747,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                         />
                         <label
                           htmlFor="TelMedSphereAuth"
-                          className="absolute top-0 left-0 cursor-pointer peer-checked:translate peer-checked:scale-[1.1] peer-checked:bg-white-1 rounded-full peer-checked:p-[0.4rem] p-[0.3rem] flex justify-center items-center"
+                          className="absolute top-0 left-0 cursor-pointer peer-checked:bg-opacity-80 peer-checked:translate peer-checked:scale-[1.1] peer-checked:bg-white-1 peer-checked:border-[3px] border-white-1 rounded-full peer-checked:p-[0.4rem] p-[0.3rem] flex justify-center items-center peer-checked:shadow-blue-7 peer-checked:shadow-[0px_2px_4px_#282f42,_inset_0px_0px_7px_#282f42]"
                         >
                           <img
                             src={heartRateLogo}
@@ -758,7 +758,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                           />
                         </label>
                       </div>
-                      <div class="relative flex h-[40px] w-[40px] items-center justify-center">
+                      <div class="relative flex h-[41px] w-[41px] items-center justify-center">
                         <input
                           type="radio"
                           id="GoogleAuth"
@@ -770,7 +770,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                         />
                         <label
                           htmlFor="GoogleAuth"
-                          className="absolute z-50 top-0 left-0 cursor-pointer peer-checked:bg-white-1 rounded-full p-1"
+                          className="peer-checked:bg-opacity-80 peer-checked:border-[3px] peer-checked:border-white-1 absolute z-50 top-0 left-0 cursor-pointer peer-checked:bg-white-1 rounded-full peer-checked:p-[0.35rem] p-[0.3rem] peer-checked:shadow-[0px_2px_4px_#282f42,_inset_0px_0px_7px_#282f42]"
                         >
                           <img
                             src="https://img.icons8.com/fluency/48/google-logo.png"
