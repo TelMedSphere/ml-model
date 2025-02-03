@@ -85,6 +85,7 @@ This document provides a step-by-step guide to setting up the required `.env` fi
 
    - **Description:** The authentication token used to verify and authenticate requests to Twilio.
    - **How to Obtain:**
+
      1. Log in to your [Twilio Console](https://console.twilio.com/).
      2. On the Account Dashboard, go to the **For You** tab.
      3. Scroll down to the **Account Info** section.
@@ -97,6 +98,7 @@ This document provides a step-by-step guide to setting up the required `.env` fi
 
    - **Description:** The Twilio WhatsApp-enabled phone number used to send messages.
    - **How to Obtain:**
+
      1. Log in to your [Twilio Console](https://console.twilio.com/).
      2. In the Twilio Console, go to the **Develop Tab**.
      3. Navigate to **Messaging → Try it Out → Send WhatsApp Message**.
@@ -109,6 +111,47 @@ This document provides a step-by-step guide to setting up the required `.env` fi
    - Optional steps(To verify your sandbox participants):
      1. In the Twilio Console - **Develop Tab**, navigate to **Messaging → Try it Out → Send WhatsApp Message**.
      2. Under the **Sandbox Settings** tab, scroll to **Sandbox Participants** to view all numbers registered in the sandbox.
+
+9. **`FIREBASE_GOOGLE_AUTH`**
+
+   - **Description:** This JSON object contains authentication credentials required for Firebase's Google authentication provider in the backend. It is used to authenticate and authorize API requests securely.
+
+   - **How to Obtain:**
+
+     1. **Go to Firebase Console:**
+
+        - Visit [Firebase Console](https://console.firebase.google.com/).
+        - Select your project or create a new one.
+
+     2. **Navigate to Service Accounts:**
+
+        - In the left sidebar, go to **Project Overview** and click on the **Settings** (⚙️) icon.
+        - Select the **Service Accounts** tab.
+
+     3. **Generate Private Key:**
+
+        - Under the **Firebase Admin SDK** section, click on **Generate new private key**.
+        - A JSON file will be downloaded to your system.
+
+     4. **Set Environment Variables:**
+        - Open the downloaded JSON file and add each value from it one at a time to your `.env` file, following this format:
+        - **Note:** The entire JSON object should be wrapped as a string under the variable `FIREBASE_GOOGLE_AUTH` in your `.env` file.
+
+     ```
+      FIREBASE_GOOGLE_AUTH='{
+      "type": "service_account",
+      "project_id": "your_project_id",
+      "private_key_id": "your_private_key_id",
+      "private_key": "your_private_key",
+      "client_email": "your_client_email",
+      "client_id": "your_client_id",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "your_client_x509_cert_url",
+      "universe_domain": "googleapis.com"
+      }'
+     ```
 
 ---
 
@@ -154,6 +197,49 @@ This document provides a step-by-step guide to setting up the required `.env` fi
      7. Open your `.env` file in frontend folder.
      8. Replacing `your_api_key` with the key you copied:
         `VITE_API_KEY = your_API_key`
+
+   4. **`VITE_FIREBASE_CONFIG`**
+
+   - **Description:** These credentials allow the frontend to interact with Firebase services, such as authentication and Firestore.
+
+   - **How to Obtain:**
+
+     1. **Go to Firebase Console:**
+
+        - Visit [Firebase Console](https://console.firebase.google.com/).
+        - Select your project.
+
+     2. **Add a Web App (if not added already):**
+
+        - In the **Project Overview**, click on the **</> Web** icon to add a new web app.
+        - Follow the setup instructions provided by Firebase to configure your web app.
+        - **Do not select Firebase Hosting** during the setup process.
+
+     3. **Find Firebase Configurations:**
+
+        - After setting up the web app, click on the **Project Overview Settings** (⚙️) icon in the left sidebar.
+        - Scroll down to the **Your Apps** section under "General".
+        - Click on your web app (or create one if not already added).
+
+     4. **Copy the Firebase Configuration Object:**
+
+        - Locate the **Firebase SDK snippet** and copy the `firebaseConfig` object values.
+
+     5. **Set Environment Variables:**
+        - Add each value from the `firebaseConfig` one at a time to your `.env` file in the following format:
+        - **Note:** The entire `firebaseConfig` object should be wrapped as a string under the variable `VITE_FIREBASE_CONFIG` in your `.env` file.
+
+     ```
+     VITE_FIREBASE_CONFIG='{
+     "apiKey": "your_api_key",
+     "authDomain": "your_project_id.firebaseapp.com",
+     "projectId": "your_project_id",
+     "storageBucket": "your_project_id.appspot.com",
+     "messagingSenderId": "your_messaging_sender_id",
+     "appId": "your_app_id",
+     "measurementId": "your_measurement_id"
+     }'
+     ```
 
 ---
 
