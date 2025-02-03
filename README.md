@@ -237,7 +237,7 @@ docker-compose kill
 </td>
 <td></td>
  <td align="center">
-<a href="https://kwoc.kossiitkgp.org/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/SWoC.png" height="100px" width="100px" alt="SWOC2025"></a><br><sub><b>SWoC 2k25</b></sub>
+<a href="https://www.socialwinterofcode.com/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/SWoC.png" height="100px" width="100px" alt="SWOC2025"></a><br><sub><b>SWoC 2k25</b></sub>
 </td>
  <td></td>
  <td align="center">

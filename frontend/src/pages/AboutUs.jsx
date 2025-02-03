@@ -38,7 +38,7 @@ const AboutUs = () => {
     },
     {
       name: "SWoC 2k25",
-      link: "https://kwoc.kossiitkgp.org/",
+      link: "https://www.socialwinterofcode.com/",
       logo: "https://raw.githubusercontent.com/PratikMane0112/TelMedSphere/master/Overview/SWoC.png"
     },
     {
