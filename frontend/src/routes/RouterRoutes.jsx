@@ -22,7 +22,7 @@ import MyWallet from "../pages/MyWallet";
 import RecentTransactions from "../pages/RecentTransactions";
 import Feedback from "../pages/Feedback";
 import ResetPassword from "../components/resetPassword/ResetPassword";
-
+import PrivacyPolicy from "../pages/Privacy";
 const RouterRoutes = () => {
   useScrollRestore();
 
@@ -54,6 +54,7 @@ const RouterRoutes = () => {
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/reset-password/:token" element={<ResetPassword/>} />
         <Route path="*" element={<ErrorPage />} />
+        <Route path="/privacy" element= {<PrivacyPolicy/>} />
       </Routes>
     </>
   );

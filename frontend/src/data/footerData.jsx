@@ -39,6 +39,11 @@ export const footMenu = [
                 link: "Rate Us",
                 path: "/feedback"
             },
+            {
+                id: 4,
+                link: "Privacy Policies",
+                path: "/privacy"
+            },
         ]
     }
 ];
