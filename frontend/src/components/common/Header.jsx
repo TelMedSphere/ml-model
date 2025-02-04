@@ -14,6 +14,7 @@ import { CiMenuFries } from "react-icons/ci";
 import { MdClose } from "react-icons/md";
 import { IoWalletOutline } from "react-icons/io5";
 import logo from "../../assets/header.png";
+import Darkmode from "../Darkmode/Darkmode"
 
 const Header = () => {
   const { toggleForm, setFormUserInfo, userLogout, toggleProfile } =
@@ -167,6 +168,7 @@ const Header = () => {
                     Register
                   </button>
                 </div>
+                <Darkmode />
               </>
             )}
 
