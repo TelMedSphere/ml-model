@@ -276,7 +276,7 @@ Read our [Contributing Guidelines](https://github.com/PratikMane0112/TelMedSpher
 
 <h2>📑Code Of Conduct</h2>
 
-TelMedSphere and everyone participating in it is governed by the [Code of Conduct](https://githu<!b.com/PratikMane0112/TelMedSphere/blob/master/.github/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+TelMedSphere and everyone participating in it is governed by the [Code of Conduct](https://github.com/PratikMane0112/TelMedSphere/blob/master/.github/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
 <!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------   -->
 <h2>🧾License</h2>
