@@ -284,7 +284,7 @@ TelMedSphere and everyone participating in it is governed by the [Code of Conduc
 This project is licensed under the Apache License 2.0. See the [LICENSE](https://github.com/PratikMane0112/TelMedSphere/blob/master/LICENSE) file for more details.
   
   ```
-   Copyright [2025] [Pratik Mane]
+   Copyright 2025 Pratik Mane
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
