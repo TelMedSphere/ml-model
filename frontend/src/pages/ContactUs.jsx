@@ -67,13 +67,13 @@ const ContactUs = () => {
         <div className="p-10 bg-white rounded-2xl shadow-lg md:col-span-2">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <input
+            <input
                 type="text"
                 placeholder="Your Name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                className="w-full p-4 text-base border-2 border-gray-200 rounded-lg transition-all duration-300 focus:border-[#3b6fa6] focus:ring-2 focus:ring-[#4f80b5] focus:ring-opacity-20 outline-none"
+                className="w-full p-4 text-base border-2 border-gray-200 rounded-lg transition-all duration-300 focus:border-[#3b6fa6] focus:ring-2 focus:ring-[#4f80b5] focus:ring-opacity-20 outline-none hover:border-[#4f80b5] hover:shadow-lg hover:shadow-[#4f80b570]"
               />
             </div>
             <div>
@@ -83,7 +83,7 @@ const ContactUs = () => {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
-                className="w-full p-4 text-base border-2 border-gray-200 rounded-lg transition-all duration-300 focus:border-[#3b6fa6] focus:ring-2 focus:ring-[#4f80b5] focus:ring-opacity-20 outline-none"
+                className="w-full p-4 text-base border-2 border-gray-200 rounded-lg transition-all duration-300 focus:border-[#3b6fa6] focus:ring-2 focus:ring-[#4f80b5] focus:ring-opacity-20 outline-none hover:border-[#4f80b5] hover:shadow-lg hover:shadow-[#4f80b570]"
               />
             </div>
             <div>
@@ -93,21 +93,21 @@ const ContactUs = () => {
                 value={formData.subject}
                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                 required
-                className="w-full p-4 text-base border-2 border-gray-200 rounded-lg transition-all duration-300 focus:border-[#3b6fa6] focus:ring-2 focus:ring-[#4f80b5] focus:ring-opacity-20 outline-none"
+                className="w-full p-4 text-base border-2 border-gray-200 rounded-lg transition-all duration-300 focus:border-[#3b6fa6] focus:ring-2 focus:ring-[#4f80b5] focus:ring-opacity-20 outline-none hover:border-[#4f80b5] hover:shadow-lg hover:shadow-[#4f80b570]"
               />
             </div>
             <div>
-              <textarea
+            <textarea
                 placeholder="Your Message"
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 required
-                className="w-full p-4 text-base border-2 border-gray-200 rounded-lg transition-all duration-300 focus:border-[#3b6fa6] focus:ring-2 focus:ring-[#4f80b5] focus:ring-opacity-20 outline-none min-h-[150px] resize-y"
-              />
+                className="w-full p-4 text-base border-2 border-gray-200 rounded-lg transition-all duration-300 focus:border-[#3b6fa6] focus:ring-2 focus:ring-[#4f80b5] focus:ring-opacity-20 outline-none min-h-[150px] resize-y hover:border-[#4f80b5] hover:shadow-lg hover:shadow-[#4f80b570]"
+              ></textarea>
             </div>
             <button
               type="submit"
-              className="px-10 py-4 bg-[#3e6b9c] text-white rounded-lg text-lg font-semibold cursor-pointer transition-all duration-300 uppercase tracking-wider hover:bg-[#4a7fc0] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-300/40"
+              className="px-10 py-4 bg-[#3e6b9c] text-white rounded-lg text-lg font-semibold cursor-pointer transition-all duration-300 uppercase tracking-wider hover:bg-[#4a7fc0] hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-400/50 active:scale-95 cursor-pointer"
             >
               Send Message
             </button>
