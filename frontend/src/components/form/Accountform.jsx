@@ -586,14 +586,17 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                     <div>
                       <div className="relative mb-4">
                         <MdEmail
-                          className="absolute left-3 top-[15px] text-white-1"
+                          className="absolute left-3 top-[15px] text-white-1 transition-opacity duration-300 hover:opacity-80 cursor-pointer"
                           size={18}
                         />
                         <input
                           type="text"
                           name="email"
                           placeholder="Email"
-                          className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
+                          className="py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-400 w-full outline-none rounded-[5px] 
+                          focus:border-[2px] focus:border-blue-500 placeholder:text-white-1 placeholder:text-opacity-50 transition-all duration-300 ease-in-out 
+                          focus:shadow-[0px_0px_12px_2px_rgba(0,191,255,0.8)] hover:shadow-[0px_0px_10px_1px_rgba(0,191,255,0.5)] 
+                          focus:scale-[1.05] transform focus:ring-2 focus:ring-blue-400 hover:bg-opacity-80 cursor-pointer"
                           value={email}
                           onChange={(e) => {
                             checkEmail(e.target.value);
@@ -613,14 +616,17 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                       <div>
                         <div className="relative mb-4">
                           <FaLock
-                            className="absolute left-3 top-[15px] text-white-1"
+                            className="absolute left-3 top-[15px] text-white-1 transition-opacity duration-300 hover:opacity-80 cursor-pointer"
                             size={16}
                           />
                           <input
                             type={showPassword ? "text" : "password"}
                             name="password"
                             placeholder="Password"
-                            className=" appearance-none py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
+                            className="appearance-none py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-400 w-full outline-none rounded-[5px] 
+                            focus:border-[2px] focus:border-blue-500 placeholder:text-white-1 placeholder:text-opacity-50 transition-all duration-300 ease-in-out 
+                            focus:shadow-[0px_0px_12px_2px_rgba(0,191,255,0.8)] hover:shadow-[0px_0px_10px_1px_rgba(0,191,255,0.5)] 
+                            focus:scale-[1.05] transform focus:ring-2 focus:ring-blue-400 hover:bg-opacity-80 cursor-pointer"
                             value={passwd}
                             onChange={(e) => {
                               checkPasswd(e.target.value);
@@ -631,16 +637,16 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                           />
                           <span
                             onClick={togglePasswordVisibility}
-                            className="absolute right-3 top-[15px] cursor-pointer"
+                            className="absolute right-3 top-[15px] cursor-pointer transition-transform duration-500 hover:scale-125"
                           >
                             {showPassword ? (
                               <IoEyeOffOutline
-                                className="text-white-1"
+                                className="text-white-1 transition-transform duration-500 rotate-180 hover:text-red-500"
                                 size={18}
                               />
                             ) : (
                               <IoEyeOutline
-                                className="text-white-1"
+                                className="text-white-1 transition-transform duration-500 rotate-0 hover:text-green-500"
                                 size={18}
                               />
                             )}
