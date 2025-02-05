@@ -665,7 +665,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                       <button
                         type="button"
                         onClick={() => setIsForgotPassword(true)}
-                        className="text-blue-1 text-sm hover:underline text-left outline-none border-none"
+                        className="text-blue-700 text-sm hover:underline text-left outline-none border-none transition-all duration-300 hover:text-blue-800 hover:scale-[1.1] cursor-pointer"
                       >
                         Forgot Password?
                       </button>
@@ -685,8 +685,11 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
 
                 {isTelMedSphereAuth && (
                   <button
-                    type="submit"
-                    className="mt-[0.8rem] mb-[0.4rem] bg-blue-7 hover:bg-blue-6 disabled:bg-blue-7 disabled:cursor-not-allowed py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out text-blue-1 w-full"
+                  type="submit"
+                  className="w-full py-3 px-4 mt-4 bg-blue-500 text-white font-semibold rounded-lg 
+                  hover:bg-blue-600 transition-all duration-300 ease-in-out 
+                  shadow-md shadow-blue-400 hover:shadow-lg hover:shadow-blue-500 
+                  focus:ring-2 focus:ring-blue-300 focus:outline-none"
                     disabled={
                       // Disable the button in the following cases:
                       // - If "Forgot Password" is active and the email is invalid, but only if Google Auth is not used
