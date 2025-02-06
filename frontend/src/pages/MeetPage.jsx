@@ -345,11 +345,11 @@ const MeetPage = () => {
       )}
 
       {isDoctor && (
-        <div className="mt-8 text-center text-blue-8 p-4">
+        <div className="mt-8 text-center text-blue-8 p-4 max-sm:p-0">
           <h2 className="text-2xl font-bold mb-4">Prescription</h2>
 
           {prescription.length > 0 && (
-            <div className="flex flex-wrap justify-start max-sm:justify-center items-center mx-auto mb-8 border-2 border-blue-2 rounded-lg max-md:p-0 md:w-[90vw] p-3">
+            <div className="flex flex-wrap justify-start max-sm:justify-center items-center mx-auto mb-8 border-2 border-blue-2 rounded-lg md:w-[90%] p-3">
               {prescription.map((item, index) => (
                 <div
                   key={index}
