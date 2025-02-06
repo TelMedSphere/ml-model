@@ -459,7 +459,7 @@ def mail_file():
     f = request.files['file']
     
     # Save the uploaded file
-    file_path = os.path.join(app.root_path, 'upload', 'Receipt.pdf')
+    file_path = os.path.join(app.root_path, 'Receipt.pdf')
     f.save(file_path)
 
     # Upload the file to Cloudinary
@@ -491,6 +491,12 @@ def mail_file():
         msg.attach("Receipt.pdf", "application/pdf", fp.read())
     thread = Thread(target=send_message_async, args=(msg,))
     thread.start()
+
+    # Delete the local file and the upload folder after sending the email
+    try:
+        os.remove(file_path)
+    except Exception as e:
+        print(f"Error deleting file: {e}")
     
     return jsonify({"message": "Success"}), 200
 
