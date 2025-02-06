@@ -46,6 +46,8 @@ module.exports = {
         "pulse-custom": "pulse 2s infinite",
         fadeIn: "fadeIn 1.5s ease-in-out",
         fadeInLeft: "fadeInLeft 1.5s ease-in-out forwards",
+        maintain: "maintain 2s linear infinite",
+        rotate: "rotate 2s linear infinite",
       },
       keyframes: {
         spark: {
@@ -72,6 +74,14 @@ module.exports = {
         fadeInLeft: {
           "0%": { opacity: "0", transform: "translateX(-20px)" },
           "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        maintain: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        rotate: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(-360deg)" },
         },
       },
       zIndex: {
