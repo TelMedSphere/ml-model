@@ -19,7 +19,7 @@ import bg from "../assets/landing-bg.png";
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
 import TestimonialSection from "../components/landingPage/TestimonialCarousel";
-
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 const LandingPage = () => {
   const { isLoading, toggleLoading } = useContext(commonContext);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
@@ -94,6 +94,7 @@ const LandingPage = () => {
   return (
     <>
       <div>
+      <Darkmode />
         <section className="h-screen w-full bg-[#f5f5f5]">
           {/* curvy-img */}
           <div className="relative top-[5.5rem] h-[90%] bg-left bg-no-repeat bg-cover -b-4 left-0 z-0 bg-curvy-shape max-lg:h-[95%] max-md:h-[80%] max-md:top-[23.5rem]"></div>

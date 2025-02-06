@@ -14,7 +14,7 @@ import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 import httpClient from "../httpClient";
 import useOutsideClose from "../hooks/useOutsideClose";
-
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 const Doctors = () => {
   useDocTitle("Doctors");
   const { isLoading, toggleLoading } = useContext(commonContext);

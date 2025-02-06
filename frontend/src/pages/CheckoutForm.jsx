@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 import {
   PaymentElement,
   LinkAuthenticationElement,
@@ -90,6 +91,7 @@ export default function CheckoutForm() {
 
   return (
     <div className="w-full flex justify-center">
+        <Darkmode />
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-[500px] shadow-[0px_0px_0px_0.5px_rgba(50,50,93,0.1),_0px_2px_5px_0px_rgba(50,50,93,0.1),_0px_1px_1.5px_0px_rgba(0,0,0,0.07)] rounded-[7px] p-[40px] mt-10 mx-6"

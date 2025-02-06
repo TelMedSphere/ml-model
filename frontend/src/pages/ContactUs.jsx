@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import httpClient from '../httpClient';
 import useDocTitle from '../hooks/useDocTitle';
 import img from '../assets/contactus.jpg';
-
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 const AlertMessage = ({ type, message }) => {
   const alertStyles = {
     success: "bg-green-100 border-l-4 border-green-500 text-green-700",
@@ -60,6 +60,7 @@ const ContactUs = () => {
             <div>
               <img src={img} alt="Contact Us" className="w-full rounded-lg" />
             </div>
+            <Darkmode />
           </div>
         </div>
   

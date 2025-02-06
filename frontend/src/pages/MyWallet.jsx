@@ -6,7 +6,7 @@ import Preloader from "../components/common/Preloader";
 import useScrollDisable from "../hooks/useScrollDisable";
 import { CircularProgress } from "@mui/material";
 import httpClient from "../httpClient";
-
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 const MyWallet = () => {
   const [canSeeMoney, setSeeMoney] = useState(false);
 

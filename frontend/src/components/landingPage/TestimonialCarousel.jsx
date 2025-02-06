@@ -81,7 +81,7 @@ const TestimonialSection = () => {
         <h3 className="text-orange-400 font-normal mb-3 text-lg tracking-wide">Testimonials</h3>
         <h2 className="text-[2.75rem] font-semibold text-gray-700 tracking-tight">Our Clients Review</h2>
       </div>
-
+    
       <div className="relative overflow-hidden px-4">
         <div 
         className="flex transition-transform duration-200 ease-linear"

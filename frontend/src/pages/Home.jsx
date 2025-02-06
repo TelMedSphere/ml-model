@@ -13,7 +13,7 @@ import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 import HealthFact from "../components/facts/HealthFact";
-
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 
 const Home = () => {
     useDocTitle("Home");
@@ -270,6 +270,7 @@ const Home = () => {
                 className="fixed top-24 w-full flex justify-center">
                 {verCont}
             </Alert>
+            
         )}
 
         {isDoctor && !isVerified && (
@@ -280,6 +281,7 @@ const Home = () => {
                     className="ml-4 bg-blue-4 text-white-1 px-6 py-3 rounded-lg hover:bg-blue-9 transition-all duration-300 shadow-lg">
                     Check
                 </button>
+                <Darkmode />
             </div>
         )}
 

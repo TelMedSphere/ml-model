@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
-
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 const AllMedicines = () => {
   const { isLoading, toggleLoading } = useContext(commonContext);
 
@@ -43,6 +43,7 @@ const AllMedicines = () => {
     <>
       {/* search-bar */}
       <section id="" className="pt-20 sticky top-0 z-[500] overflow-hidden">
+      <Darkmode />
         <SearchBar />
       </section>
       {/* all_products section*/}

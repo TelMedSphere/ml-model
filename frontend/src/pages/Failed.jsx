@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { BiErrorCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 const Failed = () => {
 
   const [active, setActive] = useState(false);

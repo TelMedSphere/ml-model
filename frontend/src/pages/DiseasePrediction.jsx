@@ -8,7 +8,7 @@ import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 import { useNavigate } from "react-router-dom";
-
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 class DP extends Component {
   constructor(props) {
     super(props);
@@ -337,6 +337,7 @@ class DP extends Component {
                     Disease
                   </li>
                 </ul>
+                <Darkmode />
               </div>
 
               {/* Main Content Area */}

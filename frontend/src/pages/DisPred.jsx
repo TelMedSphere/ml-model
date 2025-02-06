@@ -12,7 +12,7 @@ import {
   MessageInput,
   TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
-
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 function DisPred() {
 
   const { isLoading, toggleLoading } = useContext(commonContext);
@@ -182,6 +182,7 @@ const handleSend = async (message) => {
   return (
     <div className="flex justify-center items-center mb-[20px] mt-10">
       <div className="relative h-[550px] max-w-[500px] mx-6">
+      <Darkmode />
         <MainContainer>
           <ChatContainer className="pt-2 -ml-[0.5rem]">
             <MessageList

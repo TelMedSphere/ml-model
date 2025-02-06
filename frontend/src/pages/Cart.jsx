@@ -9,7 +9,7 @@ import httpClient from "../httpClient";
 import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
-
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 const Cart = () => {
   const { isLoading, toggleLoading } = useContext(commonContext);
 
@@ -94,6 +94,7 @@ const Cart = () => {
     <>
       <section id="" className="text-blue-8 py-32 overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-3 ">
+          <Darkmode />
           {cartQuantity === 0 ? (
             <EmptyView
               msg="Your Cart is Empty"

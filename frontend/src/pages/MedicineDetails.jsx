@@ -11,7 +11,7 @@ import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 import httpClient from "../httpClient";
-
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 const MedicineDetails = () => {
   useDocTitle("Medicine Details");
 

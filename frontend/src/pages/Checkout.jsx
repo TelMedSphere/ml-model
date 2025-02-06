@@ -6,6 +6,7 @@ import CheckoutForm from "./CheckoutForm";
 import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
@@ -58,6 +59,7 @@ export default function Checkout() {
 
   return (
     <div id="checkout">
+        <Darkmode />
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
           <CheckoutForm />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaGithub, FaDiscord } from 'react-icons/fa';
+import Darkmode from './components/Darkmode/Darkmode.jsx'
 
 const AboutUs = () => {
   const projectAdmins = [
@@ -155,9 +156,10 @@ const AboutUs = () => {
                 <a href="https://discord.gg/qsdDRKak28" className="inline-flex items-center px-8 py-4 bg-white text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-all duration-300 text-lg border-2 border-gray-200">
                   <FaDiscord className="mr-2 text-2xl" /> Join Community
                 </a>
+                <Darkmode />
               </div>
             </div>
-   
+          
            {/* Updated image container */}
       <div className="lg:w-7/12 relative h-full mt-8 lg:mt-0">
         <div 
@@ -190,8 +192,9 @@ const AboutUs = () => {
               Designed with lessons from COVID-19 to handle future health emergencies effectively
             </p>
           </div>
+          <Darkmode />
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {pandemicFeatures.map((feature, index) => (
+            {pandemicFeatures.map((featur>e, index) => (
               <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
