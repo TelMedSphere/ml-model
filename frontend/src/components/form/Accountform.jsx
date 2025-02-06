@@ -613,14 +613,14 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                       <div>
                         <div className="relative mb-4">
                           <FaLock
-                            className="absolute left-3 top-[15px] text-white-1"
+                            className="absolute left-3 top-[15px] text-white-1 transition-opacity duration-300 hover:opacity-80 cursor-pointer"
                             size={16}
                           />
                           <input
                             type={showPassword ? "text" : "password"}
                             name="password"
                             placeholder="Password"
-                            className=" appearance-none py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
+                            className="appearance-none py-3 px-3 pl-10 text-white-1 peer-disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1 placeholder:text-white-1 placeholder:text-opacity-50"
                             value={passwd}
                             onChange={(e) => {
                               checkPasswd(e.target.value);
@@ -631,11 +631,11 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                           />
                           <span
                             onClick={togglePasswordVisibility}
-                            className="absolute right-3 top-[15px] cursor-pointer"
+                            className="absolute right-3 top-[15px] cursor-pointer transition-transform duration-500 hover:scale-125"
                           >
                             {showPassword ? (
                               <IoEyeOffOutline
-                                className="text-white-1"
+                                className="absolute right-3 top-[15px] cursor-pointer"
                                 size={18}
                               />
                             ) : (
@@ -679,8 +679,8 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
 
                 {isTelMedSphereAuth && (
                   <button
-                    type="submit"
-                    className="mt-[0.8rem] mb-[0.4rem] bg-blue-7 hover:bg-blue-6 disabled:bg-blue-7 disabled:cursor-not-allowed py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out text-blue-1 w-full"
+                  type="submit"
+                  className="mt-[0.8rem] mb-[0.4rem] bg-blue-7 hover:bg-blue-6 disabled:bg-blue-7 disabled:cursor-not-allowed py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out text-blue-1 w-full"
                     disabled={
                       // Disable the button in the following cases:
                       // - If "Forgot Password" is active and the email is invalid, but only if Google Auth is not used
