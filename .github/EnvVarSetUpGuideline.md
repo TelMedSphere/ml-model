@@ -152,6 +152,61 @@ This document provides a step-by-step guide to setting up the required `.env` fi
 
      ```
 
+11. **`CLOUDINARY_CLOUD_NAME`**
+
+- **Description:** Your unique Cloudinary cloud name used to identify your account.
+- **How to Obtain:**
+
+  1. Log in to your [Cloudinary Account](https://cloudinary.com/).
+  2. Click on the **Settings** icon in the bottom-left corner.
+  3. In the left panel, select the **API Keys** tab.
+  4. Locate the **Cloud Name** field.
+  5. Copy the **Cloud Name** and set it in your `.env` file:
+
+     ```
+     CLOUDINARY_CLOUD_NAME=your-cloud-name
+     ```
+
+12. **`CLOUDINARY_API_KEY`**
+
+- **Description:** A unique API key used to authenticate requests to Cloudinary.
+- **How to Obtain:**
+
+  1. Log in to your [Cloudinary Account](https://cloudinary.com/).
+  2. Click on the **Settings** icon in the bottom-left corner.
+  3. In the left panel, select the **API Keys** tab.
+  4. If no API key is present, click **Generate New API Key**.
+  5. Copy the **API Key** and set it in your `.env` file:
+
+     ```
+     CLOUDINARY_API_KEY=your-api-key
+     ```
+
+13. **`CLOUDINARY_API_SECRET`**
+
+- **Description:** A private API secret used for secure authentication with Cloudinary services.
+- **How to Obtain:**
+
+  1. Log in to your [Cloudinary Account](https://cloudinary.com/).
+  2. Click on the **Settings** icon in the bottom-left corner.
+  3. In the left panel, select the **API Keys** tab.
+  4. Copy the corresponding  **API Secret** to your API Key and set it in your `.env` file:
+
+     ```
+     CLOUDINARY_API_SECRET=your-api-secret
+     ```
+     
+   #### **Storing PDF and ZIP Files on Cloudinary**  
+
+   By default, Cloudinary does not allow storing **PDF and ZIP files** unless explicitly permitted. Follow these steps to enable this feature:  
+
+   1. Log in to your [Cloudinary Account](https://cloudinary.com/).  
+   2. Click on the **Settings** icon in the bottom-left corner.  
+   3. In the left panel, select the **Security** tab.  
+   4. Scroll down to the last section labeled **"PDF and ZIP files delivery"**.  
+   5. **Check** the option and **save** changes.  
+
+   Once enabled, you will be able to **upload and store PDF and ZIP files** in Cloudinary.
 ---
 
 ## **Frontend `.env` Variables**
@@ -237,6 +292,7 @@ This document provides a step-by-step guide to setting up the required `.env` fi
      VITE_FIREBASE_APP_ID=your-app-id
      VITE_FIREBASE_MEASUREMENT_ID=your-measurement-id
      ```
+
      6. **Enabling Authentication**
         - On your project console, left side bar click on `Authetication` & enable with google (email/password)
         - Give your project name(your choice) & support email, then click save.
