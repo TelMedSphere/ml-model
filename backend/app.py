@@ -18,6 +18,7 @@ from twilio.rest import Client
 from flask import Flask, request, jsonify
 import firebase_admin
 from firebase_admin import credentials, auth
+from utils.imageUploader import upload_file
 
 load_dotenv()
 secret_key = secrets.token_hex(16)
@@ -32,6 +33,7 @@ app.config['MAIL_PORT'] = os.getenv('PORT')
 app.config['MAIL_USERNAME'] = os.getenv('HOST_EMAIL')
 app.config['MAIL_PASSWORD'] = os.getenv('PASSWORD')
 app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
 mail = Mail(app)
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
@@ -40,6 +42,7 @@ jwt = JWTManager(app)
 CORS(app, supports_credentials=True)
 bcrypt = Bcrypt(app)
 
+# Twilio Whatsapp notification variables
 URI = os.getenv("DBURL")
 
 # Twilio Whatsapp notification variables
@@ -393,7 +396,6 @@ def forgot_password():
 
     return jsonify({'message': 'Password reset link sent'}), 200
 
-
 @app.route('/reset_password/<token>', methods=['POST'])
 def reset_password(token):
     data = request.get_json()
@@ -420,8 +422,6 @@ def doc_status():
     user = data['email']
     doctor.update_one({'email': user}, {'$set': {'status': 'offline'}})
     return jsonify({'message': 'Doctor status updated successfully'}), 200
-
-
 
 # @app.route('/meet_end', methods=['PUT'])
 # def meet_end():
@@ -461,11 +461,16 @@ def mail_file():
     # Save the uploaded file
     file_path = os.path.join(app.root_path, 'upload', 'Receipt.pdf')
     f.save(file_path)
+
+    # Upload the file to Cloudinary
+    file_url = upload_file(file_path)
+
+    if "http" not in file_url:
+        return jsonify({"error": "File upload failed", "details": file_url}), 500
     
     # Prepare the email message
     msg = Message(
         "Receipt cum Prescription for your Consultancy",
-        sender="deexithmadas277@gmail.com",
         recipients=[user]
     )
     
@@ -478,7 +483,7 @@ def mail_file():
     # Prepare and send the WhatsApp message with the PDF link
     whatsapp_message({
         "to": f"whatsapp:{pat['phone']}",
-        "body": "Thank you for taking our consultancy. Please find your receipt attached. [link: https://pratik0112-telmedsphere.vercel.app/]",
+        "body": f"Thank you for taking our consultancy. Please find your receipt here: {file_url}",
     })
     
     # Attach the receipt PDF to the email message

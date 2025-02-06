@@ -9,6 +9,7 @@ import httpClient from "./httpClient";
 import ChatBot from "./components/common/ChatBot";
 // import CursorTrail from "./components/common/Cursortrail";
 
+
 const App = () => {
 
     setInterval(() => {
