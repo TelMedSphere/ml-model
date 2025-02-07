@@ -10,12 +10,18 @@ import {
   FaUserClock,
   FaIdCard,
   FaPhoneAlt,
+  FaPencilAlt,
+  FaTimes,
 } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa6";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { auth, signInWithPopup, provider } from "../../firebase";
 import heartRateLogo from "../../assets/heart-rate-logo.png";
+import doctorMale from "../../assets/doctor-male.png";
+import doctorFemale from "../../assets/doctor-female.png";
+import patientMale from "../../assets/patient-male.png";
+import patientFemale from "../../assets/patient-female.png";
 
 const AccountForm = ({ isSignup, setIsSignup }) => {
   const { isFormOpen, toggleForm, setFormUserInfo } = useContext(commonContext);
@@ -40,9 +46,11 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isGoogleAuth, setIsGoogleAuth] = useState(false);
   const [isTelMedSphereAuth, setIsTelMedSphereAuth] = useState(true);
-
   const setCurrAuthApp = [setIsTelMedSphereAuth, setIsGoogleAuth];
   const [currAuthAppIdx, setCurrAuthAppIdx] = useState(0);
+  const [profilePic, setProfilePic] = useState(null);
+  const [profilePicFile, setProfilePicFile] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   useOutsideClose(formRef, () => {
     toggleForm(false);
@@ -68,6 +76,29 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
   const handleIsSignupVisible = () => {
     setIsSignupVisible((prevState) => !prevState);
     setIsForgotPassword(false);
+  };
+
+  // Default profile picture based on usertype and gender
+  const getDefaultProfilePic = () => {
+    if (usertype === "doctor") {
+      return gender === "female" ? doctorFemale : doctorMale;
+    } else {
+      return gender === "female" ? patientFemale : patientMale;
+    }
+  };
+
+  // Handle file selection
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfilePic(URL.createObjectURL(file));
+      setProfilePicFile(file);
+    }
+  };
+
+  // Clear profile picture
+  const removeProfilePic = () => {
+    setProfilePic(null);
   };
 
   const checkAge = (a) => {
@@ -145,9 +176,11 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
         .then((res) => {
           setIsAlert("success");
           setAlertCont("Signup Successful");
+          localStorage.setItem("profilePic", res.data.profile_picture);
           setTimeout(() => {
             setIsAlert("");
             toggleForm(false);
+            setProfilePic(res.data.profile_picture);
             setFormUserInfo({
               username: res.data.username,
               usertype: usertype,
@@ -193,11 +226,13 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
         })
         .then((res) => {
           localStorage.setItem("token", res.data.access_token);
+          localStorage.setItem("profilePic", res.data.profile_picture);
           setIsAlert("success");
           setAlertCont("Login Successful");
           setTimeout(() => {
             setIsAlert("");
             toggleForm(false);
+            setProfilePic(res.data.profile_picture);     
             setFormUserInfo({
               username: res.data.username,
               usertype: res.data.usertype,
@@ -229,7 +264,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (isInvEmail || isInvPass || isInvPhone) {
       return;
@@ -237,32 +272,40 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
 
     setIsSuccessLoading(true);
 
-    // Sample loader for fetching the data --> TODO: replace it with actual fetcher
     setTimeout(() => {
       setIsSuccessLoading(false);
 
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("registerer", usertype);
+      formData.append("age", age);
+      formData.append("gender", gender);
+      formData.append("phone", "+91" + phone);
+      formData.append("email", email);
+      formData.append("passwd", passwd);
+      formData.append("specialization", specialization);
+
+      if (profilePicFile) {
+        formData.append("profile_picture", profilePicFile); // Attach file if selected
+      }
+
       if (isSignupVisible) {
         if (isGoogleAuth) {
-          // Google signup (only asking for userType)
           handleGoogleRegister(); // Call Google Signup
         } else {
-          // Regular signup
           httpClient
-            .post("/register", {
-              username,
-              registerer: usertype,
-              age,
-              gender,
-              phone: "+91" + phone,
-              email,
-              passwd,
-              specialization,
+            .post("/register", formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
             })
             .then((res) => {
               setIsAlert("success");
               setAlertCont("Signup Successful");
+              localStorage.setItem("profilePic", res.data.profile_picture);
               setTimeout(() => {
                 setIsAlert("");
+                setProfilePic(res.data.profile_picture);  
                 setFormUserInfo({
                   username,
                   usertype,
@@ -288,10 +331,8 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
         }
       } else {
         if (isGoogleAuth) {
-          // Google signup (only asking for userType)
-          handleGoogleLogin(); // Call Google Signup
+          handleGoogleLogin();
         } else {
-          // Login functionality here
           httpClient
             .post("/login", {
               email,
@@ -299,11 +340,13 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
             })
             .then((res) => {
               localStorage.setItem("token", res.data.access_token);
+              localStorage.setItem("profilePic", res.data.profile_picture);
               setIsAlert("success");
               setAlertCont("Login Successful");
               setTimeout(() => {
                 setIsAlert("");
                 toggleForm(false);
+                setProfilePic(res.data.profile_picture);  
                 setFormUserInfo({
                   username: res.data.username,
                   usertype: res.data.usertype,
@@ -379,6 +422,48 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
               <div className="mt-7">
                 {isSignupVisible && (
                   <>
+                    <div className="relative mb-5">
+                      <div
+                        className="flex justify-center rounded-full relative w-[45%] aspect-square mx-auto bg-white-1 shadow-[0_0_5px_1px_#282f42] border-[2px] border-blue-3"
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                      >
+                        <img
+                          src={profilePic || getDefaultProfilePic()} // Show uploaded image or default
+                          alt="Profile"
+                          className="w-full h-full rounded-full"
+                        />
+
+                        {/* Show delete icon on hover only if the user has uploaded a picture */}
+                        {profilePic && isHovered && (
+                          <button
+                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md cursor-pointer border-2 border-red-500"
+                            onClick={removeProfilePic}
+                          >
+                            <FaTimes className="w-5 h-5 text-red-500" />
+                          </button>
+                        )}
+
+                        {/* Edit Icon Positioned at Bottom-Right of the Image */}
+                        <label
+                          htmlFor="profile_picture"
+                          className="absolute bottom-0 right-2 bg-white-1 p-2 rounded-full shadow-md cursor-pointer border-2 border-blue-3"
+                        >
+                          <FaPencilAlt className="w-5 h-5 text-blue-3" />
+                        </label>
+                      </div>
+
+                      {/* Hidden Input Field */}
+                      <input
+                        type="file"
+                        name="profile_picture"
+                        id="profile_picture"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                      />
+                    </div>
+
                     <div className="relative mb-5">
                       <label className="text-blue-1">Register as</label>
                       <div className="mt-[10px]">
@@ -679,8 +764,8 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
 
                 {isTelMedSphereAuth && (
                   <button
-                  type="submit"
-                  className="mt-[0.8rem] mb-[0.4rem] bg-blue-7 hover:bg-blue-6 disabled:bg-blue-7 disabled:cursor-not-allowed py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out text-blue-1 w-full"
+                    type="submit"
+                    className="mt-[0.8rem] mb-[0.4rem] bg-blue-7 hover:bg-blue-6 disabled:bg-blue-7 disabled:cursor-not-allowed py-[0.8rem] px-6 rounded-[3px] transition-colors duration-200 ease-out text-blue-1 w-full"
                     disabled={
                       // Disable the button in the following cases:
                       // - If "Forgot Password" is active and the email is invalid, but only if Google Auth is not used
@@ -753,7 +838,9 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                             src={heartRateLogo}
                             alt="telMedSphere-logo"
                             className={`z-50 relative left-[0.39px] ${
-                              isTelMedSphereAuth ? "top-[1.5px]" : "top-[0.27px]"
+                              isTelMedSphereAuth
+                                ? "top-[1.5px]"
+                                : "top-[0.27px]"
                             }`}
                           />
                         </label>
