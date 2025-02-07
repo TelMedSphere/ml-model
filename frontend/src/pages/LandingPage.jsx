@@ -19,6 +19,7 @@ import bg from "../assets/landing-bg.png";
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
 import TestimonialSection from "../components/landingPage/TestimonialCarousel";
+import DetailsBar from "../components/numberedCard/AnimatedCounter";
 
 const LandingPage = () => {
   const { isLoading, toggleLoading } = useContext(commonContext);
@@ -256,6 +257,9 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
+        </section>
+        <section className="py-12 px-0 bg-white-1">
+          <DetailsBar></DetailsBar>
         </section>
 
         {/* team-section */}
