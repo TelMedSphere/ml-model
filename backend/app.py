@@ -205,6 +205,8 @@ def register():
                 data['cart'] = []  
             if 'wallet' not in data:
                 data['wallet'] = 0  
+            if 'meet' not in data:
+                data['meet'] = False  
             if 'wallet_history' not in data:
                 data['wallet_history'] = []  
             data['upcomingAppointments'] = []
@@ -492,7 +494,7 @@ def mail_file():
     thread = Thread(target=send_message_async, args=(msg,))
     thread.start()
 
-    # Delete the local file and the upload folder after sending the email
+    # Delete the local file after sending the email
     try:
         os.remove(file_path)
     except Exception as e:
@@ -529,7 +531,7 @@ def set_appointment():
     
         whatsapp_message({
             "to": f"whatsapp:{pat['phone']}",
-            "body": "Your Appointment has been booked on " + data['date'] + " at "+ data['time'] + " with Dr. " + doc['username'] +"."
+            "body": "Your Appointment has been booked on " + data['date'] + " at "+ data['time'] + " with Dr. " + doc['username'] +"."+"\n"+doc[email]
         })
 
         doctor.update_one({'email': email}, {'$set': {'upcomingAppointments': doc['upcomingAppointments']}})
