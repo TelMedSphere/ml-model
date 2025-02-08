@@ -165,129 +165,114 @@ def create_payment():
 
 @app.route('/register', methods=['POST'])
 def register():
-    if request.is_json:
-        data = request.get_json()
+    data = None
+    cloudinary_url = None
 
-        # Firebase Google Register
-        if 'id_token' in data:
-            try:
-                decoded_token = auth.verify_id_token(data['id_token'])
-                email = decoded_token.get('email')
-            except:
-                return jsonify({'message': 'Invalid Firebase token'}), 401
-        else:
-            email = data.get('email')
+    if 'registerer' in request.form:
+        data = request.form.to_dict()
 
-        if not email:
-            return jsonify({'message': 'Email is required'}), 400
-        
-        # Custom Register
-        if data['registerer'] == 'patient':
-            if doctor.find_one({'email': email}) or patients.find_one({'email': email}):
-                return jsonify({'message': 'User already exists'}), 400
-            
-            if 'id_token' not in data:
-                hashed_password = bcrypt.generate_password_hash(data['passwd']).decode('utf-8')
-                data['passwd'] = hashed_password
-            
-            # Add default values if not provided
-            if 'username' not in data:
-                data['username'] = 'Patient-' + email.split('@')[0]  # Username based on email
-            if 'email' not in data:
-                data['email'] = email
-            if 'age' not in data:
-                data['age'] = ''  
-            if 'gender' not in data:
-                data['gender'] = ''  
-            if 'phone' not in data:
-                data['phone'] = ''  
-            if 'cart' not in data:
-                data['cart'] = []  
-            if 'wallet' not in data:
-                data['wallet'] = 0  
-            if 'meet' not in data:
-                data['meet'] = False  
-            if 'wallet_history' not in data:
-                data['wallet_history'] = []  
-            data['upcomingAppointments'] = []
-            if 'specialization' in data:
-                del data['specialization']
-
-            patients.insert_one(data)
-
-            if 'phone' in data:
-                whatsapp_message({
-                    "to": f"whatsapp:{data['phone']}",
-                    "body": "Thank You for Signing up on TelMedSphere"
-                })
-
-            return jsonify({
-                'message': 'User created successfully',
-                "username": data["username"],
-                "usertype": "patient",
-                "gender": data["gender"],
-                "phone": data["phone"],
-                "email": data["email"],
-                "age": data["age"],
-            }), 200
-        
-        elif data['registerer'] == 'doctor':
-            if patients.find_one({'email': email}) or doctor.find_one({'email': email}):
-                return jsonify({'message': 'User already exists'}), 400
-
-            if 'id_token' not in data:
-                hashed_password = bcrypt.generate_password_hash(data['passwd']).decode('utf-8')
-                data['passwd'] = hashed_password
-            
-           # Add default values if not provided
-            if 'username' not in data:
-                data['username'] = 'Doctor-' + email.split('@')[0]  # Username based on email
-            if 'email' not in data:
-                data['email'] = email 
-            if 'specialization' not in data:
-                data['specialization'] = ''  
-            if 'gender' not in data:
-                data['gender'] = ''  
-            if 'phone' not in data:
-                data['phone'] = ''  
-            if 'appointments' not in data:
-                data['appointments'] = 0  
-            if 'stars' not in data:
-                data['stars'] = 0  
-            if 'status' not in data:
-                data['status'] = 'offline'  
-            if 'upcomingAppointments' not in data:
-                data['upcomingAppointments'] = []  
-            if 'fee' not in data:
-                data['fee'] = 0  
-            if 'verified' not in data:
-                data['verified'] = False  
-            if 'cart' not in data:
-                data['cart'] = [] 
-            if 'meet' not in data:
-                data['cart'] = []  
-            if 'wallet_history' not in data:
-                data['wallet_history'] = []  
-            if 'wallet' not in data:
-                data['wallet'] = 0 
-
-            doctor.insert_one(data)
-
-            return jsonify({
-                'message': 'User created successfully',
-                "username": data["username"],
-                "usertype": "doctor",
-                "gender": data["gender"],
-                "phone": data["phone"],
-                "email": data["email"],
-                "specialization": data["specialization"],
-                "verified": data["verified"]
-            }), 200
-        
-        else:
-            return jsonify({'message': 'Invalid registerer type'}), 400
+    # Firebase Google Register
+    if 'id_token' in data:
+        try:
+            decoded_token = auth.verify_id_token(data['id_token'])
+            email = decoded_token.get('email')
+        except:
+            return jsonify({'message': 'Invalid Firebase token'}), 401
     else:
-        return jsonify({'message': 'Invalid request'}), 400
+        email = data.get('email')
+
+    if not email:
+        return jsonify({'message': 'Email is required'}), 400
+      
+    if 'profile_picture' in request.files: 
+        image_file = request.files['profile_picture']
+        cloudinary_url = upload_file(image_file) 
+        print("cloud_url", cloudinary_url)
+
+    # Custom Register
+    if data['registerer'] == 'patient':
+        if doctor.find_one({'email': email}) or patients.find_one({'email': email}):
+            return jsonify({'message': 'User already exists'}), 400
+        
+        if 'id_token' not in data:
+            hashed_password = bcrypt.generate_password_hash(data['passwd']).decode('utf-8')
+            data['passwd'] = hashed_password
+        
+        # Default values
+        data.setdefault('username', 'Patient-' + email.split('@')[0])
+        data.setdefault('age', '')
+        data.setdefault('gender', '')
+        data.setdefault('phone', '')
+        data.setdefault('cart', [])
+        data.setdefault('wallet', 0)
+        data.setdefault('meet', False)
+        data.setdefault('wallet_history', [])
+        data.setdefault('upcomingAppointments', [])
+        if cloudinary_url:
+            data['profile_picture'] = cloudinary_url
+        if 'specialization' in data:
+            del data['specialization']
+        
+        patients.insert_one(data)
+
+        if 'phone' in data:
+            whatsapp_message({
+                "to": f"whatsapp:{data['phone']}",
+                "body": "Thank You for Signing up on TelMedSphere"
+            })
+
+        return jsonify({
+            'message': 'User created successfully',
+            "username": data["username"],
+            "usertype": "patient",
+            "gender": data["gender"],
+            "phone": data["phone"],
+            "email": data["email"],
+            "age": data["age"],
+            "profile_picture": data.get("profile_picture")
+        }), 200
+    
+    elif data['registerer'] == 'doctor':
+        if patients.find_one({'email': email}) or doctor.find_one({'email': email}):
+            return jsonify({'message': 'User already exists'}), 400
+
+        if 'id_token' not in data:
+            hashed_password = bcrypt.generate_password_hash(data['passwd']).decode('utf-8')
+            data['passwd'] = hashed_password
+        
+        # Default values
+        data.setdefault('username', 'Doctor-' + email.split('@')[0])
+        data.setdefault('specialization', '')
+        data.setdefault('gender', '')
+        data.setdefault('phone', '')
+        data.setdefault('appointments', 0)
+        data.setdefault('stars', 0)
+        data.setdefault('status', 'offline')
+        data.setdefault('upcomingAppointments', [])
+        data.setdefault('fee', 0)
+        data.setdefault('verified', False)
+        data.setdefault('cart', [])
+        data.setdefault('wallet_history', [])
+        data.setdefault('wallet', 0)
+        if cloudinary_url:
+            data['profile_picture'] = cloudinary_url
+
+        doctor.insert_one(data)
+
+        return jsonify({
+            'message': 'User created successfully',
+            "username": data["username"],
+            "usertype": "doctor",
+            "gender": data["gender"],
+            "phone": data["phone"],
+            "email": data["email"],
+            "specialization": data["specialization"],
+            "verified": data["verified"],
+            "profile_picture": data.get("profile_picture")
+        }), 200
+    
+    else:
+        return jsonify({'message': 'Invalid registerer type'}), 400
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -321,7 +306,8 @@ def login():
                 "gender": var["gender"],
                 "phone": var["phone"],
                 "email": var["email"],
-                "age": var["age"]
+                "age": var["age"],
+                "profile_picture": var.get("profile_picture")
             }), 200
         return jsonify({'message': 'Invalid password'}), 400
 
@@ -340,7 +326,8 @@ def login():
                 "phone": var["phone"],
                 "email": var["email"],
                 "specialization": var["specialization"],
-                "verified": var.get("verified", False)
+                "verified": var.get("verified", False),
+                "profile_picture": var.get("profile_picture")
             }), 200
         return jsonify({'message': 'Invalid password'}), 400
 
@@ -655,25 +642,72 @@ def get_orders():
 
 @app.route('/update_details', methods=['PUT'])
 def update_details():
-    data = request.get_json()
-    usertype = data['usertype']
-    email = data['email']
+    data = None
+    email = None
+    usertype = None
+    cloudinary_url = None
+
+    # Handle form-data request
+    if 'email' in request.form and 'usertype' in request.form:
+        data = request.form.to_dict()
+        email = data.get('email')
+        usertype = data.get('usertype')
+
+    if not email or not usertype:
+        return jsonify({'message': 'Email and usertype are required'}), 400
+
+    # Check if an image file is sent
+    if 'profile_picture' in request.files:
+        image_file = request.files['profile_picture']
+        cloudinary_url = upload_file(image_file)  
+
+    update_data = {}
+
+    # Fields to update (only if provided in request)
+    if 'username' in data:
+        update_data['username'] = data['username']
+    if 'phone' in data:
+        update_data['phone'] = data['phone']
+    if 'gender' in data:
+        update_data['gender'] = data['gender']
+    if 'profile_picture' in request.files:
+        update_data['profile_picture'] = cloudinary_url
+
     if usertype == 'doctor':
-        if data['passwd'] == '':
-            doctor.update_one({'email': email}, {'$set': {'username': data['username'], 'phone': data['phone'], 'specialization': data['specialization'], 'gender': data['gender'], 'fee': data['fee']}})
-        else:
-            hashed_password = bcrypt.generate_password_hash(data['passwd']).decode('utf-8')
-            data['passwd'] = hashed_password
-            doctor.update_one({'email': email}, {'$set': {'username': data['username'], 'phone': data['phone'], 'specialization': data['specialization'], 'passwd': data['passwd'], 'gender': data['gender'], 'fee': data['fee']}})
-        return jsonify({'message': 'Doctor details updated successfully'}), 200
+        if 'specialization' in data:
+            update_data['specialization'] = data['specialization']
+        if 'fee' in data:
+            update_data['fee'] = data['fee']
+    else:  # usertype == 'patient'
+        if 'age' in data:
+            update_data['age'] = data['age']
+
+    # Handle password update separately
+    if 'passwd' in data and data['passwd']:
+        hashed_password = bcrypt.generate_password_hash(data['passwd']).decode('utf-8')
+        update_data['passwd'] = hashed_password
+
+    # Update in MongoDB
+    collection = doctor if usertype == 'doctor' else patients
+    result = collection.update_one({'email': email}, {'$set': update_data})
+
+    # Check if a document was updated
+    if result.matched_count == 0:
+        return jsonify({'message': 'User Not Found'}), 404
+
+    if result.modified_count > 0:
+        updated_user = collection.find_one({'email': email}) 
+
+        response = {'message': f'{usertype.capitalize()} details updated successfully'}
+
+        # Add only existing fields to the response
+        for field in ["username", "usertype", "gender", "phone", "email", "age", "profile_picture"]:
+            if field in updated_user:
+                response[field] = updated_user[field]
+
+        return jsonify(response), 200
     else:
-        if data['passwd'] == '':
-            patients.update_one({'email': email}, {'$set': {'username': data['username'], 'phone': data['phone'], 'age': data['age'], 'gender': data['gender']}})
-        else:
-            hashed_password = bcrypt.generate_password_hash(data['passwd']).decode('utf-8')
-            data['passwd'] = hashed_password
-            patients.update_one({'email': email}, {'$set': {'username': data['username'], 'phone': data['phone'],  'passwd': data['passwd'], 'age': data['age'], 'gender': data['gender']}})
-        return jsonify({'message': 'Patient details updated successfully'}), 200
+        return jsonify({'message': 'No changes made'}), 200 
 
 # ----------- cart routes -----------------
 

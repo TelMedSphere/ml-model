@@ -4,6 +4,11 @@ import useOutsideClose from "../../hooks/useOutsideClose";
 import useScrollDisable from "../../hooks/useScrollDisable";
 import { Alert, CircularProgress } from "@mui/material";
 import httpClient from "../../httpClient";
+import { FaPencilAlt, FaTimes } from "react-icons/fa";
+import doctorMale from "../../assets/doctor-male.png";
+import doctorFemale from "../../assets/doctor-female.png";
+import patientMale from "../../assets/patient-male.png";
+import patientFemale from "../../assets/patient-female.png";
 
 const Profile = () => {
   const { isProfileOpen, toggleProfile, setFormUserInfo } =
@@ -28,6 +33,10 @@ const Profile = () => {
   const [isSuccessLoading, setIsSuccessLoading] = useState(false);
   const isDoctor = localStorage.getItem("usertype") === "doctor";
 
+  const [profilePic, setProfilePic] = useState(localStorage.getItem("profilePic") ?? null);
+  const [profilePicFile, setProfilePicFile] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
+
   const profileRef = useRef();
 
   useOutsideClose(profileRef, () => {
@@ -42,6 +51,29 @@ const Profile = () => {
   });
 
   useScrollDisable(isProfileOpen);
+
+  // Default profile picture based on usertype and gender
+  const getDefaultprofile_picture = () => {
+    if (isDoctor) {
+      return gender === "female" ? doctorFemale : doctorMale;
+    } else {
+      return gender === "female" ? patientFemale : patientMale;
+    }
+  };
+
+  // Handle file selection
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfilePic(URL.createObjectURL(file));
+      setProfilePicFile(file);
+    }
+  };
+
+  // Clear profile picture
+  const removeprofile_picture = () => {
+    setProfilePic(null);
+  };
 
   const checkAge = (a) => {
     const valid =
@@ -64,25 +96,38 @@ const Profile = () => {
 
     setIsSuccessLoading(true);
 
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("username", username);
+    formData.append("usertype", isDoctor ? "doctor" : "patient");
+    formData.append("age", age);
+    formData.append("specialization", specialization);
+    formData.append("gender", gender);
+    formData.append("phone", phone);
+    if (isChPasswd) {
+      formData.append("passwd", passwd);
+    }
+    formData.append("fee", fee);
+
+    if (profilePicFile) {
+      formData.append("profile_picture", profilePicFile); // Attach profile picture if selected
+    }
+
     httpClient
-      .put("/update_details", {
-        email: email,
-        username: username,
-        usertype: isDoctor ? "doctor" : "patient",
-        age: age,
-        specialization: specialization,
-        gender: gender,
-        phone: phone,
-        passwd: passwd,
-        fee: fee,
+      .put("/update_details", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
-      .then(() => {
+      .then((res) => {
         setIsSuccessLoading(false);
         setIsAlert("success");
         setAlertCont("Successfully updated");
+        localStorage.setItem("profilePic", res.data.profile_picture);
         setTimeout(() => {
           setIsAlert("");
           setAlertCont("");
+          setProfilePic(res.data.profile_picture);  
           setFormUserInfo({
             username,
             usertype: isDoctor ? "doctor" : "patient",
@@ -93,6 +138,7 @@ const Profile = () => {
             specialization,
             age,
             fee,
+            profilePic: res.data.profile_picture, 
           });
           toggleProfile(false);
         }, 1000);
@@ -139,6 +185,47 @@ const Profile = () => {
 
               {/*===== Form-Body =====*/}
               <div className="mt-10">
+                <div className="relative mb-5">
+                  <div
+                    className="flex justify-center rounded-full relative w-[45%] aspect-square mx-auto bg-white-1 shadow-[0_0_5px_1px_#282f42] border-[2px] border-blue-3"
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                  >
+                    <img
+                      src={profilePic || getDefaultprofile_picture()} // Show uploaded image or default
+                      alt="Profile"
+                      className="w-full h-full rounded-full"
+                    />
+
+                    {/* Show delete icon on hover only if the user has uploaded a picture */}
+                    {profilePic && isHovered && (
+                      <button
+                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md cursor-pointer border-2 border-red-500"
+                        onClick={removeprofile_picture}
+                      >
+                        <FaTimes className="w-5 h-5 text-red-500" />
+                      </button>
+                    )}
+
+                    {/* Edit Icon Positioned at Bottom-Right of the Image */}
+                    <label
+                      htmlFor="profile_picture"
+                      className="absolute bottom-0 right-2 bg-white-1 p-2 rounded-full shadow-md cursor-pointer border-2 border-blue-3"
+                    >
+                      <FaPencilAlt className="w-5 h-5 text-blue-3" />
+                    </label>
+                  </div>
+
+                  {/* Hidden Input Field */}
+                  <input
+                    type="file"
+                    name="profile_picture"
+                    id="profile_picture"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                </div>
                 <div className="relative mb-4">
                   <input
                     type="text"
