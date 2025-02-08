@@ -131,6 +131,7 @@ const AboutUs = () => {
     }
   ];
 
+
   return (
     <div className="w-full bg-gray-50">
       <section className="min-h-screen flex items-center relative bg-gradient-to-br from-blue-50 to-purple-50 py-20 px-4">

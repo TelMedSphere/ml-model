@@ -78,13 +78,13 @@ const TestimonialSection = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-24 bg-gradient-to-b from-white to-gray-50">
       <div className="text-center mb-20">
+        <h2 className="text-[#333] mb-8 text-[2rem] text-shado animate-fadeIn duration-200 ease-in-out text-shadow-md">Our Clients Review</h2>
         <h3 className="text-orange-400 font-normal mb-3 text-lg tracking-wide">Testimonials</h3>
-        <h2 className="text-[2.75rem] font-semibold text-gray-700 tracking-tight">Our Clients Review</h2>
       </div>
 
       <div className="relative overflow-hidden px-4">
         <div 
-        className="flex transition-transform duration-200 ease-linear"
+        className="flex transition-transform duration-300 ease-linear"
             style={{ 
                 transform: `translateX(${position}%)`,
                 transition: position === 0 ? 'none' : 'transform 0.2s linear',
@@ -95,7 +95,7 @@ const TestimonialSection = () => {
             {[...testimonials, ...testimonials].map((testimonial, index) => (
             <div 
                 key={`${testimonial.feedbackid}-${index}`}
-                className="w-full md:w-1/3 flex-shrink-0 max-w-[440px] bg-[#f5f5f3] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
+                className="w-full md:w-1/3 flex-shrink-0 max-w-[440px] bg-[#f5f5f3] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] pt-12 rounded-lg ease-in-out duration-300"
                 >
               <div className="relative pt-12">
          

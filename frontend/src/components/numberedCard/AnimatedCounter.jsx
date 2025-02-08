@@ -57,7 +57,7 @@ const InViewCard = ({ label, value, suffix }) => {
   return (
     <motion.div
       ref={ref}
-      className="flex flex-col items-center justify-center p-4 rounded-lg shadow-md bg-white border border-gray-200 hover:shadow-lg transition-all duration-300"
+      className="flex flex-col items-center justify-center p-4 rounded-lg shadow-md bg-white border border-gray-200 hover:shadow-lg transition-all ease-in-out duration-300"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={inView ? { opacity: 1, scale: 1 } : {}}
       transition={{ duration: 0.6 }}

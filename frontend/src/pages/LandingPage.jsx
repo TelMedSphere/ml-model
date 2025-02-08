@@ -126,7 +126,7 @@ const LandingPage = () => {
         {/* services-section */}
         <section className="py-16 px-0 text-center bg-white-1">
           <div>
-            <h2 className="text-[#333] mb-8">Services we provide</h2>
+            <p className="text-[#333] mb-8 text-[2rem] text-shado animate-fadeIn duration-200 ease-in-out text-shadow-md">Services we provide</p>
           </div>
           {/* service-list */}
           <div className="flex flex-wrap justify-around mt-8 max-w-[1200px] my-0 mx-auto">
@@ -219,10 +219,10 @@ const LandingPage = () => {
 
         <section className="py-12 px-0 bg-white-1">
           <div className="text-center text-blue-9">
-            <h2>Our Benefits</h2>
+            <h2 className="text-[#333] mb-8 text-[2rem] text-shado animate-fadeIn duration-200 ease-in-out text-shadow-md">Our Benefits</h2>
             <div className="flex flex-wrap my-0 mx-auto max-w-[1000px] justify-center mt-8 text-blue-7">
               {/* first */}
-              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(246,171,47,0.1)] m-4 hover:shadow-[0_0_4px_0_#f6ab2f]">
+              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in bg-[rgba(246,171,47,0.1)] m-4 hover:shadow-[0_0_4px_0_#f6ab2f] shadow-xl">
                 {/* icon */}
                 <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#f6ab2f]">
                   <MdOutlineHealthAndSafety />{" "}
@@ -231,7 +231,7 @@ const LandingPage = () => {
                   TeleHealth services
                 </p>
               </div>
-              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(12,184,182,0.1)] m-4 hover:shadow-[0_0_4px_0_#0cb8b6]">
+              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in bg-[rgba(12,184,182,0.1)] m-4 hover:shadow-[0_0_4px_0_#0cb8b6] shadow-xl">
                 <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#0cb8b6]">
                   <IoAccessibility />{" "}
                 </div>
@@ -239,7 +239,7 @@ const LandingPage = () => {
                   Convenience and accessibility
                 </p>
               </div>
-              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(230,73,45,0.1)] m-4 hover:shadow-[0_0_4px_0_#e6492d]">
+              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in bg-[rgba(230,73,45,0.1)] m-4 hover:shadow-[0_0_4px_0_#e6492d] shadow-xl">
                 <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#e6492d] ">
                   <TbStethoscope />{" "}
                 </div>
@@ -247,7 +247,7 @@ const LandingPage = () => {
                   Online Appointment Booking
                 </p>
               </div>
-              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(22,101,216,0.1)] m-4 hover:shadow-[0_0_4px_0_#1665d8]">
+              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in bg-[rgba(22,101,216,0.1)] m-4 hover:shadow-[0_0_4px_0_#1665d8] shadow-xl">
                 <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#1665d8] ">
                   <TbHeartPlus />{" "}
                 </div>
@@ -267,7 +267,7 @@ const LandingPage = () => {
           {/* team-div */}
           <div>
             <div>
-              <h2 className="text-blue-9 mb-8">Meet Our Team</h2>
+              <h2 className="text-[#333] mb-8 text-[2rem] text-shado animate-fadeIn duration-200 ease-in-out text-shadow-md">Meet Our Team</h2>
             </div>
             {/* team */}
             <div className="flex flex-wrap my-0 mx-auto max-w-[1200px] justify-center mt-8">
