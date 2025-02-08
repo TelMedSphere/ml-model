@@ -19,7 +19,6 @@ import bg from "../assets/landing-bg.png";
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
 import TestimonialSection from "../components/landingPage/TestimonialCarousel";
-import DetailsBar from "../components/numberedCard/AnimatedCounter";
 
 
 const TypingEffect = ({ text, speed = 100, className }) => {
@@ -57,10 +56,10 @@ const TypingEffect = ({ text, speed = 100, className }) => {
   return (
     <div className="w-full">
       <h2 
-        className={`${className} overflow-hidden whitespace-nowrap inline-block`}
+        className={`${className} md:overflow-hidden md:whitespace-nowrap inline-block`}
         style={{ 
-          width: `${text.length}ch`,
-          minWidth: `${text.length}ch`
+          // width: `${text.length}ch`,
+          // minWidth: `${text.length}ch`
         }}
       >
         {displayedText}
@@ -310,9 +309,6 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
-        </section>
-        <section className="py-12 px-0 bg-white-1">
-          <DetailsBar></DetailsBar>
         </section>
 
         {/* team-section */}
