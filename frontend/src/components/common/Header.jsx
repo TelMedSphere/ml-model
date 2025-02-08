@@ -14,6 +14,8 @@ import { CiMenuFries } from "react-icons/ci";
 import { MdClose } from "react-icons/md";
 import { IoWalletOutline } from "react-icons/io5";
 import logo from "../../assets/header.png";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useDarkMode } from "./DarkmodeContext";
 
 const Header = () => {
   const { toggleForm, setFormUserInfo, userLogout, toggleProfile } =
@@ -28,6 +30,7 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const windowWidth = window.innerWidth;
   const [isSideBarOpen, setSideBarOpen] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   useEffect(() => {
     const handleIsSticky = () =>
@@ -81,6 +84,7 @@ const Header = () => {
     setIsSignup(true);
     toggleForm(true);
   };
+  
 
   return (
     <>
@@ -149,9 +153,20 @@ const Header = () => {
                 />
               </Link>
             </h2>
+
             {!localStorage.getItem("username") && (
               <>
                 <div className="flex md:gap-4 items-center max-md:flex max-md:flex-col max-md:items-end">
+                  <button
+                    className="text-lg font-semibold p-2 rounded-md text-white-1 hover:bg-blue-6"
+                    onClick={toggleDarkMode}
+                  >
+                    {isDarkMode ? (
+                      <FaMoon className="text-gray-500" />
+                    ) : (
+                      <FaSun className="text-yellow-500" />
+                    )}
+                  </button>
                   <button
                     type="button"
                     onClick={handleLoginClick}
