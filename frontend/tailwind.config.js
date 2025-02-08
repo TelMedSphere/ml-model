@@ -48,8 +48,13 @@ module.exports = {
         fadeInLeft: "fadeInLeft 1.5s ease-in-out forwards",
         maintain: "maintain 2s linear infinite",
         rotate: "rotate 2s linear infinite",
+        blink: 'blink 0.7s infinite'
       },
       keyframes: {
+        blink: {
+          '0%, 100%': { opacity: '0' },
+          '50%': { opacity: '1' }
+        },
         spark: {
           "0%": {
             maxWidth: "0%",
