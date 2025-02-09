@@ -63,7 +63,6 @@ const TypingEffect = ({ text, speed = 100, className }) => {
         }}
       >
         {displayedText}
-        <span className="animate-blink">|</span>
       </h2>
     </div>
   );
