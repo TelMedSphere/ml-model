@@ -67,8 +67,8 @@ firebase_config = {
 
 if firebase_config:
     try:
-        cred = credentials.Certificate(firebase_config)
-        firebase_admin.initialize_app(cred)
+        # cred = credentials.Certificate(firebase_config)
+        # firebase_admin.initialize_app(cred)
         print("Firebase initialized successfully!")
     except json.JSONDecodeError as e:
         print(f"JSON Decode Error: {e}")
