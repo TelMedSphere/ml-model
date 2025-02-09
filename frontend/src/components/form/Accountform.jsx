@@ -63,6 +63,9 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
     setPasswd("");
     setIsForgotPassword(false);
     setSpecialization("");
+    setDoctorId("");
+    setProfilePic(null);
+    setProfilePicFile(null);
   });
 
   useScrollDisable(isFormOpen);
@@ -166,43 +169,53 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
       const result = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken(); // Get the ID token
 
-      // Send idToken along with userType to the backend for registration
-      await httpClient
-        .post("/register", {
-          registerer: usertype, // 'patient' or 'doctor'
-          email: result.user.email, // Use email from Google account
-          id_token: idToken, // Send the ID token received from Google
-        })
-        .then((res) => {
-          setIsAlert("success");
-          setAlertCont("Signup Successful");
-          localStorage.setItem("profilePic", res.data.profile_picture);
-          setTimeout(() => {
-            setIsAlert("");
-            toggleForm(false);
-            setProfilePic(res.data.profile_picture);
-            setFormUserInfo({
-              username: res.data.username,
-              usertype: usertype,
-              gender: res.data.gender,
-              phone: res.data.phone,
-              email: res.data.email,
-              passwd,
-              specialization: res.data.specialization,
-              age: res.data.age,
-              verified: false,
-            });
-            toggleForm(false);
-          }, 1500);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsAlert("error");
-          setAlertCont("User already exists");
-          setTimeout(() => {
-            setIsAlert("");
-          }, 1500);
+      // Create a FormData object
+      const formData = new FormData();
+      formData.append("registerer", usertype);
+      formData.append("email", result.user.email);
+      formData.append("id_token", idToken);
+
+      if (profilePicFile && profilePicFile instanceof File) {
+        // If profilePicFile exists, append it
+        formData.append("profile_picture", profilePicFile);
+      } else {
+        // If profilePicFile is empty, fetch patientMale URL and convert it to Blob
+        try {
+          const response = await fetch(getDefaultProfilePic());
+          const blob = await response.blob();
+          formData.append("profile_picture", blob, "default_profile.jpg");
+        } catch (err) {
+          console.error("Error fetching default profile picture:", err);
+        }
+      }
+
+      // Send the FormData request
+      const res = await httpClient.post("/register", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      setIsAlert("success");
+      setAlertCont("Signup Successful");
+
+      setTimeout(() => {
+        setIsAlert("");
+        toggleForm(false);
+        setFormUserInfo({
+          username: res.data.username,
+          usertype: usertype,
+          gender: res.data.gender,
+          phone: res.data.phone,
+          email: res.data.email,
+          passwd,
+          specialization: res.data.specialization,
+          doctorId: res.data.doctorId,
+          age: res.data.age,
+          verified: false,
+          profile_picture: res.data.profile_picture,
         });
+        toggleForm(false);
+        window.location.reload();
+      }, 1500);
     } catch (error) {
       console.error(error);
       setIsAlert("error");
@@ -219,45 +232,44 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
       const result = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken(); // Get the ID token
 
-      // Send idToken along with userType to the backend for registration
-      await httpClient
-        .post("/login", {
-          id_token: idToken, // Send the ID token received from Google
-        })
-        .then((res) => {
-          localStorage.setItem("token", res.data.access_token);
-          localStorage.setItem("profilePic", res.data.profile_picture);
-          setIsAlert("success");
-          setAlertCont("Login Successful");
-          setTimeout(() => {
-            setIsAlert("");
-            toggleForm(false);
-            setProfilePic(res.data.profile_picture);     
-            setFormUserInfo({
-              username: res.data.username,
-              usertype: res.data.usertype,
-              gender: res.data.gender,
-              phone: res.data.phone,
-              email: res.data.email,
-              passwd,
-              specialization: res.data.specialization,
-              age: res.data.age,
-              verified: res.data.verified,
-            });
-          }, 1500);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsAlert("error");
-          setAlertCont("Login Failed");
-          setTimeout(() => {
-            setIsAlert("");
-          }, 1500);
+      // Send ID token to the backend for login
+      const res = await httpClient.post("/login", { id_token: idToken });
+
+      // Store access token in local storage
+      localStorage.setItem("token", res.data.access_token);
+
+      // Set success alert
+      setIsAlert("success");
+      setAlertCont("Login Successful");
+
+      // Update user info & UI state
+      setTimeout(() => {
+        setIsAlert("");
+        toggleForm(false);
+        setFormUserInfo({
+          username: res.data.username,
+          usertype: res.data.usertype,
+          gender: res.data.gender,
+          phone: res.data.phone,
+          email: res.data.email,
+          passwd,
+          specialization: res.data.specialization,
+          doctorId: res.data.doctorId,
+          age: res.data.age,
+          verified: res.data.verified,
+          profile_picture: res.data.profile_picture,
+          fee: res.data.fee,
         });
-    } catch (e) {
-      console.error(e);
+
+        window.location.reload();
+      }, 1500);
+    } catch (error) {
+      console.error("Login Error:", error);
+
+      // Handle login failure
       setIsAlert("error");
       setAlertCont("Login Failed");
+
       setTimeout(() => {
         setIsAlert("");
       }, 1500);
@@ -266,15 +278,12 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (isInvEmail || isInvPass || isInvPhone) {
-      return;
-    }
+
+    if (isInvEmail || isInvPass || isInvPhone) return;
 
     setIsSuccessLoading(true);
 
-    setTimeout(() => {
-      setIsSuccessLoading(false);
-
+    try {
       const formData = new FormData();
       formData.append("username", username);
       formData.append("registerer", usertype);
@@ -284,93 +293,109 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
       formData.append("email", email);
       formData.append("passwd", passwd);
       formData.append("specialization", specialization);
+      formData.append("doctorId", doctorId);
 
-      if (profilePicFile) {
-        formData.append("profile_picture", profilePicFile); // Attach file if selected
-      }
-
-      if (isSignupVisible) {
-        if (isGoogleAuth) {
-          handleGoogleRegister(); // Call Google Signup
-        } else {
-          httpClient
-            .post("/register", formData, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            })
-            .then((res) => {
-              setIsAlert("success");
-              setAlertCont("Signup Successful");
-              localStorage.setItem("profilePic", res.data.profile_picture);
-              setTimeout(() => {
-                setIsAlert("");
-                setProfilePic(res.data.profile_picture);  
-                setFormUserInfo({
-                  username,
-                  usertype,
-                  gender,
-                  phone,
-                  email,
-                  passwd,
-                  specialization,
-                  age,
-                  verified: false,
-                });
-                toggleForm(false);
-              }, 1500);
-            })
-            .catch((err) => {
-              console.log(err);
-              setIsAlert("error");
-              setAlertCont("User already exists");
-              setTimeout(() => {
-                setIsAlert("");
-              }, 1500);
-            });
-        }
+      // Handle profile picture
+      if (profilePicFile && profilePicFile instanceof File) {
+        formData.append("profile_picture", profilePicFile);
       } else {
-        if (isGoogleAuth) {
-          handleGoogleLogin();
-        } else {
-          httpClient
-            .post("/login", {
-              email,
-              passwd,
-            })
-            .then((res) => {
-              localStorage.setItem("token", res.data.access_token);
-              localStorage.setItem("profilePic", res.data.profile_picture);
-              setIsAlert("success");
-              setAlertCont("Login Successful");
-              setTimeout(() => {
-                setIsAlert("");
-                toggleForm(false);
-                setProfilePic(res.data.profile_picture);  
-                setFormUserInfo({
-                  username: res.data.username,
-                  usertype: res.data.usertype,
-                  gender: res.data.gender,
-                  phone: res.data.phone,
-                  email: res.data.email,
-                  passwd,
-                  specialization: res.data.specialization,
-                  age: res.data.age,
-                  verified: res.data.verified,
-                });
-              }, 1500);
-            })
-            .catch((err) => {
-              console.log(err);
-              setIsAlert("error");
-              setAlertCont("Login Failed");
-              setTimeout(() => {
-                setIsAlert("");
-              }, 1500);
-            });
+        try {
+          const response = await fetch(getDefaultProfilePic());
+          const blob = await response.blob();
+          formData.append("profile_picture", blob, "default_profile.jpg");
+        } catch (err) {
+          console.error("Error fetching default profile picture:", err);
         }
       }
-    }, 1500);
+
+      setIsSuccessLoading(false);
+
+      // Choose between login or signup
+      if (isSignupVisible) {
+        isGoogleAuth
+          ? await handleGoogleRegister()
+          : await handleRegister(formData);
+      } else {
+        isGoogleAuth ? await handleGoogleLogin() : await handleLogin();
+      }
+    } catch (error) {
+      console.error("Form Submission Error:", error);
+      setIsSuccessLoading(false);
+      setIsAlert("error");
+      setAlertCont("An unexpected error occurred.");
+      setTimeout(() => setIsAlert(""), 1500);
+    }
+  };
+
+  // Helper function to handle registration
+  const handleRegister = async (formData) => {
+    try {
+      const res = await httpClient.post("/register", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      setIsAlert("success");
+      setAlertCont("Signup Successful");
+
+      setTimeout(() => {
+        setIsAlert("");
+        setFormUserInfo({
+          username,
+          usertype,
+          gender,
+          phone,
+          email,
+          passwd,
+          specialization,
+          doctorId,
+          age,
+          verified: false,
+          profile_picture: res.data.profile_picture,
+        });
+        toggleForm(false);
+        window.location.reload();
+      }, 1500);
+    } catch (err) {
+      console.error("Signup Error:", err);
+      setIsAlert("error");
+      setAlertCont("User already exists");
+      setTimeout(() => setIsAlert(""), 1500);
+    }
+  };
+
+  // Helper function to handle login
+  const handleLogin = async () => {
+    try {
+      const res = await httpClient.post("/login", { email, passwd });
+
+      localStorage.setItem("token", res.data.access_token);
+      setIsAlert("success");
+      setAlertCont("Login Successful");
+
+      setTimeout(() => {
+        setIsAlert("");
+        toggleForm(false);
+        setFormUserInfo({
+          username: res.data.username,
+          usertype: res.data.usertype,
+          gender: res.data.gender,
+          phone: res.data.phone,
+          email: res.data.email,
+          passwd,
+          specialization: res.data.specialization,
+          doctorId: res.data.doctorId,
+          age: res.data.age,
+          verified: res.data.verified,
+          profile_picture: res.data.profile_picture,
+        });
+        window.location.reload();
+      }, 1500);
+    } catch (err) {
+      console.error("Login Error:", err);
+      setIsAlert("error");
+      setAlertCont("Login Failed");
+      setTimeout(() => setIsAlert(""), 1500);
+    }
   };
 
   return (

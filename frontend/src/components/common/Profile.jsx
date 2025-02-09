@@ -22,6 +22,7 @@ const Profile = () => {
   const [specialization, setSpecialization] = useState(
     localStorage.getItem("specialization") ?? ""
   );
+  const [doctorId, setDoctorId] = useState(localStorage.getItem("doctorId") ?? "");
   const [fee, setFee] = useState(localStorage.getItem("fee") ?? 199);
   const email = localStorage.getItem("email") ?? "";
   const [isChPasswd, setChPasswd] = useState(false);
@@ -33,9 +34,12 @@ const Profile = () => {
   const [isSuccessLoading, setIsSuccessLoading] = useState(false);
   const isDoctor = localStorage.getItem("usertype") === "doctor";
 
-  const [profilePic, setProfilePic] = useState(localStorage.getItem("profilePic") ?? null);
+  const [profilePic, setProfilePic] = useState(
+    localStorage.getItem("profile_picture") ?? null
+  );
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   const profileRef = useRef();
 
@@ -46,8 +50,12 @@ const Profile = () => {
     setGender(localStorage.getItem("gender") ?? "");
     setPhone(localStorage.getItem("phone") ?? "");
     setSpecialization(localStorage.getItem("specialization") ?? "");
-    setFee(localStorage.getItem("fee") ?? 199);
+    setFee(localStorage.getItem("fee") ?? 0);
     setPasswd("");
+    setDoctorId(localStorage.getItem("doctorId") ?? "");
+    setPasswd("");
+    setProfilePic(localStorage.getItem("profile_picture") ?? null);
+    setProfilePicFile(null);
   });
 
   useScrollDisable(isProfileOpen);
@@ -88,7 +96,7 @@ const Profile = () => {
     return valid;
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (isInvAge || (isChPasswd && isInvPass)) {
       return;
@@ -108,50 +116,57 @@ const Profile = () => {
       formData.append("passwd", passwd);
     }
     formData.append("fee", fee);
+    formData.append("doctorId", doctorId);
 
-    if (profilePicFile) {
-      formData.append("profile_picture", profilePicFile); // Attach profile picture if selected
+    // Handle profile picture
+    if (profilePicFile && profilePicFile instanceof File) {
+      formData.append("profile_picture", profilePicFile);
+    } else {
+      try {
+        const response = await fetch(getDefaultProfilePic());
+        const blob = await response.blob();
+        formData.append("profile_picture", blob, "default_profile.jpg");
+      } catch (err) {
+        console.error("Error fetching default profile picture:", err);
+      }
     }
 
-    httpClient
-      .put("/update_details", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        setIsSuccessLoading(false);
-        setIsAlert("success");
-        setAlertCont("Successfully updated");
-        localStorage.setItem("profilePic", res.data.profile_picture);
-        setTimeout(() => {
-          setIsAlert("");
-          setAlertCont("");
-          setProfilePic(res.data.profile_picture);  
-          setFormUserInfo({
-            username,
-            usertype: isDoctor ? "doctor" : "patient",
-            gender,
-            phone,
-            email,
-            passwd: passwd ?? localStorage.getItem("passwd"),
-            specialization,
-            age,
-            fee,
-            profilePic: res.data.profile_picture, 
-          });
-          toggleProfile(false);
-        }, 1000);
-      })
-      .catch(() => {
-        setIsSuccessLoading(false);
-        setIsAlert("error");
-        setAlertCont("Something went wrong. Please try again later");
-        setTimeout(() => {
-          setIsAlert("");
-          setAlertCont("");
-        }, 1000);
-      });
+    const res = await httpClient.put("/update_details", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    if (res) {
+      setIsSuccessLoading(false);
+      setIsAlert("success");
+      setAlertCont("Successfully updated");
+      setTimeout(() => {
+        setIsAlert("");
+        setAlertCont("");
+        setFormUserInfo({
+          username,
+          usertype: isDoctor ? "doctor" : "patient",
+          gender,
+          phone,
+          email,
+          passwd: passwd ?? localStorage.getItem("passwd"),
+          specialization,
+          doctorId,
+          age,
+          fee,
+          profile_picture: res.data.profile_picture,
+        });
+        toggleProfile(false);
+      }, 1500);
+    } else {
+      setIsSuccessLoading(false);
+      setIsAlert("error");
+      setAlertCont("Something went wrong. Please try again later");
+      setTimeout(() => {
+        setIsAlert("");
+        setAlertCont("");
+      }, 1000);
+    }
   };
 
   const renderAlert = () => {
@@ -191,10 +206,16 @@ const Profile = () => {
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                   >
+                    {isImageLoading && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-8 h-8 border-4 border-blue-3 border-t-transparent rounded-full animate-spin"></div>
+                      </div>
+                    )}
                     <img
                       src={profilePic || getDefaultprofile_picture()} // Show uploaded image or default
                       alt="Profile"
                       className="w-full h-full rounded-full"
+                      onLoad={() => setIsImageLoading(false)}
                     />
 
                     {/* Show delete icon on hover only if the user has uploaded a picture */}
@@ -241,19 +262,34 @@ const Profile = () => {
                 </div>
 
                 {isDoctor && (
-                  <div className="relative mb-4">
-                    <input
-                      type="text"
-                      name="specialization"
-                      className="py-3 px-3 text-white-1 peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
-                      value={specialization}
-                      onChange={(e) => setSpecialization(e.target.value)}
-                      required
-                    />
-                    <label className="peer-disabled:transform peer-disabled:scale-[0.85] peer-disabled:text-blue-1 absolute -top-[10px] left-[10px] bg-blue-3 text-blue-1 px-[5px] text-sm">
-                      Specialization {"(Eg. Cancer Surgeon)"}
-                    </label>
-                  </div>
+                  <>
+                    <div className="relative mb-4">
+                      <input
+                        type="text"
+                        name="specialization"
+                        className="py-3 px-3 text-white-1 peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
+                        value={specialization}
+                        onChange={(e) => setSpecialization(e.target.value)}
+                        required
+                      />
+                      <label className="peer-disabled:transform peer-disabled:scale-[0.85] peer-disabled:text-blue-1 absolute -top-[10px] left-[10px] bg-blue-3 text-blue-1 px-[5px] text-sm">
+                        Specialization {"(Eg. Cancer Surgeon)"}
+                      </label>
+                    </div>
+                    <div className="relative mb-4">
+                      <input
+                        type="text"
+                        name="ID"
+                        className="py-3 px-3 text-white-1 peer disabled:cursor-not-allowed border-[1px] border-blue-1 w-full outline-none rounded-[3px] focus:border-[2px] focus:border-blue-1"
+                        value={doctorId}
+                        onChange={(e) => setDoctorId(e.target.value)}
+                        required
+                      />
+                      <label className="peer-disabled:transform peer-disabled:scale-[0.85] peer-disabled:text-blue-1 absolute -top-[10px] left-[10px] bg-blue-3 text-blue-1 px-[5px] text-sm">
+                        Doctor Id 
+                      </label>
+                    </div>
+                  </>
                 )}
 
                 {!isDoctor && (
