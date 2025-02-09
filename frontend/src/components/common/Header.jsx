@@ -16,7 +16,7 @@ import { IoWalletOutline } from "react-icons/io5";
 import logo from "../../assets/header.png";
 
 const Header = () => {
-  const { toggleForm, setFormUserInfo, userLogout, toggleProfile } =
+  const { toggleForm, userLogout, toggleProfile } =
     useContext(commonContext);
   const { cartItems, setCartItems } = useContext(cartContext);
   const [isSticky, setIsSticky] = useState(false);
@@ -47,22 +47,21 @@ const Header = () => {
   const updatestatus = () => {
     httpClient.put("/doc_status", { email: localStorage.getItem("email") });
     userLogout();
+    window.location.reload();
   };
 
   useEffect(() => {
-    {
-      localStorage.getItem("email") &&
-        localStorage.getItem("email") !== "undefined" &&
-        httpClient
-          .post("/get_cart", { email: localStorage.getItem("email") })
-          .then((res) => {
-            setCartItems(res.data.cart);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-    }
-  }, [localStorage.getItem("email")]);
+    localStorage.getItem("email") &&
+      localStorage.getItem("email") !== "undefined" &&
+      httpClient
+        .post("/get_cart", { email: localStorage.getItem("email") })
+        .then((res) => {
+          setCartItems(res.data.cart);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }, []);
 
   const dropdownRef = useRef();
   const sidebarRef = useRef();

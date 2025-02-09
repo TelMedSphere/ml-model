@@ -212,6 +212,8 @@ def register():
             data['profile_picture'] = cloudinary_url
         if 'specialization' in data:
             del data['specialization']
+        if 'doctorId' in data:
+            del data['doctorId']
         
         patients.insert_one(data)
 
@@ -254,6 +256,7 @@ def register():
         data.setdefault('cart', [])
         data.setdefault('wallet_history', [])
         data.setdefault('wallet', 0)
+        data.setdefault('doctorId', "")
         if cloudinary_url:
             data['profile_picture'] = cloudinary_url
 
@@ -267,6 +270,7 @@ def register():
             "phone": data["phone"],
             "email": data["email"],
             "specialization": data["specialization"],
+            "doctorId": data["doctorId"],
             "verified": data["verified"],
             "profile_picture": data.get("profile_picture")
         }), 200
@@ -326,6 +330,7 @@ def login():
                 "phone": var["phone"],
                 "email": var["email"],
                 "specialization": var["specialization"],
+                "doctorId": var["doctorId"],
                 "verified": var.get("verified", False),
                 "profile_picture": var.get("profile_picture")
             }), 200
@@ -678,6 +683,8 @@ def update_details():
             update_data['specialization'] = data['specialization']
         if 'fee' in data:
             update_data['fee'] = data['fee']
+        if 'doctorId' in data:
+            update_data['doctorId'] = data['doctorId']
     else:  # usertype == 'patient'
         if 'age' in data:
             update_data['age'] = data['age']
