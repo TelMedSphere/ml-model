@@ -256,6 +256,7 @@ def register():
         data.setdefault('cart', [])
         data.setdefault('wallet_history', [])
         data.setdefault('wallet', 0)
+        data.setdefault('meet', False
         data.setdefault('doctorId', "")
         if cloudinary_url:
             data['profile_picture'] = cloudinary_url
