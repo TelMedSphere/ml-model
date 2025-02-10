@@ -19,7 +19,54 @@ import bg from "../assets/landing-bg.png";
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
 import TestimonialSection from "../components/landingPage/TestimonialCarousel";
-import DetailsBar from "../components/numberedCard/AnimatedCounter";
+
+
+const TypingEffect = ({ text, speed = 100, className }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  
+  useEffect(() => {
+    let timer;
+    
+    if (!isDeleting && displayedText.length < text.length) {
+      // Typing
+      timer = setTimeout(() => {
+        setDisplayedText(text.slice(0, displayedText.length + 1));
+      }, speed);
+    } else if (!isDeleting && displayedText.length === text.length) {
+      // Pause at the end before starting to delete
+      timer = setTimeout(() => {
+        setIsDeleting(true);
+      }, speed * 10);
+    } else if (isDeleting && displayedText.length > 0) {
+      // Deleting
+      timer = setTimeout(() => {
+        setDisplayedText(text.slice(0, displayedText.length - 1));
+      }, speed / 2);
+    } else if (isDeleting && displayedText.length === 0) {
+      // Reset to start typing again
+      timer = setTimeout(() => {
+        setIsDeleting(false);
+      }, speed * 5);
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayedText, isDeleting, text, speed]);
+
+  return (
+    <div className="w-full">
+      <h2 
+        className={`${className} md:overflow-hidden md:whitespace-nowrap inline-block`}
+        style={{ 
+          // width: `${text.length}ch`,
+          // minWidth: `${text.length}ch`
+        }}
+      >
+        {displayedText}
+      </h2>
+    </div>
+  );
+};
 
 const LandingPage = () => {
   const { isLoading, toggleLoading } = useContext(commonContext);
@@ -101,9 +148,13 @@ const LandingPage = () => {
           <div className="absolute left-0 top-0 h-[85%] z-[1] flex justify-evenly items-center w-full text-blue-8 text-shadow-landing-highlight max-md:flex max-md:justify-end max-md:items-center max-md:flex-col-reverse max-xxs:top-12 max-lg:px-4">
             <div className="max-w-[50%] max-md:pt-8 max-md:max-w-[90%]">
               {/* highlight-heading */}
-              <h2 className="text-[2.5rem] mb-4 text-shado animated-heading max-md:text-[1.7em]">
+              {/* <h2 className="text-[2.5rem] mb-4 text-shado animated-heading max-md:text-[1.7em]">
                 Healing Hands & Caring Hearts
-              </h2>
+              </h2> */}
+             <TypingEffect 
+  text="Healing Hands & Caring Hearts" 
+  className="text-[2.5rem] mb-4 text-shado animated-heading max-md:text-[1.7em]"
+/>
               {/* highlight-text */}
               <p className="text-[1rem] mt-[1.4rem] animate-fadeIn duration-200 ease-in-out gap-[2em] max-md:text-[1em]">
                 Connecting patients and doctors, no matter the distance <br />
@@ -257,9 +308,6 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
-        </section>
-        <section className="py-12 px-0 bg-white-1">
-          <DetailsBar></DetailsBar>
         </section>
 
         {/* team-section */}
