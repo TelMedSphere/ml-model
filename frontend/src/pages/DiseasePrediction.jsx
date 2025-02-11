@@ -196,6 +196,7 @@ class DP extends Component {
           symptom_page_button: "",
           tab_progress: 50,
           button_name: "Next",
+          button_is_disabled: true,
           patient_nav_value: false,
           disease_possibility: [],
           user_symptoms: [],
