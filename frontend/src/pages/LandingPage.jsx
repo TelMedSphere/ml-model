@@ -19,6 +19,8 @@ import bg from "../assets/landing-bg.png";
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
 import TestimonialSection from "../components/landingPage/TestimonialCarousel";
+import Lottie from "lottie-react";
+import animationData from "../assets/Animation - 1739250057848.json";
 
 
 const TypingEffect = ({ text, speed = 100, className }) => {
@@ -63,7 +65,7 @@ const TypingEffect = ({ text, speed = 100, className }) => {
         }}
       >
         {displayedText}
-        <span className="animate-blink">|</span>
+        {/* <span className="animate-blink">|</span> */}
       </h2>
     </div>
   );
@@ -146,8 +148,8 @@ const LandingPage = () => {
         <section className="h-screen w-full bg-[#f5f5f5]">
           {/* curvy-img */}
           <div className="relative top-[5.5rem] h-[90%] bg-left bg-no-repeat bg-cover -b-4 left-0 z-0 bg-curvy-shape max-lg:h-[95%] max-md:h-[80%] max-md:top-[23.5rem]"></div>
-          <div className="absolute left-0 top-0 h-[85%] z-[1] flex justify-evenly items-center w-full text-blue-8 text-shadow-landing-highlight max-md:flex max-md:justify-end max-md:items-center max-md:flex-col-reverse max-xxs:top-12 max-lg:px-4">
-            <div className="max-w-[50%] max-md:pt-8 max-md:max-w-[90%]">
+          <div className="absolute left-0 top-0 h-[85%] z-[1] flex justify-between items-center w-full text-blue-8 text-shadow-landing-highlight max-md:flex max-md:justify-end max-md:items-center max-md:flex-col-reverse max-xxs:top-12 max-lg:px-4">
+            <div className="max-w-[55%]  md:pl-10 max-md:pt-8 max-md:max-w-[90%]">
               {/* highlight-heading */}
               {/* <h2 className="text-[2.5rem] mb-4 text-shado animated-heading max-md:text-[1.7em]">
                 Healing Hands & Caring Hearts
@@ -166,12 +168,13 @@ const LandingPage = () => {
                             )} */}
             </div>
 
-            <div className="max-w-[50%] text-center max-md:max-w-full">
-              <img
+            <div className="max-w-[45%] text-center max-md:max-w-full">
+              {/* <img
                 src={bg}
                 alt="landing bg"
                 className="my-[20px] mx-auto max-md:max-w-[90%]"
-              />
+              /> */}
+              <Lottie animationData={animationData} loop={true} />
             </div>
           </div>
         </section>
