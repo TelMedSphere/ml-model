@@ -42,7 +42,7 @@ class Patient2 extends Component {
           },
           () => {
             // Callback to parent component with updated answers
-            this.props.callback(allAnswers, this.state.next_button_available);
+            this.props.callback(allAnswers);
           }
         );
       }
