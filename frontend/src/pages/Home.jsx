@@ -89,21 +89,6 @@ const Home = () => {
   const [verAlert, setVerAlert] = useState(false);
   const [availableLoading, setAvailableLoading] = useState(false);
 
-  const handleFeedbackClose = () => {
-    httpClient.post("/doctor_app", {
-      email: localStorage.getItem("lastMeetMail"),
-      stars: feedbackRate+1,
-    });
-    localStorage.setItem("lastMeetWith", null);
-    setHasLastMeet(false);
-
-    setFeedbackAlert(true);
-    setTimeout(() => {
-      setHasLastMeet(false);
-      setFeedbackAlert(false);
-    }, 2000);
-  };
-  
   const ratings = [
     "Very Dissatisfied",
     "Dissatisfied",
@@ -111,6 +96,39 @@ const Home = () => {
     "Satisfied",
     "Very Satisfied",
   ];
+  const [shareItOnWebsite, setShareItOnWebsite] = useState(true);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+
+  const handleFeedbackClose = async () => {
+    try {
+      await httpClient.post("/doctor_app", {
+        email: localStorage.getItem("lastMeetMail"),
+        stars: feedbackRate + 1,
+      });
+
+      await httpClient.post("/feedback", {
+        demail: localStorage.getItem("lastMeetMail"),
+        pemail: localStorage.getItem("email"),
+        stars: feedbackRate + 1,
+        feedback_message: feedbackMessage,
+        share_it_on_website: shareItOnWebsite,
+      });
+
+      localStorage.setItem("lastMeetWith", null);
+      setHasLastMeet(false);
+
+      setFeedbackAlert(true);
+      setTimeout(() => {
+        setHasLastMeet(false);
+        setFeedbackAlert(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      alert(
+        "Something went wrong while submitting your feedback. Please try again."
+      );
+    }
+  };
 
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
 
@@ -477,13 +495,13 @@ const Home = () => {
           )}
           Set your availability
           {/* Show Spinner while loading */}
-          <span
-            className="w-full h-[3px] rounded-lg flex items-center mt-1"
-          >
+          <span className="w-full h-[3px] rounded-lg flex items-center mt-1">
             <span
               className={`h-[3px] rounded-lg ${
                 availableLoading
-                  ? `${available ? "bg-red-500" : "bg-green-500"} animate-progressFill`
+                  ? `${
+                      available ? "bg-red-500" : "bg-green-500"
+                    } animate-progressFill`
                   : available
                   ? "bg-green-500 w-full"
                   : "bg-red-500 w-full"
@@ -545,8 +563,36 @@ const Home = () => {
                   </div>
                 ))}
               </div>
-
               <div className="mt-4 mb-4 text-lg">{ratings[feedbackRate]}</div>
+              <div className="flex justify-center items-center mb-4">
+                <textarea
+                  className="min-h-32 w-full border-2 border-blue-3 rounded-lg p-2 text-base scrollbar-thin scrollbar-track-transparent scrollbar-thumb-blue-4 scrollbar-thumb-rounded-full hover:scrollbar-thumb-blue-6"
+                  placeholder="Share your consultancy experience with us!"
+                  value={feedbackMessage}
+                  onChange={(e) => setFeedbackMessage(e.target.value)}
+                ></textarea>
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="share-experience"
+                    className="w-4 h-4 cursor-pointer"
+                    checked={shareItOnWebsite}
+                    onChange={(e) => setShareItOnWebsite(e.target.checked)}
+                  />
+                  <label
+                    htmlFor="share-experience"
+                    className="text-base cursor-pointer"
+                  >
+                    Share my experience on the website
+                  </label>
+                </div>
+              </div>
+              <p className="text-start text-sm mt-1">
+                <span className="text-red-500 mr-1">*</span> Your experience
+                will still be shared with the doctor.
+              </p>
             </div>
           </div>
 
@@ -554,7 +600,7 @@ const Home = () => {
             <button
               onClick={handleFeedbackClose}
               disabled={feedbackAlert}
-              className="bg-blue-4 text-white-1 px-6 py-4 rounded hover:bg-blue-6 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed mb-3"
+              className="mt-6 bg-blue-4 text-white-1 px-6 py-4 rounded hover:bg-blue-6 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed mb-3"
             >
               {feedbackAlert ? "Submitted" : "Submit"}
             </button>

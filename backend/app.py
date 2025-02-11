@@ -940,8 +940,9 @@ def save_feedback():
         "patient_email": patient_email,
         "rating": rating,
         "feedback_message": feedback_message,
-        "username": patient.get("username", ""),  # Fetching username from patients collection
-        "profile_picture": patient.get("profile_picture", ""),  # Fetching profile image from patients collection
+        "username": patient.get("username", ""),  
+        "profile_picture": patient.get("profile_picture", ""), 
+        "share_it_on_website":patient.get("share_it_on_website", True)
     }
 
     try:

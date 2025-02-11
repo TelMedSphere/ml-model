@@ -17,7 +17,10 @@ const TestimonialSection = () => {
           throw new Error("Invalid data format received from API");
         }
 
-        setTestimonials([...data, ...data]); // Duplicate for infinite loop effect
+        const sortedData = data.filter((item) => item.share_it_on_website === true)
+        .sort((a, b) => b.stars - a.stars);
+        setTestimonials([...sortedData, ...sortedData]);
+        
       } catch (error) {
         console.error("Error fetching testimonials:", error);
         setTestimonials([
@@ -61,7 +64,7 @@ const TestimonialSection = () => {
     const slideInterval = setInterval(() => {
       setPosition((prev) => {
         const next = prev - 0.2;
-        const resetThreshold = -(testimonials.length / 2) * 100; // Half the list
+        const resetThreshold = -(testimonials.length / 4) * 100; // Half the list
 
         if (next <= resetThreshold) {
           return 0; // Seamless reset
