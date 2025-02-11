@@ -33,7 +33,7 @@ const Home = (props) => {
               value="truth"
             />
             <label
-              className="text-blue-8 h-4 peer-checked:outline-none"
+              className="text-blue-8 h-4 cursor-pointer peer-checked:outline-none"
               htmlFor="truth"
             >
               I agree to the TelMedSphere terms and conditions
