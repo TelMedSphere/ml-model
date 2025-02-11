@@ -154,9 +154,9 @@ class Disease extends Component {
   }
   componentDidUpdate(prevProps) {
     // Update state when the result prop changes
-    if (this.props.result !== prevProps.result) {
-      this.setState({ disease_with_possibility: this.props.result });
-    }
+    // if (this.props.result !== prevProps.result) {
+    //   this.setState({ disease_with_possibility: this.props.result });
+    // }
   }
   get_current_html = () => {
     const filtered_list = this.state.disease_with_possibility.filter((e) => e.probability );
