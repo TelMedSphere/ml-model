@@ -19,6 +19,7 @@ from flask import Flask, request, jsonify
 import firebase_admin
 from firebase_admin import credentials, auth
 from utils.imageUploader import upload_file
+from bson import ObjectId
 
 load_dotenv()
 secret_key = secrets.token_hex(16)
@@ -256,7 +257,7 @@ def register():
         data.setdefault('cart', [])
         data.setdefault('wallet_history', [])
         data.setdefault('wallet', 0)
-        data.setdefault('meet', False
+        data.setdefault('meet', False)
         data.setdefault('doctorId', "")
         if cloudinary_url:
             data['profile_picture'] = cloudinary_url
@@ -556,7 +557,6 @@ def make_meet():
     data = request.get_json()
     email = data['email']
     if request.method == 'PUT':
-        print(data['link'])
         doctor.update_one({'email': email}, {'$set': {'link': {'link': data['link'], "name": data['patient']}}})
         return jsonify({'message': 'Meet link created successfully'}), 200
     else:
@@ -919,34 +919,60 @@ def get_wallet_history():
 @app.route('/feedback', methods=['POST'])
 def save_feedback():
     data = request.get_json()
+
+    # Extract required details
+    doctor_email = data.get("demail")
+    patient_email = data.get("pemail")
+    rating = data.get("stars", 0)
+    feedback_message = data.get("feedback_message", "")
+
+    if not doctor_email or not patient_email or rating is None:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    # Fetch patient details using pemail
+    patient = patients.find_one({"email": patient_email}, {"_id": 0, "username": 1, "profile_picture": 1})
+
+    if not patient:
+        return jsonify({"error": "Patient not found"}), 404
+
+    feedback_entry = {
+        "doctor_email": doctor_email,
+        "patient_email": patient_email,
+        "rating": rating,
+        "feedback_message": feedback_message,
+        "username": patient.get("username", ""),  # Fetching username from patients collection
+        "profile_picture": patient.get("profile_picture", ""),  # Fetching profile image from patients collection
+    }
+
     try:
-        # Saving feedback information
-        feedback.insert_one(data);
+        feedback.insert_one(feedback_entry)
         return jsonify({"message": "Feedback Saved Successfully"}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500     
-        
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/feedback',methods=['GET'])
 def get_all_feedback():
     try:
         feedbacks = list(feedback.find({}, {"_id": 0}))
         return jsonify(feedbacks),200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500    
-
+        return jsonify({"error": str(e)}), 500       
+        
 @app.route('/feedback/<id>', methods=['GET'])
 def get_feedback(id):
     try:
-        print(f"Feedback ID: {id}")
-        result = feedback.find_one({'feedbackid': str(id)})  
+        # Convert string ID to ObjectId
+        object_id = ObjectId(id)
 
-        print(f"Feedback: {result}")
+        # Fetch feedback using the converted ObjectId
+        result = feedback.find_one({'_id': object_id})
+
         if result:
-            # Convert ObjectId to string
-            result['_id'] = str(result['_id'])
+            # Convert ObjectId to string before returning response
+            result['id'] = str(result['_id'])
             return jsonify({"message": "Feedback found", "data": result}), 200
         else:
-            return jsonify({"message": "Feedback Not Found"}), 400    
+            return jsonify({"message": "Feedback Not Found"}), 404    
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
