@@ -1,10 +1,7 @@
 import React, {
-  createRef,
   Component,
   useContext,
   useEffect,
-  useState,
-  useRef,
 } from "react";
 import Home from "../components/diseasePrediction/Home";
 // import Patient from "../components/diseasePrediction/Patient1";
@@ -30,14 +27,13 @@ class DP extends Component {
       gender: localStorage.getItem("gender")
         ? localStorage.getItem("gender").toUpperCase()
         : "Male", //Default gender
-      // male: true, // patient checkbox
-      // female: false, // patient checkbox
       home_nav_icon: <p>1</p>,
       patient_nav_icon: <p>2</p>,
       symptom_nav_icon: <p>3</p>,
       disease_nav_icon: <p>4</p>,
-      patient_question: [],
-      // patient_2_next_button_disabled: "",
+      patient_question: localStorage.getItem("patient_question")
+        ? localStorage.getItem("patient_question")
+        : [],
       home_nav_value: false,
       patient_nav_value: false,
       symptom_nav_value: false,
@@ -78,6 +74,9 @@ class DP extends Component {
           button_is_disabled: true,
           user_symptom_length: 0,
           home_button_checked: true,
+          patient_question: localStorage.getItem("patient_question")
+            ? JSON.parse(localStorage.getItem("patient_question")) // Convert back to array
+            : [],
         });
       case "Symptom":
         // Call the Symptom component's sendSymptomsToBackend method
@@ -92,6 +91,9 @@ class DP extends Component {
           disease_nav_value: true,
           button_is_disabled: true,
           home_button_checked: true,
+          patient_question: localStorage.getItem("patient_question")
+            ? JSON.parse(localStorage.getItem("patient_question")) 
+            : [],
         });
       case "Disease":
         return this.setState({
@@ -108,7 +110,6 @@ class DP extends Component {
           patient_nav_icon: <p>2</p>,
           symptom_nav_icon: <p>3</p>,
           disease_nav_icon: <p>4</p>,
-          patient_question: [],
           home_nav_value: false,
           patient_nav_value: false,
           symptom_nav_value: false,
@@ -121,7 +122,6 @@ class DP extends Component {
   };
 
   get_gender = (e) => {
-    // console.log("slf", e.target.value);
     if (e.target.value === "male") {
       this.setState({
         male: true,
@@ -150,7 +150,7 @@ class DP extends Component {
   //   }));
   // };
 
-  patient_2_callback = (data) => {
+  patient_2_callback = async (data) => {
     let d = data.filter((key) => {
       return key.answer !== "";
     });
@@ -160,6 +160,7 @@ class DP extends Component {
       button_is_disabled: avl,
       symptom_nav_value: true,
     });
+    localStorage.setItem("patient_question", JSON.stringify(data));
   };
 
   updateSymptoms = (user_symptoms) => {
@@ -210,6 +211,7 @@ class DP extends Component {
           user_symptom_length: 0,
           button_is_disabled: false,
           home_button_checked: true,
+          patient_question: this.state.patient_question,
         });
       case "Symptom":
         return this.setState({
@@ -276,7 +278,7 @@ class DP extends Component {
             pageCallback={this.symptom_page_button_callback}
             setResult={(result) => this.setState({ result })}
             updateDiseasePossibility={this.updateDiseasePossibility}
-            updateSymptoms={this.updateSymptoms} // Callback to update symptoms in main state
+            updateSymptoms={this.updateSymptoms} 
           />
         );
       case "Disease":
@@ -294,7 +296,7 @@ class DP extends Component {
               if (el) {
                 setTimeout(() => {
                   if (el) el.innerText = "Error predicting disease.";
-                }, 5000);
+                }, 10000);
               }
             }}
           >
@@ -427,7 +429,6 @@ class DP extends Component {
               >
                 Back
               </button>
-              {/* {current_page === "Symptom" ? this.renderResetButton() : ""} */}
               <button
                 className={`bg-blue-3 border-[1px] border-blue-5 text-white-1 py-[10px] px-[12px] rounded-[5px] mb-[8px] mx-[20px] font-sans transition-all duration-300 ease-in-out hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed`}
                 disabled={!home_button_checked || button_is_disabled}
