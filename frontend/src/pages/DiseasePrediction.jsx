@@ -204,7 +204,6 @@ class DP extends Component {
       case "Patient-2":
         return this.setState({
           current_page: "Home",
-          current_page: "Home",
           home_nav_icon: <p>1</p>,
           home_nav_value: false,
           button_is_disabled: true,
