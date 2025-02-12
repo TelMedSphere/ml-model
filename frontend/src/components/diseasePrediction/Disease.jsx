@@ -1,6 +1,5 @@
 // import React, { Component } from "react";
 
-
 // // class Disease extends Component {
 // //   state = {
 // //     patientInfo: this.props.patientInfo,
@@ -27,7 +26,7 @@
 //     // Trigger fetch only when patientInfo is updated and not empty
 //     if (prevState.patientInfo !== this.state.patientInfo && this.state.patientInfo.length > 0) {
 //       const symptoms = this.state.patientInfo.map((info) => info.answer); // Assuming `answer` contains symptoms
-      
+
 //       fetch("http://127.0.0.1:5000/predict", {
 //         method: "POST",
 //         headers: {
@@ -50,7 +49,6 @@
 //         .catch((error) => console.error("Error fetching predictions:", error));
 //     }
 //   }
-
 
 //   get_current_html = () => {
 //     const filtered_list = this.state.disease_with_possibility.filter((e) => {
@@ -142,24 +140,42 @@ import React, { Component } from "react";
 
 class Disease extends Component {
   state = {
-    patientInfo: [], // Initialize patientInfo as an empty array
-    disease_with_possibility: [], // To store the diseases with possibilities
+    gender: this.props.gender,
+    age: this.props.age,
+    patientInfo: this.props.patient_question || [], // Initialize patientInfo as an empty array
+    disease_possibility: this.props.disease_possibility || [], // To store the diseases with possibilities
   };
 
-  componentDidMount() {
-    // Ensure patientInfo is set from props on mount
-    if (this.props.patientInfo) {
-      this.setState({ patientInfo: this.props.patientInfo });
-    }
-  }
-  componentDidUpdate(prevProps) {
-    // Update state when the result prop changes
-    // if (this.props.result !== prevProps.result) {
-    //   this.setState({ disease_with_possibility: this.props.result });
-    // }
-  }
+  // componentDidMount() {
+  //   // Ensure patientInfo is set from props on mount
+  //   if (this.props.patientInfo) {
+  //     this.setState({ patientInfo: this.props.patientInfo });
+  //   }
+  // }
+  // componentDidUpdate(prevProps) {
+  //   // Update state when the result prop changes
+  //   // if (this.props.result !== prevProps.result) {
+  //   //   this.setState({ disease_with_possibility: this.props.result });
+  //   // }
+  // }
+  // componentDidUpdate(prevProps) {
+  //   if (
+  //     this.props.result !== prevProps.result &&
+  //     Array.isArray(this.props.result)
+  //   ) {
+  //     this.setState({ disease_possibility: this.props.result }, () => {
+  //       console.log(
+  //         "✅ Updated disease_with_possibility:",
+  //         this.state.disease_possibility
+  //       );
+  //     });
+  //   }
+  // }
+
   get_current_html = () => {
-    const filtered_list = this.state.disease_with_possibility.filter((e) => e.probability );
+    const filtered_list = this.state.disease_possibility.filter(
+      (e) => e.probability
+    );
     filtered_list.sort(
       (a, b) =>
         b.probability - a.probability || a.disease.localeCompare(b.disease)
@@ -168,16 +184,20 @@ class Disease extends Component {
     return filtered_list.length !== 0 ? (
       <div className="grid-row width-full DiseaseComponent">
         <div className="col-12 tablet:grid-col-12 patientInfo">
-          <h3>Patient gender: {this.props.gender}</h3>
-          <h3>Patient age: {this.props.age}</h3>
+          <h3>Patient gender: {this.state.gender}</h3>
+          <h3>Patient age: {this.state.age}</h3>
         </div>
         <div className="col-12 tablet:grid-col-12 patientQuestions">
-          {this.state.patientInfo.map((key, id) => (
-            <div className="singleQuestion" key={id}>
-              <p>{key.question}</p>
-              <p>{key.answer}</p>
-            </div>
-          ))}
+          {this.state.patientInfo.length > 0 ? (
+            this.state.patientInfo.map((key, id) => (
+              <div className="singleQuestion" key={id}>
+                <p>{key.question}</p>
+                <p>{key.answer}</p>
+              </div>
+            ))
+          ) : (
+            <p>No patient information available.</p>
+          )}
         </div>
         <div className="col-12 tablet:grid-col-12 DiagnosisReport">
           <h2>Diagnosis Report</h2>
@@ -191,15 +211,14 @@ class Disease extends Component {
                     title={"wikipedia"}
                     rel="noopener noreferrer"
                     target="_blank"
-                  >
-                  </a>
+                  ></a>
                 </div>
                 <div className="Possibility">
                   <p>
-                  Probability  <span>{key.probability*100}%</span>
+                    Probability <span>{key.probability * 100}%</span>
                   </p>
                   <div className="possibilityProgressBar">
-                    <div style={{ width: `${key.probability*100 }%` }}></div>
+                    <div style={{ width: `${key.probability * 100}%` }}></div>
                   </div>
                 </div>
               </div>
@@ -216,7 +235,10 @@ class Disease extends Component {
             </div>
           ))}
         </div>
-        <div>Always visit a doctor if you have any symptoms of a disease or call your local hospital</div>
+        <div>
+          Always visit a doctor if you have any symptoms of a disease or call
+          your local hospital
+        </div>
       </div>
     ) : (
       <div className="grid-row width-full DiseaseComponent">
@@ -225,8 +247,9 @@ class Disease extends Component {
           <h3>Patient age: {this.props.age}</h3>
         </div>
         <p>
-          Cannot determine possible diseases due to lack of symptoms. Please retry the analysis with actual symptoms or
-          call your local hospital if it is an emergency.
+          Cannot determine possible diseases due to lack of symptoms. Please
+          retry the analysis with actual symptoms or call your local hospital if
+          it is an emergency.
         </p>
       </div>
     );

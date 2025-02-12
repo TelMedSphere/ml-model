@@ -23,7 +23,7 @@ class DP extends Component {
       current_page: "Home", // Name of the current component
       tab_name: "Welcome",
       tab_progress: 25,
-      button_is_disabled: true, // Next button disabled if not agreed to terms
+      button_is_disabled: false, // Next button disabled if not agreed to terms
       home_button_checked: false, //Check if terms are agreed
       age: localStorage.getItem("age") ? localStorage.getItem("age") : "18", //Patient Default Age
       button_name: "Next", //Button name retry or next
@@ -44,7 +44,7 @@ class DP extends Component {
       disease_nav_value: false,
       disease_possibility: [],
       user_symptoms: [],
-      user_symptom_length: "",
+      user_symptom_length: 0,
     };
     // this.symptomPage = React.createRef();
     this.symptomRef = React.createRef();
@@ -59,7 +59,7 @@ class DP extends Component {
           tab_progress: 50,
           home_nav_value: true,
           button_is_disabled: true,
-          home_button_checked: false,
+          home_button_checked: true,
           button_name: "Next",
           // patient_2_next_button_disabled: true,
         });
@@ -75,7 +75,9 @@ class DP extends Component {
           tab_progress: 75,
           button_name: "Finish",
           patient_nav_value: true,
+          button_is_disabled: true,
           user_symptom_length: 0,
+          home_button_checked: true,
         });
       case "Symptom":
         // Call the Symptom component's sendSymptomsToBackend method
@@ -88,12 +90,14 @@ class DP extends Component {
           tab_progress: 100,
           symptom_nav_value: true,
           disease_nav_value: true,
+          button_is_disabled: true,
+          home_button_checked: true,
         });
       case "Disease":
         return this.setState({
           tab_progress: 25,
           current_page: "Home", // Name of the current component
-          button_is_disabled: true, // Next button disabled if not agreed to terms
+          button_is_disabled: false, // Next button disabled if not agreed to terms
           home_button_checked: false, //Check if terms are agreed
           age: "18", //Patient Default Age
           button_name: "Next", //Button name retry or next
@@ -105,7 +109,6 @@ class DP extends Component {
           symptom_nav_icon: <p>3</p>,
           disease_nav_icon: <p>4</p>,
           patient_question: [],
-          // patient_2_next_button_disabled: false,
           home_nav_value: false,
           patient_nav_value: false,
           symptom_nav_value: false,
@@ -138,16 +141,16 @@ class DP extends Component {
     this.setState({ age: e.target.value });
   };
 
-  symptomInfoCallback = (data, data2) => {
-    this.setState({
-      disease_possibility: data,
-      user_symptoms: data2,
-      user_symptom_length: data2.length,
-    });
-  };
+  // symptomInfoCallback = (data, data2) => {
+  //   this.setState((prevState) => ({
+  //     disease_possibility: data,
+  //     user_symptoms:
+  //       prevState.user_symptoms.length > 0 ? prevState.user_symptoms : data2,
+  //     user_symptom_length: data2.length,
+  //   }));
+  // };
 
   patient_2_callback = (data) => {
-    console.log("patient2", data)
     let d = data.filter((key) => {
       return key.answer !== "";
     });
@@ -157,6 +160,21 @@ class DP extends Component {
       button_is_disabled: avl,
       symptom_nav_value: true,
     });
+  };
+
+  updateSymptoms = (user_symptoms) => {
+    this.setState({ user_symptoms });
+    this.setState({ user_symptom_length: user_symptoms.length });
+    if (user_symptoms.length > 0) {
+      this.setState({ button_is_disabled: false });
+    }
+  };
+
+  updateDiseasePossibility = (disease_possibility) => {
+    this.setState({ disease_possibility });
+    if (disease_possibility.length > 0) {
+      this.setState({ button_is_disabled: false });
+    }
   };
 
   home_button_check_event = (e) => {
@@ -188,7 +206,10 @@ class DP extends Component {
           button_name: "Finish",
           tab_progress: 75,
           disease_nav_value: false,
-          user_symptom_length: this.state.user_symptoms.length,
+          user_symptoms: [],
+          user_symptom_length: 0,
+          button_is_disabled: false,
+          home_button_checked: true,
         });
       case "Symptom":
         return this.setState({
@@ -197,19 +218,23 @@ class DP extends Component {
           tab_progress: 50,
           button_name: "Next",
           button_is_disabled: true,
+          home_button_checked: true,
           patient_nav_value: false,
           disease_possibility: [],
           user_symptoms: [],
+          user_symptom_length: 0,
         });
       case "Patient-2":
         return this.setState({
           current_page: "Home",
+          button_name: "Next",
           home_nav_icon: <p>1</p>,
           home_nav_value: false,
-          button_is_disabled: true,
+          button_is_disabled: false,
           home_button_checked: false,
+          user_symptoms: [],
+          user_symptom_length: 0,
           tab_progress: 25,
-          user_symptom_length: 1,
         });
       // case "Patient":
       //   return this.setState({
@@ -240,26 +265,41 @@ class DP extends Component {
       //   return <Patient male={male} female={female} gender={this.get_gender} age={age} ageChange={this.get_age_event} />;
       case "Patient-2":
         return <Patient2 callback={this.patient_2_callback} />;
+
       case "Symptom":
         return (
           <Symptom
             ref={this.symptomRef}
-            userSymptoms={this.state.user_symptoms}
-            diseasePossibility={this.state.disease_possibility}
+            user_symptoms={this.state.user_symptoms}
+            disease_possibility={this.state.disease_possibility}
             getPossibleDisease={this.symptomInfoCallback}
             pageCallback={this.symptom_page_button_callback}
             setResult={(result) => this.setState({ result })}
+            updateDiseasePossibility={this.updateDiseasePossibility}
+            updateSymptoms={this.updateSymptoms} // Callback to update symptoms in main state
           />
         );
       case "Disease":
-        return (
+        return this.state.disease_possibility.length > 0 ? (
           <Disease
             patientInfo={this.state.patient_question}
-            disease_with_possibility={this.state.disease_possibility}
+            disease_possibility={this.state.disease_possibility}
             gender={gender}
             age={age}
             result={result}
           />
+        ) : (
+          <p
+            ref={(el) => {
+              if (el) {
+                setTimeout(() => {
+                  if (el) el.innerText = "Error predicting disease.";
+                }, 5000);
+              }
+            }}
+          >
+            Loading disease possibility...
+          </p>
         );
     }
   };
@@ -281,6 +321,7 @@ class DP extends Component {
       button_is_disabled,
       user_symptom_length,
       current_page,
+      home_button_checked,
       button_name,
     } = this.state;
 
@@ -389,15 +430,11 @@ class DP extends Component {
               {/* {current_page === "Symptom" ? this.renderResetButton() : ""} */}
               <button
                 className={`bg-blue-3 border-[1px] border-blue-5 text-white-1 py-[10px] px-[12px] rounded-[5px] mb-[8px] mx-[20px] font-sans transition-all duration-300 ease-in-out hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed`}
-                disabled={
-                  button_is_disabled
-
-                  // ||user_symptom_length === 0
-                }
+                disabled={!home_button_checked || button_is_disabled}
                 type="submit"
                 onClick={this.get_next_page}
               >
-                {this.state.button_name}
+                {button_name}
               </button>
             </div>
           </div>
