@@ -42,7 +42,7 @@ class Patient2 extends Component {
           },
           () => {
             // Callback to parent component with updated answers
-            this.props.callback(allAnswers);
+            this.props.callback(allAnswers, this.state.next_button_available);
           }
         );
       }
@@ -84,18 +84,18 @@ class Patient2 extends Component {
     ];
 
     return (
-      <div className="pt-8 text-blue-600">
+      <div className="pt-8 text-blue-6">
         <div className="width-full">
-          <h2 className="text-lg mb-4 text-gray-500">
+          <h2 className="text-lg mb-4 text-gray-5">
             Please check all the statements below that apply to you
           </h2>
-          <p className="mb-6 text-gray-400">Select one answer in each row</p>
+          <p className="mb-6 text-gray-4">Select one answer in each row</p>
         </div>
 
         <div className="space-y-6">
           {questions.map((question) => (
             <div key={question.name} className="space-y-2">
-              <p className="text-blue-400 mb-2">{question.title}</p>
+              <p className="text-blue-4 mb-2">{question.title}</p>
               <div className="flex gap-8 items-center">
                 {[
                   { value: "Yes", label: "Yes" },
@@ -104,7 +104,7 @@ class Patient2 extends Component {
                 ].map((option) => (
                   <label
                     key={`${question.name}-${option.value}`}
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 cursor-pointer"
                   >
                     <input
                       type="radio"
@@ -112,9 +112,9 @@ class Patient2 extends Component {
                       value={option.value}
                       checked={this.state[question.stateKey] === option.value}
                       onChange={this.handleOnChange}
-                      className="w-5 h-5 text-blue-900 border-2 border-blue-100 focus:ring-blue-500 focus:ring-2"
-                    />
-                    <span className="text-blue-400">{option.label}</span>
+                      className="appearance-none my-0 mx-[5px] w-[1.2em] h-[1.2em] bg-blue-1 content-none cursor-pointer outline-none rounded-[15px] -top-[2px] -left-[1px] relative inline-block visible border-[4px] border-blue-1 checked:bg-blue-8"
+                      />
+                    <span className="text-blue-4">{option.label}</span>
                   </label>
                 ))}
               </div>
