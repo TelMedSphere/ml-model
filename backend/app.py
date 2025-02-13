@@ -928,6 +928,7 @@ def save_website_feedback():
     comments = data.get("comments", "")
     feedback_type = data.get("feedback_type", "")
     timestamp = data.get("timestamp", "")
+    keep_it_anonymous = data.get("keep_it_anonymous", False)
 
     # Fetch patient details using pemail
     user = patients.find_one({"email": user_email}, {"_id": 0, "username": 1, "profile_picture": 1})
@@ -943,7 +944,7 @@ def save_website_feedback():
         "comments": comments,
         "username": user.get("username", ""),  
         "profile_picture": user.get("profile_picture", ""), 
-        "share_it_on_website":user.get("share_it_on_website", True),
+        "keep_it_anonymous": keep_it_anonymous,
         "feedback_type": feedback_type,
         "timestamp" : timestamp
     }
@@ -958,6 +959,11 @@ def save_website_feedback():
 def get_all_website_feedback():
     try:
         feedbacks = list(website_feedback.find({}, {"_id": 0}))
+        for feedback in feedbacks:
+            if feedback.get("keep_it_anonymous"):
+                feedback.pop("username", None)
+                feedback.pop("user_email", None)
+        print("feedback", feedback)
         return jsonify(feedbacks),200
     except Exception as e:
         return jsonify({"error": str(e)}), 500       
@@ -969,11 +975,12 @@ def get_website_feedback(id):
         object_id = ObjectId(id)
 
         # Fetch feedback using the converted ObjectId
-        result = website_feedback.find_one({'_id': object_id})
+        result = website_feedback.find({'_id': object_id}, {"_id": 0})
 
         if result:
-            # Convert ObjectId to string before returning response
-            result['id'] = str(result['_id'])
+            if result.get("keep_it_anonymous"):
+                result.pop("username", None)
+                result.pop("user_email", None)
             return jsonify({"message": "Feedback found", "data": result}), 200
         else:
             return jsonify({"message": "Feedback Not Found"}), 404    

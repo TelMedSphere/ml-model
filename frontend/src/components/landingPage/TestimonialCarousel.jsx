@@ -13,7 +13,7 @@ const TestimonialSection = () => {
         const response = await httpClient.get("/website_feedback");
         let data = response.data;
 
-        if(!data.length){
+        if (!data.length) {
           throw new Error("Testimonials not available");
         }
 
@@ -21,10 +21,9 @@ const TestimonialSection = () => {
           throw new Error("Invalid data format received from API");
         }
 
-        const sortedData = data.filter((item) => item.share_it_on_website === true)
-        .sort((a, b) => b.rating - a.rating);
+        const sortedData = data.sort((a, b) => b.rating - a.rating);
+        console.log("sorted data", response);
         setTestimonials([...sortedData]);
-        
       } catch (error) {
         console.error("Error fetching testimonials:", error);
         setTestimonials([
@@ -119,7 +118,7 @@ const TestimonialSection = () => {
                   <div className="w-20 h-20 mt-2 rounded-full overflow-hidden ring-4 ring-white shadow-lg">
                     <img
                       src={testimonial.profile_picture || patientMale}
-                      alt={testimonial.username}
+                      alt="user profile picture"
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -128,9 +127,13 @@ const TestimonialSection = () => {
                 <div className="bg-[#faf2f1] rounded-2xl p-8 pt-12 relative">
                   <div className="text-center">
                     <h3 className="text-2xl font-semibold text-gray-700 mb-2">
-                      {testimonial.username}
+                      {testimonial.username
+                        ? testimonial.username
+                        : "Anonymous"}
                     </h3>
-                    <p className="text-gray-500 text-sm mb-6">{testimonial.feedback_type}</p>
+                    <p className="text-gray-500 text-sm mb-6">
+                      {testimonial.feedback_type}
+                    </p>
                     <p className="text-gray-600 text-sm mb-8 leading-relaxed">
                       {testimonial.comments}
                     </p>

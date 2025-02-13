@@ -16,7 +16,7 @@ const Feedback = () => {
     comments: "",
     email: localStorage.getItem("email") || "",
     username: localStorage.getItem("username") || "",
-    share_it_on_website: true,
+    keep_it_anonymous: false,
   });
 
   const [submitStatus, setSubmitStatus] = useState(null);
@@ -48,7 +48,7 @@ const Feedback = () => {
       email: formData.email,
       timestamp: new Date().toISOString(),
       username: formData.username,
-      share_it_on_website: formData.share_it_on_website,
+      keep_it_anonymous: formData.keep_it_anonymous,
     };
 
     try {
@@ -192,11 +192,11 @@ const Feedback = () => {
                     type="checkbox"
                     id="share-experience"
                     className="w-[0.9rem] h-4 cursor-pointer text-blue-5"
-                    checked={formData.share_it_on_website}
+                    checked={formData.keep_it_anonymous}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        share_it_on_website: e.target.checked,
+                        keep_it_anonymous: e.target.checked,
                       })
                     }
                   />
@@ -204,7 +204,7 @@ const Feedback = () => {
                     htmlFor="share-experience"
                     className="text-base cursor-pointer"
                   >
-                    Share my experience on the website
+                    Keep my feedback anonymous.
                   </label>
                 </div>
               </div>
