@@ -14,10 +14,11 @@ import { CiMenuFries } from "react-icons/ci";
 import { MdClose } from "react-icons/md";
 import { IoWalletOutline } from "react-icons/io5";
 import logo from "../../assets/header.png";
+import { useDarkMode } from "../../contexts/DarkMode/DarkModeContext";
+import { FaMoon, FaSun } from "react-icons/fa";
 
 const Header = () => {
-  const { toggleForm, userLogout, toggleProfile } =
-    useContext(commonContext);
+  const { toggleForm, userLogout, toggleProfile } = useContext(commonContext);
   const { cartItems, setCartItems } = useContext(cartContext);
   const [isSticky, setIsSticky] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
@@ -28,6 +29,7 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const windowWidth = window.innerWidth;
   const [isSideBarOpen, setSideBarOpen] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   useEffect(() => {
     const handleIsSticky = () =>
@@ -326,196 +328,248 @@ const Header = () => {
                       </div>
                     )}
                   </div>
+                  <div className="relative -left-2">
+                    <input
+                      type="checkbox"
+                      id="dark-mode-toggle"
+                      className="sr-only"
+                      checked={isDarkMode}
+                      onChange={toggleDarkMode}
+                    />
+                    <label
+                      htmlFor="dark-mode-toggle"
+                      className="w-14 h-7 flex items-center bg-gray-900 dark:bg-white-1 rounded-full p-1 cursor-pointer relative transition-all"
+                    >
+                      {/* Toggle Ball */}
+                      <div
+                        className={`w-6 h-6 bg-white-1 dark:bg-gray-900 rounded-full shadow-md transition-transform ${
+                          isDarkMode ? "translate-x-0" : "translate-x-7"
+                        }`}
+                      />
+
+                      {/* Sun & Moon Icons */}
+                      <FaMoon className="absolute left-2 w-4 h-4 text-yellow-400 hidden dark:block" />
+                      <FaSun className="absolute right-1 w-4 h-4 text-yellow-400 dark:hidden " />
+                    </label>
+                  </div>
                 </nav>
               ) : (
-                <div
-                  id="sidebar"
-                  className="w-auto max-sm:relative max-sm:ml-10"
-                >
-                  <div
-                    className="text-[1.5em] cursor-pointer font-bold"
-                    onClick={() => setSideBarOpen((prev) => !prev)}
-                  >
-                    {isSideBarOpen ? <MdClose /> : <CiMenuFries />}
+                <div className="flex justify-end items-center">
+                  <div className="relative -right-5 inline-block">
+                    <input
+                      type="checkbox"
+                      id="dark-mode-toggle"
+                      className="sr-only"
+                      checked={isDarkMode}
+                      onChange={toggleDarkMode}
+                    />
+                    <label
+                      htmlFor="dark-mode-toggle"
+                      className="w-14 h-7 flex items-center bg-gray-900 dark:bg-white-1 rounded-full p-1 cursor-pointer relative transition-all"
+                    >
+                      {/* Toggle Ball */}
+                      <div
+                        className={`w-6 h-6 bg-white-1 dark:bg-gray-900 rounded-full shadow-md transition-transform ${
+                          isDarkMode ? "translate-x-0" : "translate-x-7"
+                        }`}
+                      />
+
+                      {/* Sun & Moon Icons */}
+                      <FaMoon className="absolute left-2 w-4 h-4 text-yellow-400 hidden dark:block" />
+                      <FaSun className="absolute right-1 w-4 h-4 text-yellow-400 dark:hidden " />
+                    </label>
                   </div>
                   <div
-                    className={`relative transition-all duration-300 ease-in ${
-                      isSideBarOpen ? "visible opacity-100" : "hidden opacity-0"
-                    }`}
-                    ref={sidebarRef}
+                    id="sidebar"
+                    className="w-auto h-7 max-sm:relative max-sm:ml-10"
                   >
-                    <nav className="absolute flex flex-col top-[30px] right-0 gap-6 bg-blue-1 z-[99] py-4 px-20 rounded-[20px]">
-                      <div
-                        className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 r ${
-                          curPath === "/home"
-                            ? "text-blue-9 border-b-[2px] border-blue-9"
-                            : ""
-                        }`}
-                      >
-                        <span
-                          onClick={() => {
-                            navigate("/home");
-                            setSideBarOpen((prev) => !prev);
-                          }}
-                          className="cursor-pointer font-bold text-center w-full"
-                        >
-                          HOME
-                        </span>
-                      </div>
-
-                      {localStorage.getItem("usertype") === "patient" && (
+                    <div
+                      className="text-[1.5em] cursor-pointer font-bold"
+                      onClick={() => setSideBarOpen((prev) => !prev)}
+                    >
+                      {isSideBarOpen ? <MdClose /> : <CiMenuFries />}
+                    </div>
+                    <div
+                      className={`relative transition-all duration-300 ease-in ${
+                        isSideBarOpen
+                          ? "visible opacity-100"
+                          : "hidden opacity-0"
+                      }`}
+                      ref={sidebarRef}
+                    >
+                      <nav className="absolute flex flex-col top-[30px] right-0 gap-6 bg-blue-1 z-[99] py-4 px-20 rounded-[20px]">
                         <div
-                          className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
-                            curPath === "/doctors"
+                          className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 r ${
+                            curPath === "/home"
                               ? "text-blue-9 border-b-[2px] border-blue-9"
                               : ""
                           }`}
                         >
                           <span
                             onClick={() => {
-                              navigate("/doctors");
+                              navigate("/home");
                               setSideBarOpen((prev) => !prev);
                             }}
                             className="cursor-pointer font-bold text-center w-full"
                           >
-                            DOCTORS
+                            HOME
                           </span>
                         </div>
-                      )}
-                      <div
-                        className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
-                          curPath === "/disease-prediction"
-                            ? "text-blue-9 border-b-[2px] border-blue-9"
-                            : ""
-                        }`}
-                      >
-                        <span
-                          onClick={() => {
-                            navigate("/disease-prediction");
-                            setSideBarOpen((prev) => !prev);
-                          }}
-                          className="cursor-pointer font-bold text-center w-full"
-                        >
-                          MODEL
-                        </span>
-                      </div>
 
-                      {/* <div className={`model_action ${curPath==="/dispred"? "active" : ""}`}>
+                        {localStorage.getItem("usertype") === "patient" && (
+                          <div
+                            className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
+                              curPath === "/doctors"
+                                ? "text-blue-9 border-b-[2px] border-blue-9"
+                                : ""
+                            }`}
+                          >
+                            <span
+                              onClick={() => {
+                                navigate("/doctors");
+                                setSideBarOpen((prev) => !prev);
+                              }}
+                              className="cursor-pointer font-bold text-center w-full"
+                            >
+                              DOCTORS
+                            </span>
+                          </div>
+                        )}
+                        <div
+                          className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
+                            curPath === "/disease-prediction"
+                              ? "text-blue-9 border-b-[2px] border-blue-9"
+                              : ""
+                          }`}
+                        >
+                          <span
+                            onClick={() => {
+                              navigate("/disease-prediction");
+                              setSideBarOpen((prev) => !prev);
+                            }}
+                            className="cursor-pointer font-bold text-center w-full"
+                          >
+                            MODEL
+                          </span>
+                        </div>
+
+                        {/* <div className={`model_action ${curPath==="/dispred"? "active" : ""}`}>
                                             <span onClick={() => navigate("/dispred")}>
                                                 MODEL 2
                                             </span>
                                         </div> */}
 
-                      <div
-                        className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
-                          curPath === "/buy-medicines"
-                            ? "text-blue-9 border-b-[2px] border-blue-9"
-                            : ""
-                        }`}
-                      >
-                        <span
-                          onClick={() => {
-                            navigate("/buy-medicines");
-                            setSideBarOpen((prev) => !prev);
-                          }}
-                          className="cursor-pointer font-bold relative text-center w-full"
+                        <div
+                          className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
+                            curPath === "/buy-medicines"
+                              ? "text-blue-9 border-b-[2px] border-blue-9"
+                              : ""
+                          }`}
                         >
-                          MEDICINES
-                          <span className="cursor-pointerfont-bold px-[5px] py-[3px] bg-blue-8 absolute -top-[14px] text-white-1 -right-[40px] rounded-[40px] hover:bg-blue-9 text-[10px] z-9999">
-                            20% off
+                          <span
+                            onClick={() => {
+                              navigate("/buy-medicines");
+                              setSideBarOpen((prev) => !prev);
+                            }}
+                            className="cursor-pointer font-bold relative text-center w-full"
+                          >
+                            MEDICINES
+                            <span className="cursor-pointerfont-bold px-[5px] py-[3px] bg-blue-8 absolute -top-[14px] text-white-1 -right-[40px] rounded-[40px] hover:bg-blue-9 text-[10px] z-9999">
+                              20% off
+                            </span>
                           </span>
-                        </span>
-                      </div>
+                        </div>
 
+                        <div
+                          className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8`}
+                        >
+                          <span
+                            className=" font-bold text-center w-full"
+                            onClick={() => {
+                              setSideBarOpen((prev) => !prev);
+                              setShowDropdown(true);
+                            }}
+                          >
+                            ACCOUNT
+                          </span>
+                        </div>
+                      </nav>
+                    </div>
+                    {showDropdown && (
                       <div
-                        className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8`}
+                        className={`absolute top-[4rem] right-0 w-[17rem] bg-blue-6 p-6 text-[0.9rem] rounded-[3px] text-[#eee] border-[1px] border-grey-3  z-50 transition-all duration-200 ease-in-out8 ${
+                          showDropdown && "active"
+                        }`}
+                        ref={dropdownRef}
                       >
-                        <span
-                          className=" font-bold text-center w-full"
+                        <h4 className="font-semibold space-x-[0.5px]  text-blue-2">
+                          <span className=" text-[1em] opacity-95 hover:opacity-100 text-white-1">
+                            Hello! &nbsp;
+                          </span>
+                          {localStorage.getItem("username")}
+                        </h4>
+                        <p className="text-[0.8rem] mt-2">
+                          Have a great health!!
+                        </p>
+                        <button
+                          type="button"
+                          className="mt-4 py-[0.8rem] px-4 rounded-[4px] border-[1px]  transition-all duration-300 hover:text-blue-1 hover:border-blue-5 hover:bg-blue-5 text-blue-1 border-blue-3 mr-[10px] bg-blue-3"
                           onClick={() => {
-                            setSideBarOpen((prev) => !prev);
-                            setShowDropdown(true);
+                            setShowDropdown(false);
+                            toggleProfile(true);
                           }}
                         >
-                          ACCOUNT
-                        </span>
+                          Profile
+                        </button>
+                        <button
+                          type="button"
+                          className="mt-4 py-[0.8rem] px-4 rounded-[4px] border-[1px]  transition-all duration-300 hover:text-blue-1 hover:border-blue-5 hover:bg-blue-5 text-blue-1 border-blue-3 mr-[10px]"
+                          onClick={() => {
+                            setShowDropdown(false);
+                            localStorage.getItem("usertype") === "doctor"
+                              ? updatestatus()
+                              : userLogout();
+                            navigate("/");
+                          }}
+                        >
+                          Logout
+                        </button>
+                        <div className="my-4 border-t-[1px] border-grey-2"></div>
+                        <ul>
+                          <li className="mb-[0.7rem] flex">
+                            <IoWalletOutline className="text-[1.4em] mr-[5px]" />
+                            <Link
+                              to="/my-wallet"
+                              onClick={() => setShowDropdown(false)}
+                            >
+                              My Wallet
+                            </Link>
+                          </li>
+                          <li className="mb-[0.7rem] flex">
+                            <AiOutlineShoppingCart className="text-[1.4em] mr-[5px]" />
+                            <Link
+                              to="/my-cart"
+                              onClick={() => setShowDropdown(false)}
+                            >
+                              My Cart
+                            </Link>
+                            <span className="bg-blue-3 text-[0.8rem] rounded-[3px] ml-[10px] py-[0.1rem] px-[0.4rem] text-white">
+                              {cartItems.length}
+                            </span>
+                          </li>
+                          <li className="flex">
+                            <RiFileList3Line className="text-[1.4em] mr-[5px]" />
+                            <Link
+                              to="/my-orders"
+                              onClick={() => setShowDropdown(false)}
+                            >
+                              My Orders
+                            </Link>
+                          </li>
+                        </ul>
                       </div>
-                    </nav>
+                    )}
                   </div>
-                  {showDropdown && (
-                    <div
-                      className={`absolute top-[4rem] right-0 w-[17rem] bg-blue-6 p-6 text-[0.9rem] rounded-[3px] text-[#eee] border-[1px] border-grey-3  z-50 transition-all duration-200 ease-in-out8 ${
-                        showDropdown && "active"
-                      }`}
-                      ref={dropdownRef}
-                    >
-                      <h4 className="font-semibold space-x-[0.5px]  text-blue-2">
-                        <span className=" text-[1em] opacity-95 hover:opacity-100 text-white-1">
-                          Hello! &nbsp;
-                        </span>
-                        {localStorage.getItem("username")}
-                      </h4>
-                      <p className="text-[0.8rem] mt-2">
-                        Have a great health!!
-                      </p>
-                      <button
-                        type="button"
-                        className="mt-4 py-[0.8rem] px-4 rounded-[4px] border-[1px]  transition-all duration-300 hover:text-blue-1 hover:border-blue-5 hover:bg-blue-5 text-blue-1 border-blue-3 mr-[10px] bg-blue-3"
-                        onClick={() => {
-                          setShowDropdown(false);
-                          toggleProfile(true);
-                        }}
-                      >
-                        Profile
-                      </button>
-                      <button
-                        type="button"
-                        className="mt-4 py-[0.8rem] px-4 rounded-[4px] border-[1px]  transition-all duration-300 hover:text-blue-1 hover:border-blue-5 hover:bg-blue-5 text-blue-1 border-blue-3 mr-[10px]"
-                        onClick={() => {
-                          setShowDropdown(false);
-                          localStorage.getItem("usertype") === "doctor"
-                            ? updatestatus()
-                            : userLogout();
-                          navigate("/");
-                        }}
-                      >
-                        Logout
-                      </button>
-                      <div className="my-4 border-t-[1px] border-grey-2"></div>
-                      <ul>
-                        <li className="mb-[0.7rem] flex">
-                          <IoWalletOutline className="text-[1.4em] mr-[5px]" />
-                          <Link
-                            to="/my-wallet"
-                            onClick={() => setShowDropdown(false)}
-                          >
-                            My Wallet
-                          </Link>
-                        </li>
-                        <li className="mb-[0.7rem] flex">
-                          <AiOutlineShoppingCart className="text-[1.4em] mr-[5px]" />
-                          <Link
-                            to="/my-cart"
-                            onClick={() => setShowDropdown(false)}
-                          >
-                            My Cart
-                          </Link>
-                          <span className="bg-blue-3 text-[0.8rem] rounded-[3px] ml-[10px] py-[0.1rem] px-[0.4rem] text-white">
-                            {cartItems.length}
-                          </span>
-                        </li>
-                        <li className="flex">
-                          <RiFileList3Line className="text-[1.4em] mr-[5px]" />
-                          <Link
-                            to="/my-orders"
-                            onClick={() => setShowDropdown(false)}
-                          >
-                            My Orders
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  )}
                 </div>
               )
             ) : null}
