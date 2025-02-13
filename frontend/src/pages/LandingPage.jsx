@@ -15,12 +15,13 @@ import { IoAccessibility } from "react-icons/io5";
 import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
-import bg from "../assets/landing-bg.png";
+// import bg from "../assets/landing-bg.png";
+
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
 import TestimonialSection from "../components/landingPage/TestimonialCarousel";
 import Lottie from "lottie-react";
-import animationData from "../assets/Animation - 1739250057848.json";
+import animationData from "../assets/Animation - 1739435608665.json";
 
 
 const TypingEffect = ({ text, speed = 100, className }) => {
