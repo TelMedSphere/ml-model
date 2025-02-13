@@ -19,6 +19,7 @@ from flask import Flask, request, jsonify
 import firebase_admin
 from firebase_admin import credentials, auth
 from utils.imageUploader import upload_file
+from bson import ObjectId
 
 load_dotenv()
 secret_key = secrets.token_hex(16)
@@ -256,7 +257,7 @@ def register():
         data.setdefault('cart', [])
         data.setdefault('wallet_history', [])
         data.setdefault('wallet', 0)
-        data.setdefault('meet', False
+        data.setdefault('meet', False)
         data.setdefault('doctorId', "")
         if cloudinary_url:
             data['profile_picture'] = cloudinary_url
@@ -556,7 +557,6 @@ def make_meet():
     data = request.get_json()
     email = data['email']
     if request.method == 'PUT':
-        print(data['link'])
         doctor.update_one({'email': email}, {'$set': {'link': {'link': data['link'], "name": data['patient']}}})
         return jsonify({'message': 'Meet link created successfully'}), 200
     else:
@@ -924,16 +924,16 @@ def save_feedback():
         feedback.insert_one(data);
         return jsonify({"message": "Feedback Saved Successfully"}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500     
-        
-@app.route('/feedback',methods=['GET'])
+        return jsonify({"error": str(e)}), 500  
+    
+@app.route('/feedback', methods=['GET'])
 def get_all_feedback():
     try:
         feedbacks = list(feedback.find({}, {"_id": 0}))
         return jsonify(feedbacks),200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500    
-
+        return jsonify({"error": str(e)}), 500       
+        
 @app.route('/feedback/<id>', methods=['GET'])
 def get_feedback(id):
     try:
@@ -950,7 +950,7 @@ def get_feedback(id):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-                       
+    
 # ----------- email for contact us routes -----------------
 @app.route('/contact', methods=['POST'])
 def contact():

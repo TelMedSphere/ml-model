@@ -47,7 +47,7 @@ const Header = () => {
   const updatestatus = () => {
     httpClient.put("/doc_status", { email: localStorage.getItem("email") });
     userLogout();
-    window.location.reload();
+    // window.location.reload();
   };
 
   useEffect(() => {
