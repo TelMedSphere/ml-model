@@ -11,7 +11,7 @@ import {
   BsEmojiSmile,
   BsEmojiLaughing,
 } from "react-icons/bs";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { HiOutlineLightBulb, HiUserGroup } from "react-icons/hi";
 import { FaVideo } from "react-icons/fa";
 import httpClient from "../httpClient";
@@ -87,11 +87,12 @@ const Home = () => {
     "Your Account is not verified yet! Please verify for appointments!!"
   );
   const [verAlert, setVerAlert] = useState(false);
+  const [availableLoading, setAvailableLoading] = useState(false);
 
   const handleFeedbackClose = () => {
     httpClient.post("/doctor_app", {
       email: localStorage.getItem("lastMeetMail"),
-      stars: feedbackRate,
+      stars: feedbackRate+1,
     });
     localStorage.setItem("lastMeetWith", null);
     setHasLastMeet(false);
@@ -102,6 +103,7 @@ const Home = () => {
       setFeedbackAlert(false);
     }, 2000);
   };
+  
   const ratings = [
     "Very Dissatisfied",
     "Dissatisfied",
@@ -283,6 +285,7 @@ const Home = () => {
   };
 
   const iamavailable = () => {
+    setAvailableLoading(true);
     setIsAlert("success");
     setAlertmessage("Now, patients can meet you");
     setAvailablemodal(false);
@@ -294,10 +297,12 @@ const Home = () => {
       setAlertmessage("");
       setAvailable(true);
       localStorage.setItem("available", true);
+      setAvailableLoading(false);
     }, 3000);
   };
 
   const iamnotavailable = () => {
+    setAvailableLoading(true);
     setIsAlert("error");
     setAlertmessage("Now, patients can't meet you");
     setAvailablemodal(false);
@@ -307,6 +312,7 @@ const Home = () => {
       setAlertmessage("");
       setAvailable(false);
       localStorage.setItem("available", false);
+      setAvailableLoading(false);
     }, 3000);
   };
 
@@ -470,11 +476,20 @@ const Home = () => {
             </Alert>
           )}
           Set your availability
+          {/* Show Spinner while loading */}
           <span
-            className={`w-full h-[3px] mt-1 rounded-lg ${
-              available ? "bg-green-500" : "bg-red-500"
-            }`}
-          ></span>
+            className="w-full h-[3px] rounded-lg flex items-center mt-1"
+          >
+            <span
+              className={`h-[3px] rounded-lg ${
+                availableLoading
+                  ? `${available ? "bg-red-500" : "bg-green-500"} animate-progressFill`
+                  : available
+                  ? "bg-green-500 w-full"
+                  : "bg-red-500 w-full"
+              }`}
+            ></span>
+          </span>
         </div>
       )}
 
@@ -731,13 +746,18 @@ const Home = () => {
           <div className="flex flex-col items-center justify-center gap-2.5 text-white-1">
             <div
               onClick={() => iamavailable()}
-              className="bg-blue-4 text-white-1  p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9 mb-3 mt-1"
+              disabled={available}
+              className={`bg-blue-4 text-white-1  p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9 mb-3 mt-1 ${
+                available && "pointer-events-none"
+              }`}
             >
               Yes, I am available!
             </div>
             <div
               onClick={() => iamnotavailable()}
-              className="bg-blue-4 text-white-1 p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9 mb-5"
+              className={`bg-blue-4 text-white-1  p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9 mb-3 mt-1 ${
+                !available && "pointer-events-none"
+              }`}
             >
               No, I am not available!
             </div>

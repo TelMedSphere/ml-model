@@ -19,6 +19,7 @@ from flask import Flask, request, jsonify
 import firebase_admin
 from firebase_admin import credentials, auth
 from utils.imageUploader import upload_file
+from bson import ObjectId
 
 load_dotenv()
 secret_key = secrets.token_hex(16)
@@ -212,6 +213,8 @@ def register():
             data['profile_picture'] = cloudinary_url
         if 'specialization' in data:
             del data['specialization']
+        if 'doctorId' in data:
+            del data['doctorId']
         
         patients.insert_one(data)
 
@@ -254,6 +257,8 @@ def register():
         data.setdefault('cart', [])
         data.setdefault('wallet_history', [])
         data.setdefault('wallet', 0)
+        data.setdefault('meet', False)
+        data.setdefault('doctorId', "")
         if cloudinary_url:
             data['profile_picture'] = cloudinary_url
 
@@ -267,6 +272,7 @@ def register():
             "phone": data["phone"],
             "email": data["email"],
             "specialization": data["specialization"],
+            "doctorId": data["doctorId"],
             "verified": data["verified"],
             "profile_picture": data.get("profile_picture")
         }), 200
@@ -326,6 +332,7 @@ def login():
                 "phone": var["phone"],
                 "email": var["email"],
                 "specialization": var["specialization"],
+                "doctorId": var["doctorId"],
                 "verified": var.get("verified", False),
                 "profile_picture": var.get("profile_picture")
             }), 200
@@ -550,7 +557,6 @@ def make_meet():
     data = request.get_json()
     email = data['email']
     if request.method == 'PUT':
-        print(data['link'])
         doctor.update_one({'email': email}, {'$set': {'link': {'link': data['link'], "name": data['patient']}}})
         return jsonify({'message': 'Meet link created successfully'}), 200
     else:
@@ -678,6 +684,8 @@ def update_details():
             update_data['specialization'] = data['specialization']
         if 'fee' in data:
             update_data['fee'] = data['fee']
+        if 'doctorId' in data:
+            update_data['doctorId'] = data['doctorId']
     else:  # usertype == 'patient'
         if 'age' in data:
             update_data['age'] = data['age']
@@ -916,16 +924,16 @@ def save_feedback():
         feedback.insert_one(data);
         return jsonify({"message": "Feedback Saved Successfully"}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500     
-        
-@app.route('/feedback',methods=['GET'])
+        return jsonify({"error": str(e)}), 500  
+    
+@app.route('/feedback', methods=['GET'])
 def get_all_feedback():
     try:
         feedbacks = list(feedback.find({}, {"_id": 0}))
         return jsonify(feedbacks),200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500    
-
+        return jsonify({"error": str(e)}), 500       
+        
 @app.route('/feedback/<id>', methods=['GET'])
 def get_feedback(id):
     try:
@@ -942,7 +950,7 @@ def get_feedback(id):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-                       
+    
 # ----------- email for contact us routes -----------------
 @app.route('/contact', methods=['POST'])
 def contact():
