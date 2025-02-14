@@ -15,13 +15,13 @@ import { IoAccessibility } from "react-icons/io5";
 import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
-// import bg from "../assets/landing-bg.png";
+import bg from "../assets/Logo.gif";
 
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
 import TestimonialSection from "../components/landingPage/TestimonialCarousel";
-import Lottie from "lottie-react";
-import animationData from "../assets/Animation - 1739435608665.json";
+// import Lottie from "lottie-react";
+// import animationData from "../assets/Animation - 1739435608665.json";
 
 
 const TypingEffect = ({ text, speed = 100, className }) => {
@@ -168,13 +168,13 @@ const LandingPage = () => {
                             )} */}
             </div>
 
-            <div className="max-w-[45%] text-center max-md:max-w-full">
-              {/* <img
+            <div className="max-w-[45%] sm:pr-16 sm:px-16 text-center max-md:max-w-full">
+              <img
                 src={bg}
                 alt="landing bg"
-                className="my-[20px] mx-auto max-md:max-w-[90%]"
-              /> */}
-              <Lottie animationData={animationData} loop={true} />
+                className="my-[20px]  rounded-2xl"
+              />
+              {/* <Lottie animationData={animationData} loop={true} /> */}
             </div>
           </div>
         </section>
