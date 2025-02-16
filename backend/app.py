@@ -80,7 +80,7 @@ client = pymongo.MongoClient(URI, server_api=ServerApi('1'))
 
 doctor = client.get_database("telmedsphere").doctors
 patients = client.get_database("telmedsphere").patients
-feedback = client.get_database("telmedsphere").feedback
+website_feedback = client.get_database("telmedsphere").website_feedback
 
 YOUR_DOMAIN = os.getenv('DOMAIN') 
 
@@ -916,37 +916,74 @@ def get_wallet_history():
         return jsonify({'message': 'Wallet history', 'wallet_history': var.get('wallet_history', [])}), 200
 
 #------------ feedback route ------------------------------
-@app.route('/feedback', methods=['POST'])
-def save_feedback():
+@app.route('/website_feedback', methods=['POST'])
+def save_website_feedback():
+    if not request.is_json:
+        return jsonify({"msg": "Missing JSON in request"}), 400
     data = request.get_json()
+   
+    # Extract required details
+    user_email = data.get("email")
+    rating = data.get("rating", 0)
+    comments = data.get("comments", "")
+    feedback_type = data.get("feedback_type", "")
+    timestamp = data.get("timestamp", "")
+    keep_it_anonymous = data.get("keep_it_anonymous", False)
+
+    # Fetch patient details using pemail
+    user = patients.find_one({"email": user_email}, {"_id": 0, "username": 1, "profile_picture": 1})
+    if not user :
+       user = doctor.find_one({"email": user_email}, {"_id": 0, "username": 1, "profile_picture": 1})
+    
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    feedback_entry = {
+        "user_email": user_email,
+        "rating": rating,
+        "comments": comments,
+        "username": user.get("username", ""),  
+        "profile_picture": user.get("profile_picture", ""), 
+        "keep_it_anonymous": keep_it_anonymous,
+        "feedback_type": feedback_type,
+        "timestamp" : timestamp
+    }
+
     try:
-        # Saving feedback information
-        feedback.insert_one(data);
+        website_feedback.insert_one(feedback_entry)
         return jsonify({"message": "Feedback Saved Successfully"}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500  
+        return jsonify({"error": str(e)}), 500
     
-@app.route('/feedback', methods=['GET'])
-def get_all_feedback():
+@app.route('/website_feedback',methods=['GET'])
+def get_all_website_feedback():
     try:
-        feedbacks = list(feedback.find({}, {"_id": 0}))
+        feedbacks = list(website_feedback.find({}, {"_id": 0}))
+        for feedback in feedbacks:
+            if feedback.get("keep_it_anonymous"):
+                feedback.pop("username", None)
+                feedback.pop("user_email", None)
+        print("feedback", feedback)
         return jsonify(feedbacks),200
     except Exception as e:
         return jsonify({"error": str(e)}), 500       
         
-@app.route('/feedback/<id>', methods=['GET'])
-def get_feedback(id):
+@app.route('/website_feedback/<id>', methods=['GET'])
+def get_website_feedback(id):
     try:
-        print(f"Feedback ID: {id}")
-        result = feedback.find_one({'feedbackid': str(id)})  
+        # Convert string ID to ObjectId
+        object_id = ObjectId(id)
 
-        print(f"Feedback: {result}")
+        # Fetch feedback using the converted ObjectId
+        result = website_feedback.find({'_id': object_id}, {"_id": 0})
+
         if result:
-            # Convert ObjectId to string
-            result['_id'] = str(result['_id'])
+            if result.get("keep_it_anonymous"):
+                result.pop("username", None)
+                result.pop("user_email", None)
             return jsonify({"message": "Feedback found", "data": result}), 200
         else:
-            return jsonify({"message": "Feedback Not Found"}), 400    
+            return jsonify({"message": "Feedback Not Found"}), 404    
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
