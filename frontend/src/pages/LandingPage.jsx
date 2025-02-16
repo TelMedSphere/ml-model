@@ -16,12 +16,9 @@ import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 import bg from "../assets/landing-bg.png";
-
 import need from "../assets/need.png";
 import profiles from "../data/teamData";
 import TestimonialSection from "../components/landingPage/TestimonialCarousel";
-// import Lottie from "lottie-react";
-// import animationData from "../assets/Animation - 1739435608665.json";
 
 
 const TypingEffect = ({ text, speed = 100, className }) => {
@@ -174,7 +171,6 @@ const LandingPage = () => {
                 alt="landing bg"
                 className="my-[20px]  rounded-2xl"
               />
-              {/* <Lottie animationData={animationData} loop={true} /> */}
             </div>
           </div>
         </section>
