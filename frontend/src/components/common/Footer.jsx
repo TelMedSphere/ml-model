@@ -1,10 +1,27 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { footMenu, footSocial } from "../../data/footerData";
 import { TfiAngleRight } from "react-icons/tfi";
 import logo from "../../assets/header.png";
+import commonContext from "../../contexts/common/commonContext";
 
 const Footer = () => {
+  const { toggleForm } = useContext(commonContext);
+  const navigate = useNavigate();
+
+  const handleProtectedLink = (e, path) => {
+    e.preventDefault();
+    const isLoggedIn = localStorage.getItem("username") && 
+                      localStorage.getItem("username") !== "undefined";
+
+    if (!isLoggedIn) {
+      navigate("/");
+      toggleForm(true);
+    } else {
+      navigate(path);
+    }
+  };
+
   return (
     <footer
       id="footer"
@@ -37,12 +54,22 @@ const Footer = () => {
                       >
                         <div className="flex items-center gap-2 hover:ml-2">
                           <TfiAngleRight className="text-sm text-opacity-80 " />
-                          <Link
-                            to={path}
-                            className="text-sm opacity-80 hover:opacity-100 hover:underline hover:text-blue-500 transition-transform transform hover:translate-x-1"
-                          >
-                            {link}
-                          </Link>
+                          {(menuItem.link === "Buy Medicines" || menuItem.link === "Disease Prediction") ? (
+                            <a
+                              href={path}
+                              onClick={(e) => handleProtectedLink(e, path)}
+                              className="text-sm opacity-80 hover:opacity-100 hover:underline hover:text-blue-500 transition-transform transform hover:translate-x-1"
+                            >
+                              {link}
+                            </a>
+                          ) : (
+                            <Link
+                              to={path}
+                              className="text-sm opacity-80 hover:opacity-100 hover:underline hover:text-blue-500 transition-transform transform hover:translate-x-1"
+                            >
+                              {link}
+                            </Link>
+                          )}
                         </div>
                       </li>
                     );
