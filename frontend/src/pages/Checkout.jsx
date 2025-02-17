@@ -1,68 +1,121 @@
 import React, { useState, useContext, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import { useNavigate } from "react-router-dom";
 import httpClient from "../httpClient";
 import CheckoutForm from "./CheckoutForm";
 import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 
-// Make sure to call loadStripe outside of a component’s render to avoid
-// recreating the Stripe object on every render.
-// This is your test publishable API key.
-// const stripePromise = loadStripe(`${process.env.REACT_APP_PUBLICATION_KEY}`);
 const stripePromise = loadStripe(`${import.meta.env.VITE_PUBLICATION_KEY}`);
 
-export default function Checkout() {
+const ErrorDisplay = ({ error, onRetry }) => (
+  <div className="min-h-[50vh] flex items-center justify-center">
+    <div className="max-w-md w-full mx-4 p-8 bg-white rounded-lg shadow-lg text-center">
+      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
+        <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </div>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">Checkout Error</h2>
+      <p className="text-gray-600 mb-6">{error}</p>
+      <div className="space-y-3">
+        <button 
+          onClick={onRetry}
+          className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Try Again
+        </button>
+        <button 
+          onClick={() => window.history.back()}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          Return to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+);
 
+const LoadingDisplay = () => (
+  <div className="min-h-[50vh] flex items-center justify-center">
+    <div className="text-center">
+      <div className="w-16 h-16 mx-auto mb-4">
+        <div className="w-full h-full border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+      </div>
+      <p className="text-gray-600">Initializing checkout...</p>
+    </div>
+  </div>
+);
+
+export default function Checkout() {
+  const navigate = useNavigate();
   const { isLoading, toggleLoading } = useContext(commonContext);
   const [clientSecret, setClientSecret] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-    // console.log(process.env.NODE_ENV)
-    // console.log(`${process.env.REACT_APP_TITLE}`)
-    toggleLoading(true);
-    httpClient.post("/create-payment-intent", {
-      amount: localStorage.getItem("totalPrice"),
-      headers: { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    }) 
-      .then((res) => {
-        console.log(res.data.clientSecret);
-        setClientSecret(res.data.clientSecret);
+    const initializeCheckout = async () => {
+      toggleLoading(true);
+      setError(null);
+
+      try {
+        const amount = localStorage.getItem("totalPrice");
+        if (!amount) {
+          throw new Error("Invalid checkout amount - Please add items to cart first");
+        }
+
+        const response = await httpClient.post("/create-payment-intent", {
+          amount,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        });
+
+        if (!response.data?.clientSecret) {
+          throw new Error("Invalid response from payment server");
+        }
+
+        setClientSecret(response.data.clientSecret);
+      } catch (err) {
+        console.error("Checkout initialization failed:", err);
+        setError(err.message || "Unable to initialize payment. Please try again later.");
+        
+        // Redirect to cart if amount is missing
+        if (err.message.includes("Invalid checkout amount")) {
+          setTimeout(() => navigate("/cart"), 2000);
+        }
+      } finally {
         toggleLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        toggleLoading(false);
       }
-    );
-  }, []);
+    };
+
+    initializeCheckout();
+  }, [toggleLoading, navigate]);
 
   useScrollDisable(isLoading);
 
-  const appearance = {
-    theme: 'stripe',
-  };
-  const options = {
-    clientSecret,
-    appearance,
-  };
-
-  if(isLoading) {
+  if (isLoading) {
     return <Preloader />;
-  };
+  }
+
+  if (error) {
+    return <ErrorDisplay error={error} onRetry={() => window.location.reload()} />;
+  }
 
   return (
-    <div id="checkout">
-      {clientSecret && (
-        <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm />
-        </Elements>
-      )}
+    <div className="min-h-screen bg-gray-50 pt-20">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {clientSecret ? (
+          <Elements options={{ clientSecret, appearance: { theme: 'stripe' } }} stripe={stripePromise}>
+            <CheckoutForm />
+          </Elements>
+        ) : (
+          <LoadingDisplay />
+        )}
+      </div>
     </div>
   );
 }
