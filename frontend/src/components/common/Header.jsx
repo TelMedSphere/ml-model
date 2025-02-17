@@ -89,12 +89,12 @@ const Header = () => {
         localStorage.getItem("username") !== "undefined" &&
         localStorage.getItem("usertype") === "patient" && (
           <div
-            className={`overflow-x-hidden flex justify-between items-center py-4 px-40 border-b-[1px] border-blue-8 h-full transition-all duration-300 ease-out max-lg:px-5 max-sm:px-4 max-sm:py-4 max-xs:p-2 bg-[#f5f5f5]${
+            className={`overflow-x-hidden flex justify-between items-center py-4 px-40 border-b-[1px] border-blue-8 h-full transition-all duration-300 ease-out max-lg:px-5 max-sm:px-4 max-sm:py-4 max-xs:p-2 dark:bg-black-3 dark:text-white-1 dark:hover:text-blue-2 dark:border-white-1 ${
               isScrolled ? "opacity-0 h-0 p-0" : ""
             }`}
           >
             <div
-              className={`flex justify-center items-center flex-wrap text-grey-3 transition-transform duration-500 max-lg:justify-start bg-[#f5f5f5] ${
+              className={`flex justify-center items-center flex-wrap text-grey-3 transition-transform duration-500 max-lg:justify-start dark:hover:text-white-1 dark:text-blue-2 ${
                 isScrolled
                   ? "-translate-x-full opacity-0"
                   : "translate-x-0 opacity-100"
@@ -102,7 +102,7 @@ const Header = () => {
             >
               <Link
                 to="/"
-                className="flex justify-center items-center transition-all duration-300 ease-out hover:text-[#333] mr-[20px] max-xs:mr-0"
+                className="flex justify-center items-center transition-all duration-300 ease-out hover:text-[#333] mr-[20px] max-xs:mr-0 dark:text-white-1 dark:text-opacity-80 dark:hover:text-opacity-100"
               >
                 <FiMail className="text-[0.9em] leading-[1.4rem] mr-[5px]" />
                 <p className="text-[0.9em] leading-[1.4rem]">
@@ -111,7 +111,7 @@ const Header = () => {
               </Link>
               <Link
                 to="/"
-                className="flex justify-center items-center transition-all duration-300 ease-out hover:text-[#333]"
+                className="flex justify-center items-center transition-all duration-300 ease-out hover:text-[#333] dark:text-white-1 dark:text-opacity-80 dark:hover:text-opacity-100"
               >
                 <FiPhoneCall className="text-[0.9em] leading-[1.4rem] mr-[5px]" />
                 <p className="text-[0.9em] leading-[1.4rem]">+91 12345 67890</p>
@@ -126,7 +126,7 @@ const Header = () => {
             >
               <Link
                 to="/doctors"
-                className="text-blue-5 font-bold transition-all duration-300 ease-out hover:text-blue-7"
+                className="text-blue-5 font-bold transition-all duration-300 ease-out hover:text-blue-7 dark:text-white-1 dark:text-opacity-80 dark:hover:text-opacity-100"
               >
                 Appointment
               </Link>
@@ -141,7 +141,7 @@ const Header = () => {
       >
         <div className="max-w-[1440px] mx-auto max-sm:px-2 px-6 max-xl:max-w-[1280px] max-lg:max-w-[1024px] max-md:max-w-[768px] max-sm:max-w-full h-full">
           <div className="grid grid-cols-12 md:gap-4 max-sm:w-full">
-            <h2 className="flex items-center col-span-7 max-md:col-span-6 max-md:mt-1">
+            <h2 className="flex items-center col-span-7 max-lg:col-span-5 max-md:col-span-6 max-sm:col-span-6 max-md:mt-1">
               <Link to="/">
                 <img
                   src={logo}
@@ -171,7 +171,7 @@ const Header = () => {
                 <div className="rounded-full pt-2 cursor-pointer flex justify-end items-center col-span-1">
                   {isDarkMode ? (
                     <FaSun
-                      className=" w-7 h-7 max-sm:w-6 max-sm:h-6 text-white-1  hidden dark:block bg-blue-3 p-[0.3rem] max-sm:p-1 rounded-full align-middle"
+                      className=" w-7 h-7 max-sm:w-6 max-sm:h-6 text-white-1 hidden dark:block bg-blue-3 p-[0.3rem] max-sm:p-1 rounded-full align-middle"
                       onClick={toggleDarkMode}
                     />
                   ) : (
@@ -188,7 +188,7 @@ const Header = () => {
             {localStorage.getItem("username") !== null &&
             localStorage.getItem("username") !== undefined ? (
               windowWidth >= 800 ? (
-                <nav className="hidden md:flex items-center gap-12">
+                <nav className={`hidden md:flex items-center ${localStorage.getItem("usertype") == "doctor" ? " xl:ml-32 lg:gap-8 max-lg:gap-7" : "gap-8 max-lg:gap-7"}`}>
                   <div
                     className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 ${
                       curPath === "/home"
@@ -357,7 +357,7 @@ const Header = () => {
                   </div>
                 </nav>
               ) : (
-                <div className="col-span-6 flex justify-end items-center mt-2">
+                <div className="col-span-6 flex justify-end items-center mt-2 absolute right-4">
                   <div className="rounded-full cursor-pointer flex justify-end items-center">
                     {isDarkMode ? (
                       <FaSun
@@ -373,7 +373,7 @@ const Header = () => {
                   </div>
                   <div
                     id="sidebar"
-                    className="w-auto h-7 max-sm:relative max-sm:ml-3"
+                    className="w-auto h-7 max-sm:relative ml-8 max-sm:ml-3"
                   >
                     <div
                       className="text-[1.5em] cursor-pointer font-bold"

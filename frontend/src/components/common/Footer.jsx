@@ -12,13 +12,9 @@ const Footer = () => {
     >
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-[1.4fr_repeat(2,1fr)] gap-12 justify-items-center">
-          <div >
+          <div>
             <Link to="/">
-            <img
-                src={logo}
-                alt="footer-logo"
-                style={{ height: "50px" }} 
-                />
+              <img src={logo} alt="footer-logo" style={{ height: "50px" }} />
             </Link>
           </div>
 
@@ -47,29 +43,13 @@ const Footer = () => {
                       </li>
                     );
                   })}
-                  {localStorage.getItem("usertype") === "patient" &&
-                    title === "Shop & More" && (
-                      <li className="transition-all duration-300 ease-in-out">
-                        <div className="flex items-center gap-2 hover:ml-2">
-                          <TfiAngleRight className="text-sm text-opacity-80" />
-                          <Link
-                            to="/doctors"
-                            className="text-sm opacity-80 hover:opacity-100 hover:underline hover:text-blue-500 transition-transform transform hover:translate-x-1"
-                          >
-                            Book an Appointment
-                          </Link>
-                        </div>
-                      </li>
-                    )}
                 </ul>
               </div>
             );
           })}
         </div>
 
-
         <div className="border-t border-opacity-70 mt-10"></div>
-
 
         <div className="flex flex-col-reverse  items-center justify-between mt-8 gap-8">
           <p className="text-sm flex flex-col items-center justify-between md:flex-row">
@@ -77,9 +57,9 @@ const Footer = () => {
               to="/"
               className="opacity-80 hover:opacity-100 transition-all"
             >
-              {new Date().getFullYear()} @{" "}TelMedSphere |{" "}
+              {new Date().getFullYear()} @ TelMedSphere |{" "}
             </Link>{" "}
-            {" "}| All Rights Reserved
+            | All Rights Reserved
           </p>
           <div className="flex gap-8 text-lg">
             {footSocial.map((item) => {
