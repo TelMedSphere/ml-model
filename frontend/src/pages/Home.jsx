@@ -90,9 +90,9 @@ const Home = () => {
   const [availableLoading, setAvailableLoading] = useState(false);
 
   const handleFeedbackClose = () => {
-    httpClient.post("/doctor_app", {
-      email: localStorage.getItem("lastMeetMail"),
-      stars: feedbackRate+1,
+    httpClient.put("/update_doctor_ratings", {
+      demail: localStorage.getItem("lastMeetMail"),
+      stars: feedbackRate + 1,
     });
     localStorage.setItem("lastMeetWith", null);
     setHasLastMeet(false);
@@ -103,7 +103,7 @@ const Home = () => {
       setFeedbackAlert(false);
     }, 2000);
   };
-  
+
   const ratings = [
     "Very Dissatisfied",
     "Dissatisfied",
@@ -148,10 +148,10 @@ const Home = () => {
       } else {
         toggleLoading(true);
         httpClient
-          .post("/set_appointment", { email: localStorage.getItem("email") })
+          .post("/doctor_apo", { demail: localStorage.getItem("email") })
           .then((res) => {
             let upcoming = [];
-            res.data.appointments
+            res.data.upcomingAppointments
               .sort()
               .reverse()
               .forEach((appointment) => {
@@ -291,7 +291,7 @@ const Home = () => {
     setAvailablemodal(false);
     setTimeout(() => {
       httpClient.put("/doctor_avilability", {
-        email: localStorage.getItem("email"),
+        demail: localStorage.getItem("email"),
       });
       setIsAlert("");
       setAlertmessage("");
@@ -477,13 +477,13 @@ const Home = () => {
           )}
           Set your availability
           {/* Show Spinner while loading */}
-          <span
-            className="w-full h-[3px] rounded-lg flex items-center mt-1"
-          >
+          <span className="w-full h-[3px] rounded-lg flex items-center mt-1">
             <span
               className={`h-[3px] rounded-lg ${
                 availableLoading
-                  ? `${available ? "bg-red-500" : "bg-green-500"} animate-progressFill`
+                  ? `${
+                      available ? "bg-red-500" : "bg-green-500"
+                    } animate-progressFill`
                   : available
                   ? "bg-green-500 w-full"
                   : "bg-red-500 w-full"
