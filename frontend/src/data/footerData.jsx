@@ -11,17 +11,20 @@ export const footMenu = [
             {
                 id: 1,
                 link: "Buy Medicines",
-                path: "/buy-medicines"
+                path: "/buy-medicines",
+                requiresAuth: true
             },
             {
                 id: 2,
                 link: "Disease Prediction",
                 path: "/disease-prediction"
+                requiresAuth: true
             },
             {
                 id: 3,
                 link: "Book an Appointment",
                 path: "/doctors"
+                requiresAuth: true
             }
         ]
     },
@@ -32,17 +35,18 @@ export const footMenu = [
             {
                 id: 1,
                 link: "About Us",
-                path: "/about"  // Change path to "/about"
+                path: "/about"
             },
             {
                 id: 2,
                 link: "Contact Us",
-                path: "/contact"  // Change path to "/contact"
+                path: "/contact"  
             },
             {
                 id: 3,
                 link: "Rate Us",
-                path: "/feedback"
+                path: "/feedback",
+                requiresAuth: true
             },
             {
                 id: 4,
@@ -57,32 +61,36 @@ export const footSocial = [
     {
         id: 1,
         icon: <FaGithub />,
-        cls: "GitHub",
+        cls: "github",
         path: "https://github.com/PratikMane0112/TelMedSphere",
+        external: true
     },
-        {
-        id: 5,
-        icon: <FaDiscord />,
-        cls: "Discord",
-        path: "https://discord.gg/qsdDRKak28",
-    },
-       {
+    {
         id: 2,
-        icon: <IoMdMail />,
-        cls: "Mail",
-        path: "/",
+        icon: <FaDiscord />,
+        cls: "discord",
+        path: "https://discord.gg/qsdDRKak28",
+        external: true
     },
     {
         id: 3,
-        icon: <FaPhoneAlt />,
-        cls: "phone",
-        path: "/",
+        icon: <IoMdMail />,
+        cls: "mail",
+        path: "mailto:contact@telmedsphere.com",
+        external: true
     },
     {
         id: 4,
-        icon: <FaHospital />,
-        cls: "Hospital",
-        path: "/",
+        icon: <FaPhoneAlt />,
+        cls: "phone",
+        path: "tel:+1234567890",
+        external: true
     },
-   
+    {
+        id: 5,
+        icon: <FaHospital />,
+        cls: "hospital",
+        path: "/about",
+        external: false
+    }
 ];
