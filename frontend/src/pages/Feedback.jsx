@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useDocTitle from "../hooks/useDocTitle";
 import Rating from "react-rating-stars-component";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import commonContext from "../contexts/common/commonContext";
 import { FaAngleDown } from "react-icons/fa";
 import httpClient from "../httpClient";
 
@@ -14,8 +12,8 @@ const Feedback = () => {
     type: "",
     rating: 0,
     comments: "",
-    email: localStorage.getItem("email") || "",
-    username: localStorage.getItem("username") || "",
+    email: "",
+    username: "",
     keep_it_anonymous: false,
   });
 
@@ -24,10 +22,6 @@ const Feedback = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const isLoggedIn =
-    localStorage.getItem("username") &&
-    localStorage.getItem("username") !== "undefined";
-
   const handleClose = () => {
     setIsModalOpen(false);
     navigate("/");
@@ -35,11 +29,6 @@ const Feedback = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!isLoggedIn) {
-      setError("Please login to submit feedback");
-      return;
-    }
 
     const feedbackData = {
       type: formData.type,
@@ -54,8 +43,6 @@ const Feedback = () => {
     try {
       const response = await httpClient.post("/website_feedback", feedbackData);
 
-      console.log("response", response)
-
       if (response.status < 200 || response.status >= 300) {
         throw new Error("Failed to submit feedback");
       }
@@ -65,7 +52,9 @@ const Feedback = () => {
         type: "",
         rating: 0,
         comments: "",
-        email: localStorage.getItem("email"),
+        email: "",
+        username: "",
+        keep_it_anonymous: false,
       });
       setIsModalOpen(true);
     } catch (error) {
@@ -78,16 +67,6 @@ const Feedback = () => {
   const ratingChanged = (newRating) => {
     setFormData({ ...formData, rating: newRating });
   };
-
-  const { toggleForm } = useContext(commonContext);
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/");
-      // Set signup to false and show the login form
-      toggleForm(true); // Opens the form modal
-    }
-  }, [isLoggedIn, navigate, toggleForm]);
 
   return (
     <section className="py-8 md:py-12 bg-gray-50">
