@@ -17,13 +17,13 @@ export const footMenu = [
             {
                 id: 2,
                 link: "Disease Prediction",
-                path: "/disease-prediction",
+                path: "/disease-prediction"
                 requiresAuth: true
             },
             {
                 id: 3,
-                link: "Book Appointment",
-                path: "/doctors",
+                link: "Book an Appointment",
+                path: "/doctors"
                 requiresAuth: true
             }
         ]
