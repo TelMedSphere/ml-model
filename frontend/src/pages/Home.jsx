@@ -92,9 +92,12 @@ const Home = () => {
   const handleFeedbackClose = () => {
     httpClient.put("/update_doctor_ratings", {
       demail: localStorage.getItem("lastMeetMail"),
+      pemail: localStorage.getItem("email"),
+      meetLink: localStorage.getItem("meetLink"),
       stars: feedbackRate + 1,
     });
     localStorage.setItem("lastMeetWith", null);
+    localStorage.setItem("meetLink", null);
     setHasLastMeet(false);
 
     setFeedbackAlert(true);
@@ -177,9 +180,8 @@ const Home = () => {
     setSearchPatient(true);
     setSearching(0);
     httpClient
-      .post("make_meet", { email: localStorage.getItem("email") })
+      .post("/make_meet", { demail: localStorage.getItem("email") })
       .then((res) => {
-        console.log(res.data);
         if (res.data.link === null) {
           setTimeout(() => {
             setSearching(1);
@@ -251,9 +253,12 @@ const Home = () => {
         ) {
           httpClient
             .put("/make_meet", {
-              email: doctormail,
-              link: joinlink,
+              demail: selectEmail,
+              pemail: localStorage.getItem("email"),
               patient: localStorage.getItem("username"),
+              date: new Date().toISOString().split("T")[0],
+              time: new Date().toLocaleTimeString(),
+              link: joinlink,
             })
             .then((res) => {
               setTimeout(() => {
@@ -272,7 +277,7 @@ const Home = () => {
               }, 30000);
             })
             .catch(() => {
-              // console.log(res)
+              console.log("Error occurred in conducting meet");
             });
         } else {
           setIsConnecting(false);
@@ -280,7 +285,7 @@ const Home = () => {
         }
       })
       .catch(() => {
-        // console.log(res)
+        console.log("Error fetching doctor status");
       });
   };
 
