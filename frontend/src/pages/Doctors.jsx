@@ -121,11 +121,15 @@ const Doctors = () => {
 
         httpClient
           .put("/make_meet", {
-            email: selectEmail,
-            link: meetLink,
+            demail: selectEmail,
+            pemail: localStorage.getItem("email"),
             patient: localStorage.getItem("username"),
+            date: new Date().toISOString().split("T")[0],
+            time: new Date().toLocaleTimeString(),
+            link: meetLink,
           })
           .then(() => {
+            localStorage.setItem("meetLink", meetLink);
             setTimeout(() => {
               httpClient
                 .post("/currently_in_meet", { email: selectEmail })
