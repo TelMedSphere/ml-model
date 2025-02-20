@@ -448,56 +448,6 @@ def send_media(path):
         directory='upload', path=path
     )
 
-# @app.route('/mail_file', methods=['POST'])
-# def mail_file():
-#     # Get form data
-#     demail = request.form.get("demail")
-#     pemail = request.form.get("pemail")
-#     meetLink = request.form.get("meetLink")
-#     f = request.files['file']
-    
-#     # Save the uploaded file
-#     file_path = os.path.join(app.root_path, 'Receipt.pdf')
-#     f.save(file_path)
-
-#     # Upload the file to Cloudinary
-#     file_url = upload_file(file_path)
-
-#     if "http" not in file_url:
-#         return jsonify({"error": "File upload failed", "details": file_url}), 500
-    
-#     # Prepare the email message
-#     msg = Message(
-#         "Receipt cum Prescription for your Consultancy",
-#         recipients=[pemail]
-#     )
-    
-#     # Retrieve patient details from the database
-#     pat = patients.find_one({'email': pemail})
-    
-#     # Render the email HTML template with patient's username
-#     msg.html = render_template('email.html', Name=pat['username'])
-    
-#     # Prepare and send the WhatsApp message with the PDF link
-#     whatsapp_message({
-#         "to": f"whatsapp:{pat['phone']}",
-#         "body": f"Thank you for taking our consultancy. Please find your receipt here: {file_url}",
-#     })
-    
-#     # Attach the receipt PDF to the email message
-#     with app.open_resource(file_path) as fp:
-#         msg.attach("Receipt.pdf", "application/pdf", fp.read())
-#     thread = Thread(target=send_message_async, args=(msg,))
-#     thread.start()
-
-#     # Delete the local file after sending the email
-#     try:
-#         os.remove(file_path)
-#     except Exception as e:
-#         print(f"Error deleting file: {e}")
-    
-#     return jsonify({"message": "Success"}), 200
-
 @app.route('/mail_file', methods=['POST'])
 def mail_file():
     # Get form data
