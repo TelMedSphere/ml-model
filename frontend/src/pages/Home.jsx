@@ -116,6 +116,7 @@ const Home = () => {
   ];
 
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+  const [completedMeets, setCompletedMeets] = useState([]);
 
   useEffect(() => {
     const now = new Date(new Date().getTime() - 10 * 60000);
@@ -172,8 +173,24 @@ const Home = () => {
             console.log(err);
           });
       }
+      httpClient
+        .post("/completed_meets", { useremail: localStorage.getItem("email") })
+        .then((res) => {
+          let completed = [];
+          res.data.completedMeets
+            .sort()
+            .reverse()
+            .forEach((Meet) => {
+              completed.unshift(Meet);
+            });
+          toggleLoading(false);
+          setCompletedMeets(completed);
+        })
+        .catch((err) => {
+          toggleLoading(false);
+          console.log(err);
+        });
     }
-    // eslint-disable-next-line
   }, []);
 
   const searchmeet = () => {
@@ -402,6 +419,59 @@ const Home = () => {
           </div>
         </div>
       )}
+
+      <div className="mx-auto w-[93vw] max-w-[1100px] mb-16">
+        <h2 className="mb-4 text-blue-8">History</h2>
+        <div>
+          <ul>
+            {completedMeets.map((item, index) => (
+              <li
+                key={index}
+                className="border-1 border-blue-4 flex justify-between items-center p-2 px-4 mb-4 bg-blue-2 rounded-lg transition-all duration-300 hover:p-4 hover:border-2 hover:border-blue-5 hover:py-[0.7rem] hover:px-4"
+              >
+                <div className="text-blue-8 flex flex-wrap items-end">
+                  <p className="text-[1.2em] mr-2">
+                    {new Date(item.date + " " + item.time)
+                      .toString()
+                      .slice(0, 3) +
+                      "," +
+                      new Date(item.date + " " + item.time)
+                        .toString()
+                        .slice(3, 16) +
+                      "at " +
+                      new Date(item.date + " " + item.time)
+                        .toString()
+                        .slice(16, 21)}
+                    ,
+                  </p>
+                  <p> With {item.doctor ? item.doctor : item.patient}</p>
+                </div>
+                <a href={item.prescription} target="_blank">
+                <button
+                  className="bg-blue-8 text-white-1 px-8 py-4 rounded-lg transition-all duration-200 hover:bg-blue-9 active:bg-blue-9 disabled:bg-blue-9 disabled:cursor-not-allowed cursor-pointer shadow-[0_0_10px_1px_#b0bbd8]"
+                  disabled={new Date(item.date + " " + item.time) > new Date()}
+                >
+                  Prescription
+                </button>
+                </a>
+              </li>
+            ))}
+            {completedMeets.length === 0 && (
+              <li className="flex justify-between items-center py-2 px-4 mb-4 bg-blue-2 rounded-lg border-1 border-blue-4 transition-all duration-300 ease-in-out hover:border-2 hover:border-blue-5 hover:py-[0.7rem] hover:px-4">
+                <div className="text-blue-8">No history found...</div>
+                {!isDoctor && (
+                  <button
+                    className="bg-blue-8 text-white-1 px-9 py-4 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#B0BBD8] hover:bg-blue-9 active:bg-blue-9"
+                    onClick={() => navigate("/doctors")}
+                  >
+                    Book
+                  </button>
+                )}
+              </li>
+            )}
+          </ul>
+        </div>
+      </div>
 
       <div className="mx-auto w-[93vw] max-w-[1100px] mb-16">
         <h2 className="mb-4 text-blue-8">Upcoming Appointments</h2>
