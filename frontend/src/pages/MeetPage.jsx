@@ -214,7 +214,9 @@ const MeetPage = () => {
     setSendingMsg("Sending...");
     var file = pdf.output("blob");
     let bodyContent = new FormData();
-    bodyContent.append("email", email);
+    bodyContent.append("pemail", email);
+    bodyContent.append("demail", localStorage.getItem("email"));
+    bodyContent.append("meetLink", localStorage.getItem("curmlink"));
     bodyContent.append("file", file);
     httpClient
       .post("mail_file", bodyContent, {

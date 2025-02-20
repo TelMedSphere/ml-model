@@ -448,10 +448,63 @@ def send_media(path):
         directory='upload', path=path
     )
 
+# @app.route('/mail_file', methods=['POST'])
+# def mail_file():
+#     # Get form data
+#     demail = request.form.get("demail")
+#     pemail = request.form.get("pemail")
+#     meetLink = request.form.get("meetLink")
+#     f = request.files['file']
+    
+#     # Save the uploaded file
+#     file_path = os.path.join(app.root_path, 'Receipt.pdf')
+#     f.save(file_path)
+
+#     # Upload the file to Cloudinary
+#     file_url = upload_file(file_path)
+
+#     if "http" not in file_url:
+#         return jsonify({"error": "File upload failed", "details": file_url}), 500
+    
+#     # Prepare the email message
+#     msg = Message(
+#         "Receipt cum Prescription for your Consultancy",
+#         recipients=[pemail]
+#     )
+    
+#     # Retrieve patient details from the database
+#     pat = patients.find_one({'email': pemail})
+    
+#     # Render the email HTML template with patient's username
+#     msg.html = render_template('email.html', Name=pat['username'])
+    
+#     # Prepare and send the WhatsApp message with the PDF link
+#     whatsapp_message({
+#         "to": f"whatsapp:{pat['phone']}",
+#         "body": f"Thank you for taking our consultancy. Please find your receipt here: {file_url}",
+#     })
+    
+#     # Attach the receipt PDF to the email message
+#     with app.open_resource(file_path) as fp:
+#         msg.attach("Receipt.pdf", "application/pdf", fp.read())
+#     thread = Thread(target=send_message_async, args=(msg,))
+#     thread.start()
+
+#     # Delete the local file after sending the email
+#     try:
+#         os.remove(file_path)
+#     except Exception as e:
+#         print(f"Error deleting file: {e}")
+    
+#     return jsonify({"message": "Success"}), 200
+
 @app.route('/mail_file', methods=['POST'])
 def mail_file():
     # Get form data
-    user = request.form.get("email")
+    demail = request.form.get("demail")
+    pemail = request.form.get("pemail")
+    meetLink = request.form.get("meetLink")
+    print("meetlink......", meetLink)
     f = request.files['file']
     
     # Save the uploaded file
@@ -464,14 +517,58 @@ def mail_file():
     if "http" not in file_url:
         return jsonify({"error": "File upload failed", "details": file_url}), 500
     
+    # Retrieve patient and doctor details from the database
+    pat = patients.find_one({'email': pemail})
+    doc = doctors.find_one({'email': demail})
+
+    if not pat or not doc:
+        return jsonify({"error": "Doctor or Patient not found"}), 404
+
+    appointment_found = False 
+
+    # Find the upcoming appointment based on meetLink
+    for appointment in pat.get('upcomingAppointments', []):
+        print("patient appointments", appointment)
+        if appointment.get('link') == meetLink:
+            print("found in pat......")
+            appointment['prescription'] = file_url  # Add prescription link
+            appointment_found = True
+            break
+
+    for appointment in doc.get('upcomingAppointments', []):
+        print("doc appointments", appointment)
+        if appointment.get('link') == meetLink:
+            print("found in doc......")
+            appointment['prescription'] = file_url  # Add prescription link
+            appointment_found = True
+            break
+
+    # If not found in upcomingAppointments, check completedMeets
+    if not appointment_found:
+        for appointment in pat.get('completedMeets', []):
+            if appointment.get('link') == meetLink:
+                print("found in completedMeets (patient)......")
+                appointment['prescription'] = file_url  # Add prescription link
+                appointment_found = True
+                break
+
+        for appointment in doc.get('completedMeets', []):
+            if appointment.get('link') == meetLink:
+                print("found in completedMeets (doctor)......")
+                appointment['prescription'] = file_url  # Add prescription link
+                appointment_found = True
+                break
+
+    # If appointment was found, update the database
+    if appointment_found:
+        patients.update_one({'email': pemail}, {"$set": {"upcomingAppointments": pat.get('upcomingAppointments', []), "completedMeets": pat.get('completedMeets', [])}})
+        doctors.update_one({'email': demail}, {"$set": {"upcomingAppointments": doc.get('upcomingAppointments', []), "completedMeets": doc.get('completedMeets', [])}})
+
     # Prepare the email message
     msg = Message(
         "Receipt cum Prescription for your Consultancy",
-        recipients=[user]
+        recipients=[pemail]
     )
-    
-    # Retrieve patient details from the database
-    pat = patients.find_one({'email': user})
     
     # Render the email HTML template with patient's username
     msg.html = render_template('email.html', Name=pat['username'])
@@ -479,7 +576,7 @@ def mail_file():
     # Prepare and send the WhatsApp message with the PDF link
     whatsapp_message({
         "to": f"whatsapp:{pat['phone']}",
-        "body": f"Thank you for taking our consultancy. Please find your receipt here: {file_url}",
+        "body": f"Thank you for taking our consultancy. Please find your prescription here: {file_url}",
     })
     
     # Attach the receipt PDF to the email message
@@ -571,13 +668,13 @@ def doctor_app():
     # Append to patient's completedMeet
     patients.update_one(
         {'email': pemail},
-        {'$push': {'completedMeet': appointment}}
+        {'$push': {'completedMeets': appointment}}
     )
 
     # Append to doctor's completedMeet
     doctors.update_one(
         {'email': demail},
-        {'$push': {'completedMeet': appointment}}
+        {'$push': {'completedMeets': appointment}}
     )
 
     # Update doctor's ratings and appointment count
@@ -628,6 +725,41 @@ def patient_apo():
         patients.update_one({'email': email}, {'$set': {'upcomingAppointments': pat['upcomingAppointments']}})
         return jsonify({'message': 'Patient status updated successfully'}), 200
     
+@app.route('/completed_meets', methods=['POST'])
+def completed_meets():
+    data = request.get_json()
+
+    if not data or 'useremail' not in data:
+        return jsonify({"error": "Email parameter is required"}), 400
+
+    useremail = data['useremail']
+
+    # Check if user is a doctor
+    doctor = doctors.find_one({'email': useremail}, {'completedMeets': 1, '_id': 0})
+    if doctor:
+        completed_meets = doctor.get('completedMeets', [])
+        
+        # Fetch patient usernames
+        for meet in completed_meets:
+            patient = patients.find_one({'email': meet.get('pemail')}, {'username': 1, '_id': 0})
+            meet['patient'] = patient.get('username', 'Unknown') if patient else 'Unknown'
+        
+        return jsonify({"completedMeets": completed_meets}), 200
+
+    # Check if user is a patient
+    patient = patients.find_one({'email': useremail}, {'completedMeets': 1, '_id': 0})
+    if patient:
+        completed_meets = patient.get('completedMeets', [])
+        
+        # Fetch doctor usernames
+        for meet in completed_meets:
+            doctor = doctors.find_one({'email': meet.get('demail')}, {'username': 1, '_id': 0})
+            meet['doctor'] = doctor.get('username', 'Unknown') if doctor else 'Unknown'
+        
+        return jsonify({"completedMeets": completed_meets}), 200
+
+    return jsonify({"error": "User not found"}), 404
+
 # ----------- meeting routes -----------------
 
 @app.route('/make_meet', methods=['POST', 'PUT'])
