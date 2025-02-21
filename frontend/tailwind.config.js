@@ -12,6 +12,7 @@ module.exports = {
         black: colors.black,
         blue: colors.blue,
         yellow: colors.yellow,
+        red: colors.red,
         orange: colors.orange,
         grey: colors.grey,
         white: colors.white,
@@ -22,11 +23,13 @@ module.exports = {
       },
       backgroundImage: {
         "curvy-shape": "url('/curvy-shape-img.png')",
+        "curvy-shape-dark": "url('/curvy-shape-dark-img.png')",
         "landing-bg":
           "linear-gradient(white 20%, #d4ddf1 40%, #b0bbd8 60%, #6575a5 80%, #4a4cb2 100%)",
       },
       textShadow: {
         "landing-highlight": "2px 2px 4px rgba(0, 0, 0, 0.3)",
+        "landing-highlight-dark": "2px 2px 4px rgba(255, 255, 255, 0.3)",
       },
       fontFamily: {
         sans: ["Montserrat", ...defaultTheme.fontFamily.sans],

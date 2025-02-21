@@ -143,9 +143,11 @@ const Header = () => {
           </div>
         )}
       <header
+
         className={`z-[999] w-full text-blue-8 transition-colors duration-300 ease-linear h-full bg-[#f5f5f5] dark:text-white-1 ${
           isSticky ? "sticky top-0 bg-blue-1 dark:bg-black-5" : "dark:bg-black-3"
         }`}
+
       >
         <div className="max-w-[1440px] mx-auto px-6 py-4">
           <div className="flex items-center justify-between">

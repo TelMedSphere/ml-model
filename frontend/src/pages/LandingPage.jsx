@@ -20,14 +20,13 @@ import need from "../assets/need.png";
 import profiles from "../data/teamData";
 import TestimonialSection from "../components/landingPage/TestimonialCarousel";
 
-
 const TypingEffect = ({ text, speed = 100, className }) => {
-  const [displayedText, setDisplayedText] = useState('');
+  const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  
+
   useEffect(() => {
     let timer;
-    
+
     if (!isDeleting && displayedText.length < text.length) {
       // Typing
       timer = setTimeout(() => {
@@ -55,12 +54,14 @@ const TypingEffect = ({ text, speed = 100, className }) => {
 
   return (
     <div className="w-full">
-      <h2 
+      <h2
         className={`${className} md:overflow-hidden md:whitespace-nowrap inline-block`}
-        style={{ 
-          // width: `${text.length}ch`,
-          // minWidth: `${text.length}ch`
-        }}
+        style={
+          {
+            // width: `${text.length}ch`,
+            // minWidth: `${text.length}ch`
+          }
+        }
       >
         {displayedText}
       </h2>
@@ -142,21 +143,21 @@ const LandingPage = () => {
   return (
     <>
       <div>
-        <section className="h-screen w-full bg-[#f5f5f5]">
+        <section className="h-screen w-full bg-[#f5f5f5] dark:bg-black-6">
           {/* curvy-img */}
-          <div className="relative top-[5.5rem] h-[90%] bg-left bg-no-repeat bg-cover -b-4 left-0 z-0 bg-curvy-shape max-lg:h-[95%] max-md:h-[80%] max-md:top-[23.5rem]"></div>
-          <div className="absolute left-0 top-0 h-[85%] z-[1] flex justify-between items-center w-full text-blue-8 text-shadow-landing-highlight max-md:flex max-md:justify-end max-md:items-center max-md:flex-col-reverse max-xxs:top-12 max-lg:px-4">
+          <div className="relative top-[5.5rem] h-[90%] bg-left bg-no-repeat bg-cover -b-4 left-0 z-0 bg-curvy-shape dark:bg-curvy-shape-dark max-lg:h-[95%] max-md:h-[80%] max-md:top-[23.5rem]"></div>
+          <div className="absolute left-0 top-0 h-[85%] z-[1] flex justify-between items-center w-full text-blue-8 text-shadow-landing-highlight dark:text-shadow-landing-highlight-dark max-md:flex max-md:justify-end max-md:items-center max-md:flex-col-reverse max-xxs:top-12 max-lg:px-4">
             <div className="max-w-[55%]  md:pl-10 max-md:pt-8 max-md:max-w-[90%]">
               {/* highlight-heading */}
               {/* <h2 className="text-[2.5rem] mb-4 text-shado animated-heading max-md:text-[1.7em]">
                 Healing Hands & Caring Hearts
               </h2> */}
-             <TypingEffect 
-  text="Healing Hands & Caring Hearts" 
-  className="text-[2.5rem] mb-4 text-shado animated-heading max-md:text-[1.7em]"
-/>
+              <TypingEffect
+                text="Healing Hands & Caring Hearts"
+                className="text-[2.5rem] mb-4 dark:mb-0 animated-heading max-md:text-[1.7em] dark:text-white-1 h-16"
+              />
               {/* highlight-text */}
-              <p className="text-[1rem] mt-[1.4rem] animate-fadeIn duration-200 ease-in-out gap-[2em] max-md:text-[1em]">
+              <p className="text-[1rem] mt-[1.4rem] animate-fadeIn duration-200 ease-in-out gap-[2em] max-md:text-[1em] dark:text-white-1">
                 Connecting patients and doctors, no matter the distance <br />
                 we are dedicated to your wellbeing & committed to your care...
               </p>
@@ -169,59 +170,61 @@ const LandingPage = () => {
               <img
                 src={bg}
                 alt="landing bg"
-                className="my-[20px]  rounded-2xl"
+                className="my-[20px] rounded-2xl"
               />
             </div>
           </div>
         </section>
         {/* services-section */}
-        <section className="py-16 px-0 text-center bg-white-1">
+        <section className="py-16 px-0 text-center bg-white-1 dark:bg-black-7">
           <div>
-            <h2 className="text-[#333] mb-8">Services we provide</h2>
+            <h2 className="text-[#333] mb-8 dark:text-yellow-1">
+              Services we provide
+            </h2>
           </div>
           {/* service-list */}
           <div className="flex flex-wrap justify-around mt-8 max-w-[1200px] my-0 mx-auto">
             {/* service-item */}
-            <div className="bg-[#f5f5f5] flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+            <div className="bg-[#f5f5f5] flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:bg-black-2 dark:border-yellow-1 dark:border-opacity-40">
               {/* icon-container */}
               <div className="flex items-center justify-center min-h-[80px] max-h-[80px]">
                 {/* icon icon-1*/}
-                <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center text-[1.8rem] bg-[rgba(25, 150, 143, 0.1)] text-[#19958f] border-[2px] border-[#19958f]">
+                <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center text-[1.8rem] bg-[rgba(25, 150, 143, 0.1)] text-[#19958f] border-[2px] border-[#19958f] dark:text-green-8 dark:border-green-7">
                   <TbStethoscope />
                 </div>
               </div>
-              <h3 className="text-[#222] mb-3 text-[1.25rem]">
+              <h3 className="text-[#222] mb-3 text-[1.25rem] dark:text-white-1">
                 Experienced Doctors
               </h3>
-              <p className="text-[#555] text-[0.9rem]">
+              <p className="text-[#555] text-[0.9rem] dark:text-white-1">
                 Connect with doctors through live video calls and receive
                 prescriptions.
               </p>
             </div>
-            <div className="flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] bg-[#f5f5f5] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+            <div className="flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] bg-[#f5f5f5] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:bg-black-2 dark:border-yellow-1 dark:border-opacity-40">
               <div className="flex items-center justify-center min-h-[80px] max-h-[80px]">
-                <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center text-[1.8rem] bg-[rgba(245, 158, 50, 0.1)] text-[#f59c23] border-[2px] border-[#f59c23]">
+                <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center text-[1.8rem] bg-[rgba(245, 158, 50, 0.1)] text-[#f59c23] border-[2px] border-[#f59c23] dark:text-yellow-9 dark:border-yellow-7">
                   <BsRobot />
                 </div>
               </div>
-              <h3 className="text-[#222] mb-3 text-[1.25rem]">
+              <h3 className="text-[#222] mb-3 text-[1.25rem] dark:text-white-1">
                 Health Prediction
               </h3>
-              <p className="text-[#555] text-[0.9rem]">
+              <p className="text-[#555] text-[0.9rem] dark:text-white-1">
                 Assess your health status with our advanced disease detection
                 model.
               </p>
             </div>
-            <div className="flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] bg-[#f5f5f5] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+            <div className="flex flex-col items-center flex-shrink flex-grow-0 basis-[30%] min-w-[280px] max-w-[280px] text-center p-[25px] rounded-[10px] transition-all duration-300 border-[1px] border-white-[#dcdcdc] bg-[#f5f5f5] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:bg-black-2 dark:border-yellow-1 dark:border-opacity-40">
               <div className="flex items-center justify-center min-h-[80px] max-h-[80px]">
-                <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center text-[1.8rem] bg-[rgba(240, 80, 50, 0.1)] text-[#f05032] border-[2px] border-[#f05032]">
+                <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center text-[1.8rem] bg-[rgba(240, 80, 50, 0.1)] text-[#f05032] border-[2px] border-[#f05032] dark:text-red-5 dark:border-red-6">
                   <GiMedicines />
                 </div>
               </div>
-              <h3 className="text-[#222] mb-3 text-[1.25rem]">
+              <h3 className="text-[#222] mb-3 text-[1.25rem] dark:text-white-1">
                 Pharmacy store
               </h3>
-              <p className="text-[#555] text-[0.9rem]">
+              <p className="text-[#555] text-[0.9rem] dark:text-white-1">
                 Buy medications securely through our integrated pharmacy
                 service.
               </p>
@@ -229,37 +232,37 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section className="py-20 px-0 bg-[#f5f5f5]">
+        <section className="py-20 px-0 bg-[#f5f5f5] dark:bg-black-8">
           <div className="w-full flex flex-wrap my-0 mx-auto justify-center items-center max-w-[1300px] max-md:flex max-md:flex-col">
             <div className="flex-shrink-0 flex-grow-0 basis-[40%] w-full p-4 text-center max-md:mb-8">
               <div className="max-sm:flex max-sm:justify-center">
-              <img
-                src={need}
-                alt="why"
-                className="w-[90%] max-ma:max-w-[400px] max-md:w-[90%]"
-              />
+                <img
+                  src={need}
+                  alt="why"
+                  className="w-[90%] max-ma:max-w-[400px] max-md:w-[90%]"
+                />
               </div>
             </div>
             <div className="flex-shrink-0 flex-grow-0 basis-[55%] p-4 max-md:p-8">
-              <h2 className="text-blue-9 mb-8">
+              <h2 className="text-blue-9 mb-8 dark:text-blue-33 ">
                 Why do we need a proper health care?
               </h2>
-              <ul>
-                <li className="my-4 mx-auto text-blue-8">
+              <ul className="dark:text-white-1 text-blue-8">
+                <li className="my-4 mx-auto ">
                   WHO recommends 44.5 doctors per 10,000 people but India has
                   only 22 per 10k people so major supply demand mismatchIndia
                   has 22.8 doctors for every 10K citizens, the half of what WHO
                   recommends.
                 </li>
-                <li className="my-4 mx-auto text-blue-8">
+                <li className="my-4 mx-auto">
                   Also, local doctors may fail to provide the best consultation
                   as they lack expertise & experience.
                 </li>
-                <li className="my-4 mx-auto text-blue-8">
+                <li className="my-4 mx-auto">
                   Thus all-in-one online hospital was created. It offers a
                   disease prediction system, pharmacy, and payments.
                 </li>
-                <li className="my-4 mx-auto text-blue-8">
+                <li className="my-4 mx-auto">
                   This platform provides access to quality healthcare from
                   anywhere, improving healthcare outcomes and accessibility.
                 </li>
@@ -268,12 +271,12 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section className="py-12 px-0 bg-white-1">
-          <div className="text-center text-blue-9">
+        <section className="py-12 px-0 bg-white-1 dark:bg-black-3">
+          <div className="text-center text-blue-9 dark:text-blue-33">
             <h2>Our Benefits</h2>
-            <div className="flex flex-wrap my-0 mx-auto max-w-[1000px] justify-center mt-8 text-blue-7">
+            <div className="flex flex-wrap my-0 mx-auto max-w-[1000px] justify-center mt-8 text-blue-7 dark:text-white-1">
               {/* first */}
-              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(246,171,47,0.1)] m-4 hover:shadow-[0_0_4px_0_#f6ab2f]">
+              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(246,171,47,0.1)] dark:bg-yellow-6 dark:bg-opacity-10 m-4 dark:hover:shadow-[0_0_4px_0_#ffc92e] hover:shadow-[0_0_4px_1px_#f6ab2f]">
                 {/* icon */}
                 <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#f6ab2f]">
                   <MdOutlineHealthAndSafety />{" "}
@@ -282,7 +285,7 @@ const LandingPage = () => {
                   TeleHealth services
                 </p>
               </div>
-              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(12,184,182,0.1)] m-4 hover:shadow-[0_0_4px_0_#0cb8b6]">
+              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(12,184,182,0.1)]  m-4 hover:shadow-[0_0_4px_0_#0cb8b6] dark:hover:shadow-[0_0_4px_1px_#0fd4ca]">
                 <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#0cb8b6]">
                   <IoAccessibility />{" "}
                 </div>
@@ -290,16 +293,16 @@ const LandingPage = () => {
                   Convenience and accessibility
                 </p>
               </div>
-              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(230,73,45,0.1)] m-4 hover:shadow-[0_0_4px_0_#e6492d]">
-                <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#e6492d] ">
+              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(230,73,45,0.1)] dark:bg-red-6 dark:bg-opacity-10 m-4 hover:shadow-[0_0_4px_0_#e6492d] dark:hover:shadow-[0_0_4px_1px_#ff0a0a]">
+                <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#e6492d]">
                   <TbStethoscope />{" "}
                 </div>
                 <p className="flex shrink-0 grow-0 basis-[70%]">
                   Online Appointment Booking
                 </p>
               </div>
-              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(22,101,216,0.1)] m-4 hover:shadow-[0_0_4px_0_#1665d8]">
-                <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#1665d8] ">
+              <div className="flex justify-between items-center shrink-0 grow-0 basis-[20%] min-w-[210px] max-w-[210px] text-center py-4 px-8 rounded-[7px] transition-all duration-300 ease-in-out bg-[rgba(22,101,216,0.1)] m-4 hover:shadow-[0_0_4px_0_#1665d8] dark:hover:shadow-[0_0_4px_1px_#4188f5]">
+                <div className="text-[1.5rem] shrink-0 grow-0 basis-[20%] text-[#1665d8]">
                   <TbHeartPlus />{" "}
                 </div>
                 <p className="flex shrink-0 grow-0 basis-[70%]">
@@ -361,9 +364,8 @@ const LandingPage = () => {
               ))}
             </div>
           </div>
-        
-          <TestimonialSection />
 
+          <TestimonialSection />
         </section>
         {/* faq-section */}
         <section className="py-20 px-0 text-center text-white-1">
