@@ -314,18 +314,20 @@ const LandingPage = () => {
         </section>
 
         {/* team-section */}
-        <section className="py-20 px-0 text-center bg-white-1">
+        <section className="py-20 px-0 text-center bg-white-1 dark:bg-black-3">
           {/* team-div */}
           <div>
             <div>
-              <h2 className="text-blue-9 mb-8">Meet Our Team</h2>
+              <h2 className="text-blue-9 mb-8 dark:text-blue-33">
+                Meet Our Team
+              </h2>
             </div>
             {/* team */}
             <div className="flex flex-wrap my-0 mx-auto max-w-[1200px] justify-center mt-8">
               {profiles.map((profile) => (
                 // item
                 <div
-                  className="flex justify-center items-center flex-col flex-grow-0 flex-shrink-0 basis-[25%] relative min-w-[250px] max-w-[250px] text-center rounded-[12px] transition-all duration-300 bg-white-1 border-[1px] border-[#eaeaea] m-4 py-4 px-0 hover:shadow-[0_0_10px_10px_#fff] group cursor-pointer"
+                  className="flex justify-center items-center flex-col flex-grow-0 flex-shrink-0 basis-[25%] relative min-w-[250px] max-w-[250px] text-center rounded-[12px] transition-all duration-300 bg-white-1 border-[1px] border-[#eaeaea] m-4 py-4 px-0 hover:shadow-[0_0_10px_10px_#fff] group cursor-pointer dark:hover:shadow-[0_0_9px_8px_#fff] hover:rounded-[12px]"
                   key={profile.id}
                 >
                   <div>
@@ -368,7 +370,7 @@ const LandingPage = () => {
           <TestimonialSection />
         </section>
         {/* faq-section */}
-        <section className="py-20 px-0 text-center text-white-1">
+        <section className="py-20 px-0 text-center text-white-1 dark:bg-black-8">
           {/* faq-div */}
           <div
             className="w-full flex flex-wrap my-0 mx-auto p-[5px] justify-between items-start max-w-[1300px] max-md:flex max-md:flex-col max-md:justify-center"
@@ -384,7 +386,7 @@ const LandingPage = () => {
             </div>
             {/* content */}
             <div className="shrink-0 grow-0 basis-[55%] p-4 max-md:p-8">
-              <h2 className="text-blue-8 mb-8">Any Queries ?</h2>
+              <h2 className="text-blue-8 mb-8 dark:text-white-1">Any Queries ?</h2>
               {/* faqs */}
               <div className="w-full my-0 mx-auto rounded-[12px]">
                 {faqs.map((item, index) => (
@@ -403,6 +405,7 @@ const LandingPage = () => {
                         boxShadow: "0px 0px 10px 2px rgba(59, 130, 246, 0.6)", // Hover shadow effect
                       },
                     }}
+                    className="dark:bg-blue-34"
                     expanded={openFaqIndex === index}
                     onChange={() => handleFaqClick(index)}
                   >
@@ -421,9 +424,10 @@ const LandingPage = () => {
                         padding: "3px",
                         margin: "10px",
                       }}
+                      className="dark:bg-[#000]"
                     >
                       {/* item-ans */}
-                      <div className="w-full p-4 rounded-[12px] bg-white-1 text-blue-7 text-left">
+                      <div className="w-full p-4 rounded-[12px] bg-white-1 text-blue-7 text-left dark:text-white-1 dark:bg-[#000]" >
                         {item.answer}
                       </div>
                     </AccordionDetails>
