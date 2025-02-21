@@ -405,7 +405,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
           <div className="fixed inset-0 flex items-center justify-center z-[9999] bg-black-1/50 pointer-events-none">
             <form
               id=""
-              className="relative bg-blue-3 text-blue-8 max-w-[450px] max-h-[90vh] overflow-y-auto scrollbar-none w-full p-12 rounded-[3px] z-[99] max-xs:px-4 max-xs:py-8 mx-4 pointer-events-auto"
+              className="relative bg-blue-3 text-blue-8 max-w-[450px] max-h-[90vh] overflow-y-auto scrollbar-none w-full p-12 rounded-[3px] z-[99] max-xs:px-4 max-xs:py-8 mx-4 pointer-events-auto dark:bg-blue-25"
               ref={formRef}
               onSubmit={
                 isForgotPassword ? handleForgotPassword : handleFormSubmit
@@ -818,7 +818,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                   <>
                     <button
                       type="submit"
-                      className="mt-[0.8rem] mb-[0.4rem] w-full flex justify-center items-center bg-white-1 dark:bg-gray-900 rounded-[3px] px-6 py-2 text-sm font-medium text-gray-800 dark:text-white hover:bg-gray-200"
+                      className="mt-[0.8rem] mb-[0.4rem] w-full flex justify-center items-center bg-white-1 rounded-[3px] px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200"
                     >
                       <img
                         src="https://img.icons8.com/fluency/48/google-logo.png"
@@ -838,7 +838,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                   <div className="mb-8">
                     <div className="border-t-[2px] border-blue-1 w-full h-2"></div>
                     <div className="relative flex justify-center">
-                      <span class="absolute -top-4 text-center text-sm text-blue-1 bg-blue-3 px-4">
+                      <span class="absolute -top-4 text-center text-sm text-blue-1 bg-blue-3 px-4 dark:bg-blue-25">
                         {isSignupVisible ? "Sign Up using" : "Sign In using"}
                       </span>
                     </div>
@@ -898,7 +898,7 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
 
               {/*===== Form-Close-Btn =====*/}
               <div
-                className="bg-[rgba(176,187,216,0.5)] text-white-1 absolute top-0 right-0 w-[30px] h-[30px] text-[1.8rem] leading-[30px] text-center cursor-pointer overflow-hidden opacity-80 transition-opacity duration-200 hover:opacity-100"
+                className="bg-[rgba(176,187,216,0.5)] text-white-1 absolute top-0 right-0 w-[30px] h-[30px] text-[1.8rem] leading-[30px] text-center cursor-pointer overflow-hidden opacity-80 transition-opacity duration-200 hover:opacity-100 dark:bg-blue-6 dark:hover:bg-blue-4"
                 title="Close"
                 onClick={() => toggleForm(false)}
               >
