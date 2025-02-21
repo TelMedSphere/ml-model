@@ -136,7 +136,9 @@ const Header = () => {
       <header
         id=""
         className={`z-[999] w-full text-blue-8 md:px-8 pt-6 pb-6 transition-colors duration-0 ease-linear h-full bg-[#f5f5f5] dark:text-white-1 ${
-          isSticky ? "top-0 sticky bg-blue-1 dark:bg-black-5" : "dark:bg-black-3 "
+          isSticky
+            ? "top-0 sticky bg-blue-1 dark:bg-black-2"
+            : "dark:bg-black-6 "
         } `}
       >
         <div className="max-w-[1440px] mx-auto max-sm:px-2 px-6 max-xl:max-w-[1280px] max-lg:max-w-[1024px] max-md:max-w-[768px] max-sm:max-w-full h-full">
