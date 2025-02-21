@@ -57,21 +57,23 @@ export default function Checkout() {
 
   useEffect(() => {
     const initializeCheckout = async () => {
+      // Don't initialize if we already have a clientSecret
+      if (clientSecret) return;
+      
+      // Don't initialize if there's no amount
+      const amount = localStorage.getItem("totalPrice");
+      if (!amount) {
+        setError("Invalid checkout amount - Please add items to cart first");
+        setTimeout(() => navigate("/cart"), 2000);
+        return;
+      }
+
       toggleLoading(true);
       setError(null);
 
       try {
-        const amount = localStorage.getItem("totalPrice");
-        if (!amount) {
-          throw new Error("Invalid checkout amount - Please add items to cart first");
-        }
-
         const response = await httpClient.post("/create-payment-intent", {
-          amount,
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          }
+          amount: parseFloat(amount),
         });
 
         if (!response.data?.clientSecret) {
@@ -81,19 +83,14 @@ export default function Checkout() {
         setClientSecret(response.data.clientSecret);
       } catch (err) {
         console.error("Checkout initialization failed:", err);
-        setError(err.message || "Unable to initialize payment. Please try again later.");
-        
-        // Redirect to cart if amount is missing
-        if (err.message.includes("Invalid checkout amount")) {
-          setTimeout(() => navigate("/cart"), 2000);
-        }
+        setError(err.response?.data?.error || err.message || "Unable to initialize payment");
       } finally {
         toggleLoading(false);
       }
     };
 
     initializeCheckout();
-  }, [toggleLoading, navigate]);
+  }, []); // Empty dependency array since we check clientSecret inside
 
   useScrollDisable(isLoading);
 
@@ -105,11 +102,20 @@ export default function Checkout() {
     return <ErrorDisplay error={error} onRetry={() => window.location.reload()} />;
   }
 
+  const options = {
+    clientSecret: clientSecret,
+    appearance: { theme: 'stripe' },
+    loader: 'auto',
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {clientSecret ? (
-          <Elements options={{ clientSecret, appearance: { theme: 'stripe' } }} stripe={stripePromise}>
+          <Elements 
+            stripe={stripePromise}
+            options={options}
+          >
             <CheckoutForm />
           </Elements>
         ) : (
