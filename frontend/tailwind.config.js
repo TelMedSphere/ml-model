@@ -24,6 +24,7 @@ module.exports = {
       backgroundImage: {
         "curvy-shape": "url('/curvy-shape-img.png')",
         "curvy-shape-dark": "url('/curvy-shape-dark-img.png')",
+        "search-patients": "url('/search_patients.png')",
         "landing-bg":
           "linear-gradient(white 20%, #d4ddf1 40%, #b0bbd8 60%, #6575a5 80%, #4a4cb2 100%)",
       },
