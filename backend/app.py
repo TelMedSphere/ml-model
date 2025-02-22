@@ -78,7 +78,7 @@ else:
 
 client = pymongo.MongoClient(URI, server_api=ServerApi('1'))
 
-doctor = client.get_database("telmedsphere").doctors
+doctors = client.get_database("telmedsphere").doctors
 patients = client.get_database("telmedsphere").patients
 website_feedback = client.get_database("telmedsphere").website_feedback
 
@@ -145,22 +145,38 @@ def create_checkout_session():
     return jsonify({'url': checkout_session.url})
 
 @app.route('/create-payment-intent', methods=['POST'])
-def create_payment():
+def create_payment_intent():
     try:
-        data = json.loads(request.data)
-        print(data)
+        data = request.get_json()
+        
+        if not data or 'amount' not in data:
+            return jsonify({'error': 'Amount is required'}), 400
+            
+        amount = float(data['amount'])
+        
+        if amount <= 0:
+            return jsonify({'error': 'Invalid amount'}), 400
+
         # Create a PaymentIntent with the order amount and currency
         intent = stripe.PaymentIntent.create(
-            amount=data['amount'],
+            amount=int(amount * 100),  # Convert to cents
             currency='inr',
-            payment_method_types=['card'],
+            automatic_payment_methods={
+                'enabled': True,
+            },
         )
+
         return jsonify({
-            'clientSecret': intent['client_secret']
+            'clientSecret': intent.client_secret
         })
+
+    except stripe.error.StripeError as e:
+        # Handle Stripe-specific errors
+        return jsonify({'error': str(e)}), 400
     except Exception as e:
-        print(e)
-        return jsonify(error=str(e)), 403
+        # Handle other errors
+        print(f"Payment intent creation error: {str(e)}")
+        return jsonify({'error': 'An unexpected error occurred'}), 500
 
 # ----------- Authentication routes ----------------
 
@@ -192,7 +208,7 @@ def register():
 
     # Custom Register
     if data['registerer'] == 'patient':
-        if doctor.find_one({'email': email}) or patients.find_one({'email': email}):
+        if doctors.find_one({'email': email}) or patients.find_one({'email': email}):
             return jsonify({'message': 'User already exists'}), 400
         
         if 'id_token' not in data:
@@ -236,7 +252,7 @@ def register():
         }), 200
     
     elif data['registerer'] == 'doctor':
-        if patients.find_one({'email': email}) or doctor.find_one({'email': email}):
+        if patients.find_one({'email': email}) or doctors.find_one({'email': email}):
             return jsonify({'message': 'User already exists'}), 400
 
         if 'id_token' not in data:
@@ -262,7 +278,7 @@ def register():
         if cloudinary_url:
             data['profile_picture'] = cloudinary_url
 
-        doctor.insert_one(data)
+        doctors.insert_one(data)
 
         return jsonify({
             'message': 'User created successfully',
@@ -317,11 +333,11 @@ def login():
             }), 200
         return jsonify({'message': 'Invalid password'}), 400
 
-    var = doctor.find_one({'email': email})
+    var = doctors.find_one({'email': email})
     if var:
         if 'id_token' in data or ('passwd' in data and bcrypt.check_password_hash(var['passwd'], data['passwd'])):
             # Update doctor status only if login is successful
-            doctor.update_one({'email': email}, {'$set': {'status': 'online'}})
+            doctors.update_one({'email': email}, {'$set': {'status': 'online'}})
             access_token = create_access_token(identity=email)
             return jsonify({
                 'message': 'User logged in successfully',
@@ -346,16 +362,16 @@ def verify():
     email = data['email']
     
     # Find the document with the given email
-    var = doctor.find_one({'email': email})
+    var = doctors.find_one({'email': email})
     
     if var:
         # If the document exists, check if 'verified' field exists
         if 'verified' not in var:
             # If 'verified' field doesn't exist, add it and set to True
-            doctor.update_one({'email': email}, {'$set': {'verified': True}})
+            doctors.update_one({'email': email}, {'$set': {'verified': True}})
         else:
             # If 'verified' exists, just ensure it's set to True
-            doctor.update_one({'email': email}, {'$set': {'verified': True}})
+            doctors.update_one({'email': email}, {'$set': {'verified': True}})
         
         verified = True  # Since we just set it to True
     else:
@@ -370,7 +386,7 @@ def forgot_password():
     email = data['email']
     print(email)
     
-    user = patients.find_one({'email': email}) or doctor.find_one({'email': email})
+    user = patients.find_one({'email': email}) or doctors.find_one({'email': email})
     if not user:
         return jsonify({'message': 'User not found'}), 404
 
@@ -380,7 +396,7 @@ def forgot_password():
     # Store the token in the user's document with an expiration time
     expiration_time = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
     patients.update_one({'email': email}, {'$set': {'reset_token': token, 'reset_token_expiration': expiration_time}})
-    doctor.update_one({'email': email}, {'$set': {'reset_token': token, 'reset_token_expiration': expiration_time}})
+    doctors.update_one({'email': email}, {'$set': {'reset_token': token, 'reset_token_expiration': expiration_time}})
 
     # Send the token to the user's email
     reset_url = url_for('reset_password', token=token, _external=True)
@@ -400,14 +416,14 @@ def reset_password(token):
 
     # Find the user with the token and check if it's still valid
     user = patients.find_one({'reset_token': token, 'reset_token_expiration': {'$gt': datetime.datetime.utcnow()}}) or \
-           doctor.find_one({'reset_token': token, 'reset_token_expiration': {'$gt': datetime.datetime.utcnow()}})
+           doctors.find_one({'reset_token': token, 'reset_token_expiration': {'$gt': datetime.datetime.utcnow()}})
     
     if not user:
         return jsonify({'message': 'The reset link is invalid or has expired'}), 400
 
     # Update the user's password and remove the reset token
     patients.update_one({'reset_token': token}, {'$set': {'passwd': hashed_password}, '$unset': {'reset_token': "", 'reset_token_expiration': ""}})
-    doctor.update_one({'reset_token': token}, {'$set': {'passwd': hashed_password}, '$unset': {'reset_token': "", 'reset_token_expiration': ""}})
+    doctors.update_one({'reset_token': token}, {'$set': {'passwd': hashed_password}, '$unset': {'reset_token': "", 'reset_token_expiration': ""}})
 
     return jsonify({'message': 'Password has been reset'}), 200
 
@@ -416,7 +432,7 @@ def reset_password(token):
 def doc_status():
     data = request.get_json()
     user = data['email']
-    doctor.update_one({'email': user}, {'$set': {'status': 'offline'}})
+    doctors.update_one({'email': user}, {'$set': {'status': 'offline'}})
     return jsonify({'message': 'Doctor status updated successfully'}), 200
 
 # @app.route('/meet_end', methods=['PUT'])
@@ -430,7 +446,7 @@ def doc_status():
 def get_status():
     details = []
     count = 0
-    for i in doctor.find():
+    for i in doctors.find():
         if i.get('verified', False):
             count += 1
             details.append({"email": i["email"], "status": i.get("status", "offline"), "username": i["username"], "specialization": i["specialization"], "gender": i["gender"], "phone": i["phone"], "isInMeet": i["meet"], "noOfAppointments": i["appointments"], "noOfStars": i["stars"], "id": count, 'fee': i.get('fee', 199)})
@@ -451,7 +467,10 @@ def send_media(path):
 @app.route('/mail_file', methods=['POST'])
 def mail_file():
     # Get form data
-    user = request.form.get("email")
+    demail = request.form.get("demail")
+    pemail = request.form.get("pemail")
+    meetLink = request.form.get("meetLink")
+    print("meetlink......", meetLink)
     f = request.files['file']
     
     # Save the uploaded file
@@ -464,14 +483,58 @@ def mail_file():
     if "http" not in file_url:
         return jsonify({"error": "File upload failed", "details": file_url}), 500
     
+    # Retrieve patient and doctor details from the database
+    pat = patients.find_one({'email': pemail})
+    doc = doctors.find_one({'email': demail})
+
+    if not pat or not doc:
+        return jsonify({"error": "Doctor or Patient not found"}), 404
+
+    appointment_found = False 
+
+    # Find the upcoming appointment based on meetLink
+    for appointment in pat.get('upcomingAppointments', []):
+        print("patient appointments", appointment)
+        if appointment.get('link') == meetLink:
+            print("found in pat......")
+            appointment['prescription'] = file_url  # Add prescription link
+            appointment_found = True
+            break
+
+    for appointment in doc.get('upcomingAppointments', []):
+        print("doc appointments", appointment)
+        if appointment.get('link') == meetLink:
+            print("found in doc......")
+            appointment['prescription'] = file_url  # Add prescription link
+            appointment_found = True
+            break
+
+    # If not found in upcomingAppointments, check completedMeets
+    if not appointment_found:
+        for appointment in pat.get('completedMeets', []):
+            if appointment.get('link') == meetLink:
+                print("found in completedMeets (patient)......")
+                appointment['prescription'] = file_url  # Add prescription link
+                appointment_found = True
+                break
+
+        for appointment in doc.get('completedMeets', []):
+            if appointment.get('link') == meetLink:
+                print("found in completedMeets (doctor)......")
+                appointment['prescription'] = file_url  # Add prescription link
+                appointment_found = True
+                break
+
+    # If appointment was found, update the database
+    if appointment_found:
+        patients.update_one({'email': pemail}, {"$set": {"upcomingAppointments": pat.get('upcomingAppointments', []), "completedMeets": pat.get('completedMeets', [])}})
+        doctors.update_one({'email': demail}, {"$set": {"upcomingAppointments": doc.get('upcomingAppointments', []), "completedMeets": doc.get('completedMeets', [])}})
+
     # Prepare the email message
     msg = Message(
         "Receipt cum Prescription for your Consultancy",
-        recipients=[user]
+        recipients=[pemail]
     )
-    
-    # Retrieve patient details from the database
-    pat = patients.find_one({'email': user})
     
     # Render the email HTML template with patient's username
     msg.html = render_template('email.html', Name=pat['username'])
@@ -479,7 +542,7 @@ def mail_file():
     # Prepare and send the WhatsApp message with the PDF link
     whatsapp_message({
         "to": f"whatsapp:{pat['phone']}",
-        "body": f"Thank you for taking our consultancy. Please find your receipt here: {file_url}",
+        "body": f"Thank you for taking our consultancy. Please find your prescription here: {file_url}",
     })
     
     # Attach the receipt PDF to the email message
@@ -498,38 +561,116 @@ def mail_file():
 
 # ----------- appointment routes -----------------
 
-@app.route('/doctor_app', methods=['POST'])
-def doctor_app():
+@app.route('/doctor_apo', methods=['POST', 'PUT'])
+def doctor_apo():
     data = request.get_json()
-    email = data['email']
-    doctor.update_one({'email': email}, {'$inc': {'appointments': 1, 'stars': data['stars']}})
-    return jsonify({'message': 'Doctor status updated successfully'}), 200
+    email = data['demail']
+    doc = doctors.find_one({'email': email})
 
-@app.route('/set_appointment', methods=['POST', 'PUT'])
-def set_appointment():
-    data = request.get_json()
-    email = data['email']
-    doc = doctor.find_one({'email': email})
     if request.method == 'POST':
-        return jsonify({'message': 'Doctor Appointments', 'appointments': doc['upcomingAppointments']}), 200
+        return jsonify({'message': 'Doctor Appointments', 'upcomingAppointments': doc['upcomingAppointments']}), 200
     else:
         doc['upcomingAppointments'].append({
             "date": data['date'],
             "time": data['time'],
             "patient": data['patient'],
-            "pemail": data['pemail'],
+            "demail": data['demail'],
             "link": data['link'],
         })
+        doctors.update_one({'email': email}, {'$set': {'upcomingAppointments': doc['upcomingAppointments']}})
+        return jsonify({
+            'message': 'Doctor status updated successfully',
+            'upcomingAppointments': doc['upcomingAppointments']
+        }), 200
 
-        pat = patients.find_one({'email': data['pemail']})
-    
-        whatsapp_message({
-            "to": f"whatsapp:{pat['phone']}",
-            "body": "Your Appointment has been booked on " + data['date'] + " at "+ data['time'] + " with Dr. " + doc['username'] +"."+"\n"+doc[email]
-        })
+@app.route('/update_doctor_ratings', methods=['PUT'])
+def doctor_app():
+    data = request.get_json()
 
-        doctor.update_one({'email': email}, {'$set': {'upcomingAppointments': doc['upcomingAppointments']}})
-        return jsonify({'message': 'Doctor status updated successfully'}), 200
+    # Extract from request
+    pemail = data.get('pemail')
+    demail = data.get('demail')
+    meet_link = data.get('meetLink')
+    stars = data.get('stars')
+
+    # Validate required fields
+    if not all([pemail, demail, meet_link, stars]):
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    # Find patient's upcoming appointment
+    patient_doc = patients.find_one({'email': pemail, 'upcomingAppointments.link': meet_link})
+    if not patient_doc:
+        return jsonify({'error': 'Patient not found or appointment does not exist'}), 404
+
+    # Find doctor's upcoming appointment
+    doctor_doc = doctors.find_one({'email': demail, 'upcomingAppointments.link': meet_link})
+    if not doctor_doc:
+        return jsonify({'error': 'Doctor not found or appointment does not exist'}), 404
+
+    # Retrieve the appointment object from patient's record
+    appointment = next(
+        (appt for appt in patient_doc.get('upcomingAppointments', []) if appt['link'] == meet_link),
+        None
+    )
+
+    if not appointment:
+        return jsonify({'error': 'Appointment details not found'}), 404
+
+    # Add stars to appointment
+    appointment['stars'] = stars
+
+    # Remove appointment from patient's upcomingAppointments
+    patients.update_one(
+        {'email': pemail},
+        {'$pull': {'upcomingAppointments': {'link': meet_link}}}
+    )
+
+    # Remove appointment from doctor's upcomingAppointments
+    doctors.update_one(
+        {'email': demail},
+        {'$pull': {'upcomingAppointments': {'link': meet_link}}}
+    )
+
+    # Append to patient's completedMeet
+    patients.update_one(
+        {'email': pemail},
+        {'$push': {'completedMeets': appointment}}
+    )
+
+    # Append to doctor's completedMeet
+    doctors.update_one(
+        {'email': demail},
+        {'$push': {'completedMeets': appointment}}
+    )
+
+    # Update doctor's ratings and appointment count
+    rating_update = doctors.update_one(
+        {'email': demail},
+        {'$inc': {'appointments': 1, 'stars': stars}}
+    )
+
+    if rating_update.matched_count == 0:
+        return jsonify({'error': 'Doctor rating update failed'}), 404
+
+    return jsonify({'message': 'Appointment completed and ratings updated successfully'}), 200
+
+@app.route('/set_appointment', methods=['POST', 'PUT'])
+def set_appointment():
+    data = request.get_json()
+    demail = data['demail']
+    pemail = data['pemail']
+
+    doc = doctors.find_one({'email': demail})
+    pat = patients.find_one({'email': pemail})
+
+    whatsapp_message({
+        "to": f"whatsapp:{pat['phone']}",
+        "body": "Your Appointment has been booked on " + data['date'] + " at "+ data['time'] + " with Dr. " + doc['username'] +"."+" "+doc['email']
+    })
+
+    return jsonify({
+        'message': 'Appoitment Fixed Successfully', 
+    }), 200
 
 @app.route('/patient_apo', methods=['POST', 'PUT'])
 def patient_apo():
@@ -550,39 +691,113 @@ def patient_apo():
         patients.update_one({'email': email}, {'$set': {'upcomingAppointments': pat['upcomingAppointments']}})
         return jsonify({'message': 'Patient status updated successfully'}), 200
     
+@app.route('/completed_meets', methods=['POST'])
+def completed_meets():
+    data = request.get_json()
+
+    if not data or 'useremail' not in data:
+        return jsonify({"error": "Email parameter is required"}), 400
+
+    useremail = data['useremail']
+
+    # Check if user is a doctor
+    doctor = doctors.find_one({'email': useremail}, {'completedMeets': 1, '_id': 0})
+    if doctor:
+        completed_meets = doctor.get('completedMeets', [])
+        
+        # Fetch patient usernames
+        for meet in completed_meets:
+            patient = patients.find_one({'email': meet.get('pemail')}, {'username': 1, '_id': 0})
+            meet['patient'] = patient.get('username', 'Unknown') if patient else 'Unknown'
+        
+        return jsonify({"completedMeets": completed_meets}), 200
+
+    # Check if user is a patient
+    patient = patients.find_one({'email': useremail}, {'completedMeets': 1, '_id': 0})
+    if patient:
+        completed_meets = patient.get('completedMeets', [])
+        
+        # Fetch doctor usernames
+        for meet in completed_meets:
+            doctor = doctors.find_one({'email': meet.get('demail')}, {'username': 1, '_id': 0})
+            meet['doctor'] = doctor.get('username', 'Unknown') if doctor else 'Unknown'
+        
+        return jsonify({"completedMeets": completed_meets}), 200
+
+    return jsonify({"error": "User not found"}), 404
+
 # ----------- meeting routes -----------------
 
 @app.route('/make_meet', methods=['POST', 'PUT'])
 def make_meet():
     data = request.get_json()
-    email = data['email']
+    demail = data.get('demail') or data.get('email')
+
+    # Validate required fields for PUT request
     if request.method == 'PUT':
-        doctor.update_one({'email': email}, {'$set': {'link': {'link': data['link'], "name": data['patient']}}})
-        return jsonify({'message': 'Meet link created successfully'}), 200
+        doctors.update_one({'email': demail}, {'$set': {'link': {'link': data['link'], "name": data['patient']}}})
+
+        required_fields = ['demail', 'pemail', 'date', 'time', 'link']
+        if not all(field in data for field in required_fields):
+            return jsonify({'error': 'Missing required fields'}), 400
+
+        # Add meet link to doctor's profile
+        doctors.update_one(
+            {'email': demail},
+            {'$set': {'link': {'link': data['link'], 'name': data['patient']}}}
+        )
+
+        # Add to doctor's upcoming appointments
+        doctors.update_one(
+            {'email': demail},
+            {'$push': {'upcomingAppointments': {
+                'demail': data['demail'],
+                'pemail': data['pemail'],
+                'date': data['date'],
+                'time': data['time'],
+                'link': data['link']
+            }}}
+        )
+
+        # Add to patient's upcoming appointments
+        patients.update_one(
+            {'email': data['pemail']},
+            {'$push': {'upcomingAppointments': {
+                'demail': data['demail'],
+                'pemail': data['pemail'],
+                'date': data['date'],
+                'time': data['time'],
+                'link': data['link']
+            }}}
+        )
+
+        return jsonify({'message': 'Meet link created and appointments updated successfully'}), 200
+
+    # Handle POST request: Retrieve doctor's meet link
     else:
-        doc = doctor.find_one({'email': email})
+        doc = doctors.find_one({'email': demail})
         return jsonify({'message': 'Meet link', 'link': doc.get('link', None)}), 200
     
 @app.route('/meet_status', methods=['POST'])
 def meet_status():
     data = request.get_json()
     user = data['email']
-    details = doctor.find_one({'email': user})
+    details = doctors.find_one({'email': user})
     if details['meet'] == True:
         return jsonify({'message': 'Doctor is already in a meet', 'link': details.get('link', '')}), 208
     else:
         if data.get('link', '') == '':
-            doctor.update_one({'email': user}, {'$set': {'meet': True}})
+            doctors.update_one({'email': user}, {'$set': {'meet': True}})
         else:
-            doctor.update_one({'email': user}, {'$set': {'meet': True, 'link': data['link']}})
+            doctors.update_one({'email': user}, {'$set': {'meet': True, 'link': data['link']}})
         return jsonify({'message': 'Doctor status updated successfully'}), 200
 
 @app.route('/delete_meet', methods=['PUT'])
 def delete_meet():
     data = request.get_json()
     email = data['email']
-    doctor.update_one({'email': email}, {'$unset': {'link': None, 'currentlyInMeet': None}})
-    doctor.update_one({'email': email}, {'$set': {'meet': False}})
+    doctors.update_one({'email': email}, {'$unset': {'link': None, 'currentlyInMeet': None}})
+    doctors.update_one({'email': email}, {'$set': {'meet': False}})
 
     return jsonify({'message': 'Meet link deleted successfully'}), 200
 
@@ -591,10 +806,10 @@ def currently_in_meet():
     data = request.get_json()
     email = data['email']
     if request.method == 'PUT':
-        doctor.update_one({'email': email}, {'$set': {'currentlyInMeet': True}})
+        doctors.update_one({'email': email}, {'$set': {'currentlyInMeet': True}})
         return jsonify({'message': 'Currently in meet'}), 200
     else:
-        doc = doctor.find_one({'email': email})
+        doc = doctors.find_one({'email': email})
         return jsonify({'message': 'Currently in meet', 'curmeet': doc.get('currentlyInMeet', False)}), 200
     
 # @app.route('/delete_currently_in_meet', methods=['PUT'])
@@ -606,8 +821,8 @@ def currently_in_meet():
 @app.route("/doctor_avilability", methods=['PUT'])
 def doctor_avilability():
     data = request.get_json()
-    user = data['email']
-    doctor.update_one({'email': user}, {'$set': {'status': 'online'}})
+    demail = data['demail']
+    doctors.update_one({'email': demail}, {'$set': {'status': 'online'}})
     return jsonify({'message': 'Doctor status updated successfully'}), 200
 
 # ----------- orders routes -----------------
@@ -626,13 +841,13 @@ def add_order():
         patients.update_one({'email': email}, {'$set': {'orders': orders}})
         return jsonify({'message': 'Order added successfully'}), 200
     else:
-        var = doctor.find_one({"email":email})
+        var = doctors.find_one({"email":email})
         orders = var.get('orders', [])
         for i in data["orders"]:
             i['key'] = str(uuid.uuid4())
             i['Ordered_on'] = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             orders.append(i)
-        doctor.update_one({'email': email}, {'$set': {'orders': orders}})
+        doctors.update_one({'email': email}, {'$set': {'orders': orders}})
         return jsonify({'message': 'Order added successfully'}), 200
     
 @app.route("/get_orders", methods=['POST'])
@@ -643,7 +858,7 @@ def get_orders():
     if var:
         return jsonify({'message': 'Orders', 'orders': var['orders']}), 200
     else:
-        var = doctor.find_one({'email': email})
+        var = doctors.find_one({'email': email})
         return jsonify({'message': 'Orders', 'orders': var['orders']}), 200
 
 @app.route('/update_details', methods=['PUT'])
@@ -696,7 +911,7 @@ def update_details():
         update_data['passwd'] = hashed_password
 
     # Update in MongoDB
-    collection = doctor if usertype == 'doctor' else patients
+    collection = doctors if usertype == 'doctor' else patients
     result = collection.update_one({'email': email}, {'$set': update_data})
 
     # Check if a document was updated
@@ -737,7 +952,7 @@ def add_to_cart():
         patients.update_one({'email': email}, {'$set': {'cart': cart}})
         return jsonify({'message': 'Cart added successfully', 'cart': cart}), 200
     else:
-        var = doctor.find_one({"email":email})
+        var = doctors.find_one({"email":email})
         cart = var.get('cart', [])
         for i in data["cart"]:
             for j in cart:
@@ -747,7 +962,7 @@ def add_to_cart():
             else:
                 i['key'] = str(uuid.uuid4())
                 cart.append(i)
-        doctor.update_one({'email': email}, {'$set': {'cart': cart}})
+        doctors.update_one({'email': email}, {'$set': {'cart': cart}})
         return jsonify({'message': 'Cart added successfully', 'cart': cart}), 200
     
 @app.route("/get_cart", methods=['POST'])
@@ -758,7 +973,7 @@ def get_cart():
     if var:
         return jsonify({'message': 'Cart', 'cart': var.get('cart', [])}), 200
     else:
-        var = doctor.find_one({'email': email})
+        var = doctors.find_one({'email': email})
         return jsonify({'message': 'Cart', 'cart': var.get('cart', [])}), 200
 
 @app.route('/increase_quantity', methods=['POST'])
@@ -774,12 +989,12 @@ def increase_quantity():
         patients.update_one({'email': email}, {'$set': {'cart': var['cart']}})
         return jsonify({'message': 'Quantity increased successfully'}), 200
     else:
-        var = doctor.find_one({'email': email})
+        var = doctors.find_one({'email': email})
         for i in var['cart']:
             if i['id'] == data['id']:
                 i['quantity'] += 1
                 break
-        doctor.update_one({'email': email}, {'$set': {'cart': var['cart']}})
+        doctors.update_one({'email': email}, {'$set': {'cart': var['cart']}})
         return jsonify({'message': 'Quantity increased successfully'}), 200
     
 @app.route('/decrease_quantity', methods=['POST'])
@@ -795,12 +1010,12 @@ def decrease_quantity():
         patients.update_one({'email': email}, {'$set': {'cart': var['cart']}})
         return jsonify({'message': 'Quantity increased successfully'}), 200
     else:
-        var = doctor.find_one({'email': email})
+        var = doctors.find_one({'email': email})
         for i in var['cart']:
             if i['id'] == data['id']:
                 i['quantity'] -= 1
                 break
-        doctor.update_one({'email': email}, {'$set': {'cart': var['cart']}})
+        doctors.update_one({'email': email}, {'$set': {'cart': var['cart']}})
         return jsonify({'message': 'Quantity increased successfully'}), 200
     
 @app.route("/delete_cart", methods=['POST'])
@@ -816,12 +1031,12 @@ def delete_cart():
         patients.update_one({'email': email}, {'$set': {'cart': cart}})
         return jsonify({'message': 'Cart deleted successfully'}), 200
     else:
-        var = doctor.find_one({'email': email})
+        var = doctors.find_one({'email': email})
         cart = var['cart']
         for i in var['cart']:
             if i['id'] == data['id']:
                 cart.remove(i)
-        doctor.update_one({'email': email}, {'$set': {'cart': cart}})
+        doctors.update_one({'email': email}, {'$set': {'cart': cart}})
         return jsonify({'message': 'Cart deleted successfully'}), 200
     
 @app.route("/delete_all_cart", methods=['POST'])
@@ -833,7 +1048,7 @@ def delete_all_cart():
         patients.update_one({'email': email}, {'$set': {'cart': []}})
         return jsonify({'message': 'Cart deleted successfully'}), 200
     else:
-        doctor.update_one({'email': email}, {'$set': {'cart': []}})
+        doctors.update_one({'email': email}, {'$set': {'cart': []}})
         return jsonify({'message': 'Cart deleted successfully'}), 200
 
 
@@ -849,9 +1064,9 @@ def wallet():
         patients.update_one({'email': email}, {'$set': {'wallet': wallet}})
         return jsonify({'message': 'Wallet updated successfully'}), 200
     else:
-        var = doctor.find_one({'email': email})
+        var = doctors.find_one({'email': email})
         wallet = var.get('wallet', 0)+round(float(data['walletAmount']))
-        doctor.update_one({'email': email}, {'$set': {'wallet': wallet}})
+        doctors.update_one({'email': email}, {'$set': {'wallet': wallet}})
         return jsonify({'message': 'Wallet updated successfully'}), 200
 
 @app.route('/get_wallet', methods=['POST'])
@@ -862,7 +1077,7 @@ def get_wallet():
     if var:
         return jsonify({'message': 'Wallet', 'wallet': var.get('wallet', 0)}), 200
     else:
-        var = doctor.find_one({'email': email})
+        var = doctors.find_one({'email': email})
         return jsonify({'message': 'Wallet', 'wallet': var.get('wallet', 0)}), 200
 
 @app.route("/debit_wallet", methods=['POST'])
@@ -872,7 +1087,7 @@ def debit_wallet():
     var = patients.find_one({'email': email})
     if data.get('demail', False):
         demail = data['demail']
-        doc = doctor.find_one({'email': demail})
+        doc = doctors.find_one({'email': demail})
         wallet = var.get('wallet', 0)-round(float(doc.get('fee', 0)))
         patients.update_one({'email': email}, {'$set': {'wallet': wallet}})
         return jsonify({'message': 'Wallet updated successfully'}), 200
@@ -882,9 +1097,9 @@ def debit_wallet():
             patients.update_one({'email': email}, {'$set': {'wallet': wallet}})
             return jsonify({'message': 'Wallet updated successfully'}), 200
         else:
-            var = doctor.find_one({'email': email})
+            var = doctors.find_one({'email': email})
             wallet = var.get('wallet', 0)-round(float(data['walletAmount']))
-            doctor.update_one({'email': email}, {'$set': {'wallet': wallet}})
+            doctors.update_one({'email': email}, {'$set': {'wallet': wallet}})
             return jsonify({'message': 'Wallet updated successfully'}), 200
     
 @app.route('/add_wallet_history', methods=['POST'])
@@ -898,10 +1113,10 @@ def add_wallet_history():
         patients.update_one({'email': email}, {'$set': {'wallet_history': history}})
         return jsonify({'message': 'Wallet history added successfully'}), 200
     else:
-        var = doctor.find_one({'email': email})
+        var = doctors.find_one({'email': email})
         history = var.get('wallet_history', [])
         history.append(data['history'])
-        doctor.update_one({'email': email}, {'$set': {'wallet_history': history}})
+        doctors.update_one({'email': email}, {'$set': {'wallet_history': history}})
         return jsonify({'message': 'Wallet history added successfully'}), 200
     
 @app.route('/get_wallet_history', methods=['POST'])
@@ -912,7 +1127,7 @@ def get_wallet_history():
     if var:
         return jsonify({'message': 'Wallet history', 'wallet_history': var.get('wallet_history', [])}), 200
     else:
-        var = doctor.find_one({'email': email})
+        var = doctors.find_one({'email': email})
         return jsonify({'message': 'Wallet history', 'wallet_history': var.get('wallet_history', [])}), 200
 
 #------------ feedback route ------------------------------
@@ -933,7 +1148,7 @@ def save_website_feedback():
     # Fetch patient details using pemail
     user = patients.find_one({"email": user_email}, {"_id": 0, "username": 1, "profile_picture": 1})
     if not user :
-       user = doctor.find_one({"email": user_email}, {"_id": 0, "username": 1, "profile_picture": 1})
+       user = doctors.find_one({"email": user_email}, {"_id": 0, "username": 1, "profile_picture": 1})
     
     if not user:
         return jsonify({"error": "User not found"}), 404
@@ -963,7 +1178,6 @@ def get_all_website_feedback():
             if feedback.get("keep_it_anonymous"):
                 feedback.pop("username", None)
                 feedback.pop("user_email", None)
-        print("feedback", feedback)
         return jsonify(feedbacks),200
     except Exception as e:
         return jsonify({"error": str(e)}), 500       

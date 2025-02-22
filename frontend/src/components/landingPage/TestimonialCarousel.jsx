@@ -22,7 +22,6 @@ const TestimonialSection = () => {
         }
 
         const sortedData = data.sort((a, b) => b.rating - a.rating);
-        console.log("sorted data", response);
         setTestimonials([...sortedData]);
       } catch (error) {
         console.error("Error fetching testimonials:", error);
@@ -91,10 +90,10 @@ const TestimonialSection = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-24 bg-gradient-to-b from-white to-gray-50">
       <div className="text-center mb-20">
-        <h3 className="text-orange-400 font-normal mb-3 text-lg tracking-wide">
+        <h3 className="text-orange-400 font-normal mb-3 text-lg tracking-wide dark:text-yellow-7">
           Testimonials
         </h3>
-        <h2 className="text-[2.75rem] font-semibold text-gray-700 tracking-tight">
+        <h2 className="text-[2.75rem] font-semibold text-gray-700 tracking-tight dark:text-yellow-1">
           Our Clients Review
         </h2>
       </div>
@@ -111,7 +110,7 @@ const TestimonialSection = () => {
           {[...testimonials, ...testimonials].map((testimonial, index) => (
             <div
               key={index}
-              className="w-full md:w-1/3 flex-shrink-0 max-w-[440px] bg-[#f5f5f3] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
+              className="w-full md:w-1/3 flex-shrink-0 max-w-[440px] bg-[#f5f5f3] m-4 hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:bg-black-2"
             >
               <div className="relative pt-12">
                 <div className="absolute left-1/2 -translate-x-1/2 -top-1 z-10">
@@ -124,17 +123,17 @@ const TestimonialSection = () => {
                   </div>
                 </div>
 
-                <div className="bg-[#faf2f1] rounded-2xl p-8 pt-12 relative">
+                <div className="bg-[#faf2f1] rounded-2xl p-8 pt-12 relative dark:bg-red-4 dark:text-white-1 dark:rounded-b-none">
                   <div className="text-center">
-                    <h3 className="text-2xl font-semibold text-gray-700 mb-2">
+                    <h3 className="text-2xl font-semibold text-gray-700 mb-2 dark:text-yellow-1">
                       {testimonial.username
                         ? testimonial.username
                         : "Anonymous"}
                     </h3>
-                    <p className="text-gray-500 text-sm mb-6">
+                    <p className="text-gray-500 text-sm mb-6 dark:text-yellow-1">
                       {testimonial.feedback_type}
                     </p>
-                    <p className="text-gray-600 text-sm mb-8 leading-relaxed">
+                    <p className="text-gray-600 text-sm mb-8 leading-relaxed dark:text-yellow-1">
                       {testimonial.comments}
                     </p>
 
