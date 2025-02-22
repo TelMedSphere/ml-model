@@ -14,12 +14,14 @@ import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 import httpClient from "../httpClient";
 import useOutsideClose from "../hooks/useOutsideClose";
+import { useDarkMode } from "../contexts/DarkMode/DarkModeContext";
 
 const Doctors = () => {
   useDocTitle("Doctors");
   const { isLoading, toggleLoading } = useContext(commonContext);
   const navigate = useNavigate();
 
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [meetModal, setMeetModal] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [isInstantMeet, setInstantMeet] = useState(false);
@@ -435,18 +437,20 @@ const Doctors = () => {
   };
 
   return (
-    <div className="py-24 text-center h-full">
+    <div className="py-24 text-center h-full dark:bg-black-6">
       <div
         className="min-h-[600px] mx-auto text-gray-800 max-w-[1300px] w-full 
-   rounded-lg h-full"
+   rounded-lg h-full "
       >
         <div className="flex justify-center items-center mb-6 ">
-          <h3 className="text-2xl font-semibold bg">Doctor Details</h3>
+          <h3 className="text-2xl font-semibold dark:text-white-1">
+            Doctor Details
+          </h3>
           <button
             className={`ml-2.5 p-2 rounded ${
               fetchingData
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-3 text-white-1 hover:bg-blue-7 cursor-pointer"
+                : "bg-blue-3 text-white-1 hover:bg-blue-7 cursor-pointer dark:bg-blue-34 dark:hover:bg-blue-31"
             } text-white transition-all duration-300`}
             onClick={fetchDoctors}
             disabled={fetchingData}
@@ -468,25 +472,65 @@ const Doctors = () => {
               maxHeight: "600px",
               height: "100vh",
               padding: "1rem",
-              boxShadow: "0 0 10px 1px #b0bbd8",
-              "& .MuiDataGrid-toolbarContainer": {
-                backgroundColor: "",
+              boxShadow: isDarkMode
+                ? "0 0 10px 1px #CABFAF"
+                : "0 0 10px 1px #b0bbd8",
+              "& .MuiDataGrid-footerContainer": {
+                borderTop: "none",
+                color: isDarkMode ? "white" : "black",
+              },
+              "& .MuiTablePagination-root, & .MuiTablePagination-caption, & .MuiSvgIcon-root":
+                {
+                  color: isDarkMode && "white !important",
+                },
 
+              "& .MuiDataGrid-virtualScroller": {
+                "&::-webkit-scrollbar-track": {
+                  background: isDarkMode && "#2a3454",
+                  borderRadius: "10px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  background: isDarkMode && "#435585",
+                  borderRadius: "10px",
+                  zIndex: "10"
+                },
+              },
+              "& .MuiDataGrid-toolbarContainer": {
                 "& button": {
                   backgroundColor: "#7584ae",
                   color: "white",
+                  backgroundColor: isDarkMode ? "#435585" : "#7584ae",
 
                   "&:hover": {
                     backgroundColor: "#282f42",
+                    backgroundColor: isDarkMode ? "#2a3454" : "#282f42",
                   },
                 },
               },
               "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#F3F4F6",
-                borderBottom: "1px solid #E5E7EB",
+                borderBottom: isDarkMode
+                  ? "1px solid #CABFAF"
+                  : "1px solid #E5E7EB",
+                color: isDarkMode ? "white" : "black",
               },
               "& .MuiDataGrid-cell": {
-                borderBottom: "1px solid #E5E7EB",
+                borderBottom: isDarkMode
+                  ? "1px solid #CABFAF"
+                  : "1px solid #E5E7EB",
+                color: isDarkMode ? "white" : "black",
+                "& div": {
+                  color: isDarkMode ? "white" : "black",
+                },
+                "& button": {
+                  backgroundColor: "#7584ae",
+                  color: "white",
+                  backgroundColor: isDarkMode ? "#435585" : "#7584ae",
+
+                  "&:hover": {
+                    backgroundColor: "#282f42",
+                    backgroundColor: isDarkMode ? "#2a3454" : "#282f42",
+                  },
+                },
               },
             }}
           />
@@ -503,12 +547,12 @@ const Doctors = () => {
       >
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
-            className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 relative bg-white-1"
+            className="bg-white rounded-lg w-full max-w-md p-6 relative bg-white-1 dark:bg-black-0 shadow-[0_0_10px_1px_#b0bbd8]"
             ref={modalRef}
           >
-            <div className="justify-between items-center border-b pb-4 mb-4">
+            <div className="justify-between items-center border-b pb-4 mb-4 dark:border-white-7 dark:border-opacity-20">
               <IoMdClose
-                className="text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300 ease-in-out block"
+                className="text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300 ease-in-out block dark:text-white-7"
                 onClick={() => setMeetModal(false)}
               />
               <h3 className="text-red-600 font-semibold text-[1em] my-4">
@@ -518,18 +562,18 @@ const Doctors = () => {
 
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span className="text-blue-7 text-[1.3em] font-normal">
+                <span className="text-blue-7 text-[1.3em] font-normal dark:text-white-1">
                   Doctor Fee {`(${selectedDoc})`}
                 </span>
-                <span className="font-bold text-blue-7 w-12">₹ {curFee}</span>
+                <span className="font-bold text-blue-7 w-12 dark:text-white-1">₹ {curFee}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-blue-7 text-[1.3em] font-normal">
+                <span className="text-blue-7 text-[1.3em] font-normal dark:text-white-1">
                   Available Balance
                 </span>
-                <span className="font-bold text-blue-7">₹ {balance}</span>
+                <span className="font-bold text-blue-7 dark:text-white-1">₹ {balance}</span>
               </div>
-              <div className="flex justify-between pt-4 border-t border-blue-2">
+              <div className="flex justify-between pt-4 border-t border-blue-2 dark:text-white-1 dark:border-blue-33 dark:border-opacity-30">
                 <span className="text-red-600 font-semibold">
                   Required Amount
                 </span>
@@ -540,7 +584,7 @@ const Doctors = () => {
             </div>
 
             <button
-              className="w-full mt-6 bg-blue-5 hover:bg-blue-6 text-white-1 py-3 rounded-lg transition-colors duration-300 shadow-md"
+              className="w-full mt-6 bg-blue-5 hover:bg-blue-6 text-white-1 py-3 rounded-lg transition-colors duration-300 shadow-md dark:bg-blue-24 dark:hover:bg-blue-31"
               onClick={() =>
                 navigate(`/my-wallet?recharge=${curFee - balance}`)
               }

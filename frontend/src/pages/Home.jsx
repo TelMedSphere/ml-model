@@ -376,7 +376,7 @@ const Home = () => {
   }
 
   return (
-    <div className="pt-24 dark:bg-black-7 pb-20">
+    <div className="pt-24 dark:bg-black-6 pb-20">
       {isDoctor && !isVerified && (
         <Alert
           severity={verAlert ? "success" : "error"}
