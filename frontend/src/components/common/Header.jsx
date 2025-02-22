@@ -49,7 +49,6 @@ const Header = () => {
   const updatestatus = () => {
     httpClient.put("/doc_status", { email: localStorage.getItem("email") });
     userLogout();
-    // window.location.reload();
   };
 
   useEffect(() => {
@@ -173,16 +172,15 @@ const Header = () => {
                 <div className="rounded-full pt-2 cursor-pointer flex justify-end items-center col-span-1">
                   {isDarkMode ? (
                     <FaSun
-                      className=" w-7 h-7 max-sm:w-6 max-sm:h-6 text-white-1 hidden dark:block bg-blue-3 p-[0.3rem] max-sm:p-1 rounded-full align-middle dark:bg-blue-25 dark:hover:bg-blue-31"
+                      className="w-8 h-8 max-sm:w-7 max-sm:h-7 text-white-1 hidden dark:block bg-blue-3 p-2 max-sm:p-1.5 rounded-full align-middle dark:bg-blue-25 dark:hover:bg-blue-31"
                       onClick={toggleDarkMode}
                     />
                   ) : (
                     <FaMoon
-                      className="w-7 h-7 max-sm:w-6 max-sm:h-6 bg-white-1 text-blue-3 dark:hidden p-[0.3rem] max-sm:p-1 rounded-full"
+                      className="w-8 h-8 max-sm:w-7 max-sm:h-7 bg-white-1 text-blue-3 dark:hidden p-2 max-sm:p-1.5 rounded-full"
                       onClick={toggleDarkMode}
                     />
                   )}
-                  {/* Sun & Moon Icons */}
                 </div>
               </div>
             )}
@@ -243,12 +241,6 @@ const Header = () => {
                     </span>
                   </div>
 
-                  {/* <div className={`model_action ${curPath==="/dispred"? "active" : ""}`}>
-                                            <span onClick={() => navigate("/dispred")}>
-                                                MODEL 2
-                                            </span>
-                                        </div> */}
-
                   <div
                     className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center dark:hover:text-blue-2 ${
                       curPath === "/buy-medicines"
@@ -267,7 +259,6 @@ const Header = () => {
                     </span>
                   </div>
 
-                  {/* Account Dropdown */}
                   <div
                     className="relative hover:text-blue-9  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 text-blue-8 dark:text-white-1 dark:hover:text-blue-2 "
                     ref={dropdownRef}
@@ -355,12 +346,12 @@ const Header = () => {
                   <div className="rounded-full cursor-pointer flex justify-end items-center relative -left-2">
                     {isDarkMode ? (
                       <FaSun
-                        className=" w-7 h-7 max-sm:w-6 max-sm:h-6 text-white-1  hidden dark:block bg-blue-8 p-[0.3rem] max-sm:p-1 rounded-full align-middle dark:bg-blue-25 dark:text-white-1"
+                        className="w-8 h-8 max-sm:w-7 max-sm:h-7 text-white-1 hidden dark:block bg-blue-8 p-2 max-sm:p-1.5 rounded-full align-middle dark:bg-blue-25 dark:text-white-1"
                         onClick={toggleDarkMode}
                       />
                     ) : (
                       <FaMoon
-                        className="w-7 h-7 max-sm:w-6 max-sm:h-6 bg-white-1 text-blue-8 dark:hidden p-[0.3rem] max-sm:p-1 rounded-full"
+                        className="w-8 h-8 max-sm:w-7 max-sm:h-7 bg-white-1 text-blue-8 dark:hidden p-2 max-sm:p-1.5 rounded-full"
                         onClick={toggleDarkMode}
                       />
                     )}
@@ -371,12 +362,12 @@ const Header = () => {
                   <div className="rounded-full cursor-pointer flex justify-end items-center">
                     {isDarkMode ? (
                       <FaSun
-                        className=" w-7 h-7 max-sm:w-6 max-sm:h-6 text-white-1  hidden dark:block bg-blue-8 p-[0.3rem] max-sm:p-1 rounded-full align-middle dark:bg-blue-25 dark:text-white-1"
+                        className="w-8 h-8 max-sm:w-7 max-sm:h-7 text-white-1 hidden dark:block bg-blue-8 p-2 max-sm:p-1.5 rounded-full align-middle dark:bg-blue-25 dark:text-white-1"
                         onClick={toggleDarkMode}
                       />
                     ) : (
                       <FaMoon
-                        className="w-7 h-7 max-sm:w-6 max-sm:h-6 bg-white-1 text-blue-8 dark:hidden p-[0.3rem] max-sm:p-1 rounded-full"
+                        className="w-8 h-8 max-sm:w-7 max-sm:h-7 bg-white-1 text-blue-8 dark:hidden p-2 max-sm:p-1.5 rounded-full"
                         onClick={toggleDarkMode}
                       />
                     )}
@@ -455,12 +446,6 @@ const Header = () => {
                           </span>
                         </div>
 
-                        {/* <div className={`model_action ${curPath==="/dispred"? "active" : ""}`}>
-                                            <span onClick={() => navigate("/dispred")}>
-                                                MODEL 2
-                                            </span>
-                                        </div> */}
-
                         <div
                           className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center ${
                             curPath === "/buy-medicines"
@@ -486,7 +471,7 @@ const Header = () => {
                           className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 dark:text-white-1`}
                         >
                           <span
-                            className=" font-bold text-center w-full"
+                            className="font-bold text-center w-full"
                             onClick={() => {
                               setSideBarOpen((prev) => !prev);
                               setShowDropdown(true);
