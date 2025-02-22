@@ -515,7 +515,7 @@ const Doctors = () => {
               },
               "& .MuiDataGrid-cell": {
                 borderBottom: isDarkMode
-                  ? "1px solid #CABFAF"
+                  ? "1px solid #101314"
                   : "1px solid #E5E7EB",
                 color: isDarkMode ? "white" : "black",
                 "& div": {
