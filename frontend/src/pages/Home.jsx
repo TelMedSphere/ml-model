@@ -584,15 +584,15 @@ const Home = () => {
         onClose={handleFeedbackClose}
         className="flex items-center justify-center"
       >
-        <div className="w-[min(500px,90vw)] bg-white-1 border-2 border-blue-2 rounded-lg p-4 shadow-[0_0_10px_1px_#b0bbd8] text-blue-7 text-center relative outline-none">
+        <div className="w-[min(500px,90vw)] bg-white-1 border-2 border-blue-2 rounded-lg p-4 shadow-[0_0_10px_1px_#b0bbd8] text-blue-7 text-center relative outline-none dark:bg-black-0">
           <div
-            className="absolute top-2 right-2 text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300"
+            className="absolute top-2 right-2 text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300 dark:text-white-7"
             onClick={handleFeedbackClose}
           >
             <IoMdClose />
           </div>
 
-          <div className="feedback-details">
+          <div className="feedback-details dark:text-white-1">
             {feedbackAlert && (
               <Alert severity="success">Thank you for your response</Alert>
             )}
@@ -614,7 +614,7 @@ const Home = () => {
                           : rate < 3
                           ? "text-orange-500"
                           : "text-green-500"
-                        : "text-gray-500"
+                        : "dark:text-white-7 text-gray-500"
                     }`}
                     onClick={() => setFeedbackRate(rate)}
                   >
@@ -639,7 +639,7 @@ const Home = () => {
             <button
               onClick={handleFeedbackClose}
               disabled={feedbackAlert}
-              className="bg-blue-4 text-white-1 px-6 py-4 rounded hover:bg-blue-6 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed mb-3"
+              className="bg-blue-4 text-white-1 px-6 py-4 rounded hover:bg-blue-6 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed mb-3 dark:bg-blue-23 dark:hover:bg-blue-6"
             >
               {feedbackAlert ? "Submitted" : "Submit"}
             </button>
@@ -656,7 +656,7 @@ const Home = () => {
         }}
         className="flex items-center justify-center"
       >
-        <div className="w-[min(500px,90vw)] bg-white-1 border-2 border-blue-2 rounded-lg p-4 text-blue-7 text-center relative shadow-[0_0_10px_1px_#b0bbd8] dark:bg-[#000]">
+        <div className="w-[min(500px,90vw)] bg-white-1 border-2 border-blue-2 rounded-lg p-4 text-blue-7 text-center relative shadow-[0_0_10px_1px_#b0bbd8] dark:bg-black-0">
           <div
             className="absolute top-2 right-2 text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300 dark:text-white-1"
             onClick={() => {
@@ -750,7 +750,7 @@ const Home = () => {
                         })
                         .catch((err) => console.log(err));
                     }}
-                    className="bg-blue-4 border text-white-1 px-3.5 py-3 rounded my-2 mx-1.5 transition-all duration-300 hover:bg-blue-9 dark:border-none"
+                    className="bg-blue-4 border text-white-1 px-3.5 py-3 rounded my-2 mx-1.5 transition-all duration-300 hover:bg-blue-9 dark:border-none dark:bg-blue-23 dark:hover:bg-blue-6"
                   >
                     Connect now <FaVideo className="inline" />
                   </button>
@@ -773,8 +773,11 @@ const Home = () => {
           setJoinlink("");
         }}
       >
-        <div className="absolute top-1/2 bg-white-1 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[500px] p-4 px-5 shadow-lg border-2 border-blue-200 bg-white rounded-lg text-blue-700 text-center">
-          <div className="text-right text-blue-500  hover:text-blue-800 transition-all duration-300 cursor-pointer">
+        <div
+          className="absolute top-1/2 bg-white-1 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[500px] p-4 px-5 border-2 border-blue-200 bg-white rounded-lg text-center dark:bg-black-0 shadow-[0_0_10px_1px_#b0bbd8] dark:border-none
+        "
+        >
+          <div className="text-right text-blue-4  hover:text-blue-9 transition-all duration-300 cursor-pointer ">
             <IoMdClose
               onClick={() => {
                 setJoinmeet(false);
@@ -784,11 +787,12 @@ const Home = () => {
                 setDoctorName("");
                 setJoinlink("");
               }}
+              className="dark:text-white-7"
             />
           </div>
           <div className="meet-details">
             {message && (
-              <div className="not-available-note">
+              <div className="not-available-note dark:text-white-1">
                 Oops! {doctorname} is currently in another meet, you can wait a
                 few minutes or else try again.{" "}
               </div>
@@ -800,12 +804,12 @@ const Home = () => {
                 {[...Array(10)].map((_, i) => (
                   <div
                     key={i}
-                    className="w-2 h-8 bg-blue-4 animate-wave"
+                    className="w-2 h-8 bg-blue-4 animate-wave dark:bg-blue-24"
                     style={{ animationDelay: `${i * 0.1}s` }}
                   ></div>
                 ))}
               </div>
-              <div>Connecting...</div>
+              <div className="dark:text-white-1">Connecting...</div>
             </div>
           ) : (
             <div className="flex justify-center">
@@ -814,7 +818,7 @@ const Home = () => {
                   setIsConnecting(true);
                   handlemeet();
                 }}
-                className="bg-blue-4 border text-white-1 px-3 py-2.5 rounded my-2 mx-1.5 transition-all duration-300 hover:bg-blue-9"
+                className="bg-blue-4 border text-white-1 px-3 py-2.5 rounded my-2 mx-1.5 transition-all duration-300 hover:bg-blue-6 dark:hover:bg-blue-7 dark:bg-blue-23 dark:border-none"
               >
                 Connect <FaVideo className="inline" />
               </button>
@@ -836,7 +840,7 @@ const Home = () => {
             <div
               onClick={() => iamavailable()}
               disabled={available}
-              className={`bg-blue-4 text-white-1  p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9 mb-3 mt-1 dark:hover:bg-blue-36 dark:bg-blue-23 ${
+              className={`bg-blue-4 text-white-1  p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9 mb-3 mt-1 dark:hover:bg-blue-6 dark:bg-blue-23 ${
                 available && "pointer-events-none "
               }`}
             >
@@ -844,7 +848,7 @@ const Home = () => {
             </div>
             <div
               onClick={() => iamnotavailable()}
-              className={`bg-blue-4 text-white-1  p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9 mb-3 mt-1 dark:hover:bg-blue-36 dark:bg-blue-23 ${
+              className={`bg-blue-4 text-white-1  p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9 mb-3 mt-1 dark:hover:bg-blue-6 dark:bg-blue-23 ${
                 !available && "pointer-events-none "
               }`}
             >
