@@ -376,7 +376,7 @@ const Home = () => {
   }
 
   return (
-    <div className="pt-24">
+    <div className="pt-24 dark:bg-black-7 pb-20">
       {isDoctor && !isVerified && (
         <Alert
           severity={verAlert ? "success" : "error"}
@@ -387,7 +387,7 @@ const Home = () => {
       )}
 
       {isDoctor && !isVerified && (
-        <div className="mx-auto w-[93vw] max-w-[1100px] my-8 text-blue-8 flex justify-center items-center">
+        <div className="mx-auto w-[93vw] max-w-[1100px] my-8 text-blue-8 flex justify-center items-center dark:text-white-1">
           <h3>Wanna check your verification status? </h3>
           <button
             onClick={check}
@@ -400,18 +400,17 @@ const Home = () => {
 
       {isDoctor && (
         <div className="mx-auto w-[93vw] max-w-[1100px] relative border-2 border-blue-2 rounded-[8px] mb-12 transition-all duration-400 ease-in-out hover:max-w-[1120px] hover:w-[95vw] hover:border-[3px]  hover:border-blue-4 py-12 px-[10px] max-xs:py-14 max-xs:px-[10px] hover:py-14">
-          <div className="absolute inset-0 bg-[url('/search_patients.png')] bg-center bg-no-repeat bg-cover -z-10 blur-[1px]"></div>
+          <div className="absolute inset-0 bg-search-patients bg-center bg-no-repeat bg-cover -z-10 blur-[1px] dark:z-[0]"></div>
           <div className="flex justify-around items-center">
             <div className="text-blue-8 flex flex-wrap items-end">
-              <h2 className="mr-[10px]">Is there any patient waiting?</h2>
-              <p className="text-[1.2em]">Search for a patient now</p>
+              <h2 className="mr-[10px] z-[1]">Is there any patient waiting?</h2>
+              <p className="text-[1.2em] z-[2]">Search for a patient now</p>
             </div>
-            <div>
+            <div className="z-[3]">
               <button
                 onClick={searchmeet}
                 disabled={!isVerified}
-                className="bg-blue-8 text-white-1 px-8 py-4 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#B0BBD8] hover:bg-blue-9 active:bg-blue-9
-                            disabled:cursor-not-allowed"
+                className="bg-blue-8 text-white-1 px-8 py-4 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#B0BBD8] hover:bg-blue-9 active:bg-blue-9 disabled:cursor-not-allowed dark:hover:bg-blue-36"
               >
                 Search
               </button>
@@ -421,16 +420,16 @@ const Home = () => {
       )}
 
       <div className="mx-auto w-[93vw] max-w-[1100px] mb-16">
-        <h2 className="mb-4 text-blue-8">History</h2>
+        <h2 className="mb-4 text-blue-8 dark:text-white-1">History</h2>
         <div>
           <ul>
             {completedMeets.map((item, index) => (
               <li
                 key={index}
-                className="border-1 border-blue-4 flex justify-between items-center p-2 px-4 mb-4 bg-blue-2 rounded-lg transition-all duration-300 hover:p-4 hover:border-2 hover:border-blue-5 hover:py-[0.7rem] hover:px-4"
+                className="border-1 border-blue-4 flex justify-between items-center p-2 px-4 mb-4 bg-blue-2 rounded-lg transition-all duration-300 hover:p-4 hover:border-2 hover:border-blue-5 hover:py-[0.7rem] hover:px-4 dark:bg-blue-35 dark:border-grey-3"
               >
                 <div className="text-blue-8 flex flex-wrap items-end">
-                  <p className="text-[1.2em] mr-2">
+                  <p className="text-[1.2em] mr-2 dark:text-white-1">
                     {new Date(item.date + " " + item.time)
                       .toString()
                       .slice(0, 3) +
@@ -444,24 +443,31 @@ const Home = () => {
                         .slice(16, 21)}
                     ,
                   </p>
-                  <p> With {item.doctor ? item.doctor : item.patient}</p>
+                  <p className="dark:text-white-1">
+                    {" "}
+                    With {item.doctor ? item.doctor : item.patient}
+                  </p>
                 </div>
                 <a href={item.prescription} target="_blank">
-                <button
-                  className="bg-blue-8 text-white-1 px-8 py-4 rounded-lg transition-all duration-200 hover:bg-blue-9 active:bg-blue-9 disabled:bg-blue-9 disabled:cursor-not-allowed cursor-pointer shadow-[0_0_10px_1px_#b0bbd8]"
-                  disabled={new Date(item.date + " " + item.time) > new Date()}
-                >
-                  Prescription
-                </button>
+                  <button
+                    className="bg-blue-8 text-white-1 px-8 py-4 rounded-lg transition-all duration-200 hover:bg-blue-9 active:bg-blue-9 disabled:bg-blue-9 disabled:cursor-not-allowed cursor-pointer shadow-[0_0_10px_1px_#b0bbd8] dark:disabled:bg-blue-36 dark:hover:bg-blue-27 dark:bg-blue-36"
+                    disabled={
+                      new Date(item.date + " " + item.time) > new Date()
+                    }
+                  >
+                    Prescription
+                  </button>
                 </a>
               </li>
             ))}
             {completedMeets.length === 0 && (
-              <li className="flex justify-between items-center py-2 px-4 mb-4 bg-blue-2 rounded-lg border-1 border-blue-4 transition-all duration-300 ease-in-out hover:border-2 hover:border-blue-5 hover:py-[0.7rem] hover:px-4">
-                <div className="text-blue-8">No history found...</div>
+              <li className="flex justify-between items-center py-2 px-4 mb-4 bg-blue-2 rounded-lg border-1 border-blue-4 transition-all duration-300 ease-in-out hover:border-2 hover:border-blue-5 hover:py-[0.7rem] hover:px-4 dark:bg-blue-35 dark:border-grey-3">
+                <div className="text-blue-8 dark:text-white-1">
+                  No history found...
+                </div>
                 {!isDoctor && (
                   <button
-                    className="bg-blue-8 text-white-1 px-9 py-4 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#B0BBD8] hover:bg-blue-9 active:bg-blue-9"
+                    className="bg-blue-8 text-white-1 px-9 py-4 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#B0BBD8] hover:bg-blue-9 active:bg-blue-9 dark:bg-blue-36"
                     onClick={() => navigate("/doctors")}
                   >
                     Book
@@ -474,15 +480,17 @@ const Home = () => {
       </div>
 
       <div className="mx-auto w-[93vw] max-w-[1100px] mb-16">
-        <h2 className="mb-4 text-blue-8">Upcoming Appointments</h2>
+        <h2 className="mb-4 text-blue-8 dark:text-white-1">
+          Upcoming Appointments
+        </h2>
         <div>
           <ul>
             {upcomingAppointments.map((item, index) => (
               <li
                 key={index}
-                className="border-1 border-blue-4 flex justify-between items-center p-2 px-4 mb-4 bg-blue-2 rounded-lg transition-all duration-300 hover:p-4 hover:border-2 hover:border-blue-5 hover:py-[0.7rem] hover:px-4"
+                className="border-1 border-blue-4 flex justify-between items-center p-2 px-4 mb-4 bg-blue-2 rounded-lg transition-all duration-300 hover:p-4 hover:border-2 hover:border-blue-5 hover:py-[0.7rem] hover:px-4 dark:bg-blue-35 dark:border-grey-3"
               >
-                <div className="text-blue-8 flex flex-wrap items-end">
+                <div className="text-blue-8 flex flex-wrap items-end dark:text-white-1">
                   <p className="text-[1.2em] mr-2">
                     {new Date(item.date + " " + item.time)
                       .toString()
@@ -500,7 +508,7 @@ const Home = () => {
                   <p> By {item.doctor ? item.doctor : item.patient}</p>
                 </div>
                 <button
-                  className="bg-blue-8 text-white-1 px-8 py-4 rounded-lg transition-all duration-200 hover:bg-blue-9 active:bg-blue-9 disabled:bg-blue-9 disabled:cursor-not-allowed cursor-pointer shadow-[0_0_10px_1px_#b0bbd8]"
+                  className="bg-blue-8 text-white-1 px-8 py-4 rounded-lg transition-all duration-200 hover:bg-blue-9 active:bg-blue-9 disabled:bg-blue-9 disabled:cursor-not-allowed cursor-pointer shadow-[0_0_10px_1px_#b0bbd8] dark:disabled:bg-blue-36 dark:hover:bg-blue-27 dark:bg-blue-36"
                   disabled={new Date(item.date + " " + item.time) > new Date()}
                   onClick={() =>
                     handleappointmentmeet(item.doctor, item.demail, item.link)
@@ -511,11 +519,13 @@ const Home = () => {
               </li>
             ))}
             {upcomingAppointments.length === 0 && (
-              <li className="flex justify-between items-center py-2 px-4 mb-4 bg-blue-2 rounded-lg border-1 border-blue-4 transition-all duration-300 ease-in-out hover:border-2 hover:border-blue-5 hover:py-[0.7rem] hover:px-4">
-                <div className="text-blue-8">No appointments found...</div>
+              <li className="flex justify-between items-center py-2 px-4 mb-4 bg-blue-2 rounded-lg border-1 border-blue-4 transition-all duration-300 ease-in-out hover:border-2 hover:border-blue-5 hover:py-[0.7rem] hover:px-4 dark:text-white-1 dark:bg-blue-35 dark:border-grey-3">
+                <div className="text-blue-8 dark:text-white-1">
+                  No appointments found...
+                </div>
                 {!isDoctor && (
                   <button
-                    className="bg-blue-8 text-white-1 px-9 py-4 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#B0BBD8] hover:bg-blue-9 active:bg-blue-9"
+                    className="bg-blue-8 text-white-1 px-9 py-4 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#B0BBD8] hover:bg-blue-9 active:bg-blue-9 dark:disabled:bg-blue-36 dark:hover:bg-blue-27 dark:bg-blue-36"
                     onClick={() => navigate("/doctors")}
                   >
                     Book
@@ -527,8 +537,8 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="mx-auto w-[93vw] max-w-[1100px] bg-[#eedfa3] border-2 border-[#ff5500] p-6 text-[#ff5500] rounded-lg mb-20 transition-all duration-300 hover:w-[95vw] hover:p-8 hover:border-3">
-        <div className="flex items-center mb-4 text-[#ff5900]">
+      <div className="mx-auto w-[93vw] max-w-[1100px] bg-[#eedfa3] border-2 border-[#ff5500] p-6 text-[#ff5500] rounded-lg transition-all duration-300 hover:w-[95vw] hover:p-8 hover:border-3 dark:bg-yellow-7 dark:bg-opacity-10 dark:text-yellow-7 dark:border-yellow-7">
+        <div className="flex items-center mb-4 text-[#ff5900] dark:text-yellow-7">
           <HiOutlineLightBulb className="text-4xl mr-2" />
           <h2>Healthy Fact of the Day</h2>
         </div>
@@ -540,7 +550,7 @@ const Home = () => {
       {isDoctor && isVerified && (
         <div
           onClick={() => setAvailablemodal(true)}
-          className="fixed bottom-10 left-5 p-3 rounded-lg cursor-pointer z-50 flex flex-col items-center bg-blue-9 text-white-1 transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#B0BBD8] hover:bg-blue-8 active:bg-blue-8 "
+          className="fixed bottom-10 left-5 p-3 rounded-lg cursor-pointer z-50 flex flex-col items-center bg-blue-9 text-white-1 transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#B0BBD8] hover:bg-blue-8 active:bg-blue-8 dark:bg-blue-36 dark:hover:bg-blue-27"
         >
           {isAlert !== "" && (
             <Alert
@@ -646,23 +656,24 @@ const Home = () => {
         }}
         className="flex items-center justify-center"
       >
-        <div className="w-[min(500px,90vw)] bg-white-1 border-2 border-blue-2 rounded-lg p-4 shadow-lg text-blue-7 text-center relative">
+        <div className="w-[min(500px,90vw)] bg-white-1 border-2 border-blue-2 rounded-lg p-4 text-blue-7 text-center relative shadow-[0_0_10px_1px_#b0bbd8] dark:bg-[#000]">
           <div
-            className="absolute top-2 right-2 text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300"
+            className="absolute top-2 right-2 text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300 dark:text-white-1"
             onClick={() => {
               localStorage.setItem("lastMeetWith", null);
               httpClient.put("/delete_meet", { email: doctormail });
               setHasLastMeet(false);
             }}
           >
-            <IoMdClose className="text-2xl" />
+            <IoMdClose className="text-2xl dark:text-white-7" />
           </div>
 
           <div className="pb-6 text-center">
-            <h3 className="my-3 text-xl font-semibold flex items-center justify-center">
-              Thank You <BsEmojiSmile className="ml-2" />
+            <h3 className="my-3 text-xl font-semibold flex items-center justify-center dark:text-white-1">
+              Thank You{" "}
+              <BsEmojiSmile className="ml-2 dark:text-white-1 dark:font-semibold" />
             </h3>
-            <div className="thankyou-note text-blue-6">
+            <div className="thankyou-note text-blue-6 dark:text-white-7">
               Thank you, {localStorage.getItem("username")}!!
               <br />
               You just treated one more life!
@@ -677,18 +688,18 @@ const Home = () => {
         onClose={() => setSearchPatient(false)}
         className="flex items-center justify-center outline-none border-none"
       >
-        <div className="w-[min(500px,90vw)] bg-white-1 border-2 border-blue-2 rounded-lg py-[14px] px-[20px] shadow-[0_0_10px_1px_#b0bbd8] text-blue-7 text-center relative outline-none">
+        <div className="w-[min(500px,90vw)] bg-white-1 border-2 border-blue-2 rounded-lg py-[14px] px-[20px] shadow-[0_0_10px_1px_#b0bbd8] text-blue-7 text-center relative outline-none dark:bg-[#000]">
           <div
             className="absolute top-2 right-2 text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300 ease-in-out"
             onClick={() => setSearchPatient(false)}
           >
-            <IoMdClose className="" />
+            <IoMdClose className="dark:text-white-7" />
           </div>
 
           {searching === 0 && (
-            <div className="text-center bg-white-1 flex flex-col items-center py-4 px-[10px]">
+            <div className="text-center flex flex-col items-center py-4 px-[10px]">
               <div className="relative py-4 mb-8">
-                <HiUserGroup className="w-[min(70vw,200px)] h-[min(70vw,200px)] text-blue-5" />
+                <HiUserGroup className="w-[min(70vw,200px)] h-[min(70vw,200px)] text-blue-5 dark:text-white-7" />
                 <div className="absolute bottom-[10px] right-[10px] w-[min(100px,50vw)] h-[min(100px,50vw)] rounded-full">
                   <div className="w-full h-full animate-rotate">
                     <div className="absolute bottom-0 right-0 w-[min(150px,40vw)] h-[min(150px,40vw)] animate-maintain">
@@ -701,27 +712,27 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <h3 className="text-lg">Searching...</h3>
+              <h3 className="text-lg dark:text-white-1">Searching...</h3>
             </div>
           )}
 
           {searching === 1 && (
-            <div className="text-center bg-white-1 flex flex-col items-center">
+            <div className="text-center bg-white-1 flex flex-col items-center dark:bg-[#000]">
               <div className="relative p-4">
-                <HiUserGroup className="w-[min(70vw,200px)] h-[min(70vw,200px)] text-blue-5" />
-                <div className="absolute bottom-2.5 right-2.5 w-[min(100px,50vw)] h-[min(100px,50vw)] rounded-full bg-white-1 border-social-whatsapp p-2.5 text-social-whatsapp flex items-center justify-center border-[5px]">
+                <HiUserGroup className="w-[min(70vw,200px)] h-[min(70vw,200px)] text-blue-5 dark:text-white-7" />
+                <div className="absolute bottom-2.5 right-2.5 w-[min(100px,50vw)] h-[min(100px,50vw)] rounded-full bg-white-1 border-social-whatsapp p-2.5 text-social-whatsapp flex items-center justify-center border-[5px] dark:bg-[#000]">
                   <IoCheckmarkDone className="w-[min(90px,45vw)] h-[min(90px,45vw)]" />
                 </div>
               </div>
-              <h3 className="mt-4">No Patients Found!</h3>
+              <h3 className="mt-4 dark:text-white-1">No Patients Found!</h3>
             </div>
           )}
 
           {searching === 2 && (
-            <div className="text-center bg-white-1 flex flex-col items-center outline-none border-none">
-              <h3 className="mb-6 mt-2">Patient Found!</h3>
+            <div className="text-center bg-white-1 flex flex-col items-center outline-none border-none dark:bg-black-0">
+              <h3 className="mb-6 mt-2 dark:text-white-1">Patient Found!</h3>
               <div className="flex flex-col items-center">
-                <div>Name: {patient_name}</div>
+                <div className="dark:text-white-1">Name: {patient_name}</div>
                 <div className="py-4 text-white-1">
                   <button
                     onClick={() => {
@@ -739,7 +750,7 @@ const Home = () => {
                         })
                         .catch((err) => console.log(err));
                     }}
-                    className="bg-blue-4 border text-white-1 px-3.5 py-3 rounded my-2 mx-1.5 transition-all duration-300 hover:bg-blue-9"
+                    className="bg-blue-4 border text-white-1 px-3.5 py-3 rounded my-2 mx-1.5 transition-all duration-300 hover:bg-blue-9 dark:border-none"
                   >
                     Connect now <FaVideo className="inline" />
                   </button>
@@ -814,24 +825,27 @@ const Home = () => {
 
       {/* Available Modal */}
       <Modal open={availablemodal} onClose={() => setAvailablemodal(false)}>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[min(95%,400px)] p-3.5 px-5 shadow-lg border-2 border-blue-2 bg-[#F5F5F5] rounded-lg text-blue-7 text-center outline-none">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[min(95%,400px)] p-3.5 px-5 border-2 border-blue-2 bg-[#F5F5F5] rounded-lg text-blue-7 text-center outline-none dark:bg-black-0 shadow-[0_0_10px_1px_#b0bbd8]">
           <div className="text-right text-blue-5 hover:text-blue-8 transition-all duration-300 cursor-pointer">
-            <IoMdClose onClick={() => setAvailablemodal(false)} />
+            <IoMdClose
+              onClick={() => setAvailablemodal(false)}
+              className="dark:text-white-1"
+            />
           </div>
           <div className="flex flex-col items-center justify-center gap-2.5 text-white-1">
             <div
               onClick={() => iamavailable()}
               disabled={available}
-              className={`bg-blue-4 text-white-1  p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9 mb-3 mt-1 ${
-                available && "pointer-events-none"
+              className={`bg-blue-4 text-white-1  p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9 mb-3 mt-1 dark:hover:bg-blue-36 dark:bg-blue-23 ${
+                available && "pointer-events-none "
               }`}
             >
               Yes, I am available!
             </div>
             <div
               onClick={() => iamnotavailable()}
-              className={`bg-blue-4 text-white-1  p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9 mb-3 mt-1 ${
-                !available && "pointer-events-none"
+              className={`bg-blue-4 text-white-1  p-2.5 rounded-lg w-[min(90%,250px)] cursor-pointer transition-all duration-300 hover:bg-blue-9 mb-3 mt-1 dark:hover:bg-blue-36 dark:bg-blue-23 ${
+                !available && "pointer-events-none "
               }`}
             >
               No, I am not available!

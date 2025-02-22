@@ -2,6 +2,7 @@ const { cyan } = require("@mui/material/colors");
 
 module.exports = {
   black: {
+    0: "#000",
     1: "#222",
     2: "#1D1F2C",
     // Dark Mode
@@ -47,6 +48,8 @@ module.exports = {
     32: "#6CA9F5",
     33: "#4188f5",
     34: "#435585",
+    35: "#1E2E58",
+    36: "#383BAA",
   },
   cyan: {
     // Dark Mode
@@ -101,6 +104,8 @@ module.exports = {
     4: "#DEE2E6",
     5: "#CED4DA",
     6: "#F5F5F5",
+    // Dark Mode
+    7: "#CABFAF",
   },
   teal: {
     1: "#A2DFF7",
