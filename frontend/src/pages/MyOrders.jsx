@@ -8,74 +8,83 @@ import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 
-
 const MyOrders = () => {
+  const { isLoading, toggleLoading } = useContext(commonContext);
 
-    const { isLoading, toggleLoading } = useContext(commonContext);
+  const navigate = useNavigate();
+  const [orderedItems, setOrderedItems] = useState([]);
 
-    const navigate = useNavigate();
-    const [orderedItems, setOrderedItems] = useState([]);
+  useDocTitle("My Orders");
 
-    useDocTitle("My Orders");
+  useEffect(() => {
+    toggleLoading(true);
+    httpClient
+      .post("/get_orders", { email: localStorage.getItem("email") })
+      .then((res) => {
+        setOrderedItems(res.data.orders.reverse());
+        toggleLoading(false);
+      })
+      .catch((err) => {
+        toggleLoading(false);
+        console.log(err);
+      });
+  }, []);
 
-    useEffect(() => {
-        toggleLoading(true);
-        httpClient.post('/get_orders', {email: localStorage.getItem("email")})
-        .then((res) => {
-            setOrderedItems(res.data.orders.reverse());
-            toggleLoading(false);
-        })
-        .catch((err) => {
-            toggleLoading(false);
-            console.log(err);
-        });
-    }, []);
+  const orderedQuantity = orderedItems.length;
+  const [viewAll, setViewAll] = useState(false);
 
-    const orderedQuantity = orderedItems.length;
-    const [viewAll, setViewAll] = useState(false);
+  useScrollDisable(isLoading);
 
-    useScrollDisable(isLoading);
+  if (isLoading) {
+    return <Preloader />;
+  }
 
-    if(isLoading) {
-        return <Preloader />;
-    }
-
-    return (
-        <>
-            <section id="orders" className="py-32 text-blue-8 w-full">
-                <div className="w-full flex justify-center">
-                    {orderedQuantity === 0 ? (
-                        <EmptyView
-                            msg="Your Cart is Empty"
-                            link="/all-medicines"
-                            btnText="Start Shopping"
-                        />
-                    ) : (
-                        // orders_wrapper
-                        <div className=" w-[95%] max-w-[600px] my-0 mx-auto">
-                            <h2 className="mb-4">Recent Orders</h2>
-                            <div className="bg-white-1 rounded-[12px]">
-                                {
-                                    viewAll? 
-                                    orderedItems.map((item) => (
-                                        <OrderedItem key={item.id} {...item} />
-                                    )) : 
-                                    orderedItems.slice(0,3).map((item) => (
-                                        <OrderedItem key={item.id} {...item} />
-                                    ))
-                                }
-                            </div>
-                            <h3 className="transition-all duration-300 ease-in-out cursor-pointer text-right mt-4 hover:underline" onClick={() => setViewAll((prev) => !prev)}>
-                                {viewAll? "show less" : "show more"}</h3>
-                        </div>
-                    )}
-                </div>
-                <div className=" text-center mt-12">
-                    <button onClick={() => navigate("/")} className="bg-blue-9 text-white-1 py-4 px-[1.5rem] m-4 rounded-[4px] cursor-pointer transition-all duration-300 ease-in-out hover:bg-blue-7 active:bg-blue-7">Back to Home</button>
-                </div>
-            </section>
-        </>
-    );
+  return (
+    <>
+      <section
+        id="orders"
+        className="py-32 text-blue-8 w-full dark:bg-black-10"
+      >
+        <div className="w-full flex justify-center">
+          {orderedQuantity === 0 ? (
+            <EmptyView
+              msg="Your Cart is Empty"
+              link="/all-medicines"
+              btnText="Start Shopping"
+            />
+          ) : (
+            // orders_wrapper
+            <div className=" w-[95%] max-w-[600px] my-0 mx-auto ">
+              <h2 className="mb-4 dark:text-yellow-1">Recent Orders</h2>
+              <div className="bg-white-1 rounded-[12px] dark:bg-black-0">
+                {viewAll
+                  ? orderedItems.map((item) => (
+                      <OrderedItem key={item.id} {...item} />
+                    ))
+                  : orderedItems
+                      .slice(0, 3)
+                      .map((item) => <OrderedItem key={item.id} {...item} />)}
+              </div>
+              <h3
+                className="transition-all duration-300 ease-in-out cursor-pointer text-right mt-4 hover:underline dark:text-yellow-1"
+                onClick={() => setViewAll((prev) => !prev)}
+              >
+                {viewAll ? "show less" : "show more"}
+              </h3>
+            </div>
+          )}
+        </div>
+        <div className=" text-center mt-12">
+          <button
+            onClick={() => navigate("/")}
+            className="bg-blue-9 text-white-1 py-4 px-[1.5rem] m-4 rounded-[4px] cursor-pointer transition-all duration-300 ease-in-out hover:bg-blue-7 active:bg-blue-7 dark:bg-blue-24 dark:hover:bg-blue-31"
+          >
+            Back to Home
+          </button>
+        </div>
+      </section>
+    </>
+  );
 };
 
 export default MyOrders;
