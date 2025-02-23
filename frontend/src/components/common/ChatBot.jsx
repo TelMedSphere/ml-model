@@ -175,7 +175,7 @@ const ChatBot = () => {
     <>
       {!open && (
         <div
-          className={`fixed bottom-[13vh] mb-3 md:mb-0 right-[1.7vw] z-30 bg-blue-9 text-white-1 text-[1.4rem] p-2 cursor-pointer rounded-[3px] transform ${
+          className={`fixed bottom-[13vh] mb-3 sm:mb-4 md:mb-6 right-[1.7vw] z-30 bg-blue-9 text-white-1 text-[1.4rem] p-2 cursor-pointer rounded-[3px] transform ${
             isVisible ? "scale-100 opacity-100 visible" : "scale-0 opacity-0 invisible"
           } transition-all duration-300 hover:bg-blue-8 max-lg:bottom-[11vh] max-lg:right-[2vw]`}
           title="Back to top"
@@ -186,7 +186,7 @@ const ChatBot = () => {
       )}
       <div
         onClick={() => setOpen(!open)}
-        className="fixed bottom-[5vh] right-[1.3vw] z-30 bg-blue-9 text-white-1 text-[2rem] p-2 cursor-pointer rounded-[50%] transition-all duration-300 hover:bg-blue-8"
+        className="fixed bottom-[5vh] mt-3 right-[1.3vw] z-30 bg-blue-9 text-white-1 text-[2rem] p-2 cursor-pointer rounded-[50%] transition-all duration-300 hover:bg-blue-8"
         title="Wanna Chat?"
       >
         {open ? <MdClear /> : <AiFillWechat />}
