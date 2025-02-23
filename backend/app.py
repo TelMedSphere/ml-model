@@ -145,22 +145,38 @@ def create_checkout_session():
     return jsonify({'url': checkout_session.url})
 
 @app.route('/create-payment-intent', methods=['POST'])
-def create_payment():
+def create_payment_intent():
     try:
-        data = json.loads(request.data)
-        print(data)
+        data = request.get_json()
+        
+        if not data or 'amount' not in data:
+            return jsonify({'error': 'Amount is required'}), 400
+            
+        amount = float(data['amount'])
+        
+        if amount <= 0:
+            return jsonify({'error': 'Invalid amount'}), 400
+
         # Create a PaymentIntent with the order amount and currency
         intent = stripe.PaymentIntent.create(
-            amount=data['amount'],
+            amount=int(amount * 100),  # Convert to cents
             currency='inr',
-            payment_method_types=['card'],
+            automatic_payment_methods={
+                'enabled': True,
+            },
         )
+
         return jsonify({
-            'clientSecret': intent['client_secret']
+            'clientSecret': intent.client_secret
         })
+
+    except stripe.error.StripeError as e:
+        # Handle Stripe-specific errors
+        return jsonify({'error': str(e)}), 400
     except Exception as e:
-        print(e)
-        return jsonify(error=str(e)), 403
+        # Handle other errors
+        print(f"Payment intent creation error: {str(e)}")
+        return jsonify({'error': 'An unexpected error occurred'}), 500
 
 # ----------- Authentication routes ----------------
 
