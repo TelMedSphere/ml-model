@@ -502,12 +502,9 @@ const Doctors = () => {
               },
               "& .MuiDataGrid-toolbarContainer": {
                 "& button": {
-                  backgroundColor: "#7584ae",
-                  color: "white",
                   backgroundColor: isDarkMode ? "#435585" : "#7584ae",
-
+                  color: "white",
                   "&:hover": {
-                    backgroundColor: "#282f42",
                     backgroundColor: isDarkMode ? "#2a3454" : "#282f42",
                   },
                 },
@@ -528,12 +525,9 @@ const Doctors = () => {
                   color: isDarkMode ? "white" : "black",
                 },
                 "& button": {
-                  backgroundColor: "#7584ae",
-                  color: "white",
                   backgroundColor: isDarkMode ? "#435585" : "#7584ae",
-
+                  color: "white",
                   "&:hover": {
-                    backgroundColor: "#282f42",
                     backgroundColor: isDarkMode ? "#2a3454" : "#282f42",
                   },
                 },
