@@ -92,8 +92,11 @@ const Cart = () => {
 
   return (
     <>
-      <section id="" className="text-blue-8 py-32 overflow-hidden dark:bg-black-6">
-        <div className="max-w-[1440px] mx-auto px-3 ">
+      <section
+        id=""
+        className="text-blue-8 py-32 overflow-hidden dark:bg-black-6"
+      >
+        <div className="max-w-[1280px] mx-auto px-3 ">
           {cartQuantity === 0 ? (
             <EmptyView
               msg="Your Cart is Empty"
@@ -115,24 +118,25 @@ const Cart = () => {
                       clearCart();
                       deleteAll();
                     }}
-                   className="bg-red-700 text-white-1 px-4 py-4 m-1 rounded-[8px] cursor-pointer shadow-[0_0_10px_1px_rgba(255,_0,_0,_0.4)] hover:bg-social-google">
+                    className="bg-red-700 text-white-1 px-4 py-4 m-1 rounded-[8px] cursor-pointer shadow-[0_0_10px_1px_rgba(255,_0,_0,_0.4)] hover:bg-social-google dark:bg-red-600 dark:hover:bg-red-700"
+                  >
                     Clear Cart
                   </button>
                 </div>
                 <div className="my-5">
-                  <h3>
+                  <h3 className="dark:text-yellow-1">
                     Order Summary &nbsp; ( {cartQuantity}{" "}
                     {cartQuantity > 1 ? "items" : "item"} )
                   </h3>
                   <div className=" mt-[3rem] mb-7">
-                    <div className="text-[1.6rem] flex justify-between items-center text-blue-7">
+                    <div className="text-[1.6rem] flex justify-between items-center text-blue-7 dark:text-white-8">
                       <b>
                         <small>SUBTOTAL</small>
                       </b>
                       <b>₹ {totalBalance} /-</b>
                     </div>
                     <div className="flex justify-between items-center my-4 border-t-[1px] border-grey-2"></div>
-                    <div className="bg-black-1 bg-opacity-5 text-black-2 p-6 rounded-[12px] flex justify-between items-center">
+                    <div className="bg-black-1 bg-opacity-5 text-black-2 p-6 rounded-[12px] flex justify-between items-center dark:bg-black-10 dark:text-yellow-1">
                       The subtotal reflects the total price of your order,
                       including duties and taxes, before any applicable
                       discounts. It does not include delivery costs and
@@ -162,7 +166,9 @@ const Cart = () => {
                       onChange={() => {}}
                       className="mr-2"
                     />
-                    <p>Use Wallet Money {`(₹ ${balance})`}</p>
+                    <p className="dark:text-yellow-1">
+                      Use Wallet Money {`(₹ ${balance})`}
+                    </p>
                   </div>
 
                   <button
