@@ -230,7 +230,7 @@ const AboutUs = () => {
                 >
                   <a
                     href="https://discord.gg/qsdDRKak28"
-                    className="inline-flex items-center px-8 py-4 bg-white text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-all duration-300 text-lg border-2 border-gray-200 dark:text-white-1"
+                    className="inline-flex items-center px-8 py-4 bg-white text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-all duration-300 text-lg border-2 border-gray-200 dark:text-white-1 dark:hover:text-gray-700"
                   >
                     <FaDiscord className="mr-2 text-2xl " /> Join Community
                   </a>
