@@ -29,7 +29,7 @@ const Footer = () => {
   return (
     <footer
       id="footer"
-      className="bg-gradient-to-br from-blue-1 to-blue-2 text-blue-8 py-12 mt-12 dark:bg-black-3 dark:from-black-3 dark:to-black-8 dark:mt-0 dark:pt-24"
+      className="bg-gradient-to-br from-blue-1 to-blue-2 text-blue-8 py-12 mt-12 dark:bg-black-3 dark:from-black-10 dark:to-black-10 dark:mt-0 dark:pt-24"
     >
       <div className="container mx-auto ">
         <div className="grid grid-cols-1 md:grid-cols-[1.4fr_repeat(2,1fr)] gap-12 justify-items-center">
