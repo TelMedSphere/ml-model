@@ -745,12 +745,10 @@ const AccountForm = ({ isSignup, setIsSignup }) => {
                           >
                             {showPassword ? (
                               <IoEyeOffOutline
-                                className="absolute right-3 top-[15px] cursor-pointer"
                                 size={18}
                               />
                             ) : (
                               <IoEyeOutline
-                                className="text-white-1"
                                 size={18}
                               />
                             )}
