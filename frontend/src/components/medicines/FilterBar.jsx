@@ -47,7 +47,7 @@ const FilterBar = () => {
       {!isFooterVisible && ( // Hide FilterBar if footer is visible
         <div
           id="filterbar_mob"
-          className="fixed z-[99] bottom-0 left-0 w-full p-4 bg-white-1 shadow-[0_-8px_15px_rgba(0,0,0,0.5)] lg:hidden max-h-[30vh] overflow-y-scroll"
+          className="dark:shadow-[0_-2px_10px_2px_#fff] dark:bg-black-0 fixed z-[99] bottom-0 left-0 w-full p-4 bg-white-1 shadow-[0_-8px_15px_rgba(0,0,0,0.5)] lg:hidden max-h-[30vh] overflow-y-scroll"
         >
           <div className="flex justify-around items-center text-sm">
             <h3

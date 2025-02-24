@@ -270,7 +270,7 @@ const Header = () => {
                       ACCOUNT
                     </span>
                     {showDropdown && (
-                      <div className="absolute top-[5rem] right-0 w-[17rem] bg-blue-6 p-6 text-[0.9rem] rounded-[3px] text-[#eee] border-[1px] border-grey-3 z-50 transition-all duration-200 ease-in-out dark:bg-blue-31">
+                      <div className="absolute top-[5rem] right-0 w-[17rem] bg-blue-6 p-6 text-[0.9rem] rounded-[3px] text-[#eee] border-[1px] border-grey-3 z-[1000] transition-all duration-200 ease-in-out dark:bg-blue-31">
                         <div>
                           <h4 className="font-semibold space-x-[0.5px]  text-blue-2">
                             <span className=" text-[1em] opacity-95 hover:opacity-100 text-white-1">
@@ -374,11 +374,14 @@ const Header = () => {
                   </div>
                   <div
                     id="sidebar"
-                    className="w-auto h-7 max-sm:relative ml-8 max-sm:ml-3"
+                    className="w-auto h-7 max-sm:relative ml-8 max-sm:ml-3 z-[1000]"
                   >
                     <div
                       className="text-[1.5em] cursor-pointer font-bold dark:font-extrabold"
-                      onClick={() => setSideBarOpen((prev) => !prev)}
+                      onClick={() => {
+                        setSideBarOpen((prev) => !prev);
+                        setShowDropdown(false);
+                      }}
                     >
                       {isSideBarOpen ? <MdClose /> : <CiMenuFries />}
                     </div>
@@ -484,7 +487,7 @@ const Header = () => {
                     </div>
                     {showDropdown && (
                       <div
-                        className={`absolute top-[4rem] right-0 w-[17rem] bg-blue-6 p-6 text-[0.9rem] rounded-[3px] text-[#eee] border-[1px] border-grey-3  z-50 transition-all duration-200 ease-in-out8 ${
+                        className={`absolute top-[4rem] right-0 w-[17rem] bg-blue-6 p-6 text-[0.9rem] rounded-[3px] text-[#eee] border-[1px] border-grey-3  z-[1000] transition-all duration-200 ease-in-out ${
                           showDropdown && "active"
                         }`}
                         ref={dropdownRef}
