@@ -215,24 +215,31 @@ const MedicineDetails = () => {
                   type="button"
                   className="inline-block px-6 py-[0.8rem] rounded-[3px] transition-colors duration-200 ease-out w-[200px] bg-orange-1 text-white-1 mt-2 mr-2 hover:bg-orange-2 active:bg-blue-7 dark:bg-orange-600 dark:hover:bg-orange-4"
                   onClick={() => {
-                    if (totalBalance === 0) {
+                    if (addBalance && price <= balance) {
+                      // If using wallet and has enough balance
                       httpClient.post("/debit_wallet", {
                         email: localStorage.getItem("email"),
                         walletAmount: price,
+                      }).then(() => {
+                        localStorage.setItem("orders", JSON.stringify([product]));
+                        window.location.href = "https://telmedsphere-server.vercel.app/success";
                       });
-                      localStorage.setItem("orders", JSON.stringify([product]));
-                      window.location.href =
-                        "https://gfg-sfi.onrender.com/success";
                     } else {
-                      httpClient.post("/debit_wallet", {
-                        email: localStorage.getItem("email"),
-                        walletAmount: balance,
-                      });
-                      setTimeout(() => {
-                        localStorage.setItem("totalPrice", totalBalance);
-                        placeOrder(product);
-                        navigate("/checkout");
-                      }, 2000);
+                      // If not using wallet or insufficient balance
+                      const amountToPay = addBalance ? Math.max(0, price - balance) : price;
+                      if (amountToPay > 0) {
+                        httpClient.post("/debit_wallet", {
+                          email: localStorage.getItem("email"),
+                          walletAmount: balance,
+                        }).then(() => {
+                          localStorage.setItem("totalPrice", amountToPay);
+                          localStorage.setItem("orders", JSON.stringify([product]));
+                          navigate("/checkout");
+                        });
+                      } else {
+                        localStorage.setItem("orders", JSON.stringify([product]));
+                        window.location.href = "https://telmedsphere-server.vercel.app/success";
+                      }
                     }
                   }}
                 >
