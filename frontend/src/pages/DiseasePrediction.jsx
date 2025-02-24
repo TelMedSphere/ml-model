@@ -1,8 +1,4 @@
-import React, {
-  Component,
-  useContext,
-  useEffect,
-} from "react";
+import React, { Component, useContext, useEffect } from "react";
 import Home from "../components/diseasePrediction/Home";
 // import Patient from "../components/diseasePrediction/Patient1";
 import Patient2 from "../components/diseasePrediction/Patient2";
@@ -92,7 +88,7 @@ class DP extends Component {
           button_is_disabled: true,
           home_button_checked: true,
           patient_question: localStorage.getItem("patient_question")
-            ? JSON.parse(localStorage.getItem("patient_question")) 
+            ? JSON.parse(localStorage.getItem("patient_question"))
             : [],
         });
       case "Disease":
@@ -278,7 +274,7 @@ class DP extends Component {
             pageCallback={this.symptom_page_button_callback}
             setResult={(result) => this.setState({ result })}
             updateDiseasePossibility={this.updateDiseasePossibility}
-            updateSymptoms={this.updateSymptoms} 
+            updateSymptoms={this.updateSymptoms}
           />
         );
       case "Disease":
@@ -330,12 +326,12 @@ class DP extends Component {
     return (
       <div
         id="disease-prediction"
-        className="pt-28 flex justify-center items-center"
+        className="py-28 flex justify-center items-center dark:bg-black-6"
       >
         {/* main-content */}
-        <main className="px-8 pt-12 max-w-[1000px] w-[95vw] border-[1px] border-grey-3 rounded-[1rem] max-sm:p-6 max-sm:pb-0">
+        <main className="px-8 pt-12 max-w-[1000px] w-[95vw] border-[1px] border-grey-3 rounded-[1rem] max-sm:p-6 max-sm:pb-0 dark:border-white-1 dark:border-opacity-25 dark:bg-black-0 shadow-[0_0_5px_1px_#E4F6FF]">
           {/* first-grid  */}
-          <div className="grid grid-cols-12 max-md:grid-cols-none">
+          <div className="grid grid-cols-12 max-md:grid-cols-none ">
             <div className="col-span-3 relative max-md:col-span-full">
               {/* side-menu-list */}
               <ul className="list-none leading-6 md:pl-2 absolute w-full">
@@ -346,26 +342,26 @@ class DP extends Component {
                   <div
                     className={`${
                       tab_progress === 25 &&
-                      "bg-blue-7 w-[25%] h-[2px] rounded-[10px]"
+                      "bg-blue-7 w-[25%] h-[2px] rounded-[10px] dark:bg-blue-8"
                     } ${
                       tab_progress === 50 &&
-                      "bg-blue-7 w-[50%] h-[2px] rounded-[10px]"
+                      "bg-blue-7 w-[50%] h-[2px] rounded-[10px] dark:bg-blue-8"
                     } ${
                       tab_progress === 75 &&
-                      "bg-blue-7 w-[75%] h-[3px] rounded-[10px]"
+                      "bg-blue-7 w-[75%] h-[3px] rounded-[10px] dark:bg-blue-8"
                     } ${
                       tab_progress === 100 &&
-                      "bg-blue-7 w-[100%] h-[2px] rounded-[10px]"
+                      "bg-blue-7 w-[100%] h-[2px] rounded-[10px] dark:bg-blue-8"
                     }`}
                   ></div>
                 </li>
                 <li
                   className={`mt-2 py-[10px] px-[20px] max-md:px-2 ${
                     current_page === "Home" &&
-                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block"
+                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block dark:border-blue-28 dark:text-blue-33"
                   } ${
                     tab_progress > 25 &&
-                    " max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8"
+                    " max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8 dark:border-blue-28 dark:text-white-1"
                   }`}
                 >
                   Welcome
@@ -373,10 +369,13 @@ class DP extends Component {
                 <li
                   className={`py-[10px] px-[20px] max-md:px-2 ${
                     tab_progress === 50 &&
-                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block"
-                  } ${tab_progress < 50 && "max-md:hidden"} ${
+                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block dark:border-blue-28 dark:text-blue-33"
+                  } ${
+                    tab_progress < 50 &&
+                    "max-md:hidden dark:text-white-1 dark:text-opacity-60"
+                  } ${
                     tab_progress > 50 &&
-                    "max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8"
+                    "max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8 dark:border-blue-28 dark:text-white-1"
                   }`}
                 >
                   Patient
@@ -384,10 +383,13 @@ class DP extends Component {
                 <li
                   className={`py-[10px] px-[20px] max-md:px-2${
                     tab_progress === 75 &&
-                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block"
-                  } ${tab_progress < 75 && "max-md:hidden"} ${
+                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block dark:border-blue-28 dark:text-blue-33"
+                  } ${
+                    tab_progress < 75 &&
+                    "max-md:hidden dark:text-white-1 dark:text-opacity-60"
+                  } ${
                     tab_progress > 75 &&
-                    "max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8"
+                    "max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8 dark:border-blue-28 dark:text-white-1"
                   }`}
                 >
                   Symptom
@@ -395,10 +397,13 @@ class DP extends Component {
                 <li
                   className={`py-[10px] px-[20px] max-md:px-2 ${
                     tab_progress === 100 &&
-                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block"
-                  } ${tab_progress < 100 && "max-md:hidden"} ${
+                    "text-[1rem] font-bold text-blue-9 border-l-[2px] border-l-blue-9  max-md:border-b-[2px] max-md:border-b-blue-9 max-md:border-l-0 max-md:w-auto max-md:inline-block dark:border-blue-28 dark:text-blue-33"
+                  } ${
+                    tab_progress < 100 &&
+                    "max-md:hidden dark:text-white-1 dark:text-opacity-60"
+                  } ${
                     tab_progress > 100 &&
-                    "max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8"
+                    "max-md:hidden border-l-[2px] border-l-blue-9 text-blue-8 dark:border-blue-28 dark:text-white-1"
                   }`}
                 >
                   Disease
@@ -415,7 +420,7 @@ class DP extends Component {
             </div>
           </div>
 
-          <div className="m-4 border-[1px] border-t-grey-3"></div>
+          <div className="m-4 border-[1px] border-t-blue-2 dark:border-white-1 dark:border-opacity-40"></div>
 
           <div className="second-grid">
             <div
@@ -425,12 +430,12 @@ class DP extends Component {
               <button
                 disabled={this.state.current_page === "Home"}
                 onClick={this.get_previous_page}
-                className="bg-blue-3 border-[1px] border-blue-5 text-white-1 py-[10px] px-[12px] rounded-[5px] mb-[8px] mx-[20px] font-sans transition-all duration-300 ease-in-out hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed usa-button--outline back"
+                className="bg-blue-3 border-[1px] border-blue-5 text-white-1 py-[10px] px-[12px] rounded-[5px] mb-[8px] mx-[20px] font-sans transition-all duration-300 ease-in-out hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed dark:bg-blue-24 dark:hover:bg-blue-31 dark:disabled:bg-blue-24"
               >
                 Back
               </button>
               <button
-                className={`bg-blue-3 border-[1px] border-blue-5 text-white-1 py-[10px] px-[12px] rounded-[5px] mb-[8px] mx-[20px] font-sans transition-all duration-300 ease-in-out hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed`}
+                className={`bg-blue-3 border-[1px] border-blue-5 text-white-1 py-[10px] px-[12px] rounded-[5px] mb-[8px] mx-[20px] font-sans transition-all duration-300 ease-in-out hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed dark:bg-blue-24 dark:hover:bg-blue-31 dark:disabled:bg-blue-24`}
                 disabled={!home_button_checked || button_is_disabled}
                 type="submit"
                 onClick={this.get_next_page}
