@@ -3,12 +3,15 @@ import React from "react";
 const Home = (props) => {
   return (
     <>
-      <div id="" className="max-w-[400px] leading-9 tablet:grid-col padding-x-2">
-        <p className="text-blue-6 ">
+      <div
+        id=""
+        className="max-w-[400px] leading-9 tablet:grid-col padding-x-2"
+      >
+        <p className="text-blue-6 dark:text-white-9">
           Before using this symptom checker, please read carefully and accept
           our Terms and Services:
         </p>
-        <ul className="text-blue-6">
+        <ul className="text-blue-6 dark:text-white-9">
           <li className="px-[0.6rem] py-[0.2rem]">
             🔹 This checkup is not a diagnosis.
           </li>
@@ -16,7 +19,7 @@ const Home = (props) => {
             🔹 This checkup is for informational purposes and is not a qualified
             medical opinion.
           </li>
-          <li className="px-[0.6rem] py-[0.2rem]">
+          <li className="px-[0.6rem] py-[0.2rem] dark:text-white-9">
             🔹 Information that you provide is anonymous and not shared with
             anyone.
           </li>
@@ -33,7 +36,7 @@ const Home = (props) => {
               value="truth"
             />
             <label
-              className="text-blue-8 h-4 cursor-pointer peer-checked:outline-none"
+              className="text-blue-8 h-4 cursor-pointer peer-checked:outline-none dark:text-white-9"
               htmlFor="truth"
             >
               I agree to the TelMedSphere terms and conditions
