@@ -483,7 +483,12 @@ const Doctors = () => {
                 {
                   color: isDarkMode && "white !important",
                 },
-
+              "& .MuiDataGrid-overlay": {
+                // Fix: Added '& ' and wrapped it in quotes
+                background: "none",
+                backgroundColor: "transparent",
+                color: isDarkMode ? "white" : "black",
+              },
               "& .MuiDataGrid-virtualScroller": {
                 "&::-webkit-scrollbar-track": {
                   background: isDarkMode && "#2a3454",
@@ -492,7 +497,7 @@ const Doctors = () => {
                 "&::-webkit-scrollbar-thumb": {
                   background: isDarkMode && "#435585",
                   borderRadius: "10px",
-                  zIndex: "10"
+                  zIndex: "10",
                 },
               },
               "& .MuiDataGrid-toolbarContainer": {
@@ -518,6 +523,7 @@ const Doctors = () => {
                   ? "1px solid #101314"
                   : "1px solid #E5E7EB",
                 color: isDarkMode ? "white" : "black",
+
                 "& div": {
                   color: isDarkMode ? "white" : "black",
                 },
@@ -565,13 +571,17 @@ const Doctors = () => {
                 <span className="text-blue-7 text-[1.3em] font-normal dark:text-white-1">
                   Doctor Fee {`(${selectedDoc})`}
                 </span>
-                <span className="font-bold text-blue-7 w-12 dark:text-white-1">₹ {curFee}</span>
+                <span className="font-bold text-blue-7 w-12 dark:text-white-1">
+                  ₹ {curFee}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-blue-7 text-[1.3em] font-normal dark:text-white-1">
                   Available Balance
                 </span>
-                <span className="font-bold text-blue-7 dark:text-white-1">₹ {balance}</span>
+                <span className="font-bold text-blue-7 dark:text-white-1">
+                  ₹ {balance}
+                </span>
               </div>
               <div className="flex justify-between pt-4 border-t border-blue-2 dark:text-white-1 dark:border-blue-33 dark:border-opacity-30">
                 <span className="text-red-600 font-semibold">
