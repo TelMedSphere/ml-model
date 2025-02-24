@@ -93,18 +93,18 @@ const MedicineDetails = () => {
   return (
     <>
       {/* product_details section */}
-      <section className="pt-16 pb-20">
+      <section className="pt-16 pb-20 dark:bg-black-6">
         {/* navigation_btns */}
         <div className="flex justify-between items-center flex-wrap mb-8">
           {/* navigation_btn */}
           <div
-            className="bg-grey-3 text-white-1 px-8 py-4 m-4 rounded-tr-[8px] rounded-tl-[40px] rounded-bl-[40px] rounded-br-[8px] transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#b3b8d0] hover:bg-blue-7 active:bg-blue-7"
+            className="bg-grey-3 text-white-1 px-8 py-4 m-4 rounded-tr-[8px] rounded-tl-[40px] rounded-bl-[40px] rounded-br-[8px] transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#b3b8d0] hover:bg-blue-7 active:bg-blue-7 dark:hover:bg-blue-27 cursor-pointer"
             onClick={() => navigate("/buy-medicines")}
           >
             Back to store
           </div>
           <div
-            className="bg-grey-3 text-white-1 px-8 py-4 m-4 rounded-tr-[40px] rounded-tl-[8px] rounded-bl-[8px] rounded-br-[40px]  transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#b3b8d0] hover:bg-blue-7 active:bg-blue-7 max-sm:absolute max-sm:right-0 max-sm:top-32 overflow-x-hidden"
+            className="bg-grey-3 text-white-1 px-8 py-4 m-4 rounded-tr-[40px] rounded-tl-[8px] rounded-bl-[8px] rounded-br-[40px]  transition-all duration-300 ease-in-out shadow-[0_0_10px_1px_#b3b8d0] hover:bg-blue-7 active:bg-blue-7 max-sm:absolute max-sm:right-0 max-sm:top-32 overflow-x-hidden dark:hover:bg-blue-27 cursor-pointer"
             onClick={() => navigate("/all-medicines")}
           >
             Browse all products
@@ -152,8 +152,8 @@ const MedicineDetails = () => {
             {/* prod_details_right_col */}
             <div className="col-span-5 lg:pl-20 text-blue-8 max-lg:w-[92vw] mt-6">
               {/* prod_details_title */}
-              <h1 className="">{title}</h1>
-              <h4 className="mt-[0.6rem] mb-[1.2rem] font-semibold text-blue-9">
+              <h1 className="dark:text-white-1">{title}</h1>
+              <h4 className="mt-[0.6rem] mb-[1.2rem] font-semibold text-blue-9 dark:text-blue-21">
                 Pharmaceuticals
               </h4>
 
@@ -161,8 +161,10 @@ const MedicineDetails = () => {
 
               <div className="flex justify-between items-center">
                 <div>
-                  <h2 className="text-[2rem]">₹ {price} /- &nbsp;</h2>
-                  <span className="text-[0.9rem] text-blue-9">
+                  <h2 className="text-[2rem] dark:text-white-1">
+                    ₹ {price} /- &nbsp;
+                  </h2>
+                  <span className="text-[0.9rem] text-blue-9 dark:text-blue-21">
                     (Inclusive of all taxes)
                   </span>
                 </div>
@@ -197,12 +199,12 @@ const MedicineDetails = () => {
                   onChange={() => {}}
                   className="inline-block"
                 />
-                <p className="inline-block">
+                <p className="inline-block dark:text-white-1 cursor-pointer">
                   Use Wallet Money {`(₹ ${balance})`}
                 </p>
               </div>
 
-              <div className="use-balance-div">
+              <div className="use-balance-div dark:text-white-1">
                 <p>
                   Amount to pay: <b>₹ {totalBalance}</b>
                 </p>
@@ -211,7 +213,7 @@ const MedicineDetails = () => {
               <div className="flex justify-start items-center flex-wrap">
                 <button
                   type="button"
-                  className="inline-block px-6 py-[0.8rem] rounded-[3px] transition-colors duration-200 ease-out w-[200px] bg-orange-1 text-white-1 mt-2 mr-2 hover:bg-orange-2 active:bg-blue-7"
+                  className="inline-block px-6 py-[0.8rem] rounded-[3px] transition-colors duration-200 ease-out w-[200px] bg-orange-1 text-white-1 mt-2 mr-2 hover:bg-orange-2 active:bg-blue-7 dark:bg-orange-600 dark:hover:bg-orange-4"
                   onClick={() => {
                     if (totalBalance === 0) {
                       httpClient.post("/debit_wallet", {
@@ -238,7 +240,7 @@ const MedicineDetails = () => {
                 </button>
                 <button
                   type="button"
-                  className={`inline-block px-6 py-[0.8rem] rounded-[3px] transition-colors duration-200 ease-out w-[200px] bg-yellow-4 text-white-1 mt-2 mr-2 hover:bg-yellow-6 active:bg-blue-7 ${
+                  className={`inline-block px-6 py-[0.8rem] rounded-[3px] transition-colors duration-200 ease-out w-[200px] bg-yellow-4 text-white-1 mt-2 mr-2 hover:bg-yellow-6 active:bg-blue-7 dark:bg-yellow-500 dark:hover:bg-yellow-4 ${
                     btnActive && "active"
                   }`}
                   onClick={handleAddItem}
