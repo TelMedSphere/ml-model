@@ -29,35 +29,38 @@ const RecentTransactions = () => {
   if (isLoading) return <Preloader />;
 
   return (
-    <div className="w-full flex justify-center">
-        <div className="max-w-[400px] w-[93vw] mt-16 mb-60 text-blue-8">
-      <section>
-        <h3 className="text-[1.2rem] mb-6">Transaction History</h3>
-        <div>
-          {transactions.map((trans, index) => (
-            <div
-              key={index}
-              className="w-full border-[2px] border-blue-8 py-3 px-4 flex justify-between items-center rounded-[5px] mb-[5px] relative"
-            >
-              <div className="lex flex-col justify-start items-center">
-                <p className="text-[1.05rem] font-semibold mb-[0.2rem] whitespace-nowrap text-ellipsis overflow-hidden max-w-[15px]">
-                  {trans.desc}
-                </p>
-                <p>{trans.date}</p>
-                <div className="tooltip">{trans.desc}</div>
-              </div>
+    <div className="w-full flex justify-center dark:bg-black-6">
+      <div className="max-w-[400px] w-[93vw] mt-16 mb-60 text-blue-8">
+        <section>
+          <h3 className="text-[1.2rem] mb-6 dark:text-white-1 dark:opacity-95">
+            Transaction History
+          </h3>
+          <div>
+            {transactions.map((trans, index) => (
               <div
-                className={`text-[1.2em] font-bold ${
-                  trans.add ? "text-[#0f0]" : "text-[#f00]"
-                }`}
+                key={index}
+                className="w-full border-[2px] border-blue-8 py-3 px-4 flex justify-between items-center rounded-[5px] mb-[5px] relative dark:border-white-8 dark:text-white-8 dark:border-[1px]"
               >
-                {trans.add ? "+" : "-"} ₹ {trans.amount}
+                <div className="lex flex-col justify-start items-center">
+                  <p className="text-[1.05rem] font-semibold mb-[0.2rem] whitespace-nowrap max-w-[15px]">
+                    {trans.desc}
+                  </p>
+                  <p>{trans.date}</p>
+                </div>
+                <div
+                  className={`text-[1.2em] font-bold ${
+                    trans.add
+                      ? "text-[#0f0] dark:text-green-6"
+                      : "text-[#f00] dark:text-red-8"
+                  }`}
+                >
+                  {trans.add ? "+" : "-"} ₹ {trans.amount}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    </div>
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 };

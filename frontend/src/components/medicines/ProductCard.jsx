@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import cartContext from '../../contexts/cart/cartContext';
 import useActive from '../../hooks/useActive';
 import { useNavigate } from 'react-router-dom';
+import httpClient from '../../httpClient';
 
 
 const ProductCard = (props) => {
@@ -12,7 +13,15 @@ const ProductCard = (props) => {
     const { addItem, placeOrder } = useContext(cartContext);
     const { active, handleActive, activeClass } = useActive(false);
     const navigate = useNavigate();
+    const [balance, setBalance] = React.useState(0);
 
+    // Add useEffect to fetch wallet balance
+    React.useEffect(() => {
+        httpClient.post("/get_wallet", { email: localStorage.getItem("email") })
+            .then((res) => {
+                setBalance(Number(res.data.wallet));
+            });
+    }, []);
 
     // handling Add-to-cart
     const handleAddItem = () => {
@@ -24,6 +33,27 @@ const ProductCard = (props) => {
         setTimeout(() => {
             handleActive(false);
         }, 3000);
+    };
+
+    // Handling direct purchase
+    const handleDirectPurchase = () => {
+        const order = { ...props, quantity: 1 };
+        
+        if (price <= balance) {
+            // If wallet has enough balance, use wallet
+            httpClient.post("/debit_wallet", {
+                email: localStorage.getItem("email"),
+                walletAmount: price,
+            }).then(() => {
+                localStorage.setItem("orders", JSON.stringify([order]));
+                window.location.href = "https://telmedsphere-server.vercel.app/success";
+            });
+        } else {
+            // If wallet doesn't have enough balance, go to checkout
+            localStorage.setItem("totalPrice", price);
+            localStorage.setItem("orders", JSON.stringify([order]));
+            navigate("/checkout");
+        }
     };
 
     return (
@@ -49,6 +79,7 @@ const ProductCard = (props) => {
                     <h2 className="">
                         ₹ {price} /- &nbsp;
                     </h2> 
+
                     {/* Add flex container for buttons */}
                     <div className="flex flex-col sm:flex-row gap-2 mt-[1.2rem]">
                         <button
@@ -71,6 +102,7 @@ const ProductCard = (props) => {
                             {active ? 'Added' : 'Add to cart'}
                         </button>
                     </div>
+
                 </div>
             </div>
         </>

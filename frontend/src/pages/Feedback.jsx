@@ -69,14 +69,14 @@ const Feedback = () => {
   };
 
   return (
-    <section className="py-8 md:py-12 bg-gray-50">
+    <section className="py-8 md:py-12 bg-gray-50 dark:bg-black-6">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="order-2 md:order-1">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 dark:text-white-10">
               Share Your Feedback
             </h1>
-            <h2 className="text-lg md:text-xl mb-6 text-gray-600">
+            <h2 className="text-lg md:text-xl mb-6 text-gray-600 dark:text-yellow-1">
               Your feedback matters to us! Help us improve our services.
             </h2>
             <img
@@ -94,7 +94,7 @@ const Feedback = () => {
               <div className="mb-6 relative">
                 <label
                   htmlFor="type"
-                  className="block text-gray-700 font-semibold mb-2"
+                  className="block text-gray-700 font-semibold mb-2 dark:text-white-10"
                 >
                   Type of Feedback
                 </label>
@@ -106,9 +106,11 @@ const Feedback = () => {
                       setFormData({ ...formData, type: e.target.value })
                     }
                     required
-                    className="w-full border border-gray-300 text-black-1 rounded-lg py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-5 appearance-none"
+                    className="w-full border  text-black-1 rounded-lg py-2 px-3 pr-10 focus:outline-none border-blue-5 focus:border-grey-3 appearance-none dark:bg-black-10 dark:border-blue-3 dark:text-white-10 focus:border-[2px] focus:ring-0 dark:focus:border-blue-23"
                   >
-                    <option value="">Select...</option>
+                    <option value="" className="dark:hover:bg-black-0">
+                      Select...
+                    </option>
                     <option value="Services">Services</option>
                     <option value="Models">Models</option>
                     <option value="Products">Products</option>
@@ -123,7 +125,7 @@ const Feedback = () => {
               <div className="mb-4">
                 <label
                   htmlFor="rating"
-                  className="block text-gray-700 font-semibold mb-2"
+                  className="block text-gray-700 font-semibold mb-2 dark:text-white-10"
                 >
                   Rating
                 </label>
@@ -149,7 +151,7 @@ const Feedback = () => {
               <div className="mb-5">
                 <label
                   htmlFor="comments"
-                  className="block text-black-1 font-semibold mb-2"
+                  className="block text-black-1 font-semibold mb-2 dark:text-white-10"
                 >
                   Comments
                 </label>
@@ -161,7 +163,7 @@ const Feedback = () => {
                   }
                   rows="4"
                   required
-                  className="min-h-32 w-full border-2 border-blue-3 rounded-lg p-2 text-base scrollbar-thin scrollbar-track-transparent scrollbar-thumb-blue-4 scrollbar-thumb-rounded-full hover:scrollbar-thumb-blue-6 focus:outline-none focus:border-blue-5 focus:border-[2.5px]"
+                  className="min-h-32 w-full border-2 border-blue-3 rounded-lg p-2 text-base scrollbar-thin scrollbar-track-transparent scrollbar-thumb-blue-4 scrollbar-thumb-rounded-full hover:scrollbar-thumb-blue-6 focus:outline-none focus:border-blue-23 focus:border-[2.5px] dark:placeholder-grey-4 dark:text-white-1"
                   placeholder="Share your thoughts..."
                 />
               </div>
@@ -181,7 +183,7 @@ const Feedback = () => {
                   />
                   <label
                     htmlFor="share-experience"
-                    className="text-base cursor-pointer"
+                    className="text-base cursor-pointer dark:text-white-10"
                   >
                     Keep my feedback anonymous.
                   </label>
@@ -190,7 +192,7 @@ const Feedback = () => {
 
               <button
                 type="submit"
-                className="mt-6 w-full text-white-1 bg-blue-4 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-7 transition-colors duration-300"
+                className="mt-6 w-full text-white-1 bg-blue-4 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-7 transition-colors duration-300 dark:bg-blue-24 dark:hover:bg-blue-31"
               >
                 Submit Feedback
               </button>

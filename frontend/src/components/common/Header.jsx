@@ -100,7 +100,7 @@ const Header = () => {
               }`}
             >
               <Link
-                to="/"
+                to="mailto:telmedsphere489@gmail.com"
                 className="flex justify-center items-center transition-all duration-300 ease-out hover:text-[#333] mr-[20px] max-xs:mr-0 dark:text-white-1 dark:text-opacity-80 dark:hover:text-opacity-100"
               >
                 <FiMail className="text-[0.9em] leading-[1.4rem] mr-[5px]" />
@@ -109,7 +109,7 @@ const Header = () => {
                 </p>
               </Link>
               <Link
-                to="/"
+                to="tel:+911234567890"
                 className="flex justify-center items-center transition-all duration-300 ease-out hover:text-[#333] dark:text-white-1 dark:text-opacity-80 dark:hover:text-opacity-100"
               >
                 <FiPhoneCall className="text-[0.9em] leading-[1.4rem] mr-[5px]" />
