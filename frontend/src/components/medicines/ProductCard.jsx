@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import cartContext from '../../contexts/cart/cartContext';
 import useActive from '../../hooks/useActive';
 import { useNavigate } from 'react-router-dom';
+import httpClient from '../../httpClient';
 
 
 const ProductCard = (props) => {
@@ -12,7 +13,15 @@ const ProductCard = (props) => {
     const { addItem, placeOrder } = useContext(cartContext);
     const { active, handleActive, activeClass } = useActive(false);
     const navigate = useNavigate();
+    const [balance, setBalance] = React.useState(0);
 
+    // Add useEffect to fetch wallet balance
+    React.useEffect(() => {
+        httpClient.post("/get_wallet", { email: localStorage.getItem("email") })
+            .then((res) => {
+                setBalance(Number(res.data.wallet));
+            });
+    }, []);
 
     // handling Add-to-cart
     const handleAddItem = () => {
@@ -24,6 +33,27 @@ const ProductCard = (props) => {
         setTimeout(() => {
             handleActive(false);
         }, 3000);
+    };
+
+    // Handling direct purchase
+    const handleDirectPurchase = () => {
+        const order = { ...props, quantity: 1 };
+        
+        if (price <= balance) {
+            // If wallet has enough balance, use wallet
+            httpClient.post("/debit_wallet", {
+                email: localStorage.getItem("email"),
+                walletAmount: price,
+            }).then(() => {
+                localStorage.setItem("orders", JSON.stringify([order]));
+                window.location.href = "https://telmedsphere-server.vercel.app/success";
+            });
+        } else {
+            // If wallet doesn't have enough balance, go to checkout
+            localStorage.setItem("totalPrice", price);
+            localStorage.setItem("orders", JSON.stringify([order]));
+            navigate("/checkout");
+        }
     };
 
     return (
@@ -52,20 +82,15 @@ const ProductCard = (props) => {
                     {/* btn products_btn */}
                     <button
                         type="button"
-                        className="inline-block bg-orange-1 text-white-1 px-[0.8rem] py-3 rounded-[3px] transition-colors duration-200 ease-out hover:bg-orange-2 w-full mt-[1.2rem] active:bg-blue-7 dark:bg-orange-600 dark:hover:bg-orange-1"
-                        onClick={() => {
-                            localStorage.setItem("totalPrice", price);
-                            const order = { ...props, quantity: 1 };
-                            placeOrder(order);
-                            navigate("/checkout");
-                        }}
+                        className="inline-block bg-orange-1 text-white-1 px-[0.8rem] py-3 rounded-[3px] transition-colors duration-200 ease-out hover:bg-orange-2 w-full active:bg-blue-7 dark:bg-orange-600 dark:hover:bg-orange-4"
+                        onClick={handleDirectPurchase}
                     >
                         Buy now
                     </button>
                     {/* btn products_btn add_to_cart_btn*/}
                     <button
                         type="button"
-                        className={`inline-block bg-orange-1 text-white-1 px-[0.8rem] py-3 rounded-[3px] transition-colors duration-200 ease-out hover:bg-orange-2 w-full mt-2 active:bg-blue-7 ${activeClass(id)} mt-2 bg-yellow-4 hover:bg-yellow-6 dark:bg-yellow-500 dark:hover:bg-yellow-4`}
+                        className={`inline-block bg-yellow-4 text-white-1 px-[0.8rem] py-3 rounded-[3px] transition-colors duration-200 ease-out hover:bg-yellow-6 w-full mt-2 active:bg-blue-7 ${activeClass(id)} dark:bg-yellow-500 dark:hover:bg-yellow-4`}
                         onClick={handleAddItem}
                     >
                         {active ? 'Added' : 'Add to cart'}
