@@ -56,10 +56,8 @@ const MeetPage = () => {
   useDocTitle("Meet");
 
   useEffect(() => {
-    // console.log(searchparams.get("name"))
     localStorage.setItem("lastMeetWith", searchparams.get("selectedDoc"));
     localStorage.setItem("lastMeetMail", searchparams.get("selectedMail"));
-    //eslint-disable-next-line
   }, []);
 
   const printEventOutput = (payload) => {
@@ -132,10 +130,6 @@ const MeetPage = () => {
     apiRef.current.on("knockingParticipant", handleKnockingParticipant);
   };
 
-  const handleReadyToClose = () => {
-    console.log("Ready to close...");
-  };
-
   const handleEndMeeting = () => {
     toggleFeedback(true);
     httpClient
@@ -158,8 +152,6 @@ const MeetPage = () => {
 
       // Delete the meeting
       await httpClient.put("/delete_meet", { email: selectedMail });
-
-      console.log("pemail", pemail);
 
       // Debit wallet
       const debitResponse = await httpClient.post("/debit_wallet", {
@@ -254,7 +246,6 @@ const MeetPage = () => {
     bodyContent.append("pemail", email);
     bodyContent.append("demail", localStorage.getItem("email"));
     bodyContent.append("meetLink", localStorage.getItem("curmlink"));
-    console.log("meetpage", localStorage.getItem("curmlink"));
     bodyContent.append("file", file);
     httpClient
       .post("mail_file", bodyContent, {

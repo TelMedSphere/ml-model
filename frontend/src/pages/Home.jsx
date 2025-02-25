@@ -211,7 +211,6 @@ const Home = () => {
           setPatient_name(res.data.link["name"]);
           setMeetlink(res.data.link["link"]);
           localStorage.setItem("curmlink", res.data.link["link"]);
-          console.log("home",localStorage.getItem("curmlink"))
 
           setTimeout(() => {
             setSearching(2);
@@ -346,7 +345,6 @@ const Home = () => {
     httpClient
       .post("/verify", { email: localStorage.getItem("email") })
       .then((res) => {
-        console.log(res.data);
         if (res.data.verified) {
           setVerCont("Yayy! Your Account is verified!!");
           setVerAlert(true);
