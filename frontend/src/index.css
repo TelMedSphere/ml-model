@@ -83,10 +83,9 @@ input[type="range"] {
   accent-color: #4a4cb2;
 }
 
-@layer utilities {
-  .dark input[type="search"]::-webkit-search-cancel-button {
-    filter: brightness(1000%);
-  }
+.dark input[type="date"] {
+  color-scheme: dark;
+  color: #dcedf6;
 }
 
 button {

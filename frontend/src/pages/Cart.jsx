@@ -9,12 +9,13 @@ import httpClient from "../httpClient";
 import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
+import { useDarkMode } from "../contexts/DarkMode/DarkModeContext";
 
 const Cart = () => {
   const { isLoading, toggleLoading } = useContext(commonContext);
 
   useDocTitle("Cart");
-
+  const { isDarkMode } = useDarkMode();
   const navigate = useNavigate();
   const userNotExists =
     localStorage.getItem("usertype") === undefined ||
@@ -220,11 +221,29 @@ const Cart = () => {
 
                   {isAlert !== 0 &&
                     (isAlert === 1 ? (
-                      <Alert severity="error">
+                      <Alert
+                        severity="error"
+                        className="dark:bg-red-4 dark:text-red-7"
+                        sx={{
+                          "& .MuiAlert-icon": {
+                            color: isDarkMode && "#f5aead",
+                          },
+                        }}
+                      >
                         Error in ordering medicines
                       </Alert>
                     ) : (
-                      <Alert severity="success">Order Successful</Alert>
+                      <Alert
+                        severity="success"
+                        className="dark:bg-green-9 dark:text-green-6"
+                        sx={{
+                          "& .MuiAlert-icon": {
+                            color: isDarkMode && "#4dff99",
+                          },
+                        }}
+                      >
+                        Order Successful
+                      </Alert>
                     ))}
                 </div>
               </div>

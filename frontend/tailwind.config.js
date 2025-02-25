@@ -27,6 +27,7 @@ module.exports = {
         "curvy-shape-dark": "url('/curvy-shape-dark-img.png')",
         "landing-bg":
           "linear-gradient(white 20%, #d4ddf1 40%, #b0bbd8 60%, #6575a5 80%, #4a4cb2 100%)",
+        "search-patients": "url('/search_patients.png')",
       },
       textShadow: {
         "landing-highlight": "2px 2px 4px rgba(0, 0, 0, 0.3)",
