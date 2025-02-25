@@ -210,6 +210,9 @@ const Home = () => {
         } else {
           setPatient_name(res.data.link["name"]);
           setMeetlink(res.data.link["link"]);
+          localStorage.setItem("curmlink", res.data.link["link"]);
+          console.log("home",localStorage.getItem("curmlink"))
+
           setTimeout(() => {
             setSearching(2);
           }, 2000);
@@ -612,19 +615,19 @@ const Home = () => {
           </div>
 
           <div className="feedback-details dark:text-white-1">
-            {/* {feedbackAlert && ( */}
-            <Alert
-              severity="success"
-              sx={{
-                "& .MuiAlert-icon": {
-                  color: isDarkMode && "#4dff99",
-                },
-              }}
-              className="dark:bg-green-9 dark:text-green-6"
-            >
-              Thank you for your response
-            </Alert>
-            {/* )} */}
+            {feedbackAlert && (
+              <Alert
+                severity="success"
+                sx={{
+                  "& .MuiAlert-icon": {
+                    color: isDarkMode && "#4dff99",
+                  },
+                }}
+                className="dark:bg-green-9 dark:text-green-6"
+              >
+                Thank you for your response
+              </Alert>
+            )}
             <h3 className="my-4 text-xl font-semibold">Feedback</h3>
             <div className="mb-3">
               How was your consultation with{" "}
