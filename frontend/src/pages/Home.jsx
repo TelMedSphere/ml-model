@@ -19,13 +19,14 @@ import Preloader from "../components/common/Preloader";
 import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 import HealthFact from "../components/facts/HealthFact";
+import { useDarkMode } from "../contexts/DarkMode/DarkModeContext";
 
 const Home = () => {
   useDocTitle("Home");
   const navigate = useNavigate();
 
+  const { isDarkMode } = useDarkMode();
   const { isLoading, toggleLoading } = useContext(commonContext);
-
   const [haslastMeet, setHasLastMeet] = useState(
     localStorage.getItem("lastMeetWith") !== undefined &&
       localStorage.getItem("lastMeetWith") !== null &&
@@ -380,7 +381,16 @@ const Home = () => {
       {isDoctor && !isVerified && (
         <Alert
           severity={verAlert ? "success" : "error"}
-          className="fixed top-24 w-full flex justify-center"
+          className={`fixed top-24 w-full flex justify-center ${
+            verAlert
+              ? "dark:bg-green-9 dark:text-green-6"
+              : "dark:bg-red-4 dark:text-red-7"
+          }`}
+          sx={{
+            "& .MuiAlert-icon": {
+              color: isDarkMode && (verAlert ? "#4dff99" : "#f5aead"),
+            },
+          }}
         >
           {verCont}
         </Alert>
@@ -555,7 +565,16 @@ const Home = () => {
           {isAlert !== "" && (
             <Alert
               severity={isAlert}
-              className="absolute -top-16 text-black w-64 left-0"
+              className={`absolute -top-16 text-black w-64 left-0 ${
+                available
+                  ? "dark:bg-red-4 dark:text-red-7"
+                  : "dark:bg-green-9 dark:text-green-6"
+              }`}
+              sx={{
+                "& .MuiAlert-icon": {
+                  color: isDarkMode && (available ? "#f5aead" : "#4dff99"),
+                },
+              }}
             >
               {alertmessage}
             </Alert>
@@ -593,9 +612,19 @@ const Home = () => {
           </div>
 
           <div className="feedback-details dark:text-white-1">
-            {feedbackAlert && (
-              <Alert severity="success">Thank you for your response</Alert>
-            )}
+            {/* {feedbackAlert && ( */}
+            <Alert
+              severity="success"
+              sx={{
+                "& .MuiAlert-icon": {
+                  color: isDarkMode && "#4dff99",
+                },
+              }}
+              className="dark:bg-green-9 dark:text-green-6"
+            >
+              Thank you for your response
+            </Alert>
+            {/* )} */}
             <h3 className="my-4 text-xl font-semibold">Feedback</h3>
             <div className="mb-3">
               How was your consultation with{" "}
