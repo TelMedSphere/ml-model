@@ -79,22 +79,30 @@ const ProductCard = (props) => {
                     <h2 className="">
                         ₹ {price} /- &nbsp;
                     </h2> 
-                    {/* btn products_btn */}
-                    <button
-                        type="button"
-                        className="inline-block bg-orange-1 text-white-1 px-[0.8rem] py-3 rounded-[3px] transition-colors duration-200 ease-out hover:bg-orange-2 w-full active:bg-blue-7 dark:bg-orange-600 dark:hover:bg-orange-4"
-                        onClick={handleDirectPurchase}
-                    >
-                        Buy now
-                    </button>
-                    {/* btn products_btn add_to_cart_btn*/}
-                    <button
-                        type="button"
-                        className={`inline-block bg-yellow-4 text-white-1 px-[0.8rem] py-3 rounded-[3px] transition-colors duration-200 ease-out hover:bg-yellow-6 w-full mt-2 active:bg-blue-7 ${activeClass(id)} dark:bg-yellow-500 dark:hover:bg-yellow-4`}
-                        onClick={handleAddItem}
-                    >
-                        {active ? 'Added' : 'Add to cart'}
-                    </button>
+
+                    {/* Add flex container for buttons */}
+                    <div className="flex flex-col sm:flex-row gap-2 mt-[1.2rem]">
+                        <button
+                            type="button"
+                            className="flex-1 bg-orange-1 text-white-1 px-[0.8rem] py-3 rounded-[3px] transition-colors duration-200 ease-out hover:bg-orange-2 active:bg-blue-7 dark:bg-orange-600 dark:hover:bg-orange-1"
+                            onClick={() => {
+                                localStorage.setItem("totalPrice", price);
+                                const order = { ...props, quantity: 1 };
+                                placeOrder(order);
+                                navigate("/checkout");
+                            }}
+                        >
+                            Buy now
+                        </button>
+                        <button
+                            type="button"
+                            className={`flex-1 bg-orange-1 text-white-1 px-[0.8rem] py-3 rounded-[3px] transition-colors duration-200 ease-out hover:bg-orange-2 ${activeClass(id)} bg-yellow-4 hover:bg-yellow-6 dark:bg-yellow-500 dark:hover:bg-yellow-4`}
+                            onClick={handleAddItem}
+                        >
+                            {active ? 'Added' : 'Add to cart'}
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </>
