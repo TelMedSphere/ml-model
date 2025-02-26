@@ -369,7 +369,7 @@ const LandingPage = () => {
         </section>
 
         {/* testimonials-section */}
-        <section className="bg-black-0">
+        <section className="dark:bg-black-0 bg-white-1">
           <TestimonialSection />
         </section>
 

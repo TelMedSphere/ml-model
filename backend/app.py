@@ -423,7 +423,48 @@ def reset_password(token):
 
     return jsonify({'message': 'Password has been reset'}), 200
 
+# ----------- Deletion routes ----------------
+
+@app.route('/delete_account', methods=['DELETE'])
+def delete_account():
+    try:
+        data = request.get_json()
+        email = data.get('email')
         
+        if not email:
+            return jsonify({'error': 'Email is required'}), 400
+
+        # Check if user is a patient
+        patient = patients.find_one({'email': email})
+        if patient:
+            # Remove patient's upcoming appointments from doctors' records
+            doctors.update_many(
+                {'upcomingAppointments.patient': email},
+                {'$pull': {'upcomingAppointments': {'patient': email}}}
+            )
+            # Delete patient record
+            patients.delete_one({'email': email})
+            return jsonify({'message': 'Patient account deleted successfully'}), 200
+
+        # Check if user is a doctor
+        doctor = doctors.find_one({'email': email})
+        if doctor:
+            # Remove doctor's upcoming appointments from patients' records
+            patients.update_many(
+                {'upcomingAppointments.demail': email},
+                {'$pull': {'upcomingAppointments': {'demail': email}}}
+            )
+            # Delete doctor record
+            doctors.delete_one({'email': email})
+            return jsonify({'message': 'Doctor account deleted successfully'}), 200
+
+        return jsonify({'error': 'User not found'}), 404
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+       
+
+
 @app.route('/doc_status', methods=['PUT'])
 def doc_status():
     data = request.get_json()
@@ -1128,7 +1169,7 @@ def save_website_feedback():
     user_email = data.get("email")
     rating = data.get("rating", 0)
     comments = data.get("comments", "")
-    feedback_type = data.get("feedback_type", "")
+    feedback_type = data.get("type", "")
     timestamp = data.get("timestamp", "")
     keep_it_anonymous = data.get("keep_it_anonymous", False)
 
@@ -1157,17 +1198,31 @@ def save_website_feedback():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@app.route('/website_feedback',methods=['GET'])
+@app.route('/website_feedback', methods=['GET'])
 def get_all_website_feedback():
     try:
         feedbacks = list(website_feedback.find({}, {"_id": 0}))
+
         for feedback in feedbacks:
             if feedback.get("keep_it_anonymous"):
                 feedback.pop("username", None)
                 feedback.pop("user_email", None)
-        return jsonify(feedbacks),200
+                feedback.pop("profile_picture", None)
+            else:
+                # Check if the user exists in the patients collection
+                user_email = feedback.get("user_email")
+                if user_email:
+                    patient_exists = patients.find_one({"email": user_email}) is not None
+                    doctor_exists = doctors.find_one({"email": user_email}) is not None
+                    print(patient_exists, doctor_exists)
+                    if not (patient_exists or doctor_exists):  # User not found in both
+                        feedback.pop("username", None)
+                        feedback.pop("user_email", None)
+                        feedback.pop("profile_picture", None)
+
+        return jsonify(feedbacks), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500       
+        return jsonify({"error": str(e)}), 500   
         
 @app.route('/website_feedback/<id>', methods=['GET'])
 def get_website_feedback(id):

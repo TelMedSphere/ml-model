@@ -12,7 +12,7 @@ const Feedback = () => {
     type: "",
     rating: 0,
     comments: "",
-    email: "",
+    email: localStorage.getItem("email", ""),
     username: "",
     keep_it_anonymous: false,
   });
