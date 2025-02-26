@@ -425,7 +425,7 @@ def reset_password(token):
 
 # ----------- Deletion routes ----------------
 
-@app.route('/delete_account', methods=['DELETE'])
+@app.route('/delete_account', methods=['POST'])
 def delete_account():
     try:
         data = request.get_json()
@@ -1214,7 +1214,6 @@ def get_all_website_feedback():
                 if user_email:
                     patient_exists = patients.find_one({"email": user_email}) is not None
                     doctor_exists = doctors.find_one({"email": user_email}) is not None
-                    print(patient_exists, doctor_exists)
                     if not (patient_exists or doctor_exists):  # User not found in both
                         feedback.pop("username", None)
                         feedback.pop("user_email", None)
