@@ -36,9 +36,7 @@ const MeetPage = () => {
   const isDoctor = localStorage.getItem("usertype") === "doctor";
   const email = searchparams.get("pemail");
   const phone = localStorage.getItem("phone");
-  const [prescription, setPrescription] = useState([
-    `a | 1-0-0 (1) | day(s) Before Food`,
-  ]);
+  const [prescription, setPrescription] = useState([]);
   const [newPrescription, setNewPrescription] = useState({
     name: "",
     dosage: "",
