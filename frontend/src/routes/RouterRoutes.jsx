@@ -24,6 +24,8 @@ import Feedback from "../pages/Feedback";
 import ResetPassword from "../components/resetPassword/ResetPassword";
 import PrivacyPolicy from "../pages/Privacy";
 import DeleteAccount from "../pages/DeleteAccount";
+import HealthBlogs from "../pages/HealthBlogs";
+
 const RouterRoutes = () => {
   useScrollRestore();
 
@@ -54,6 +56,7 @@ const RouterRoutes = () => {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/reset-password/:token" element={<ResetPassword/>} />
+        <Route path="/health-blogs" element={<HealthBlogs />} />
         <Route path="*" element={<ErrorPage />} />
         <Route path="/privacy" element= {<PrivacyPolicy/>} />
         <Route path="/delete-account" element= {<DeleteAccount/>} />

@@ -261,6 +261,21 @@ const Header = () => {
                   </div>
 
                   <div
+                    className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center dark:hover:text-blue-2 ${
+                      curPath === "/health-blogs"
+                        ? "text-blue-9 border-b-[2px] border-blue-9 dark:text-blue-32 dark:border-blue-5"
+                        : "dark:text-white-1 text-blue-8"
+                    }`}
+                  >
+                    <span
+                      onClick={() => navigate("/health-blogs")}
+                      className="cursor-pointer font-bold"
+                    >
+                      INFO
+                    </span>
+                  </div>
+
+                  <div
                     className="relative hover:text-blue-9  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 text-blue-8 dark:text-white-1 dark:hover:text-blue-2 "
                     ref={dropdownRef}
                   >
@@ -477,6 +492,24 @@ const Header = () => {
                             <span className="cursor-pointerfont-bold px-[5px] py-[3px] bg-blue-8 absolute -top-[14px] text-white-1 -right-[40px] rounded-[40px] hover:bg-blue-9 text-[10px] z-9999 dark:bg-blue-25 dark:text-white-1">
                               20% off
                             </span>
+                          </span>
+                        </div>
+
+                        <div
+                          className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center dark:hover:text-blue-2 ${
+                            curPath === "/health-blogs"
+                              ? "text-blue-9 border-b-[2px] border-blue-9 dark:text-blue-32 dark:border-blue-5"
+                              : "dark:text-white-1 text-blue-8"
+                          }`}
+                        >
+                          <span
+                            onClick={() => {
+                              navigate("/health-blogs");
+                              setSideBarOpen((prev) => !prev);
+                            }}
+                            className="cursor-pointer font-bold text-center w-full"
+                          >
+                            HEALTH BLOGS
                           </span>
                         </div>
 
