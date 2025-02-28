@@ -25,6 +25,7 @@ const DeleteAccount = () => {
     try {
       httpClient.post("/delete_account", { email: accountEmail }).then(() => {
         userLogout();
+        window.location.reload();
       });
     } catch (error) {
       setIsAccountDletedAlert(true);
