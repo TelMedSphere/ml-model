@@ -213,7 +213,7 @@ const MedicineDetails = () => {
               <div className="flex justify-start items-center flex-wrap">
                 <button
                   type="button"
-                  className="inline-block px-6 py-[0.8rem] rounded-[3px] transition-colors duration-200 ease-out w-[200px] bg-orange-1 text-white-1 mt-2 mr-2 hover:bg-orange-2 active:bg-blue-7 dark:bg-orange-600 dark:hover:bg-orange-4"
+                  className="inline-block px-6 py-[0.8rem] rounded-[3px] transition-colors duration-200 ease-out w-full sm:w-[200px] bg-orange-1 text-white-1 mt-2 mr-2 hover:bg-orange-2 active:bg-blue-7 dark:bg-orange-600 dark:hover:bg-orange-4"
                   onClick={() => {
                     if (addBalance && price <= balance) {
                       // If using wallet and has enough balance
@@ -247,7 +247,7 @@ const MedicineDetails = () => {
                 </button>
                 <button
                   type="button"
-                  className={`inline-block px-6 py-[0.8rem] rounded-[3px] transition-colors duration-200 ease-out w-[200px] bg-yellow-4 text-white-1 mt-2 mr-2 hover:bg-yellow-6 active:bg-blue-7 dark:bg-yellow-500 dark:hover:bg-yellow-4 ${
+                  className={`inline-block px-6 py-[0.8rem] rounded-[3px] transition-colors duration-200 ease-out w-full sm:w-[200px] bg-yellow-4 text-white-1 mt-2 mr-2 hover:bg-yellow-6 active:bg-blue-7 dark:bg-yellow-500 dark:hover:bg-yellow-4 ${
                     btnActive && "active"
                   }`}
                   onClick={handleAddItem}

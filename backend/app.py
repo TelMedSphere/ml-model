@@ -116,7 +116,6 @@ def whatsapp_message(msg):
         # Send the WhatsApp message
         message = whatsappclient.messages.create(**message_params)
 
-        print(f"Message sent! SID: {message.sid}")
         return {"status": "success", "message_sid": message.sid}
     
     except Exception as e:
@@ -204,7 +203,6 @@ def register():
     if 'profile_picture' in request.files: 
         image_file = request.files['profile_picture']
         cloudinary_url = upload_file(image_file) 
-        print("cloud_url", cloudinary_url)
 
     # Custom Register
     if data['registerer'] == 'patient':
@@ -382,9 +380,7 @@ def verify():
 @app.route('/forgot_password', methods=['POST'])
 def forgot_password():
     data = request.get_json()
-    print(data)
     email = data['email']
-    print(email)
     
     user = patients.find_one({'email': email}) or doctors.find_one({'email': email})
     if not user:
@@ -450,7 +446,6 @@ def get_status():
         if i.get('verified', False):
             count += 1
             details.append({"email": i["email"], "status": i.get("status", "offline"), "username": i["username"], "specialization": i["specialization"], "gender": i["gender"], "phone": i["phone"], "isInMeet": i["meet"], "noOfAppointments": i["appointments"], "noOfStars": i["stars"], "id": count, 'fee': i.get('fee', 199)})
-    # print(details)
     return jsonify({"details": details}), 200
 
 def send_message_async(msg):
@@ -470,7 +465,6 @@ def mail_file():
     demail = request.form.get("demail")
     pemail = request.form.get("pemail")
     meetLink = request.form.get("meetLink")
-    print("meetlink......", meetLink)
     f = request.files['file']
     
     # Save the uploaded file
@@ -494,17 +488,13 @@ def mail_file():
 
     # Find the upcoming appointment based on meetLink
     for appointment in pat.get('upcomingAppointments', []):
-        print("patient appointments", appointment)
         if appointment.get('link') == meetLink:
-            print("found in pat......")
             appointment['prescription'] = file_url  # Add prescription link
             appointment_found = True
             break
 
     for appointment in doc.get('upcomingAppointments', []):
-        print("doc appointments", appointment)
         if appointment.get('link') == meetLink:
-            print("found in doc......")
             appointment['prescription'] = file_url  # Add prescription link
             appointment_found = True
             break
@@ -513,14 +503,12 @@ def mail_file():
     if not appointment_found:
         for appointment in pat.get('completedMeets', []):
             if appointment.get('link') == meetLink:
-                print("found in completedMeets (patient)......")
                 appointment['prescription'] = file_url  # Add prescription link
                 appointment_found = True
                 break
 
         for appointment in doc.get('completedMeets', []):
             if appointment.get('link') == meetLink:
-                print("found in completedMeets (doctor)......")
                 appointment['prescription'] = file_url  # Add prescription link
                 appointment_found = True
                 break
@@ -830,7 +818,6 @@ def doctor_avilability():
 def add_order():
     data = request.get_json()
     email = data['email']
-    print(data)
     var = patients.find_one({'email': email})
     if var:
         orders = var.get('orders', [])
@@ -1090,7 +1077,7 @@ def debit_wallet():
         doc = doctors.find_one({'email': demail})
         wallet = var.get('wallet', 0)-round(float(doc.get('fee', 0)))
         patients.update_one({'email': email}, {'$set': {'wallet': wallet}})
-        return jsonify({'message': 'Wallet updated successfully'}), 200
+        return jsonify({'message': 'Wallet updated successfully', "fee":float(doc.get('fee', 0)) }), 200
     else:
         if var:
             wallet = var.get('wallet', 0)-round(float(data['walletAmount']))

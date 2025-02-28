@@ -59,10 +59,8 @@ const MeetPage = () => {
   useDocTitle("Meet");
 
   useEffect(() => {
-    // console.log(searchparams.get("name"))
     localStorage.setItem("lastMeetWith", searchparams.get("selectedDoc"));
     localStorage.setItem("lastMeetMail", searchparams.get("selectedMail"));
-    //eslint-disable-next-line
   }, []);
 
   const printEventOutput = (payload) => {
@@ -135,10 +133,6 @@ const MeetPage = () => {
     apiRef.current.on("knockingParticipant", handleKnockingParticipant);
   };
 
-  const handleReadyToClose = () => {
-    console.log("Ready to close...");
-  };
-
   const handleEndMeeting = () => {
     toggleFeedback(true);
     httpClient
@@ -151,23 +145,58 @@ const MeetPage = () => {
       });
   };
 
-  const handleDocEndMeeting = () => {
-    toggleFeedback(true);
-    setMeetEnded(true);
-    httpClient.put("/delete_meet", { email: searchparams.get("selectedMail") });
-    httpClient.post("/debit_wallet", {
-      email: searchparams.get("pemail"),
-      demail: searchparams.get("selectedMail"),
-    });
-    httpClient.post("/add_wallet_history", {
-      email: searchparams.get("email"),
-      history: {
-        desc: "Doctor Fee",
-        amount: searchparams.get("fee"),
-        date: new Date().toLocaleDateString(),
-        add: false,
-      },
-    });
+  const handleDocEndMeeting = async () => {
+    try {
+      toggleFeedback(true);
+      setMeetEnded(true);
+
+      const selectedMail = searchparams.get("selectedMail");
+      const pemail = searchparams.get("pemail");
+
+      // Delete the meeting
+      await httpClient.put("/delete_meet", { email: selectedMail });
+
+      // Debit wallet
+      const debitResponse = await httpClient.post("/debit_wallet", {
+        email: pemail,
+        demail: selectedMail,
+      });
+
+      const fee = parseFloat(debitResponse.data.fee);
+      localStorage.setItem("fee", fee);
+
+      // Add transaction to patient's wallet history
+      await httpClient.post("/add_wallet_history", {
+        email: pemail,
+        history: {
+          desc: "Doctor Fee",
+          amount: fee,
+          date: new Date().toLocaleDateString(),
+          add: false,
+        },
+      });
+
+      // Update doctor's wallet balance
+      await httpClient.post("/wallet", {
+        email: localStorage.getItem("email"),
+        walletAmount: fee,
+      });
+
+      // Add transaction to doctor's wallet history
+      await httpClient.post("/add_wallet_history", {
+        email: selectedMail,
+        history: {
+          desc: "Consultation Fee",
+          amount: fee,
+          date: new Date().toLocaleDateString(),
+          add: true,
+        },
+      });
+
+      localStorage.setItem("fee", null);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const renderSpinner = () => (
@@ -228,7 +257,6 @@ const MeetPage = () => {
         },
       })
       .then((res) => {
-        console.log(res);
         setSendingMsg("Sent");
         setTimeout(() => {
           setSendingMsg("Send");
@@ -236,6 +264,7 @@ const MeetPage = () => {
         httpClient.put("/delete_meet", {
           email: searchparams.get("selectedMail"),
         });
+        localStorage.setItem("curmlink", null);
         navigate("/home");
       })
       .catch((err) => {
