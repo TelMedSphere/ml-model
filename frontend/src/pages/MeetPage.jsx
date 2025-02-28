@@ -9,13 +9,14 @@ import useDocTitle from "../hooks/useDocTitle";
 import commonContext from "../contexts/common/commonContext";
 import httpClient from "../httpClient";
 import PDFGenerator from "../components/pdfgenerator/PDFGenerator";
+import { useDarkMode } from "../contexts/DarkMode/DarkModeContext";
 
 const MeetPage = () => {
   const navigate = useNavigate();
   const userNotExists =
     localStorage.getItem("usertype") === undefined ||
     localStorage.getItem("usertype") === null;
-
+  const { isDarkMode } = useDarkMode();
   useEffect(() => {
     if (userNotExists) {
       navigate("/");
@@ -302,11 +303,11 @@ const MeetPage = () => {
     return <></>;
   }
   return (
-    <div className="p-24 md:p-6 lg:p-8 text-black text-blue-8 text-center max-md:p-4 max-md:pt-[4.5rem] lg:mt-10 max-lg:mt-0">
+    <div className="p-24 md:p-6 lg:p-8 text-black text-blue-8 text-center max-md:p-4 max-md:pt-[4.5rem] lg:pt-10 max-lg:mt-0 dark:bg-black-0">
       {!isMeetEnded && (
         <div className="">
           <div className="flex justify-center items-center">
-            <h2 className="">Live Meet</h2>
+            <h2 className="dark:text-white-1">Live Meet</h2>
             <div className="flex items-center justify-center flex-wrap">
               <span
                 className="cursor-pointer text-blue-2 relative transition-colors duration-300 inline-block hover:text-blue-3"
@@ -318,10 +319,24 @@ const MeetPage = () => {
                   setTimeout(() => setCopyAlert(false), 2000);
                 }}
               >
-                <MdContentCopy size={20} className="inline-block ml-2" />
+                <MdContentCopy
+                  size={20}
+                  className="inline-block ml-2 dark:text-white-10"
+                />
                 {copyAlert && (
-                  <div className="absolute -top-5 -right-10">
-                    <Alert severity="success">Copied</Alert>
+                  <div className="absolute -top-5 -right-10 bg-none dark:bg-green-9 dark:text-green-6">
+                    <Alert
+                      severity="success"
+                      sx={{
+                        "& .MuiAlert-icon": {
+                          color: isDarkMode && "#4dff99",
+                        },
+                        color: isDarkMode && "#4dff99",
+                        backgroundColor: isDarkMode && "#0c2602",
+                      }}
+                    >
+                      Copied
+                    </Alert>
                   </div>
                 )}
               </span>
@@ -329,7 +344,7 @@ const MeetPage = () => {
           </div>
 
           <div className="relative my-4 mx-auto lg:pt-[35%] max-lg:pt-[100%] max-md:w-full w-[85%] max-md:pt-[70%] max-sm:pt-[120%]">
-            <div className="absolute inset-0 ">
+            <div className="absolute inset-0 dark">
               <JaaSMeeting
                 appId={JaasAppId}
                 roomName={meetId}
@@ -377,7 +392,9 @@ const MeetPage = () => {
 
       {isDoctor && (
         <div className="mt-8 text-center text-blue-8 p-4 max-sm:p-0">
-          <h2 className="text-2xl font-bold mb-4">Prescription</h2>
+          <h2 className="text-2xl font-bold mb-4 dark:text-white-1">
+            Prescription
+          </h2>
 
           {prescription.length > 0 && (
             <div className="flex flex-wrap justify-start max-sm:justify-center items-center mx-auto mb-8 border-2 border-blue-2 rounded-lg md:w-[90%] p-3">
@@ -409,7 +426,7 @@ const MeetPage = () => {
               <div className="w-full mb-4">
                 <input
                   type="text"
-                  className="w-full py-[0.65rem] px-[0.55rem] bg-white-1 border-[2px] border-blue-1 text-blue-8 focus:border-blue-2  rounded-md outline-none text-center font-montserrat focus:shadow-[0_0_6px_3px_#d4ddf1]"
+                  className="w-full py-[0.65rem] px-[0.55rem] bg-white-1 border-[2px] border-blue-1 text-blue-8 focus:border-blue-2  rounded-md outline-none text-center font-montserrat focus:shadow-[0_0_6px_3px_#d4ddf1] dark:bg-black-10 dark:border-blue-9 dark:text-white-1"
                   value={newPrescription.name}
                   onChange={(e) => {
                     setInvName(
@@ -432,7 +449,7 @@ const MeetPage = () => {
                 <div className="flex flex-wrap justify-center items-center mb-4 w-full">
                   <input
                     type="text"
-                    className="w-[250px] max-w-[95vw] mx-2 my-1  bg-white-1 border-[2px] border-blue-1 text-blue-8 py-[0.65rem] px-[0.55rem]  focus:border-blue-2  rounded-md outline-none text-center font-montserrat focus:shadow-[0_0_6px_3px_#d4ddf1]"
+                    className="w-[250px] max-w-[95vw] mx-2 my-1  bg-white-1 border-[2px] border-blue-1 text-blue-8 py-[0.65rem] px-[0.55rem]  focus:border-blue-2  rounded-md outline-none text-center font-montserrat focus:shadow-[0_0_6px_3px_#d4ddf1] dark:bg-black-10 dark:border-blue-9 dark:text-white-1"
                     value={newPrescription.dosage}
                     onChange={(e) => {
                       setInvDosage(!/^[0-5]-[0-5]-[0-5]$/.test(e.target.value));
@@ -451,7 +468,7 @@ const MeetPage = () => {
                         dosageTime: e.target.value,
                       })
                     }
-                    className="w-[200px] max-w-[95vw] py-[0.65rem] px-[0.55rem] bg-white-1 border-[2px] border-blue-1 text-blue-8 focus:border-blue-2  rounded-md outline-none text-center font-montserrat focus:shadow-[0_0_6px_3px_#d4ddf1]"
+                    className="w-[200px] max-w-[95vw] py-[0.65rem] px-[0.55rem] bg-white-1 border-[2px] border-blue-1 text-blue-8 focus:border-blue-2  rounded-md outline-none text-center font-montserrat focus:shadow-[0_0_6px_3px_#d4ddf1] dark:bg-black-10 dark:border-blue-9 dark:text-white-1"
                   >
                     <option value="Before Food">Before Food</option>
                     <option value="After Food">After Food</option>
@@ -461,7 +478,7 @@ const MeetPage = () => {
                 <div className="flex flex-wrap justify-center items-center mb-4 w-full">
                   <input
                     type="text"
-                    className="bg-white-1 w-[250px] max-w-[95vw] mx-2 my-1 border-[2px] border-blue-1 text-blue-8 py-[0.65rem] px-[0.55rem]  focus:border-blue-2  rounded-md outline-none text-center font-montserrat focus:shadow-[0_0_6px_3px_#d4ddf1]"
+                    className="bg-white-1 w-[250px] max-w-[95vw] mx-2 my-1 border-[2px] border-blue-1 text-blue-8 py-[0.65rem] px-[0.55rem]  focus:border-blue-2  rounded-md outline-none text-center font-montserrat focus:shadow-[0_0_6px_3px_#d4ddf1] dark:bg-black-10 dark:border-blue-9 dark:text-white-1"
                     value={newPrescription.duration}
                     onChange={(e) => {
                       setInvDuration(
@@ -483,7 +500,7 @@ const MeetPage = () => {
                         durationUnit: e.target.value,
                       })
                     }
-                    className="w-[200px] max-w-[95vw] py-[0.65rem] px-[0.55rem] bg-white-1 border-[2px] border-blue-1 text-blue-8 focus:border-blue-2  rounded-md outline-none text-center font-montserrat focus:shadow-[0_0_6px_3px_#d4ddf1]"
+                    className="w-[200px] max-w-[95vw] py-[0.65rem] px-[0.55rem] bg-white-1 border-[2px] border-blue-1 text-blue-8 focus:border-blue-2  rounded-md outline-none text-center font-montserrat focus:shadow-[0_0_6px_3px_#d4ddf1] dark:bg-black-10 dark:border-blue-9 dark:text-white-1"
                   >
                     <option value="day(s)">day(s)</option>
                     <option value="month(s)">month(s)</option>
@@ -492,7 +509,7 @@ const MeetPage = () => {
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center w-[300px] max-w-[90vw]">
+            <div className="flex flex-col items-center justify-center w-[300px] max-w-[90vw] dark:bg-red-4 dark:text-red-7">
               <button
                 onClick={addPrescriptionItem}
                 disabled={
@@ -504,20 +521,51 @@ const MeetPage = () => {
                   isInvDuration
                 }
                 className="w-full py-3 px-4 rounded bg-blue-4 text-white-1 transition-colors duration-300 hover:bg-blue-6 
-              active:bg-blue-6 disabled:cursor-not-allowed disabled:bg-blue-6"
+              active:bg-blue-6 disabled:cursor-not-allowed disabled:bg-blue-6 dark:bg-blue-24 dark:disabled:bg-blue-24 dark:hover:bg-blue-31"
               >
                 Add
               </button>
               {isInvName && (
-                <Alert severity="error">Medicine Name already exists</Alert>
+                <Alert
+                  severity="error"
+                  sx={{
+                    "& .MuiAlert-icon": {
+                      color: isDarkMode && "#f5aead",
+                    },
+                    color: isDarkMode && "#f5aead",
+                    backgroundColor: isDarkMode && "#350000",
+                  }}
+                >
+                  Medicine Name already exists
+                </Alert>
               )}
               {isInvDosage && (
-                <Alert severity="error">
+                <Alert
+                  severity="error"
+                  sx={{
+                    "& .MuiAlert-icon": {
+                      color: isDarkMode && "#f5aead",
+                    },
+                    color: isDarkMode && "#f5aead",
+                    backgroundColor: isDarkMode && "#350000",
+                  }}
+                >
                   Dosage should be in the form of n-n-n and between 0-5
                 </Alert>
               )}
               {isInvDuration && (
-                <Alert severity="error">Invalid Duration</Alert>
+                <Alert
+                  severity="error"
+                  sx={{
+                    "& .MuiAlert-icon": {
+                      color: isDarkMode && "#f5aead",
+                    },
+                    color: isDarkMode && "#f5aead",
+                    backgroundColor: isDarkMode && "#350000",
+                  }}
+                >
+                  Invalid Duration
+                </Alert>
               )}
             </div>
 
@@ -536,7 +584,7 @@ const MeetPage = () => {
               </button>
             </div>
 
-            <div className="mt-5">
+            <div className="mt-5 dark:text-white-1">
               Note: Please ensure that you covered the prescription correctly
               before clicking the 'send' button. As the page will redirect to
               the home page.
