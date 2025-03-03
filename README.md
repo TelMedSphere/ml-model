@@ -31,6 +31,7 @@
  [⭐ Overview](#overview).<br>
  [💥 Getting Started](#getting-started).<br>
  [🐳 Docker Setup](#docker-setup).<br>
+ [📑  API Documentation](#api-documentation).<br>
  [⚡ Project Admin & Mentors](#project-admin-and-mentors).<br>
  [💬 Join Chatting Server](#contributing-with-fun).<br>
  [📑 Contributing Guidelines](#contributing-guidelines).<br>
@@ -88,12 +89,6 @@ TelMedSphere is designed to make healthcare simple and accessible for both docto
 <h1 align="center"> <a href="https://pratik0112-telmedsphere.vercel.app/"> Live Project Demo ↗️</a></h1>
 
 ![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/1.png)
-![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/2.png)
-![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/3.png)
-![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/4.png)
-![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/5.png)
-![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/6.png)
-
 
 <h3 align="right"><a href="#top">⬆️</a></h3>
 
@@ -207,6 +202,34 @@ docker-compose kill
 <h3 align="right"><a href="#top">⬆️</a></h3>
 
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+<h2>📑API Documentation</h2>
+
+This project uses [Swagger](https://swagger.io/) for its REST API Documentation with OPEN API Specificaion.
+
+### Navigate to the API Docs URL:
+
+For local you can access it at (before please make sure that you have setup it following above steps) :
+
+```bash
+http://localhost:5000/api/docs
+
+```
+
+For deployed URL it can be access at :
+
+```bash
+https://pratik0112-telmedsphere.vercel.app/api/docs
+
+https://telmedsphere-server.vercel.app/api/docs
+
+```
+
+<h3 align="right"><a href="#top">⬆️</a></h3>
+
+<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+
 
 <h2>⚡Project Admin and Mentors</h2>
 
