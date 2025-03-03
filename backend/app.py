@@ -20,6 +20,7 @@ import firebase_admin
 from firebase_admin import credentials, auth
 from utils.imageUploader import upload_file
 from bson import ObjectId
+from flask_swagger_ui import get_swaggerui_blueprint
 
 load_dotenv()
 secret_key = secrets.token_hex(16)
@@ -83,6 +84,17 @@ patients = client.get_database("telmedsphere").patients
 website_feedback = client.get_database("telmedsphere").website_feedback
 
 YOUR_DOMAIN = os.getenv('DOMAIN') 
+
+### Swagger specific ###
+SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (ex. http://your-domain/api/docs)
+API_URL = '/static/swagger.yaml'  # URL where your swagger.yaml is stored
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={ 'app_name': "Authentication API" }
+)
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+### End Swagger specific ###
 
 
 # Test MongoDB connection
