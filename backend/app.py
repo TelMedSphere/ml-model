@@ -21,11 +21,14 @@ from firebase_admin import credentials, auth
 from utils.imageUploader import upload_file
 from bson import ObjectId
 from flask_swagger_ui import get_swaggerui_blueprint
+from flasgger import Swagger
 
 load_dotenv()
 secret_key = secrets.token_hex(16)
 
 app = Flask(__name__)
+swagger = Swagger(app)
+
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = secret_key
 SECRET_KEY = os.getenv('SECRET')
@@ -103,9 +106,14 @@ try:
     print("MongoDB connection successful!")
 except Exception as e:
     print(f"Error connecting to MongoDB: {e}")
+
 @app.get("/")
 def getInfo():
     return "WelCome to 💖TelMedSphere server !!!! "
+
+@app.get("/hello")
+def hello_greeting():
+    return "Helloo.... please feel free to explore 💖TelMedSphere & lets make it better together !!!!"
 
 @app.before_request
 def before_request():

@@ -4,9 +4,7 @@ info:
   version: "1.0.0"
   description: API documentation for the TelMedSphere REST API using Swagger/OpenAPI Specificaion.
 servers:
-  - url: https://pratik0112-telmedsphere.vercel.app/
-  - url: https://telmedsphere-server.vercel.app/
-  - url: https://localhost:5000/
+  - url: http://127.0.0.1:5000/
   
 tags:
   - name: Authentication
@@ -41,6 +39,19 @@ paths:
               schema:
                 type: string
                 example: "WelCome to 💖TelMedSphere server !!!! "
+  "/hello":
+    get:
+      summary: Hello message
+      tags:
+        - Authentication
+      responses:
+        "200":
+          description: Returns a greeting message.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Helloo.... please feel free to explore 💖TelMedSphere & lets make it better together !!!!"
   "/checkout":
     get:
       summary: Create a Stripe checkout session
