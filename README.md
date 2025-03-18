@@ -31,14 +31,13 @@
  [⭐ Overview](#overview).<br>
  [💥 Getting Started](#getting-started).<br>
  [🐳 Docker Setup](#docker-setup).<br>
- [📑  API Documentation](#api-documentation).<br>
  [⚡ Project Admin & Mentors](#project-admin-and-mentors).<br>
  [💬 Join Chatting Server](#contributing-with-fun).<br>
  [📑 Contributing Guidelines](#contributing-guidelines).<br>
  [📑 Code Of Conduct](#code-of-conduct).<br>
  [📑 License](#license).<br>
 <br>
-
+<!-- [📑  API Documentation](#api-documentation).<br> -->
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
 <h2>📌Introduction</h2>
@@ -70,11 +69,11 @@ TelMedSphere is designed to make healthcare simple and accessible for both docto
   <a href="https://www.w3schools.com/css/"> <img src="https://img.icons8.com/?size=64&id=21278&format=png" alt="CSS" /></a>
   <a href="https://www.w3schools.com/js/"> <img src="https://img.icons8.com/?size=64&id=108784&format=png" alt="JS" /></a>
   <a href="https://www.w3schools.com/REACT/DEFAULT.ASP"> <img src="https://img.icons8.com/?size=64&id=NfbyHexzVEDk&format=png" alt="React" /></a>
-  <a href="https://www.w3schools.com/sass/"> <img src="https://img.icons8.com/?size=64&id=qsQZWvMuX4ad&format=png" alt="SCSS" /></a>
   <a href="https://www.w3schools.com/python/"> <img src="https://img.icons8.com/?size=64&id=13441&format=png" alt="Python" /></a>
   <a href="https://www.geeksforgeeks.org/flask-tutorial/"><img src="https://img.icons8.com/?size=64&id=ewGOClUtmFX4&format=png" alt="Flask" /></a>
   <a href="https://www.w3schools.com/mongodb/"> <img src="https://img.icons8.com/?size=64&id=74402&format=png" alt="Mongo" /></a>
   <a href="https://www.educative.io/blog/docker-compose-tutorial" ><img src="https://img.icons8.com/?size=64&id=22813&format=png&color=000000" alt="Docker"></a>
+  <a href="https://swagger.io/" ><img src="https://img.icons8.com/?size=64&id=rdKV2dee9wxd&format=png&color=000000" alt="Swagger"></a>
 </p>
 
 🚨 Frontend: ReactJs <br>
@@ -82,6 +81,7 @@ TelMedSphere is designed to make healthcare simple and accessible for both docto
 🚨 Backend: Python, Flask <br>
 🚨 Database: MongoDB Atlas<br>
 🚨 Containerization: Docker <br>
+🚨 REST-API Documentation: Swagger <br>
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
 <h2>⭐Overview</h2>
@@ -203,7 +203,7 @@ docker-compose kill
 
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
-<h2>📑API Documentation</h2>
+<!--- <h2>📑API Documentation</h2>
 
 This project uses [Swagger](https://swagger.io/) for its REST API Documentation with OPEN API Specificaion.
 
