@@ -36,8 +36,7 @@
  [📑 Contributing Guidelines](#contributing-guidelines).<br>
  [📑 Code Of Conduct](#code-of-conduct).<br>
  [📑 License](#license).<br>
-<br>
-<!-- [📑  API Documentation](#api-documentation).<br> -->
+[📑  API Documentation](#api-documentation).<br>
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
 <h2>📌Introduction</h2>
@@ -203,7 +202,7 @@ docker-compose kill
 
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
-<!--- <h2>📑API Documentation</h2>
+<h2>📑API Documentation</h2>
 
 This project uses [Swagger](https://swagger.io/) for its REST API Documentation with OPEN API Specificaion.
 
