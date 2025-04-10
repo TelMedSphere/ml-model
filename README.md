@@ -211,15 +211,9 @@ This project uses [Swagger](https://swagger.io/) for its REST API Documentation 
 For local you can access it at below URL (before please make sure that you have setup project locally by following above steps) :
 
 ```bash
-http://localhost:5000/api/docs
+http://localhost:5000/api/docs (live testing)
+https://telmedsphere-server.vercel.app/api/docs 
 ```
-
-For deployed URL it can be access at :
-
-```bash
-https://telmedsphere-server.vercel.app/api/docs
-```
-
 <h3 align="right"><a href="#top">⬆️</a></h3>
 
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
