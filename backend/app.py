@@ -20,11 +20,15 @@ import firebase_admin
 from firebase_admin import credentials, auth
 from utils.imageUploader import upload_file
 from bson import ObjectId
+from flask_swagger_ui import get_swaggerui_blueprint
+from flasgger import Swagger
 
 load_dotenv()
 secret_key = secrets.token_hex(16)
 
 app = Flask(__name__)
+swagger = Swagger(app)
+
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = secret_key
 SECRET_KEY = os.getenv('SECRET')
@@ -84,6 +88,17 @@ website_feedback = client.get_database("telmedsphere").website_feedback
 
 YOUR_DOMAIN = os.getenv('DOMAIN') 
 
+### Swagger specific ###
+SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (ex. http://your-domain/api/docs)
+API_URL = '/static/swagger.yaml'  # URL where your swagger.yaml is stored
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={ 'app_name': "Authentication API" }
+)
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+### End Swagger specific ###
+
 
 # Test MongoDB connection
 try:
@@ -91,9 +106,14 @@ try:
     print("MongoDB connection successful!")
 except Exception as e:
     print(f"Error connecting to MongoDB: {e}")
+
 @app.get("/")
 def getInfo():
     return "WelCome to 💖TelMedSphere server !!!! "
+
+@app.get("/hello")
+def hello_greeting():
+    return "Helloo.... please feel free to explore 💖TelMedSphere & lets make it better together !!!!"
 
 @app.before_request
 def before_request():

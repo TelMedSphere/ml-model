@@ -36,8 +36,7 @@
  [📑 Contributing Guidelines](#contributing-guidelines).<br>
  [📑 Code Of Conduct](#code-of-conduct).<br>
  [📑 License](#license).<br>
-<br>
-
+[📑  API Documentation](#api-documentation).<br>
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
 <h2>📌Introduction</h2>
@@ -69,11 +68,11 @@ TelMedSphere is designed to make healthcare simple and accessible for both docto
   <a href="https://www.w3schools.com/css/"> <img src="https://img.icons8.com/?size=64&id=21278&format=png" alt="CSS" /></a>
   <a href="https://www.w3schools.com/js/"> <img src="https://img.icons8.com/?size=64&id=108784&format=png" alt="JS" /></a>
   <a href="https://www.w3schools.com/REACT/DEFAULT.ASP"> <img src="https://img.icons8.com/?size=64&id=NfbyHexzVEDk&format=png" alt="React" /></a>
-  <a href="https://www.w3schools.com/sass/"> <img src="https://img.icons8.com/?size=64&id=qsQZWvMuX4ad&format=png" alt="SCSS" /></a>
   <a href="https://www.w3schools.com/python/"> <img src="https://img.icons8.com/?size=64&id=13441&format=png" alt="Python" /></a>
   <a href="https://www.geeksforgeeks.org/flask-tutorial/"><img src="https://img.icons8.com/?size=64&id=ewGOClUtmFX4&format=png" alt="Flask" /></a>
   <a href="https://www.w3schools.com/mongodb/"> <img src="https://img.icons8.com/?size=64&id=74402&format=png" alt="Mongo" /></a>
   <a href="https://www.educative.io/blog/docker-compose-tutorial" ><img src="https://img.icons8.com/?size=64&id=22813&format=png&color=000000" alt="Docker"></a>
+  <a href="https://swagger.io/" ><img src="https://img.icons8.com/?size=64&id=rdKV2dee9wxd&format=png&color=000000" alt="Swagger"></a>
 </p>
 
 🚨 Frontend: ReactJs <br>
@@ -81,6 +80,7 @@ TelMedSphere is designed to make healthcare simple and accessible for both docto
 🚨 Backend: Python, Flask <br>
 🚨 Database: MongoDB Atlas<br>
 🚨 Containerization: Docker <br>
+🚨 REST-API Documentation: Swagger <br>
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
 <h2>⭐Overview</h2>
@@ -88,12 +88,6 @@ TelMedSphere is designed to make healthcare simple and accessible for both docto
 <h1 align="center"> <a href="https://pratik0112-telmedsphere.vercel.app/"> Live Project Demo ↗️</a></h1>
 
 ![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/1.png)
-![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/2.png)
-![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/3.png)
-![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/4.png)
-![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/5.png)
-![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/6.png)
-
 
 <h3 align="right"><a href="#top">⬆️</a></h3>
 
@@ -204,6 +198,22 @@ docker-compose down
 docker-compose kill
 ```
 
+<h3 align="right"><a href="#top">⬆️</a></h3>
+
+<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+<h2>📑API Documentation</h2>
+
+This project uses [Swagger](https://swagger.io/) for its REST API Documentation with OPEN API Specificaion.
+
+### Navigate to the API Docs URL:
+
+For local you can access it at below URL (before please make sure that you have setup project locally by following above steps) :
+
+```bash
+http://localhost:5000/api/docs (live testing)
+https://telmedsphere-server.vercel.app/api/docs 
+```
 <h3 align="right"><a href="#top">⬆️</a></h3>
 
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
