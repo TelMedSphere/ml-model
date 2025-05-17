@@ -207,6 +207,20 @@ This document provides a step-by-step guide to setting up the required `.env` fi
    5. **Check** the option and **save** changes.  
 
    Once enabled, you will be able to **upload and store PDF and ZIP files** in Cloudinary.
+
+14. **`GEMINI_API_KEY`**
+
+- **Description:** The API key for Report Analyzing 
+- **How to Obtain:**
+   1. Go to the [Google AI Studio](https://aistudio.google.com/app/apikey).
+   2. Sign in with your Google account.
+   3. Once logged in, you should see an interface for managing projects and API keys (If prompted, create a new project or select an existing one).
+   4. Now In the API Key section, look for an option to Generate API Key & click on it to create a new API key
+   5. Once the key is generated, it will be displayed on the screen.
+   6. Copy the API key.
+   7. Open your `.env` file in frontend folder.
+   8. Replacing `your_api_key` with the key you copied:
+      `GEMINI_API_KEY = your_API_key`
 ---
 
 ## **Frontend `.env` Variables**
