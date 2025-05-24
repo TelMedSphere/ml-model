@@ -16,6 +16,7 @@ import { IoWalletOutline } from "react-icons/io5";
 import logo from "../../assets/header.png";
 import { useDarkMode } from "../../contexts/DarkMode/DarkModeContext";
 import { FaMoon, FaSun } from "react-icons/fa";
+import { TiUserDeleteOutline } from "react-icons/ti";
 
 const Header = () => {
   const { toggleForm, userLogout, toggleProfile } = useContext(commonContext);
@@ -100,7 +101,7 @@ const Header = () => {
               }`}
             >
               <Link
-                to="/"
+                to="mailto:telmedsphere489@gmail.com"
                 className="flex justify-center items-center transition-all duration-300 ease-out hover:text-[#333] mr-[20px] max-xs:mr-0 dark:text-white-1 dark:text-opacity-80 dark:hover:text-opacity-100"
               >
                 <FiMail className="text-[0.9em] leading-[1.4rem] mr-[5px]" />
@@ -109,7 +110,7 @@ const Header = () => {
                 </p>
               </Link>
               <Link
-                to="/"
+                to="tel:+911234567890"
                 className="flex justify-center items-center transition-all duration-300 ease-out hover:text-[#333] dark:text-white-1 dark:text-opacity-80 dark:hover:text-opacity-100"
               >
                 <FiPhoneCall className="text-[0.9em] leading-[1.4rem] mr-[5px]" />
@@ -136,7 +137,7 @@ const Header = () => {
         id=""
         className={`z-[999] w-full text-blue-8 md:px-8 pt-6 pb-6 transition-colors duration-0 ease-linear h-full bg-[#f5f5f5] dark:text-white-1 ${
           isSticky
-            ? "top-0 sticky bg-blue-1 dark:bg-black-2"
+            ? "top-0 sticky bg-blue-1 dark:bg-black-9"
             : "dark:bg-black-6 "
         } `}
       >
@@ -260,6 +261,21 @@ const Header = () => {
                   </div>
 
                   <div
+                    className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center dark:hover:text-blue-2 ${
+                      curPath === "/health-blogs"
+                        ? "text-blue-9 border-b-[2px] border-blue-9 dark:text-blue-32 dark:border-blue-5"
+                        : "dark:text-white-1 text-blue-8"
+                    }`}
+                  >
+                    <span
+                      onClick={() => navigate("/health-blogs")}
+                      className="cursor-pointer font-bold"
+                    >
+                      INFO
+                    </span>
+                  </div>
+
+                  <div
                     className="relative hover:text-blue-9  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 text-blue-8 dark:text-white-1 dark:hover:text-blue-2 "
                     ref={dropdownRef}
                   >
@@ -270,7 +286,7 @@ const Header = () => {
                       ACCOUNT
                     </span>
                     {showDropdown && (
-                      <div className="absolute top-[5rem] right-0 w-[17rem] bg-blue-6 p-6 text-[0.9rem] rounded-[3px] text-[#eee] border-[1px] border-grey-3 z-50 transition-all duration-200 ease-in-out dark:bg-blue-31">
+                      <div className="absolute top-[5rem] right-0 w-[17rem] bg-blue-6 p-6 text-[0.9rem] rounded-[3px] text-[#eee] border-[1px] border-grey-3 z-[1000] transition-all duration-200 ease-in-out dark:bg-blue-31">
                         <div>
                           <h4 className="font-semibold space-x-[0.5px]  text-blue-2">
                             <span className=" text-[1em] opacity-95 hover:opacity-100 text-white-1">
@@ -329,13 +345,22 @@ const Header = () => {
                                 {cartItems.length}
                               </span>
                             </li>
-                            <li className="flex">
+                            <li className="mb-[0.7rem] flex">
                               <RiFileList3Line className="text-[1.4em] mr-[5px]" />
                               <Link
                                 to="/my-orders"
                                 onClick={() => setShowDropdown(false)}
                               >
                                 My Orders
+                              </Link>
+                            </li>
+                            <li className="flex">
+                              <TiUserDeleteOutline className="text-[1.4em] mr-[5px]" />
+                              <Link
+                                to="/delete-account"
+                                onClick={() => setShowDropdown(false)}
+                              >
+                                Delete Account
                               </Link>
                             </li>
                           </ul>
@@ -374,11 +399,14 @@ const Header = () => {
                   </div>
                   <div
                     id="sidebar"
-                    className="w-auto h-7 max-sm:relative ml-8 max-sm:ml-3"
+                    className="w-auto h-7 max-sm:relative ml-8 max-sm:ml-3 z-[1000]"
                   >
                     <div
                       className="text-[1.5em] cursor-pointer font-bold dark:font-extrabold"
-                      onClick={() => setSideBarOpen((prev) => !prev)}
+                      onClick={() => {
+                        setSideBarOpen((prev) => !prev);
+                        setShowDropdown(false);
+                      }}
                     >
                       {isSideBarOpen ? <MdClose /> : <CiMenuFries />}
                     </div>
@@ -468,6 +496,24 @@ const Header = () => {
                         </div>
 
                         <div
+                          className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center dark:hover:text-blue-2 ${
+                            curPath === "/health-blogs"
+                              ? "text-blue-9 border-b-[2px] border-blue-9 dark:text-blue-32 dark:border-blue-5"
+                              : "dark:text-white-1 text-blue-8"
+                          }`}
+                        >
+                          <span
+                            onClick={() => {
+                              navigate("/health-blogs");
+                              setSideBarOpen((prev) => !prev);
+                            }}
+                            className="cursor-pointer font-bold text-center w-full"
+                          >
+                            HEALTH BLOGS
+                          </span>
+                        </div>
+
+                        <div
                           className={`hover:text-blue-9 content-none  transition-all duration-300 text-[0.9em] pt-[13px] pb-2 inline-flex items-center text-blue-8 dark:text-white-1`}
                         >
                           <span
@@ -484,7 +530,7 @@ const Header = () => {
                     </div>
                     {showDropdown && (
                       <div
-                        className={`absolute top-[4rem] right-0 w-[17rem] bg-blue-6 p-6 text-[0.9rem] rounded-[3px] text-[#eee] border-[1px] border-grey-3  z-50 transition-all duration-200 ease-in-out8 ${
+                        className={`absolute top-[4rem] right-0 w-[17rem] bg-blue-6 p-6 text-[0.9rem] rounded-[3px] text-[#eee] border-[1px] border-grey-3  z-[1000] transition-all duration-200 ease-in-out ${
                           showDropdown && "active"
                         }`}
                         ref={dropdownRef}

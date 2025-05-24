@@ -101,8 +101,8 @@ const MyWallet = () => {
 
   return (
     // my-wallet
-    <div className="w-full flex justify-center">
-      <div className="max-w-[400px] w-[93vw] my-auto text-blue-8">
+    <div className="w-full flex justify-center dark:bg-black-6 pb-20">
+      <div className="max-w-[400px] w-[93vw] my-auto text-blue-8 dark:text-white-8">
         <h2 className="mb-8 mt-4 text-xl">My Wallet</h2>
         {/* check-balance */}
         <section className="flex justify-between item-center text-[1.2rem]">
@@ -132,7 +132,7 @@ const MyWallet = () => {
 
         <div className="my-8 mx-0 w-full h-[2px] bg-blue-6"></div>
 
-          {/* topup-wallet */}
+        {/* topup-wallet */}
         <section>
           <h3 className="text-[1.2rem] mb-6">Topup Wallet</h3>
           <div className="w-full">
@@ -142,9 +142,11 @@ const MyWallet = () => {
                 value={inputMoney}
                 onChange={(e) => setInputMoney(displayMoney(e.target.value))}
                 placeholder="Enter the amount"
-                className="block bg-transparent border-[2px] border-blue-8 w-full text-[1.3rem] font-bold rounded-[3px] transition-all duration-200 ease-in-out py-4 px-[0.85rem] pl-12 focus:border-blue-5"
+                className="block bg-transparent border-[2px] border-blue-8 w-full text-[1.3rem] font-bold rounded-[3px] transition-all duration-400 ease-linear py-4 px-[0.85rem] pl-12 focus:border-blue-5 dark:placeholder-white-8 dark:placeholder-opacity-45 dark:focus:border-2 dark:text-white-1 dark:ring-0 dark:border-white-8 dark:outline-none dark:border-[1px]"
               />
-              <span className="absolute text-[1.5rem] left-[15px] top-[15px] z-[1]">₹</span>
+              <span className="absolute text-[1.5rem] left-[15px] top-[15px] z-[1] dark:text-white-1">
+                ₹
+              </span>
             </div>
             {/* recommended-div */}
             <div className="">
@@ -153,7 +155,7 @@ const MyWallet = () => {
                 {recommendedMoney.map((money, index) => (
                   <div
                     key={index}
-                    className="py-2 px-3 border-[2px] border-blue-5 mr-4 rounded-[6px] cursor-pointer bg-blue-1 transition-all duration-300 ease hover:bg-blue-2"
+                    className="py-2 px-3 border-[2px] border-blue-5 mr-4 rounded-[6px] cursor-pointer bg-blue-1 transition-all duration-300 ease hover:bg-blue-2 dark:border-white-8 dark:bg-white-1 dark:bg-opacity-0 dark:text-white-8 dark:hover:bg-opacity-50 dark:outline-none"
                     onClick={() =>
                       setInputMoney(displayMoney(money.toString()))
                     }
@@ -167,7 +169,8 @@ const MyWallet = () => {
             <button
               onClick={() => handleClick()}
               disabled={inputMoney === "" || addingMoney}
-             className="bg-blue-8 text-white-1 w-full py-4 px-8 mt-8 cursor-pointer transition-all duration-300 ease active:bg-blue-6 disabled:bg-blue-6 hover:bg-blue-6 disabled:cursor-not-allowed rounded-[8px]">
+              className="bg-blue-8 text-white-1 w-full py-4 px-8 mt-8 cursor-pointer transition-all duration-300 ease active:bg-blue-6 disabled:bg-blue-6 hover:bg-blue-6 disabled:cursor-not-allowed rounded-[8px]"
+            >
               {addingMoney ? (
                 <CircularProgress size={24} sx={{ color: "#f5f5f5" }} />
               ) : (
@@ -180,29 +183,48 @@ const MyWallet = () => {
         <div className="my-8 mx-0 w-full h-[2px] bg-blue-6"></div>
 
         <section>
-          <h3 className="text-[1.2rem] mb-6">Recent Transactions</h3>
+          <h3 className="text-[1.2rem] mb-6 dark:text-white-1 dark:opacity-95">
+            Recent Transactions
+          </h3>
           {transactions.length > 0 ? (
             <div>
               {transactions.map((trans, index) => (
-                <div key={index} className="w-full border-[2px] border-blue-8 py-3 px-4 flex justify-between items-center rounded-[5px] mb-[5px] relative">
+                <div
+                  key={index}
+                  className="w-full border-[2px] border-blue-8 py-3 px-4 flex justify-between items-center rounded-[5px] mb-[5px] relative dark:border-white-8 dark:text-white-8 dark:border-[1px]"
+                >
                   <div className="flex flex-col justify-start items-center">
-                    <p className="text-[1.05rem] font-semibold mb-[0.2rem] whitespace-nowrap text-ellipsis overflow-hidden max-w-[15px]">{trans.desc}</p>
-                    <p className="text-[0.9em] whitespace-nowrap text-ellipsis overflow-hidden max-w-[15px]">{trans.date}</p>
-                    <div className="absolute opacity-0 invisible hover:opacity-100 hover:visible active:opacity-100 active:visible top-[35px] w-full bg-blue-7">{trans.desc}</div>
+                    <p className="text-[1.05rem] font-semibold mb-[0.2rem] whitespace-nowrap max-w-[15px]">
+                      {trans.desc}
+                    </p>
+                    <p className="text-[0.9em] whitespace-nowrap max-w-[15px]">
+                      {trans.date}
+                    </p>
+                    <div className="absolute opacity-0 invisible hover:opacity-100 hover:visible active:opacity-100 active:visible top-[35px] w-full bg-blue-7">
+                      {trans.desc}
+                    </div>
                   </div>
-                  <div className={`text-[1.2em] font-bold  ${trans.add ? "text-[#0f0]" : "text-[#f00]"}`}>
+                  <div
+                    className={`text-[1.2em] font-bold  ${
+                      trans.add
+                        ? "text-[#0f0] dark:text-green-6"
+                        : "text-[#f00] dark:text-red-8"
+                    }`}
+                  >
                     {trans.add ? "+" : "-"} ₹ {trans.amount}
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="w-full text-center">No transactions found...</div>
+            <div className="w-full text-center dark:text-white-1">
+              No transactions found...
+            </div>
           )}
           {transactions.length > 0 && (
             <button
-              className="mt-0"
               onClick={() => navigate("/recent-transactions")}
+              className="dark:opacity-50 dark:hover:opacity-100 dark:text-white-1  mt-0"
             >
               View All
             </button>

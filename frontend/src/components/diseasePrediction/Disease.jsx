@@ -22,17 +22,17 @@ class Disease extends Component {
 
     return filtered_list.length !== 0 ? (
       <div className="text-blue-7 py-2 px-4 leading-[1.7]">
-        <div className="text-blue-9 py-4 px-0">
+        <div className="text-blue-9 py-4 px-0 dark:text-blue-21">
           <h3>Patient gender: {this.state.gender}</h3>
           <h3>Patient age: {this.state.age}</h3>
         </div>
-        <h2 className="text-blue-7">Patient Information</h2>
-        <div className="px-0 py-2 border-t-[2px] border-blue-9">
+        <h2 className="text-blue-7 dark:text-white-1">Patient Information</h2>
+        <div className="px-0 py-2 border-t-[2px] border-blue-9 dark:border-blue-29">
           {this.state.patientInfo.length > 0 ? (
             this.state.patientInfo.map((key, id) => (
               <div
-                className={`px-0 py-2 ${
-                  id > 0 && "border-top-[1px] border-blue-9"
+                className={`px-0 py-2 dark:text-white-1 ${
+                  id > 0 && "border-top-[1px] border-blue-9 dark:border-blue-29"
                 }`}
                 key={id}
               >
@@ -44,11 +44,11 @@ class Disease extends Component {
             <p>No patient information available.</p>
           )}
         </div>
-        <div className="py-4 px-0 text-blue-7">
+        <div className="py-4 px-0 text-blue-7 dark:text-white-1">
           <h2>Diagnosis Report</h2>
           {filtered_list.map((key, id) => (
             <div
-              className="px-0 py-2 border-t-[2px] border-blue-9 text-blue-7"
+              className="px-0 py-2 border-t-[2px] border-blue-9 text-blue-7 dark:border-blue-29 dark:text-white-1"
               key={id}
             >
               <div className="flex justify-between items-center flex-wrap py-4 px-0">
@@ -59,20 +59,20 @@ class Disease extends Component {
                     title={"wikipedia"}
                     rel="noopener noreferrer"
                     target="_blank"
-                    className="bg-blue-9 text-white-1 leading-[1.5rem] py-0 px-[0.6rem] rounded-[2rem] ml-4 text-no no-underline focus:outline-none"
+                    className="bg-blue-9 text-white-1 leading-[1.5rem] py-0 px-[0.6rem] rounded-[2rem] ml-4 text-no no-underline focus:outline-none dark:border-blue-29"
                   ></a>
                 </div>
                 <div className="flex justify-between items-center flex-wrap">
                   <p>
                     Probability{" "}
-                    <span className="text-blue-9 font-semibold">
+                    <span className="text-blue-9 font-semibold dark:text-white-1">
                       {key.probability * 100}%
                     </span>
                   </p>
-                  <div className="bg-[#ccc] w-full h-[4px] ml-2 rounded-[1rem]">
+                  <div className="bg-[#ccc] w-full h-[4px] ml-2 rounded-full">
                     <div
                       style={{ width: `${key.probability * 100}%` }}
-                      className="h-full bg-blue-9"
+                      className="h-full bg-blue-9 dark:bg-blue-29 rounded-full"
                     ></div>
                   </div>
                 </div>
@@ -95,13 +95,13 @@ class Disease extends Component {
             </div>
           ))}
         </div>
-        <div>
+        <div className="dark:text-white-1">
           Always visit a doctor if you have any symptoms of a disease or call
           your local hospital
         </div>
       </div>
     ) : (
-      <div className="text-blue-7 py-2 px-4 leading-[1.7]">
+      <div className="text-blue-7 py-2 px-4 leading-[1.7] dark:text-white-1">
         <div className="text-blue-9 py-4 px-0">
           <h3>Patient gender: {this.props.gender}</h3>
           <h3>Patient age: {this.props.age}</h3>

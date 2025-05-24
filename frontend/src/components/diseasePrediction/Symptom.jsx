@@ -78,7 +78,7 @@ class Symptom extends Component {
           {/* Search Input */}
           <div className="col-span-3 max-md:col-span-full relative">
             <input
-              className="border-0 outline-none usa-input border-b-[1px] border-b-blue-6 transition-colors duration-200 ease-in-out box-border p-2 text-blue-7 w-[95%] focus:border-b-blue-6 focus:border-b-[2px]"
+              className="border-0 outline-none usa-input border-b-[1px] border-b-blue-6 transition-colors duration-200 ease-in-out box-border p-2 text-blue-7 w-[95%] focus:border-b-blue-6 focus:border-b-[2px] dark:text-white-1"
               type="text"
               value={this.state.searched}
               onChange={this.handleSearchChange}
@@ -96,7 +96,7 @@ class Symptom extends Component {
                 >
                   <button
                     onClick={() => this.addSymptom(symptom)}
-                    className="px-4 my-0 py-1 hover:bg-blue-1 hover:cursor-pointer transition-all ease-in-out duration-200 hover:text-blue-9 border-0 w-full h-full text-left text-base"
+                    className="px-4 my-0 py-1 hover:bg-blue-1 hover:cursor-pointer transition-all ease-in-out duration-200 hover:text-blue-9 border-0 w-full h-full text-left text-base dark:hover:bg-black-8 dark:hover:text-blue-33"
                   >
                     {symptom}
                   </button>
@@ -130,7 +130,7 @@ class Symptom extends Component {
         <div className="mt-7 flex justify-center items-center">
           <button
             onClick={this.on_click_reset_button}
-            className="border-none outline-none bg-blue-3 border-[1px] border-blue-5 text-white-1 rounded-[5px] mx-[8px] my-[5px] font-sans transition-all duration-300 ease-in-out hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed px-[12px] py-[9px]"
+            className="border-none outline-none bg-blue-3 border-[1px] border-blue-5 text-white-1 rounded-[5px] mx-[8px] my-[5px] font-sans transition-all duration-300 ease-in-out hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed px-[12px] py-[9px] dark:bg-blue-24 dark:hover:bg-blue-31 dark:disabled:bg-blue-24"
           >
             Reset
           </button>

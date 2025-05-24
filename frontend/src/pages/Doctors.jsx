@@ -14,12 +14,14 @@ import commonContext from "../contexts/common/commonContext";
 import useScrollDisable from "../hooks/useScrollDisable";
 import httpClient from "../httpClient";
 import useOutsideClose from "../hooks/useOutsideClose";
+import { useDarkMode } from "../contexts/DarkMode/DarkModeContext";
 
 const Doctors = () => {
   useDocTitle("Doctors");
   const { isLoading, toggleLoading } = useContext(commonContext);
   const navigate = useNavigate();
 
+  const { isDarkMode } = useDarkMode();
   const [meetModal, setMeetModal] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [isInstantMeet, setInstantMeet] = useState(false);
@@ -39,7 +41,7 @@ const Doctors = () => {
   const [selectedDocAvailable, setSelectedDocAvailable] = useState(false);
   const [selectEmail, setSelectEmail] = useState("");
   const [message, setMessage] = useState("");
-  const { handleActive, activeClass } = useActive(-1);
+  const { handleActive } = useActive(-1);
   const [selectedTime, setSelectedTime] = useState(null);
   const modalRef = useRef(null);
 
@@ -54,11 +56,6 @@ const Doctors = () => {
     { time: "17:00", available: true },
     { time: "18:00", available: true },
   ]);
-
-  const timings = Object.entries(available).map(([time, isAvailable]) => ({
-    time,
-    available: true,
-  }));
 
   useEffect(() => {
     const userNotExists = !localStorage.getItem("usertype");
@@ -170,15 +167,17 @@ const Doctors = () => {
           "17:00": true,
           "18:00": true,
         };
-        appointments
-          .filter((item) => {
-            const itemDate = item.date.split("T")[0]; // Extract YYYY-MM-DD
-            const selectedDate = curDate.split("T")[0]; // Ensure same format
-            return itemDate === selectedDate;
-          })
-          .forEach((item) => {
-            times[item.time] = false;
-          });
+        // Filter appointments to include only those in 'times' object
+        const filteredAppointments = appointments.filter((item) => {
+          const itemDate = item.date.split("T")[0]; // Extract YYYY-MM-DD
+          const selectedDate = curDate.split("T")[0]; // Ensure same format
+          return itemDate === selectedDate && times.hasOwnProperty(item.time);
+        });
+
+        // Update availability based on filtered appointments
+        filteredAppointments.forEach((item) => {
+          times[item.time] = false;
+        });
         setAvailable(times);
       })
       .catch(console.error);
@@ -435,18 +434,20 @@ const Doctors = () => {
   };
 
   return (
-    <div className="py-24 text-center h-full">
+    <div className="py-24 text-center h-full dark:bg-black-6">
       <div
         className="min-h-[600px] mx-auto text-gray-800 max-w-[1300px] w-full 
-   rounded-lg h-full"
+   rounded-lg h-full "
       >
         <div className="flex justify-center items-center mb-6 ">
-          <h3 className="text-2xl font-semibold bg">Doctor Details</h3>
+          <h3 className="text-2xl font-semibold dark:text-white-1">
+            Doctor Details
+          </h3>
           <button
             className={`ml-2.5 p-2 rounded ${
               fetchingData
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-3 text-white-1 hover:bg-blue-7 cursor-pointer"
+                : "bg-blue-3 text-white-1 hover:bg-blue-7 cursor-pointer dark:bg-blue-34 dark:hover:bg-blue-31"
             } text-white transition-all duration-300`}
             onClick={fetchDoctors}
             disabled={fetchingData}
@@ -468,25 +469,67 @@ const Doctors = () => {
               maxHeight: "600px",
               height: "100vh",
               padding: "1rem",
-              boxShadow: "0 0 10px 1px #b0bbd8",
+              boxShadow: isDarkMode
+                ? "0 0 10px 1px #CABFAF"
+                : "0 0 10px 1px #b0bbd8",
+              "& .MuiDataGrid-footerContainer": {
+                borderTop: "none",
+                color: isDarkMode ? "white" : "black",
+              },
+              "& .MuiTablePagination-root, & .MuiTablePagination-caption, & .MuiSvgIcon-root":
+                {
+                  color: isDarkMode && "white !important",
+                },
+              "& .MuiDataGrid-overlay": {
+                // Fix: Added '& ' and wrapped it in quotes
+                background: "none",
+                backgroundColor: "transparent",
+                color: isDarkMode ? "white" : "black",
+              },
+              "& .MuiDataGrid-virtualScroller": {
+                "&::-webkit-scrollbar-track": {
+                  background: isDarkMode && "#2a3454",
+                  borderRadius: "10px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  background: isDarkMode && "#435585",
+                  borderRadius: "10px",
+                  zIndex: "10",
+                },
+              },
               "& .MuiDataGrid-toolbarContainer": {
-                backgroundColor: "",
-
                 "& button": {
-                  backgroundColor: "#7584ae",
                   color: "white",
+                  backgroundColor: isDarkMode ? "#435585" : "#7584ae",
 
                   "&:hover": {
-                    backgroundColor: "#282f42",
+                    backgroundColor: isDarkMode ? "#2a3454" : "#282f42",
                   },
                 },
               },
               "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#F3F4F6",
-                borderBottom: "1px solid #E5E7EB",
+                borderBottom: isDarkMode
+                  ? "1px solid #CABFAF"
+                  : "1px solid #E5E7EB",
+                color: isDarkMode ? "white" : "black",
               },
               "& .MuiDataGrid-cell": {
-                borderBottom: "1px solid #E5E7EB",
+                borderBottom: isDarkMode
+                  ? "1px solid #101314"
+                  : "1px solid #E5E7EB",
+                color: isDarkMode ? "white" : "black",
+
+                "& div": {
+                  color: isDarkMode ? "white" : "black",
+                },
+                "& button": {
+                  color: "white",
+                  backgroundColor: isDarkMode ? "#435585" : "#7584ae",
+
+                  "&:hover": {
+                    backgroundColor: isDarkMode ? "#2a3454" : "#282f42",
+                  },
+                },
               },
             }}
           />
@@ -503,12 +546,12 @@ const Doctors = () => {
       >
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
-            className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 relative bg-white-1"
+            className="bg-white rounded-lg w-full max-w-md p-6 relative bg-white-1 dark:bg-black-0 shadow-[0_0_10px_1px_#b0bbd8]"
             ref={modalRef}
           >
-            <div className="justify-between items-center border-b pb-4 mb-4">
+            <div className="justify-between items-center border-b pb-4 mb-4 dark:border-white-7 dark:border-opacity-20">
               <IoMdClose
-                className="text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300 ease-in-out block"
+                className="text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300 ease-in-out block dark:text-white-7"
                 onClick={() => setMeetModal(false)}
               />
               <h3 className="text-red-600 font-semibold text-[1em] my-4">
@@ -518,18 +561,22 @@ const Doctors = () => {
 
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span className="text-blue-7 text-[1.3em] font-normal">
+                <span className="text-blue-7 text-[1.3em] font-normal dark:text-white-1">
                   Doctor Fee {`(${selectedDoc})`}
                 </span>
-                <span className="font-bold text-blue-7 w-12">₹ {curFee}</span>
+                <span className="font-bold text-blue-7 w-12 dark:text-white-1">
+                  ₹ {curFee}
+                </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-blue-7 text-[1.3em] font-normal">
+                <span className="text-blue-7 text-[1.3em] font-normal dark:text-white-1">
                   Available Balance
                 </span>
-                <span className="font-bold text-blue-7">₹ {balance}</span>
+                <span className="font-bold text-blue-7 dark:text-white-1">
+                  ₹ {balance}
+                </span>
               </div>
-              <div className="flex justify-between pt-4 border-t border-blue-2">
+              <div className="flex justify-between pt-4 border-t border-blue-2 dark:text-white-1 dark:border-blue-33 dark:border-opacity-30">
                 <span className="text-red-600 font-semibold">
                   Required Amount
                 </span>
@@ -540,7 +587,7 @@ const Doctors = () => {
             </div>
 
             <button
-              className="w-full mt-6 bg-blue-5 hover:bg-blue-6 text-white-1 py-3 rounded-lg transition-colors duration-300 shadow-md"
+              className="w-full mt-6 bg-blue-5 hover:bg-blue-6 text-white-1 py-3 rounded-lg transition-colors duration-300 shadow-md dark:bg-blue-24 dark:hover:bg-blue-31"
               onClick={() =>
                 navigate(`/my-wallet?recharge=${curFee - balance}`)
               }
@@ -562,12 +609,12 @@ const Doctors = () => {
       >
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
-            className="rounded-[8px] w-auto py-[14px] px-[20px] pb-[20px] relative shadow-[0_0_10px_#b0bbd8] border-[2px] border-blue-2 bg-white-1 text-blue-7 text-center"
+            className="rounded-[8px] w-auto py-[14px] px-[20px] pb-[20px] relative shadow-[0_0_10px_#b0bbd8] border-[2px] border-blue-2 bg-white-1 text-blue-7 text-center dark:bg-black-0 dark:border-white-1 dark:border-opacity-65"
             ref={modalRef}
           >
             <div className="justify-between items-center pb-4">
               <IoMdClose
-                className="text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300 ease-in-out block"
+                className="text-blue-5 hover:text-blue-8 cursor-pointer transition-colors duration-300 ease-in-out block dark:text-white-7"
                 onClick={() => {
                   setMessage("");
                   setMeetModal(false);
@@ -575,15 +622,17 @@ const Doctors = () => {
                   httpClient.put("/delete_meet", { email: selectEmail });
                 }}
               />
-              <h3 className="text-center border-none">Wanna meet?</h3>
+              <h3 className="text-center border-none dark:text-white-8">
+                Wanna meet?
+              </h3>
             </div>
 
             {/* Meeting Options */}
-            <div className="">
+            <div className="md:min-w-[450px]">
               <div className="flex justify-center text-white-1 mx-[25px] mb-[10px] max-sm:flex max-sm:flex-col">
                 {selectedDocStatus && !selectedDocAvailable && (
                   <button
-                    className="px-8 py-4 bg-grey-3 m-4 text-white-1 rounded-[8px] cursor-pointer hover:bg-blue-6 transition-all duration-300 w-auto shadow-[0_0_10px_1px_#b3b8d0;] active:bg-blue-6"
+                    className="px-8 py-4 bg-grey-3 m-4 text-white-1 rounded-[8px] cursor-pointer hover:bg-blue-6 transition-all duration-300 w-auto shadow-[0_0_10px_1px_#b3b8d0] active:bg-blue-6 dark:bg-grey-9 dark:hover:bg-blue-31 dark:active:bg-blue-31 dark:shadow-[0_0_10px_1px_#606a6f]"
                     onClick={() => {
                       setScheduleMeet(false);
                       setInstantMeet(!isInstantMeet);
@@ -594,7 +643,7 @@ const Doctors = () => {
                   </button>
                 )}
                 <button
-                  className="px-8 py-4 bg-grey-3 m-4 text-white-1 rounded-[8px] cursor-pointer hover:bg-blue-6 transition-all duration-300 w-auto shadow-[0_0_10px_1px_#b3b8d0;] active:bg-blue-6"
+                  className="px-8 py-4 bg-grey-3 m-4 text-white-1 rounded-[8px] cursor-pointer hover:bg-blue-6 transition-all duration-300 w-auto shadow-[0_0_10px_1px_#b3b8d0;] active:bg-blue-6 dark:bg-grey-9 dark:hover:bg-blue-31 dark:active:bg-blue-31 dark:shadow-[0_0_10px_1px_#606a6f]"
                   onClick={() => {
                     const d = new Date();
                     setCurDate(
@@ -619,7 +668,15 @@ const Doctors = () => {
               </div>
 
               {message && (
-                <Alert severity="error" className="mt-4">
+                <Alert
+                  severity="error"
+                  className="mt-4 dark:bg-red-4 dark:text-red-7"
+                  sx={{
+                    "& .MuiAlert-icon": {
+                      color: isDarkMode && "#f5aead",
+                    },
+                  }}
+                >
                   {message}
                 </Alert>
               )}
@@ -633,7 +690,7 @@ const Doctors = () => {
                         {[...Array(10)].map((_, index) => (
                           <div
                             key={index}
-                            className="w-1 bg-gradient-to-t from-purple-600 to-purple-300 rounded-full animate-wave"
+                            className="w-1 bg-gradient-to-t rounded-full animate-wave"
                             style={{
                               animationDelay: `${index * 0.1}s,
                               height: ${(index + 1) * 8}px,
@@ -642,15 +699,18 @@ const Doctors = () => {
                           />
                         ))}
                       </div>
-                      <p className="text-gray-600">Connecting to doctor...</p>
+                      <p className="text-gray-600 dark:text-grey-5">
+                        Connecting to doctor...
+                      </p>
                     </div>
                   ) : (
                     <button
                       className="flex items-center justify-center gap-2 mx-auto px-6 py-3 
                         bg-blue-3 text-white rounded-lg hover:bg-blue-5
-                        transition-all duration-300 shadow-md text-white-1"
+                        transition-all duration-300 shadow-md text-white-1 dark:bg-blue-34 dark:hover:bg-blue-31"
                       onClick={() => {
                         setConnecting(true);
+                        setMessage("");
                         handleMeet();
                       }}
                     >
@@ -664,10 +724,18 @@ const Doctors = () => {
               {/* Schedule Meeting Section */}
               {isScheduleMeet && (
                 <div className="pb-[25px] mb-1">
-                  <h4 className="">Select Date and Time</h4>
+                  <h4 className="dark:text-white-8">Select Date and Time</h4>
 
                   {isInvDateTime && (
-                    <Alert severity="error" className="mb-4">
+                    <Alert
+                      severity="error"
+                      className="mb-4 dark:bg-red-4 dark:text-red-7"
+                      sx={{
+                        "& .MuiAlert-icon": {
+                          color: isDarkMode && "#f5aead",
+                        },
+                      }}
+                    >
                       Please select a future date and time
                     </Alert>
                   )}
@@ -675,15 +743,27 @@ const Doctors = () => {
                   {scheduleAlert !== 0 && (
                     <Alert
                       severity={scheduleAlert === 1 ? "error" : "success"}
-                      className="mb-4"
+                      className={`mb-4 ${
+                        scheduleAlert === 1
+                          ? "dark:bg-red-4 dark:text-red-7"
+                          : "dark:bg-green-9 dark:text-green-6"
+                      }`}
+                      sx={{
+                        "& .MuiAlert-icon": {
+                          color:
+                            isDarkMode &&
+                            (scheduleAlert === 1 ? "#f5aead" : "#4dff99"),
+                        },
+                      }}
                     >
                       {scheduleAlert === 1
                         ? "Doctor is unavailable at selected time"
                         : "Meeting scheduled successfully"}
                     </Alert>
                   )}
+
                   <div className="w-full flex justify-center">
-                    <div className="space-y-4 w-[70%]">
+                    <div className="space-y-4 w-full ">
                       <input
                         type="date"
                         min={new Date().toISOString().split("T")[0]} // Prevent selecting past dates
@@ -693,20 +773,22 @@ const Doctors = () => {
                           setCurDate(selectedDate);
                           checkInvDateTime(selectedDate, curTime);
                         }}
-                        className="py-[11px] px-[12px] cursor-pointer border-[2px] border-blue-3 rounded-[8px]"
+                        className="py-[11px] px-[12px] cursor-pointer border-[2px] border-blue-3 rounded-[8px] text-black dark:text-white-8 dark:[color-scheme:dark] "
                       />
 
                       <div className="w-full flex justify-center">
-                        <div className="grid grid-cols-3 gap-[5px] max-w-[360px] w-[90vw] border-[2px] border-blue-3 rounded-[8px] p-[5px]">
+                        <div className="grid grid-cols-3 gap-[5px] w-[70%] max-md:w-full border-[2px] border-blue-3 rounded-[8px] p-[5px] dark:border-blue-37">
+                          {/* {console.log(available)} */}
                           {Object.keys(available).map((time, index) => (
                             <button
                               key={index}
-                              className={`border-[2px] boder-blue-3 rounded-[8px] cursor-pointer flex items-center justify-center py-[10px] px-[5px] ${
+                              className={`border-[2px] border-blue-3 dark:border-blue-37 rounded-[8px] cursor-pointer flex items-center justify-center py-[10px] px-[5px] ${
                                 available[time]
-                                  ? `border-[2px] border-blue-3 ${
-                                      selectedTime === time && "bg-blue-1"
+                                  ? `border-[2px] border-blue-3 dark:border-blue-37 ${
+                                      selectedTime === time &&
+                                      "bg-blue-1 dark:bg-grey-10"
                                     }`
-                                  : "bg-blue-2 cursor-not-allowed"
+                                  : "bg-blue-2 cursor-not-allowed dark:bg-blue-37"
                               }`}
                               disabled={!available[time]} // Accessing the value for each time slot
                               onClick={() => {
@@ -726,15 +808,17 @@ const Doctors = () => {
                                     : "text-[#f00]"
                                 } // Using available[time] here
                               />
-                              <span className="mx-[10px]">{time}</span>
-                              <AiOutlineClockCircle />
+                              <span className="mr-[6px] ml-[2px] md:text-base max-md:text-lg max-md:text-[10px] min-w-[50%] dark:text-white-8">
+                                {time}
+                              </span>
+                              <AiOutlineClockCircle className="dark:text-white-8" />
                             </button>
                           ))}
                         </div>
                       </div>
 
                       <button
-                        className={`bg-blue-3 border-[2px] border-blue-5 text-white-1 py-[10px] px-[12px] rounded-[5px] my-[8px] mx-[5px] transition-all duration-300 hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed`}
+                        className={`mt-10 bg-blue-3 text-white-1 py-[12px] px-[12px] rounded-[5px] my-[8px] mx-[5px] transition-all duration-300 hover:bg-blue-5 active:bg-blue-5 disabled:bg-blue-5 disabled:cursor-not-allowed dark:bg-blue-24 dark:hover:bg-blue-31`}
                         onClick={handleScheduleClick}
                         disabled={
                           isInvDateTime ||

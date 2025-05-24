@@ -11,6 +11,7 @@ module.exports = {
       colors: {
         black: colors.black,
         blue: colors.blue,
+        cyan: colors.cyan,
         yellow: colors.yellow,
         red: colors.red,
         orange: colors.orange,
@@ -24,9 +25,9 @@ module.exports = {
       backgroundImage: {
         "curvy-shape": "url('/curvy-shape-img.png')",
         "curvy-shape-dark": "url('/curvy-shape-dark-img.png')",
-        "search-patients": "url('/search_patients.png')",
         "landing-bg":
           "linear-gradient(white 20%, #d4ddf1 40%, #b0bbd8 60%, #6575a5 80%, #4a4cb2 100%)",
+        "search-patients": "url('/search_patients.png')",
       },
       textShadow: {
         "landing-highlight": "2px 2px 4px rgba(0, 0, 0, 0.3)",

@@ -12,7 +12,7 @@ const FilterBarOptions = () => {
     handleMobFilterVisibility,
     handleClearFilters,
   } = useContext(filtersContext);
-  
+
   const sortMenu = [
     {
       id: 1,
@@ -29,14 +29,14 @@ const FilterBarOptions = () => {
   ];
 
   return (
-    <>
+    <div className="dark:bg-black-0">
       {/*===== Clear-Filters btn =====*/}
       {(sortedValue || price !== maxPrice) && (
         // clear_filter_btn
         <div className="">
           <button
             type="button"
-            className="w-full bg-blue-3 text-white-1 px-4 py-3 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out hover:bg-blue-6 active:bg-blue-6 max-lg:mt-5"
+            className="w-full bg-blue-3 text-white-1 px-4 py-3 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out hover:bg-blue-6 active:bg-blue-6 max-lg:mt-5 dark:bg-blue-24 dark:hover:bg-blue-31"
             onClick={handleClearFilters}
           >
             Clear Filters
@@ -47,10 +47,12 @@ const FilterBarOptions = () => {
       <div className="max-lg:grid max-lg:grid-cols-2 gap-5">
         {/*===== Sort-menu =====*/}
         <div
-          className={`w-full py-8 bg-white max-lg:col-span-1 ${isMobSortVisible ? "block" : ""}`}
+          className={`w-full py-8 bg-white max-lg:col-span-1 ${
+            isMobSortVisible ? "block" : ""
+          }`}
         >
           {/* sort_head */}
-          <div className="max-lg:flex max-lg:justify-between max-lg:items-center flex justify-between">
+          <div className="max-lg:flex max-lg:justify-between max-lg:items-center flex justify-between dark:text-yellow-1">
             <h3>Sort By</h3>
             {/* close_btn */}
             <button
@@ -72,8 +74,8 @@ const FilterBarOptions = () => {
                   key={id}
                   className={`cursor-pointer transition-colors duration-200 ${
                     sortedValue === title
-                      ? "text-blue-8 font-bold"
-                      : "hover:text-blue-8"
+                      ? "text-blue-8 font-bold dark:text-white-1"
+                      : "hover:text-blue-8 dark:hover:text-white-8"
                   }`}
                   onClick={() => setSortedValue(title)}
                 >
@@ -119,7 +121,7 @@ const FilterBarOptions = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

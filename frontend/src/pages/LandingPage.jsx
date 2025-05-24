@@ -271,7 +271,7 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section className="py-12 px-0 bg-white-1 dark:bg-black-3">
+        <section className="py-12 dark:pb-6 px-0 bg-white-1 dark:bg-black-11">
           <div className="text-center text-blue-9 dark:text-blue-33">
             <h2>Our Benefits</h2>
             <div className="flex flex-wrap my-0 mx-auto max-w-[1000px] justify-center mt-8 text-blue-7 dark:text-white-1">
@@ -314,7 +314,7 @@ const LandingPage = () => {
         </section>
 
         {/* team-section */}
-        <section className="py-20 px-0 text-center bg-white-1 dark:bg-black-3">
+        <section className="py-20 pb-28 px-0 text-center bg-white-1 dark:bg-black-11">
           {/* team-div */}
           <div>
             <div>
@@ -366,11 +366,15 @@ const LandingPage = () => {
               ))}
             </div>
           </div>
+        </section>
 
+        {/* testimonials-section */}
+        <section className="bg-black-0">
           <TestimonialSection />
         </section>
+
         {/* faq-section */}
-        <section className="py-20 px-0 text-center text-white-1 dark:bg-black-8">
+        <section className="py-20 px-0 text-center text-white-1 dark:bg-black-10">
           {/* faq-div */}
           <div
             className="w-full flex flex-wrap my-0 mx-auto p-[5px] justify-between items-start max-w-[1300px] max-md:flex max-md:flex-col max-md:justify-center"
@@ -386,7 +390,9 @@ const LandingPage = () => {
             </div>
             {/* content */}
             <div className="shrink-0 grow-0 basis-[55%] p-4 max-md:p-8">
-              <h2 className="text-blue-8 mb-8 dark:text-white-1">Any Queries ?</h2>
+              <h2 className="text-blue-8 mb-8 dark:text-white-1">
+                Any Queries ?
+              </h2>
               {/* faqs */}
               <div className="w-full my-0 mx-auto rounded-[12px]">
                 {faqs.map((item, index) => (
@@ -427,7 +433,7 @@ const LandingPage = () => {
                       className="dark:bg-[#000]"
                     >
                       {/* item-ans */}
-                      <div className="w-full p-4 rounded-[12px] bg-white-1 text-blue-7 text-left dark:text-white-1 dark:bg-[#000]" >
+                      <div className="w-full p-4 rounded-[12px] bg-white-1 text-blue-7 text-left dark:text-white-1 dark:bg-[#000]">
                         {item.answer}
                       </div>
                     </AccordionDetails>

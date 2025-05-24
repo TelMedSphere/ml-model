@@ -12,6 +12,11 @@ module.exports = {
     6: "#060606",
     7: "#101010",
     8: "#181921",
+    9: "#1C1E21",
+    10: "#101314",
+    11: "#080A0C",
+    12: "#00051B",
+    13: "#0c0b0b",
   },
   blue: {
     1: "#D4DDF1",
@@ -50,6 +55,8 @@ module.exports = {
     34: "#435585",
     35: "#1E2E58",
     36: "#383BAA",
+    37: "#1E2E58",
+    38: "#4DC6FF",
   },
   cyan: {
     // Dark Mode
@@ -69,6 +76,8 @@ module.exports = {
     8: "#C1B697",
     9: "#FFD93B",
     10: "#907A37",
+    11: "#8B806E",
+    12: "#f7f7ed",
   },
   red: {
     // Dark Mode
@@ -78,6 +87,8 @@ module.exports = {
     4: "#350000",
     5: "#FF0A0A",
     6: "#B30505",
+    7: "#F5AEAD",
+    8: "#ff1111",
   },
   orange: {
     1: "#FF8400",
@@ -96,6 +107,9 @@ module.exports = {
     8: "#7D7D7D",
     // Dark Mode
     9: "#606A6F",
+    10: "#1E2225",
+    11: "#292E31",
+    12: "#394044",
   },
   white: {
     1: "#FFFFFF",
@@ -106,6 +120,9 @@ module.exports = {
     6: "#F5F5F5",
     // Dark Mode
     7: "#CABFAF",
+    8: "#DCEDF6",
+    9: "#D8D6D2",
+    10: "#E4F6FF",
   },
   teal: {
     1: "#A2DFF7",
@@ -131,6 +148,7 @@ module.exports = {
     6: "#4DFF99",
     7: "#0fd4ca",
     8: "#7affff",
+    9: "#0C2602",
   },
   social: {
     fb: "#4A71C3",

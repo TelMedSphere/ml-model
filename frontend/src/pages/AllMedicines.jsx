@@ -40,7 +40,7 @@ const AllMedicines = () => {
   }
 
   return (
-    <>
+    <div className="dark:bg-black-6">
       {/* search-bar */}
       <section id="" className="pt-20 sticky top-0 z-[500] overflow-hidden">
         <SearchBar />
@@ -48,10 +48,10 @@ const AllMedicines = () => {
       {/* all_products section*/}
       <section
         id=""
-        className=" overflow-hidden py-20 pt-8 grid grid-cols-12 text-blue-6 max-lg:grid-cols-none"
+        className=" overflow-hidden py-20 pt-8 grid grid-cols-12 text-blue-6 max-lg:grid-cols-none dark:text-yellow-1"
       >
         <div className="col-span-2">
-          <FilterBar  />
+          <FilterBar />
         </div>
         {/* container */}
         <div className="col-span-10 max-w-[1440px] mx-auto px-3 max-xl:max-w-[1280px] max-lg:max-w-[1024px] max-md:max-w-[768px] max-sm:max-w-[640px] max-xs:max-w-full lg:min-w-[80vw]">
@@ -63,11 +63,14 @@ const AllMedicines = () => {
               ))}
             </div>
           ) : (
-            <EmptyView icon={<BsExclamationCircle />} msg="No Results Found" />
+            <EmptyView
+              icon={<BsExclamationCircle className="dark:text-yellow-1" />}
+              msg="No Results Found"
+            />
           )}
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

@@ -24,18 +24,18 @@ const QuantityBox = (props) => {
 
   return (
     <>
-      <div className="inline-block items-center border-[1px] border-blue-3 rounded-[3px] overflow-hidden w-36 h-10 mt-3 relative">
+      <div className="inline-block items-center border-[1px] border-blue-3 rounded-[3px] overflow-hidden w-36 h-10 mt-3 relative dark:border-blue-5">
         <button
           type="button"
           onClick={() => {
             decrementItem(itemId), decrement(itemId);
           }}
           disabled={itemQuantity === 1}
-          className="w-12 h-full bg-blue-3 text-blue-1 transition-colors duration-200 hover:bg-blue-5 text-white disabled:cursor-not-allowed disabled:text-grey-2"
+          className="w-12 h-full bg-blue-3 text-blue-1 transition-colors duration-200 hover:bg-blue-5 text-white disabled:cursor-not-allowed disabled:text-grey-2 dark:bg-blue-5 dark:hover:bg-blue-6 dark:disabled:bg-blue-5"
         >
           <FaMinus />
         </button>
-        <span className="h-full w-auto text-center text-red-600 text-2xl font-bold align-top absolute left-[45%]">
+        <span className="h-full w-auto text-center text-red-600 text-2xl font-bold align-top absolute left-[45%] dark:text-red-5">
           {itemQuantity}
         </span>
         <button
@@ -44,7 +44,7 @@ const QuantityBox = (props) => {
             incrementItem(itemId), increment(itemId);
           }}
           disabled={itemQuantity === 10}
-          className="w-12 h-full bg-blue-3 text-blue-1 transition-colors duration-200 hover:bg-blue-5 text-white disabled:cursor-not-allowed disabled:text-grey-2 absolute right-0"
+          className="w-12 h-full bg-blue-3 text-blue-1 transition-colors duration-200 hover:bg-blue-5 text-white disabled:cursor-not-allowed disabled:text-grey-2 absolute right-0 dark:bg-blue-5 dark:hover:bg-blue-6 dark:disabled:bg-blue-5"
         >
           <FaPlus />
         </button>
