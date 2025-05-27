@@ -22,6 +22,8 @@ from utils.imageUploader import upload_file
 from bson import ObjectId
 from flask_swagger_ui import get_swaggerui_blueprint
 from flasgger import Swagger
+import google.generativeai as genai
+from utils.analyzeReport import extract_text_from_pdf
 
 load_dotenv()
 secret_key = secrets.token_hex(16)
@@ -141,6 +143,11 @@ def whatsapp_message(msg):
     except Exception as e:
         print(f"Error sending message: {str(e)}")
         return {"status": "error", "message": str(e)}
+
+# Set up Gemini
+GEMINI_API_KEY=os.getenv("GEMINI_API_KEY")
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel("models/gemini-1.5-flash-latest")
 
 # ----------- stripe payment routes -----------------
 
@@ -1231,3 +1238,61 @@ def contact():
         return jsonify({"message": "Message sent successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+# ----------- Analyze Report -----------------
+
+@app.route('/analyze_pdf', methods=['POST'])
+def analyze_pdf():
+    if 'pdf' not in request.files:
+        return jsonify({"error": "No PDF file provided"}), 400
+
+    # Get user input if available
+    user_input = request.form.get("user_input", "")
+
+    pdf_file = request.files['pdf']
+    pdf_path = os.path.join(app.root_path, 'report.pdf')
+    pdf_file.save(pdf_path)
+
+    extracted_text = extract_text_from_pdf(pdf_path)
+
+    try:
+        os.remove(pdf_path)
+    except Exception as e:
+        print(f"Error deleting file: {e}")
+
+    if not extracted_text:
+        return jsonify({"error": "No text extracted from PDF"}), 400
+    
+    prompt = f"""
+        You are a medical assistant. Analyze the following medical lab report and summarize only the abnormal or deficient parameters.
+
+        Additional user info to consider: {user_input}
+
+        ⚠️ Return your response strictly in markdown format using the structure below for each abnormal element. Wrap the entire response inside triple backticks (```markdown). Use bullet points where indicated.
+
+        Format (Markdown):
+        ```
+        ### **Element - Value (Status)**
+---
+
+**Concern:**
+<brief explanation>
+
+**Treatment Suggestions:**
+- **Diet**
+
+  **Veg -** <veg options>
+  
+  **Non-veg -** <non-veg options>
+- **Supplements:** <recommended supplements>
+- **Tips:** <lifestyle tips>
+```
+
+        Only use this format. At the end, provide a short summary (2-3 lines) what action should be taken.
+        
+        Here is the lab report:
+        {extracted_text}
+        """
+    
+    response = model.generate_content(prompt)
+    return jsonify({"summary": response.text})
