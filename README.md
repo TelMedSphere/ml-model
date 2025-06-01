@@ -1,146 +1,89 @@
- # <p align="center">💖TelMedSphere</p>
-<!-------------------------------------------------------------------------------------------------------------------------------------->
- <div align="center">
- <p>
+# TelMedSphere ML Model
 
-[![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
-![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)
-![Visitors](https://api.visitorbadge.io/api/visitors?path=PratikMane0112%2FTelMedSphere%20&countColor=%23263759&style=flat)
-![GitHub forks](https://img.shields.io/github/forks/PratikMane0112/TelMedSphere)
-![GitHub Repo stars](https://img.shields.io/github/stars/PratikMane0112/TelMedSphere)
-![GitHub contributors](https://img.shields.io/github/contributors/PratikMane0112/TelMedSphere)
-![GitHub last commit](https://img.shields.io/github/last-commit/PratikMane0112/TelMedSphere)
-![GitHub repo size](https://img.shields.io/github/repo-size/PratikMane0112/TelMedSphere)
-![Github license](https://img.shields.io/github/license/PratikMane0112/TelMedSphere)
-![GitHub issues](https://img.shields.io/github/issues/PratikMane0112/TelMedSphere)
-![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/PratikMane0112/TelMedSphere)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/PratikMane0112/TelMedSphere)
-![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/PratikMane0112/TelMedSphere)
- </p>
- </div>
+## Overview
 
-<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+TelMedSphere's ML Model is a disease prediction system that uses machine learning algorithms to predict potential diseases based on reported symptoms. This repository contains the trained machine learning models, datasets, and API implementation that powers the disease prediction feature of the TelMedSphere platform.
 
-<div id="top"></div>
+## Features
 
-<h2>🧾 Table of Contents</h2>
+- **Multi-model disease prediction**: Implements various ML algorithms (ExtraTrees, RandomForest, GradientBoost, XGBoost, LightGBM) for accurate disease prediction
+- **RESTful API**: Flask-based API that can be integrated with frontend applications
+- **Cross-origin support**: Includes CORS support for web application integration
+- **Top-K prediction**: Returns the top 3 most probable diseases with descriptions and precautions
+- **Symptom-Disease mapping**: Uses comprehensive datasets mapping symptoms to diseases
 
- [📌 Introduction](#introduction).<br>
- [💡 Features](#features).<br>
- [🚀 Technology Used](#technology-used).<br>
- [⭐ Overview](#overview).<br>
- [💥 Getting Started](#getting-started).<br>
- [🐳 Docker Setup](#docker-setup).<br>
- [⚡ Project Admin & Mentors](#project-admin-and-mentors).<br>
- [💬 Join Chatting Server](#contributing-with-fun).<br>
- [📑 Contributing Guidelines](#contributing-guidelines).<br>
- [📑 Code Of Conduct](#code-of-conduct).<br>
- [📑 License](#license).<br>
-[📑  API Documentation](#api-documentation).<br>
-<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+## Project Structure
 
-<h2>📌Introduction</h2>
+```
+├── app.py                    # Flask API implementation
+├── dataset.csv               # Main dataset with disease-symptom mapping
+├── ExtraTrees                # Trained ExtraTrees classifier model
+├── GradientBoost             # Trained GradientBoost classifier model
+├── LightGBM                  # Trained LightGBM classifier model
+├── Prediction.ipynb          # Jupyter notebook for model training and analysis
+├── Random Forest             # Trained RandomForest classifier model
+├── requirements.txt          # Python dependencies
+├── symptom_Description.csv   # Dataset containing disease descriptions
+├── symptom_precaution.csv    # Dataset containing recommended precautions for diseases
+├── Symptom-severity.csv      # Dataset containing symptom severity information
+└── XGBoost                   # Trained XGBoost classifier model
+```
 
-TelMedSphere is designed to make healthcare simple and accessible for both doctors and patients. It allows patients to connect with doctors through video calls, manage their health records, and make payments easily. For doctors, the app provides tools to schedule consultations, write prescriptions, and manage their time effectively.
+## Datasets
 
-<h2>💡Features</h2>
+The system uses multiple datasets:
 
-🚨 For Patients:<br>
- - Book Video Calls: Easily schedule video consultations with doctors.
- - Share Feedback: Rate and review the doctor after your consultation.
- - Manage Your Profile: Update and view your personal details.
- - View Past Records: Check previous orders and prescriptions in one place.
- - Easy Payments: Use the wallet feature powered by Stripe for secure payments.
+1. **dataset.csv**: Contains mapping between diseases and their symptoms
+2. **symptom_Description.csv**: Contains detailed descriptions of diseases
+3. **symptom_precaution.csv**: Contains precaution measures for each disease
+4. **Symptom-severity.csv**: Contains severity information for each symptom
+
+## ML Models
+
+The project implements and compares multiple machine learning models:
+
+1. **ExtraTrees**: Extra Trees Classifier (Default model used in the API)
+2. **RandomForest**: Random Forest Classifier
+3. **GradientBoost**: Gradient Boosting Classifier
+4. **XGBoost**: XGBoost Classifier
+5. **LightGBM**: LightGBM Classifier
+
+## API Endpoints
+
+### POST `/predict`
+
+Predicts diseases based on provided symptoms.
+
+**Request Body**:
+```json
+[
+  "symptom1",
+  "symptom2",
+  "symptom3",
+  ...
+]
+```
+
+**Response**:
+```json
+[
+  {
+    "disease": "Disease Name",
+    "probability": 0.95,
+    "description": "Description of the disease",
+    "precautions": ["Precaution 1", "Precaution 2", "Precaution 3", "Precaution 4"]
+  },
+  ...
+]
+```
+
+## Installation & Setup
  
-🚨 For Doctors:<br>
- - Set Up Your Profile: Add information about yourself and your services.
- - Manage Availability: Set your working hours for consultations.
- - Join Video Calls: Connect with patients at the scheduled time.
- - Write Prescriptions: Share prescriptions directly with patients after the consultation.
- - Queue System: Organize appointments efficiently with a smart queue feature.
-
-<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-
-<h2>🚀Technology Used</h2>
-
-<p>
-  <a href="https://www.w3schools.com/html/"> <img src="https://img.icons8.com/?size=64&id=20909&format=png" alt="HTML" /></a>
-  <a href="https://www.w3schools.com/css/"> <img src="https://img.icons8.com/?size=64&id=21278&format=png" alt="CSS" /></a>
-  <a href="https://www.w3schools.com/js/"> <img src="https://img.icons8.com/?size=64&id=108784&format=png" alt="JS" /></a>
-  <a href="https://www.w3schools.com/REACT/DEFAULT.ASP"> <img src="https://img.icons8.com/?size=64&id=NfbyHexzVEDk&format=png" alt="React" /></a>
-  <a href="https://www.w3schools.com/python/"> <img src="https://img.icons8.com/?size=64&id=13441&format=png" alt="Python" /></a>
-  <a href="https://www.geeksforgeeks.org/flask-tutorial/"><img src="https://img.icons8.com/?size=64&id=ewGOClUtmFX4&format=png" alt="Flask" /></a>
-  <a href="https://www.w3schools.com/mongodb/"> <img src="https://img.icons8.com/?size=64&id=74402&format=png" alt="Mongo" /></a>
-  <a href="https://www.educative.io/blog/docker-compose-tutorial" ><img src="https://img.icons8.com/?size=64&id=22813&format=png&color=000000" alt="Docker"></a>
-  <a href="https://swagger.io/" ><img src="https://img.icons8.com/?size=64&id=rdKV2dee9wxd&format=png&color=000000" alt="Swagger"></a>
-</p>
-
-🚨 Frontend: ReactJs <br>
-🚨 Styling: TailwindCSS <br>
-🚨 Backend: Python, Flask <br>
-🚨 Database: MongoDB Atlas<br>
-🚨 Containerization: Docker <br>
-🚨 REST-API Documentation: Swagger <br>
-<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-
-<h2>⭐Overview</h2>
-
-<h1 align="center"> <a href="https://pratik0112-telmedsphere.vercel.app/"> Live Project Demo ↗️</a></h1>
-
-![](https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/1.png)
-
-<h3 align="right"><a href="#top">⬆️</a></h3>
-
-<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-<h2>💥Getting Started</h2>
-
-- Fork this Repository.
-- Clone the forked repository in your local system.
-  
  ```bash
- git clone https://github.com/<your-github-username>/TelMedSphere.git
- ```
-<h2>💻Local Setup</h2>
-
-- Navigate to the project directory for frontend Setup.
-  
- ```bash
- # Navigate to frontend directory
- cd frontend    
- # Install all npm packages for react frontend
- # Use `npm ci` to avoid changing package-lock.json after every install https://stackoverflow.com/a/56254478  
- npm ci
- # Set .env file
- copy .env.example .env
- # (For linux) cp .env.example .env
- # Start the frontend 
- npm run dev    
- ```
-
-- Navigate to the project directory for backend Setup.
-  
- ```bash
- # Navigate to backend directory
- cd backend
- # Set .env file
- copy .env.example .env
- # (For linux) cp .env.example .env
- # Create a virtual environment
- python -m venv venv # This will create a folder named venv inside your project directory
- # Activate the virtual environment
- venv\Scripts\activate
- # Install all dependencies for flask server
- pip install -r requirements.txt     
- # Run flask server
- flask run
- # deactivate the virtual environment, when you are done
- deactivate
- ```
-- Navigate to the project directory for ML model Setup.
-  
- ```bash
- # Navigate to backend directory
- cd models
+ # Clone the repo
+ git clone https://github.com/TelMedSphere/ml-model.git
+ # Navigate to directory
+ cd TelMedSphere/ml-model
  # Create a virtual environment
  python -m venv venv # This will create a folder named venv inside your project directory
  # Activate the virtual environment
@@ -151,70 +94,24 @@ TelMedSphere is designed to make healthcare simple and accessible for both docto
  flask run
  #update the development server link in .env file of frontend(MODEL_URL)
  # deactivate the virtual environment, when you are done
- deactivate
- ```
-<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+ deact
 
-## How to Get `.env` File Variables
+4. The API will be available at `http://localhost:5000`
 
-Refer to the [EnvVarSetUpGuideline.md](.github/EnvVarSetUpGuideline.md) for detailed steps on setting up the `.env` files for both the frontend and backend.
+## Development
 
+### Training New Models
 
-<h3 align="right"><a href="#top">⬆️</a></h3>
+The `Prediction.ipynb` notebook contains the code for data preprocessing, model training, and evaluation. You can use this notebook to:
 
-<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-<h2>🐳Docker Setup</h2>
+1. Analyze the dataset
+2. Preprocess the data
+3. Train and evaluate different ML models
+4. Save the trained models
 
-Docker provides an easier way to set up and run TelMedSphere with all its dependencies.
+### Model Performance
 
-### Prerequisites
-- Docker and Docker Compose [installed](https://www.docker.com/products/docker-desktop/) on your system
-- Environment variables ready for configuration
-
-### Steps to Run with Docker
-
-1. Clone the repository same as above:
-
-2. Update Enviroment variables:
-   - Update Environment variables mentioned in docker-compose based on each project's `.env` respectively
-
-
-3. Start the application using Docker Compose:
-```bash
-docker-compose up --build -d
-```
-
-The application will be available at:
-- Frontend: http://localhost:3000
-- Backend: http://localhost:5000
-
-### Stopping the Application
-```bash
-docker-compose down
-```
-
-### Remove the Container
-```bash
-docker-compose kill
-```
-
-<h3 align="right"><a href="#top">⬆️</a></h3>
-
-<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-
-<h2>📑API Documentation</h2>
-
-This project uses [Swagger](https://swagger.io/) for its REST API Documentation with OPEN API Specificaion.
-
-### Navigate to the API Docs URL:
-
-For local you can access it at below URL (before please make sure that you have setup project locally by following above steps) :
-
-```bash
-http://localhost:5000/api/docs (live testing)
-https://telmedsphere-server.vercel.app/api/docs 
-```
-<h3 align="right"><a href="#top">⬆️</a></h3>
+The models are evaluated using cross-validation, and metrics like F1 score and AUC-ROC are calculated to measure performance. The ExtraTrees model demonstrated the best overall performance and is used as the default prediction model in the API.
 
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
@@ -235,29 +132,6 @@ https://telmedsphere-server.vercel.app/api/docs
 <a href="https://github.com/RajKhanke"><img src="https://avatars.githubusercontent.com/u/137288727?v=4" height="140px" width="140px" alt="Raj Khanke"></a><br><sub><b>DWoC Mentor - Raj Khanke</b></sub>
 </td>
 
-</tr>
-</table>
-
-<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-<h2>🚩 Project is part of below Open Source Programs </h2>
-
-<table>
-<tr>
-<td align="center">
-<a href="https://kwoc.kossiitkgp.org/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/KWoC.png" height="100px" width="100px" alt="KWOC2024"></a><br><sub><b>KWoC 2k24</b></sub>
-</td>
-<td></td>
- <td align="center">
-<a href="https://www.socialwinterofcode.com/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/SWoC.png" height="100px" width="100px" alt="SWOC2025"></a><br><sub><b>SWoC 2k25</b></sub>
-</td>
- <td></td>
- <td align="center">
-<a href="https://dwoc.io/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/DWoC.jpg" height="100px" width="100px" alt="SWOC2025"></a><br><sub><b>DWoC 2k25</b></sub>
-</td>
-<td></td>
- <td align="center">
-<a href="https://iwoc3.devfolio.co/"><img src="https://github.com/PratikMane0112/TelMedSphere/blob/master/Overview/IWoC.png" height="100px" width="100px" alt="IWOC2025"></a><br><sub><b>IWoC 2k25</b></sub>
-</td>
 </tr>
 </table>
 
